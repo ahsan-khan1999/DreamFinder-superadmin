@@ -363,7 +363,7 @@ const data = [
           // },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.admin',
+            label: 'menu.fieldStaff',
             to: `${adminRoot}/menu/levels/viewDoctor`,
           },
 
@@ -409,7 +409,7 @@ const data = [
           // },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.fieldStaff',
+            label: 'menu.admin',
             to: `${adminRoot}/menu/levels/viewPharmacy`,
           },
           // {

@@ -78,6 +78,7 @@ import todoApp from './todo/reducer';
 import chatApp from './chat/reducer';
 import surveyListApp from './surveyList/reducer';
 import surveyDetailApp from './surveyDetail/reducer';
+import { OrderReducer } from 'Store/Reducers/ConcordOrder/OrderReducer';
 
 const reducers = combineReducers({
   menu,
@@ -126,8 +127,13 @@ const reducers = combineReducers({
   ViewMedicinesReducer,
   ViewReportReducer,
   CreateRegionReducer,
-  ViewUserReducer
+  ViewUserReducer,
   // DepartmentReducer,
+
+
+   //Concord Order Reducer
+   orderReducer:OrderReducer,
+
 });
 
 export default reducers;

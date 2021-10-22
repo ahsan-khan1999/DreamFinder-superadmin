@@ -24,9 +24,6 @@ const ViewDoctor = React.lazy(() =>
 const CreateAdministrator = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-3" */ './createAdministrator')
 );
-const CreateAdmin = React.lazy(() =>
-  import(/* webpackChunkName: "menu-level-3" */ './CreateAdmin')
-);
 const ViewAdministrator = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-3" */ './viewAdministrator')
 );
@@ -47,9 +44,6 @@ const ViewPharmacy = React.lazy(() =>
 );
 const CreateSuperAdmin = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-3" */ './createSuperAdmin')
-);
-const ViewCurrentUser = React.lazy(() =>
-  import(/* webpackChunkName: "menu-level-3" */ './ViewCurrentUser')
 );
 const CreateSuperAdmins = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-3" */ './CreateSuperAdmins')
@@ -79,11 +73,6 @@ const MenuLevels = ({ match }) => (
         path={`${match.url}/viewCurrentDoctor`}
         render={(props) => <CreateViewDoctor {...props} />}
       />
-      CreateAdmin
-      <Route
-        path={`${match.url}/CreateAdmin`}
-        render={(props) => <CreateAdmin {...props} />}
-      />
       <Route
         path={`${match.url}/CreateDoctors`}
         render={(props) => <CreateDoctor {...props} />}
@@ -91,10 +80,6 @@ const MenuLevels = ({ match }) => (
       <Route
         path={`${match.url}/CreatePatients`}
         render={(props) => <CreatePatients {...props} />}
-      />
-       <Route
-        path={`${match.url}/ViewCurrentUser`}
-        render={(props) => <ViewCurrentUser {...props} />}
       />
       <Route
         path={`${match.url}/viewDoctor`}

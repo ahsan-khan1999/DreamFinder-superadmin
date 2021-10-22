@@ -24,46 +24,54 @@ import {
   getItemIsEdit,
 } from '../../../../Store/Actions/User/Doctor/viewDoctorAction';
 import {
-  AdminTable,
   ReactTableDivided,
   ReactTableWithPaginationCard,
   // ReactTableDivided,
 } from 'containers/ui/ReactTableCards';
-import {
-  ViewAdminAction,
-  ViewRoleAction,
-} from 'Store/Actions/User/UserActions';
-const ViewAdmin = ({ match, history }) => {
+import { ViewAdminAction } from 'Store/Actions/User/UserActions';
+const ThirdLevel2 = ({ match, history }) => {
+  const [dropdownOpen, setOpen] = useState(false);
+  const doctor = useSelector((state) => state?.viewDoctorReducer?.doctor);
+  const loading = useSelector((state) => state?.viewDoctorReducer?.loading);
+
+  // data.push(doctor);
   const dispatch = useDispatch();
-  const getAdmin = () => {
-    dispatch(ViewAdminAction());
+  const toggle = () => setOpen(!dropdownOpen);
+  // let [data, setData] = useState();
+  // let data = {
+  //   doctor: doctor,
+  // };
+
+  useEffect(async () => {
+    getDoctor();
+  }, []);
+
+  const getDoctor = async () => {
+    let res = await dispatch(ViewAdminAction());
   };
+  const [doc, setDoc] = useState(doctor);
 
   useEffect(() => {
-    getAdmin();
-  }, []);
-  const [doc, setDoc] = useState();
-  const user = useSelector((state) => state?.ViewUserReducer?.admin);
-  const loading = useSelector((state) => state?.ViewUserReducer?.loading);
-  console.log(loading);
-  // useEffect(() => {
-  //   setDoc();
-  // }, [user]);
+    setDoc(doctor);
+  }, [doctor]);
   const [search, setSearch] = useState('');
 
   const changeRoute = async (item) => {
-    history.push('/app/menu/levels/ViewCurrentUser', item);
+    // setView(true);
+
+    let res = await dispatch(getItemIsEdit(item));
+    item, history.push('/app/menu/levels/viewCurrentDoctor');
   };
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(user, search));
+    setDoc(searchArray(doctor, search));
   };
 
   const handleAdd = () => {
-    history.push('/app/menu/levels/CreateAdmin');
+    // dispatch(clear_doctor())
+    history.push('/app/menu/levels/CreateDoctors');
   };
-
   let header = [
     'Name',
     'DOB',
@@ -73,16 +81,14 @@ const ViewAdmin = ({ match, history }) => {
     'Status',
     'Actions',
   ];
-  // const filterAdmin = user?.filter((item) =>
-  //   item?.role?.category?.user_role_id === 1 ? item : null
-  // );
+
   return (
     <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
             {/* <Breadcrumb heading="Doctors" match={match} /> */}
-            <h4>Admin</h4>
+            <h4>Doctors</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
@@ -110,7 +116,7 @@ const ViewAdmin = ({ match, history }) => {
           onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#003766',
+            'backgroundColor': '#003766',
             marginTop: '10px',
           }}
         >
@@ -136,19 +142,96 @@ const ViewAdmin = ({ match, history }) => {
                 />
               </div>
             ) : (
-              <AdminTable
+              <ReactTableWithPaginationCard
                 header={header}
-                data={user}
+                doctor={search === '' ? doctor : doc}
                 changeRoute={changeRoute}
               />
             )}
           </Colxx>
         </Row>
+        {/* </Colxx> */}
+        {/* <ReactTableDivided/> */}
+        {/* {doctor?.length === 0 ? (
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Loader
+                type="Puff"
+                color="#00BFFF"
+                height={100}
+                width={100}
+              />
+            </div>
+          ) : (
+            <div className="table-form" style={{width:"100%"}}>
+              <Table >
+                <thead>
+                  <tr>
+
+                    <th>Name</th>
+                    <th>DOB</th>
+
+                    <th>Designation</th>
+
+                    <th>Gender</th>
+
+
+
+                    <th>Speciality</th>
+                    <th>Status</th>
+
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {doctor?.map((item, index = 0) => {
+                    return (
+                      <tr>
+                        <td>{item?.name}</td>
+
+                        <td>{item?.date_of_birth}</td>
+
+                        <td>{item?.designation}</td>
+
+                        <td>{item?.gender?.name}</td>
+
+
+                        <td>{item?.speciality?.name}</td>
+                        <td>{item?.state?.name}</td>
+
+
+                        <td>
+                          <Button
+                            key={index}
+                            value={item}
+                            onClick={(e) => {
+                              changeRoute(item);
+                            }}
+                          >
+                            View
+                          </Button>
+
+
+
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </div>
+          )} */}
       </CardBody>
     </Card>
   );
 };
-export default ViewAdmin;
+export default ThirdLevel2;
 {
   /*  */
 }

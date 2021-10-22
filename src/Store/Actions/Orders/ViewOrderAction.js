@@ -13,16 +13,11 @@ export const ViewOrderAction = () => async (dispatch) => {
   try {
     dispatch({
       type: VIEW_ORDER_CONSTANTS.VIEW_ORDER_LOADING,
-      payload: true,
+      payload: false,
     });
-    // let res = await axios.post('https://dmfr-backend.herokuapp.com/api/v1/order/read',{},{headers :{
-    //   "x_session_key":"13d183ec-156a-4b95-a59a-55d1e6842ad1",
-    //   "x_session_type" :"super_admin"
 
-    // }})
 
     let res = await apiServices.getOrders();
-    // console.log(res);
 
     if (res?.data?.response_code === 200) {
       dispatch({

@@ -25,7 +25,6 @@ import {
   UPDATE_RSM_CONSTANT,
   UPDATE_SM_CONSTANT,
   UPDATE_MPO_CONSTANT,
-  VIEW_ROLE_CONSTANT,
 } from 'Store/Constant/Constants';
 
 const initial_state = {
@@ -37,8 +36,7 @@ const initial_state = {
   areaManager: [],
   regionalSalesManager: [],
   mpo: [],
-  roles:[],
-  loading: false,
+  laoding: false,
 };
 
 export const ViewUserReducer = (state = initial_state, action) => {
@@ -187,13 +185,8 @@ export const ViewUserReducer = (state = initial_state, action) => {
       return { ...state, mpo: action.payload };
     case UPDATE_MPO_CONSTANT.UPDATE_MPO_ERROR:
       return { ...state, loading: action.payload };
-    case VIEW_ROLE_CONSTANT.VIEW_ROLE_LOADING:
-      return { ...state, loading: action.payload };
-    case VIEW_ROLE_CONSTANT.VIEW_ROLE_SUCCESS:
-      return { ...state, roles: action.payload };
-    case VIEW_ROLE_CONSTANT.VIEW_ROLE_ERROR:
-      return { ...state, loading: action.payload };
     default:
       return { ...state };
   }
 };
+

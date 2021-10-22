@@ -58,9 +58,10 @@ const SERVICE_URLS = {
   upadtePay: 'payment/update',
   region: 'region-classifications/read/region',
   area: 'region-classifications/read/area',
-  createUsers: 'users/create',
-  readRoles: 'roles/read',
-  updateUsers:'users/update'
+
+  //Concord Orders
+  getorder: 'orders/read',
+
 };
 
 const requestApproval = (data) =>
@@ -75,8 +76,6 @@ const readPayment = () =>
   post(SERVICE_URLS.readPayment, {}, { feature: featureConstants.static });
 const readRegion = () =>
   get(SERVICE_URLS.region, {}, { feature: featureConstants.static });
-const readRoles = () =>
-  get(SERVICE_URLS.readRoles, {}, { feature: featureConstants.static });
 const readArea = () =>
   get(SERVICE_URLS.area, {}, { feature: featureConstants.static });
 const readThana = () =>
@@ -87,8 +86,6 @@ const logout = () =>
   post(SERVICE_URLS.logout, {}, { feature: featureConstants.login });
 const insertMedicine = (data) =>
   post(SERVICE_URLS.medicineUpload, data, { feature: featureConstants.static });
-const CreateUsers = (data) =>
-  post(SERVICE_URLS.createUsers, data, { feature: featureConstants.static });
 const CreateCategory = (data) =>
   post(SERVICE_URLS.createCategory, data, { feature: featureConstants.login });
 const ReadReports = () =>
@@ -149,7 +146,7 @@ const changeDeliveryStatus = (data) =>
     feature: featureConstants.static,
   });
 
-const getUsers =async () =>
+const getUsers = () =>
   get(
     SERVICE_URLS.getDoctor,
     {},
@@ -329,12 +326,17 @@ const deleteReport = async (data) =>
   patch(SERVICE_URLS.deleteReport, data, {
     feature: featureConstants.static,
   });
-
-const updateUser = async (data) =>
-  put(SERVICE_URLS.updateUsers, data, {
-    feature: featureConstants.static,
-  });
 // post getStatic
+
+
+
+// Concord Orders
+  const getorder = () =>
+  get(SERVICE_URLS.getorder, { feature: featureConstants.static });
+
+
+
+
 
 const apiServices = {
   // define variables
@@ -394,8 +396,13 @@ const apiServices = {
   updatePayment,
   readArea,
   readThana,
-  CreateUsers,
-  readRoles,
-  updateUser
+
+
+
+// Concord Orders
+  getorder,
+
+
+
 };
 export default apiServices;

@@ -22,13 +22,9 @@ import {
 } from 'reactstrap';
 import apiServices from 'services/requestHandler';
 import { updateOrderAction } from 'Store/Actions/Orders/ViewOrderAction';
-export default function viewCurrentOrderComponent({ history, match }) {
-  let view = useSelector((state) => state?.ViewCurrentOrderRedcuer?.view);
-  let currentOrder = useSelector(
-    (state) => state?.ViewCurrentOrderRedcuer?.currentOrder
-  );
-  // console.log(currentOrder);
-  // console.log(currentOrder,view);
+export default function viewCurrentOrderComponent(props) {
+  // let view = useSelector((state) => state?.ViewCurrentOrderRedcuer?.view);
+  let currentOrder = props?.location?.state;
   const formikData = useFormik({
     initialValues: {
       //   password: doctor_obj?.password,
@@ -37,7 +33,6 @@ export default function viewCurrentOrderComponent({ history, match }) {
     // validate: validate,
 
     onSubmit: (values) => {
-      // console.log(values);
     },
   });
   useEffect(() => {
@@ -45,69 +40,69 @@ export default function viewCurrentOrderComponent({ history, match }) {
       history.push('/app/Orders/orders');
     }
   }, []);
-  const handleChangeToView = () => {
-    history.push('/app/Orders/orders');
-  };
-  const dispatch = useDispatch();
+  // const handleChangeToView = () => {
+  //   history.push('/app/Orders/orders');
+  // };
+  // const dispatch = useDispatch();
 
-  const changeStatusToProcessing = () => {
-    const apiData = {
-      order_id: currentOrder?.id,
-      delivery_status: { id: 2, name: 'processing' },
-    };
-    let res = dispatch(updateOrderAction(apiData));
-    if (res) {
-      NotificationManager.success(
-        'Sucessfully Updated',
-        'Sucess',
-        5000,
-        null,
-        ''
-      );
-      history.push('/app/Orders/orders');
-    }
-  };
-  const changeStatusToDispatched = async () => {
-    const apiData = {
-      order_id: currentOrder?.id,
-      delivery_status: { id: 3, name: 'dispatched' },
-    };
-    let res = dispatch(updateOrderAction(apiData));
-    if (res) {
-      NotificationManager.success(
-        'Sucessfully Updated',
-        'Sucess',
-        5000,
-        null,
-        ''
-      );
-      history.push('/app/Orders/orders');
-    }
-  };
-  const changeStatusToDelivered = async () => {
-    const apiData = {
-      order_id: currentOrder?.id,
-      delivery_status: { id: 4, name: 'delivered' },
-    };
-    let res = dispatch(updateOrderAction(apiData));
-    if (res) {
-      NotificationManager.success(
-        'Sucessfully Updated',
-        'Sucess',
-        5000,
-        null,
-        ''
-      );
-      history.push('/app/Orders/orders');
-    }
-  };
+  // const changeStatusToProcessing = () => {
+  //   const apiData = {
+  //     order_id: currentOrder?.id,
+  //     delivery_status: { id: 2, name: 'processing' },
+  //   };
+  //   let res = dispatch(updateOrderAction(apiData));
+  //   if (res) {
+  //     NotificationManager.success(
+  //       'Sucessfully Updated',
+  //       'Sucess',
+  //       5000,
+  //       null,
+  //       ''
+  //     );
+  //     history.push('/app/Orders/orders');
+  //   }
+  // };
+  // const changeStatusToDispatched = async () => {
+  //   const apiData = {
+  //     order_id: currentOrder?.id,
+  //     delivery_status: { id: 3, name: 'dispatched' },
+  //   };
+  //   let res = dispatch(updateOrderAction(apiData));
+  //   if (res) {
+  //     NotificationManager.success(
+  //       'Sucessfully Updated',
+  //       'Sucess',
+  //       5000,
+  //       null,
+  //       ''
+  //     );
+  //     history.push('/app/Orders/orders');
+  //   }
+  // };
+  // const changeStatusToDelivered = async () => {
+  //   const apiData = {
+  //     order_id: currentOrder?.id,
+  //     delivery_status: { id: 4, name: 'delivered' },
+  //   };
+  //   let res = dispatch(updateOrderAction(apiData));
+  //   if (res) {
+  //     NotificationManager.success(
+  //       'Sucessfully Updated',
+  //       'Sucess',
+  //       5000,
+  //       null,
+  //       ''
+  //     );
+  //     history.push('/app/Orders/orders');
+  //   }
+  // };
   return (
     <Card>
       <CardBody>
         <CardTitle>
           <Button
             className="btn-btn-secondary"
-            onClick={handleChangeToView}
+            // onClick={handleChangeToView}
             style={{ marginRight: '20px', 'background-color': '#003766' }}
           >
             Back
@@ -123,7 +118,7 @@ export default function viewCurrentOrderComponent({ history, match }) {
           }}
         >
           <Button
-            onClick={changeStatusToProcessing}
+            // onClick={changeStatusToProcessing}
             style={{
               'margin-right': '10px',
               'background-color': '#003766',
@@ -136,7 +131,7 @@ export default function viewCurrentOrderComponent({ history, match }) {
             Processing
           </Button>
           <Button
-            onClick={changeStatusToDispatched}
+            // onClick={changeStatusToDispatched}
             style={{
               'margin-right': '10px',
               'background-color': '#003766',
@@ -150,7 +145,7 @@ export default function viewCurrentOrderComponent({ history, match }) {
           </Button>
 
           <Button
-            onClick={changeStatusToDelivered}
+            // onClick={changeStatusToDelivered}
             style={{ 'background-color': '#003766' }}
           >
             Delivered
@@ -166,50 +161,18 @@ export default function viewCurrentOrderComponent({ history, match }) {
                     <h6>Delivery Type</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder?.delivery_type?.name}</p>
+                    <p>"Del"</p>
                   </span>
                 </FormGroup>
               </Col>
 
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Email Address" />
-                  </Label>
-                  <span>
-                    <p>{currentOrder?.ordered_by?.email_address}</p>
-                  </span>
-                </FormGroup>
-              </Col> */}
-
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Order By" />
-                  </Label>
-                  <span>
-                    <p>{currentOrder?.ordered_by?.name}</p>
-                  </span>
-                </FormGroup>
-              </Col> */}
-
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <label>
-                    <IntlMessages id="Packages" />
-                  </label>
-                  <span>
-                    <p>{currentOrder?.packages?.map((item) => item?.name)}</p>
-                  </span>
-                </FormGroup>
-              </Col> */}
               <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <h6>Delivery Status</h6>
                   </Label>
                   <span style={{color:currentOrder?.delivery_status?.name === "delivered" ? 'green' : "red"}}>
-                    <p>{currentOrder?.delivery_status?.name?.toUpperCase()}</p>
+                    <p>""</p>
                   </span>
                 </FormGroup>
               </Col>
@@ -219,7 +182,7 @@ export default function viewCurrentOrderComponent({ history, match }) {
                     <h6>Paid Status</h6>
                   </Label>
                   <span style={{color:currentOrder?.paid_status?.name === "paid" ? 'green' : "red"}}>
-                    <p>{currentOrder?.paid_status?.name?.toUpperCase()}</p>
+                    <p></p>
                   </span>
                 </FormGroup>
               </Col>
@@ -229,7 +192,7 @@ export default function viewCurrentOrderComponent({ history, match }) {
                     <IntlMessages id="Ordered By" />
                   </Label>
                   <span>
-                    <p>{currentOrder?.ordered_by?.name}</p>
+                    <p></p>
                   </span>
                 </FormGroup>
               </Col>
@@ -251,36 +214,12 @@ export default function viewCurrentOrderComponent({ history, match }) {
                     <IntlMessages id="Total Amount" />
                   </Label>
                   <span>
-                    <p>{currentOrder?.total_amount}</p>
+                    <p>""</p>
                   </span>
                 </FormGroup>
               </Col>
             </Row>
-            {/* <Row>
-              <div className="table-form-order" style={{ width: '100%' }}>
-                <h3>Order By</h3>
-
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-
-                      <th>Phone Number</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{currentOrder?.ordered_by?.name}</td>
-
-                      <td>{currentOrder?.ordered_by?.email_address}</td>
-
-                      <td>{currentOrder?.ordered_by?.phone_number}</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </Row> */}
+           
 
             <Row>
               <Col lg={12}>
@@ -304,24 +243,18 @@ export default function viewCurrentOrderComponent({ history, match }) {
                     <tbody>
                       <tr>
                         <td>
-                          {currentOrder?.tests?.map((item) => item?.test?.name)}
+                         ""
                         </td>
 
                         <td>
-                          {currentOrder?.tests?.map(
-                            (item) => item?.test?.report?.status?.name
-                          )}
+                          ""
                         </td>
                         <td>
-                          {currentOrder?.tests?.map(
-                            (item) => item?.test?.price
-                          )}
+                          ""
                         </td>
 
                         <td>
-                          {currentOrder?.tests?.map(
-                            (item) => item?.test?.status?.name
-                          )}
+                         ""
                         </td>
                       </tr>
                     </tbody>
@@ -356,13 +289,13 @@ export default function viewCurrentOrderComponent({ history, match }) {
                       {currentOrder?.packages?.map((item, index) => {
                         return (
                           <tr>
-                            <td>{item?.name}</td>
+                            <td>""</td>
 
-                            <td>{item?.age_group?.name}</td>
-                            <td>{item?.category?.name}</td>
-                            <td>{item?.gender?.name}</td>
-                            <td>{item?.price}</td>
-                            <td>{item?.status?.name}</td>
+                            <td>""</td>
+                            <td>""</td>
+                            <td>""</td>
+                            <td>""</td>
+                            <td>""</td>
                           </tr>
                         );
                       })}
@@ -399,15 +332,15 @@ export default function viewCurrentOrderComponent({ history, match }) {
                       {currentOrder?.medicines?.map((item) => {
                         return (
                           <tr>
-                            <td>{item?.medicine?.name}</td>
-                            <td>{item?.medicine?.quantity}</td>
+                            <td></td>
+                            <td></td>
 
-                            <td>{item?.medicine?.medicine_type}</td>
-                            <td>{item?.medicine?.purchase_price}</td>
-                            <td>{item?.medicine?.availability?.name}</td>
-                            <td>{item?.medicine?.formula}</td>
-                            <td>{item?.medicine?.sales_price}</td>
-                            {/* <td>{item?.status?.name}</td> */}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                         
                           </tr>
                         );
                       })}
