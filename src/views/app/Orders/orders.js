@@ -57,6 +57,12 @@ export default function Orders({ match, history }) {
   };
   const [orderTable, setOrderTable] = useState(orders);
 
+
+  const handleAdd = () => {
+
+    history.push('/app/Orders/AddOrder');
+  };
+
   useEffect(() => {
     setOrderTable(orders);
   }, [orders]);
@@ -69,6 +75,7 @@ export default function Orders({ match, history }) {
     'Delivery Status',
     'Payment Status',
     'Proceed By',
+    'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
@@ -84,11 +91,22 @@ export default function Orders({ match, history }) {
             <Separator className="mb-5" />
           </Colxx>
         </Row>
+        <Button
+          onClick={handleAdd}
+          style={{
+            marginBottom: '15px',
+            'backgroundColor': '#003766',
+            marginTop: '10px',
+          }}
+        >
+          Add New Order
+        </Button>
         <Row>
           <Col lg={12}>
             {/* <label htmlFor="search">
               <input id="search" type="text" onChange={handleSearch} />
             </label> */}
+            
             <div className="header-search">
               <form action="#" className="">
                 <i className="fas fa-search search-icon"></i>
@@ -104,6 +122,7 @@ export default function Orders({ match, history }) {
             </div>
           </Col>
         </Row>
+        
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (

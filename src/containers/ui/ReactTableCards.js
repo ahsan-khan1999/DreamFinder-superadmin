@@ -492,10 +492,17 @@ export const OrderRequestTable = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
-            style={{
-              
+            
+          style={{
+              color: props?.value === 'delivered' 
+              ||props?.value==='submitted_to_depot'
+              ? 'green'
+               : props?.value === 'pending' ? '#C0B627' 
+              : props?.value === 'returned' 
+              ||props?.value==='cancelled' ? 'red' 
+              : props?.value === 'dispatched' ? 'blue' : '',
               fontSize: '0.9rem',
-
+              fontWeight:'600'
               
             }}
           >
@@ -510,8 +517,15 @@ export const OrderRequestTable = (props) => {
         Cell: (props) => (
           <span
             style={{
-              
+              color: props?.value === 'delivered' 
+              ||props?.value==='received'
+              ? 'green'
+               : props?.value === 'pending' ? '#C0B627' 
+              : props?.value === 'declined' 
+              ||props?.value==='cancelled' ? 'red' 
+              :props?.value === 'unpaid' || props?.value === 'deposited' ? 'blue' : '',
               fontSize: '0.9rem',
+              fontWeight:'600'
             }}
           >
             {props?.value?.toUpperCase()}
@@ -535,8 +549,25 @@ export const OrderRequestTable = (props) => {
         ),
       },
       {
+        Header: props?.header[8],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
         Header: (
-          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[8]}</span>
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[9]}</span>
         ),
         accessor: 'title6',
         cellClass: 'text-muted w-10',

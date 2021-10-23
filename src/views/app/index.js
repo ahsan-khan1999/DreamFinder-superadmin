@@ -3,6 +3,7 @@ import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import AppLayout from 'layout/AppLayout';
+
 // import { ProtectedRoute, UserRole } from 'helpers/authHelper';
 
 const Dashboards = React.lazy(() =>
@@ -14,6 +15,11 @@ const Pages = React.lazy(() =>
 const Orders = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Orders/orders')
 );
+const AddOrder = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Orders/AddOrder')
+);
+  
+
 const Test = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Test/viewTest')
 );
@@ -57,7 +63,9 @@ const UploadReport = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Reports/uploadReport')
 );
 const ViewCurrentMedicines = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines')
+  import(
+    /* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines'
+  )
 );
 const ViewCurrentOrder = React.lazy(() =>
   import(
@@ -94,7 +102,7 @@ const App = ({ match }) => {
             />
 
             <Route
-              path={`${match.url}/Orders/viewCurrentOrder`}
+              path={`${match.url}/orders/viewCurrentOrder`}
               render={(props) => <ViewCurrentOrder {...props} />}
             />
             <Route
@@ -126,9 +134,14 @@ const App = ({ match }) => {
               render={(props) => <ViewCurrentMedicines {...props} />}
             />
             <Route
-              path={`${match.url}/orders`}
+              path={`${match.url}/Orders/orders`}
               render={(props) => <Orders {...props} />}
             />
+            <Route
+              path={`${match.url}/Orders/AddOrder`}
+              render={(props) => <AddOrder {...props} />}
+            />
+            
 
             <Route
               path={`${match.url}/Test/viewTest`}
@@ -147,7 +160,7 @@ const App = ({ match }) => {
               path={`${match.url}/Medicines/CreateMedicines`}
               render={(props) => <CreateMedicines {...props} />}
             />
-            
+
             <Route
               path={`${match.url}/Test/CreateCategory`}
               render={(props) => <CreateCategory {...props} />}

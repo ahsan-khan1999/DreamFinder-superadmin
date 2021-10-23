@@ -35,3 +35,44 @@ export const OrderAction = () => async (dispatch) => {
     }
   } catch {}
 };
+
+export const getUsers = (uid,user) => async (dispatch) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  try {
+    const head = { "x-session-key": token.token, "x-session-type": token.type };
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/users/read/${user}?manager_uid=${uid}`,
+      { headers: head }
+    );
+    console.log("Api Response",response)
+    if (response?.data?.response_code === 200) {
+      if (role === "sm") {
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER,
+          payload: response?.data?.response_data,
+        });
+      }
+      else if (role === "rsm") {
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_RSM,
+          payload: response?.data?.response_data,
+        });
+      }
+      else if (role === "am"){
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_AM,
+          payload: response?.data?.response_data,
+        });
+      }
+      else if (role === "mpo"){
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_MPO,
+          payload: response?.data?.response_data,
+        });
+      }
+     
+    }
+  } catch (error) {
+    return "Fail";
+  }
+};

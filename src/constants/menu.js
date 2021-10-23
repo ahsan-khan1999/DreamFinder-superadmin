@@ -478,6 +478,7 @@ const data = [
         label: 'menu.viewOrders',
         to: `${adminRoot}/Orders/orders`,
       },
+      
     ],
   },
 
