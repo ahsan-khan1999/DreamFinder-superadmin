@@ -6,6 +6,7 @@ import {
   CreateAdminAction,
   ViewAdminAction,
   ViewRoleAction,
+  ViewSalesManagerManagerAction,
 } from 'Store/Actions/User/UserActions';
 import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
@@ -41,7 +42,7 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 
 ];
-export default function CreateAdmin({history}) {
+export default function CreateDirector({history}) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -57,29 +58,31 @@ export default function CreateAdmin({history}) {
     phone_number: '',
     
     role_uid: '',
+    manager_uid:'',
+    service_location_uid:[]
   };
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
   const readUser = () => {
-    dispatch(ViewAdminAction());
+    dispatch(ViewSalesManagerManagerAction());
   };
   useEffect(() => {
     readRoles();
     readUser()
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  const user = useSelector((state) => state?.ViewUserReducer?.admin);
+  const user = useSelector((state) => state?.ViewUserReducer?.salesManager);
 
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  // let deliveryStaffFilter = []
-  //   user?.filter((item) => (
-  //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
-  //   ))
+  let salesManager = []
+    user?.filter((item) => (
+      salesManager?.push({label:item?.name,value:item?.name,key:item?.uid})
+    ))
   
 
   const [admin, setAdmin] = useState(admin_obj);
@@ -128,7 +131,7 @@ export default function CreateAdmin({history}) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Admin" />
+          <IntlMessages id="Create Regional Sales Manager" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -295,6 +298,31 @@ export default function CreateAdmin({history}) {
                       setAdmin({ ...admin, role_uid: val?.key })
                     }
                     options={options}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select SM" />
+                  </Label>
+
+                  <Select
+                    required
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name-gender"
+                    // value={gender}
+
+                    onChange={(val) => {
+                      setAdmin({
+                        ...admin,
+                        manager_uid: val.key,
+                      });
+                      getServiceLocationUid(val.key);
+                    }}
+                    options={salesManager}
                   />
                 </FormGroup>
               </Col>

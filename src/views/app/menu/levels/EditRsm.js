@@ -24,12 +24,15 @@ import Select from 'react-select';
 
 import CustomSelectInput from '../../../../components/common/CustomSelectInput';
 import { NotificationManager } from 'components/common/react-notifications';
+import apiServices from 'services/requestHandler';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
-export default function ViewCurrentUser(props) {
+export default function EditRsm(props) {
+  const [buttonName, setButtonName] = useState('')
+
   const [thisView, setThisView] = useState(true);
   const currentUser = props?.location?.state;
   //   console.log(currentUser);
@@ -37,7 +40,7 @@ export default function ViewCurrentUser(props) {
   console.log(currentUser);
   const admin_obj = {
     email_address: currentUser?.email_address,
-    uid:currentUser?.uid,
+    uid: currentUser?.uid,
     name: currentUser?.name,
     // password: "alpha",
 
@@ -53,6 +56,11 @@ export default function ViewCurrentUser(props) {
     // dispatch(ViewRoleAction());
   };
   useEffect(() => {
+    if (currentUser?.status?.name === 'suspended') {
+      setButtonName('Active');
+    } else if (currentUser?.status?.name === 'active') {
+      setButtonName('Suspend');
+    }
     // readRoles();
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
@@ -73,14 +81,68 @@ export default function ViewCurrentUser(props) {
   const handleChangeToView = () => {
     props.history.push('/app/menu/levels/viewAdmin');
   };
-  const editData = async(e) => {
+  const editData = async (e) => {
     e.preventDefault();
     console.log(admin);
-    let res =await  dispatch(UpdateUserAction(admin));
+    let res = await dispatch(UpdateUserAction(admin));
     if (res) {
       NotificationManager.success('Successful response', 'Success', 5000, '');
       props.history.push('/app/menu/levels/viewAdmin');
     }
+  };
+  const suspandAdmin = async () => {
+    if (currentUser?.status?.name === 'suspended') {
+      let apiData = {
+        uid: currentUser?.uid,
+      };
+      let res = await apiServices.suspandUser(apiData);
+      console.log(res);
+      if (res?.data?.response_code === 200) {
+        NotificationManager.success(
+          'Sucessfully Activated',
+          'Sucess',
+          5000,
+          null,
+          ''
+        );
+        props.history.push('/app/menu/levels/ViewRsm');
+      } else {
+        NotificationManager.error(
+          'Error active This Admin',
+          'Error',
+          5000,
+          null,
+          ''
+        );
+      }
+    } else {
+      let apiData = {
+        uid: currentUser?.uid,
+      };
+      let res = await apiServices.suspandUser(apiData);
+      console.log(res);
+      if (res?.response_code === 200) {
+        NotificationManager.success(
+          'Sucessfully Suspaned',
+          'Sucess',
+          5000,
+          null,
+          ''
+        );
+        props.history.push('/app/menu/levels/ViewRsm');
+      } else {
+        NotificationManager.error(
+          res?.response_message,
+          'Error',
+          5000,
+          null,
+          ''
+        );
+      }
+    }
+    //  setStatusUpdate()
+
+    // console.log(doctor?.password);
   };
   return (
     <Card>
@@ -342,6 +404,25 @@ export default function ViewCurrentUser(props) {
                 </span>
                 Save
               </Button>
+            )}
+            {thisView ? (
+              <Button
+                style={{ 'background-color': '#003766', marginRight: '5px' }}
+                // className="btn btn-primary"
+                onClick={suspandAdmin}
+                // className={`btn-shadow btn-multiple-state ${
+                //   loading ? 'show-spinner' : ''
+                // }`}
+              >
+                <span className="spinner d-inline-block">
+                  <span className="bounce1" />
+                  <span className="bounce2" />
+                  <span className="bounce3" />
+                </span>
+                {buttonName}
+              </Button>
+            ) : (
+              ''
             )}
           </Form>
         </Formik>

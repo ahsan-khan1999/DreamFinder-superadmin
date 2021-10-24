@@ -21,7 +21,14 @@ const SERVICE_URLS = {
   resetPassword: 'users/reset-password ',
   getDepartment: 'department/read ',
   createUser: 'user/create',
-  getDoctor: 'users/read',
+  getAdmin: 'users/read/admin',
+  getDirector: 'users/read/director',
+  getDepoManager: 'users/read/depot_manager',
+  getDeliveryStaff: 'users/read/delivery_staff',
+  getSM: 'users/read/sm',
+  getRSM: 'users/read/rsm',
+  getAM: 'users/read/am',
+  getMPO: 'users/read/mpo',
   updateDoctor: 'user/update',
   getTodaysAppoinment: 'appointments/today',
   getPastAppoinment: 'appointments/past',
@@ -60,7 +67,8 @@ const SERVICE_URLS = {
   area: 'region-classifications/read/area',
   createUsers: 'users/create',
   readRoles: 'roles/read',
-  updateUsers:'users/update'
+  updateUsers: 'users/update',
+  suspandUser:'users/suspend'
 };
 
 const requestApproval = (data) =>
@@ -149,15 +157,70 @@ const changeDeliveryStatus = (data) =>
     feature: featureConstants.static,
   });
 
-const getUsers =async () =>
+const getAdmin =  () =>
   get(
-    SERVICE_URLS.getDoctor,
+    SERVICE_URLS.getAdmin,
     {},
     {
       feature: featureConstants.static,
     }
   );
-
+const getDirector = async () =>
+  get(
+    SERVICE_URLS.getDirector,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
+const getDepo = async () =>
+  get(
+    SERVICE_URLS.getDepoManager,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
+const getDeliveryUser = async () =>
+  get(
+    SERVICE_URLS.getDeliveryStaff,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
+const getSm = async () =>
+  get(
+    SERVICE_URLS.getSM,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
+const getRsm = async () =>
+  get(
+    SERVICE_URLS.getRSM,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
+const getAm = async () =>
+  get(
+    SERVICE_URLS.getAM,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
+const getMpo = async () =>
+  get(
+    SERVICE_URLS.getMPO,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
 const getSuperAdmin = () =>
   post(
     SERVICE_URLS.superAdminRead,
@@ -281,6 +344,14 @@ const updateAdmin = async (data) =>
   put(SERVICE_URLS.updateDoctor, data, {
     feature: featureConstants.static,
   });
+const suspandUser = async (data) =>
+  patch(
+    SERVICE_URLS.suspandUser,
+    data,
+    {
+      feature: featureConstants.static,
+    }
+  );
 const getTodaysAppoinments = async () =>
   post(
     SERVICE_URLS.getTodaysAppoinment,
@@ -354,7 +425,7 @@ const apiServices = {
   getDepartment,
   changePassword,
   reg_doctor,
-  getUsers,
+  getAdmin,
   updateDoctor,
   getTodaysAppoinments,
   getPastAppoinments,
@@ -396,6 +467,14 @@ const apiServices = {
   readThana,
   CreateUsers,
   readRoles,
-  updateUser
+  updateUser,
+  getDirector,
+  getDepo,
+  getDeliveryUser,
+  getSm,
+  getRsm,
+  getAm,
+  getMpo,
+  suspandUser
 };
 export default apiServices;

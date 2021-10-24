@@ -37,7 +37,7 @@ export const ViewAdminAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getAdmin();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_ADMIN_CONSTANT.VIEW_ADMIN_LOADING,
@@ -50,7 +50,7 @@ export const ViewAdminAction = () => async (dispatch) => {
     } else {
       dispatch({
         type: VIEW_ADMIN_CONSTANT.VIEW_ADMIN_ERROR,
-        payload: true,
+        payload: false,
       });
     }
   } catch {}
@@ -63,7 +63,7 @@ export const ViewDirectorAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getDirector();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_DIRECTOR_CONSTANT.VIEW_DIRECTOR_LOADING,
@@ -89,7 +89,7 @@ export const ViewDepoAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getDepo();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_DEPO_CONSTANT.VIEW_DEPO_LOADING,
@@ -115,7 +115,7 @@ export const ViewDeliveryStaffAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getDeliveryUser();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_DELIVERYSTAFF_CONSTANT.VIEW_DELIVERYSTAFF_LOADING,
@@ -141,7 +141,7 @@ export const ViewAreaManagerAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getAm();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_AM_CONSTANT.VIEW_AM_LOADING,
@@ -167,7 +167,7 @@ export const ViewRegionalSalesManagerManagerAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getRsm();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_RSM_CONSTANT.VIEW_RSM_LOADING,
@@ -192,7 +192,7 @@ export const ViewSalesManagerManagerAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getSm();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_SM_CONSTANT.VIEW_SM_LOADING,
@@ -217,7 +217,7 @@ export const ViewMPOManagerAction = () => async (dispatch) => {
       payload: true,
     });
 
-    let response = await apiServices.getUsers();
+    let response = await apiServices.getMpo();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_MPO_CONSTANT.VIEW_MPO_LOADING,
@@ -302,6 +302,7 @@ export const UpdateUserAction = (data) => async (dispatch) => {
     let res = await apiServices.updateUser(data);
     console.log(res);
     if (res?.response_code === 200) {
+      // dispatch(ViewAdminAction())
       dispatch({
         type: UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_LOADING,
         payload: false,

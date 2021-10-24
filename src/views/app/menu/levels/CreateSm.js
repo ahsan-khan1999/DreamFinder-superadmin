@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import {
   CreateAdminAction,
   ViewAdminAction,
+  ViewDirectorAction,
   ViewRoleAction,
 } from 'Store/Actions/User/UserActions';
 import { CardBody, Col, Row, Table } from 'reactstrap';
@@ -34,14 +35,14 @@ import ModalExample from './ModelTo';
 import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
+import axios from 'axios';
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
-
 ];
-export default function CreateAdmin({history}) {
+export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -55,22 +56,24 @@ export default function CreateAdmin({history}) {
     designation: '',
 
     phone_number: '',
-    
+
     role_uid: '',
+    manager_uid: '',
+    service_location_uid: [],
   };
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
   const readUser = () => {
-    dispatch(ViewAdminAction());
+    dispatch(ViewDirectorAction());
   };
   useEffect(() => {
     readRoles();
-    readUser()
+    readUser();
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  const user = useSelector((state) => state?.ViewUserReducer?.admin);
+  const user = useSelector((state) => state?.ViewUserReducer?.director);
 
   let options = [];
   roles?.filter((item) =>
@@ -80,7 +83,14 @@ export default function CreateAdmin({history}) {
   //   user?.filter((item) => (
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
-  
+  let directorFilter = [];
+  user?.filter((item) =>
+    directorFilter?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
 
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
@@ -89,8 +99,9 @@ export default function CreateAdmin({history}) {
       admin?.name === '' &&
       admin?.password === '' &&
       admin?.gender === '' &&
-      admin?.phone_number === ''
-      && admin?.designation === '' && admin.role_uid === ''
+      admin?.phone_number === '' &&
+      admin?.designation === '' &&
+      admin.role_uid === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -124,11 +135,25 @@ export default function CreateAdmin({history}) {
       }
     }
   };
+  const getServiceLocationUid = async (uid) => {
+    alert('at finc');
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-prod.herokuapp.com/api/region-classifications/read?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+    console.log(response);
+  };
   return (
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Admin" />
+          <IntlMessages id="Create Sales Manager" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -228,7 +253,7 @@ export default function CreateAdmin({history}) {
                       onChange={(val) =>
                         setAdmin({
                           ...admin,
-                          gender:  val?.value,
+                          gender: val?.value,
                         })
                       }
                       options={selectGender}
@@ -290,7 +315,7 @@ export default function CreateAdmin({history}) {
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-                    
+
                     onChange={(val) =>
                       setAdmin({ ...admin, role_uid: val?.key })
                     }
@@ -298,10 +323,11 @@ export default function CreateAdmin({history}) {
                   />
                 </FormGroup>
               </Col>
-              {/* <Col lg={6}>
+          
+              <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Parent" />
+                    <IntlMessages id="Select Depo Manager" />
                   </Label>
 
                   <Select
@@ -311,14 +337,18 @@ export default function CreateAdmin({history}) {
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-                    
-                    // onChange={(val) =>
-                    //   setAdmin({ ...admin, role_uid: val?.key })
-                    // }
-                    options={deliveryStaffFilter}
+
+                    onChange={(val) => {
+                      setAdmin({
+                        ...admin,
+                        manager_uid: val.key,
+                      });
+                      getServiceLocationUid(val.key);
+                    }}
+                    options={directorFilter}
                   />
                 </FormGroup>
-              </Col> */}
+              </Col>
             </Row>
 
             <Button

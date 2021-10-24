@@ -1,10 +1,10 @@
 /* eslint-disable */
 
-import { NotificationManager } from 'components/common/react-notifications';
 import React, { useEffect } from 'react';
 import {
   CreateAdminAction,
   ViewAdminAction,
+  ViewDepoAction,
   ViewRoleAction,
 } from 'Store/Actions/User/UserActions';
 import { CardBody, Col, Row, Table } from 'reactstrap';
@@ -34,63 +34,98 @@ import ModalExample from './ModelTo';
 import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
+import axios from 'axios';
+import { NotificationManager } from 'components/common/react-notifications';
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
-
 ];
-export default function CreateAdmin({history}) {
+export default function CreateDeliveryStaff() {
+  let [filterLocationIds, setfilterLocationIds] = useState([]);
+  // let filterLocationIds =[]
+  let [service_location, setService_location] = useState([]);
+
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
-  const admin_obj = {
+  const deliveryStaff_obj = {
     email_address: '',
 
     name: '',
-    // password: "alpha",
     password: '',
 
     gender: '',
     designation: '',
 
     phone_number: '',
-    
+
     role_uid: '',
+    manager_uid: '',
+    service_location_uid: filterLocationIds,
+  };
+  let [option, setoption] = useState([]);
+
+  const getServiceLocationUid = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+    
+    setService_location(response?.data?.response_data)
+
+    
   };
 
+
+  service_location?.map((item) => (
+    option?.push({label:item?.name,value:item?.name,key:item?.uid})  
+  ))
+  
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
-  const readUser = () => {
-    dispatch(ViewAdminAction());
-  };
   useEffect(() => {
     readRoles();
-    readUser()
+    dispatch(ViewDepoAction());
   }, []);
-  const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  const user = useSelector((state) => state?.ViewUserReducer?.admin);
+  const depoManager = useSelector(
+    (state) => state?.ViewUserReducer?.depoManager
+  );
 
+  const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  // let deliveryStaffFilter = []
-  //   user?.filter((item) => (
-  //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
-  //   ))
-  
+  let depoManagerFilter = [];
+  depoManager?.filter((item) =>
+    depoManagerFilter?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
 
-  const [admin, setAdmin] = useState(admin_obj);
+  const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
+
   const onAdminCreate = async () => {
     if (
-      admin?.email_address === '' &&
-      admin?.name === '' &&
-      admin?.password === '' &&
-      admin?.gender === '' &&
-      admin?.phone_number === ''
-      && admin?.designation === '' && admin.role_uid === ''
+      deliveryStaff?.email_address === '' &&
+      deliveryStaff?.name === '' &&
+      deliveryStaff?.password === '' &&
+      deliveryStaff?.gender === '' &&
+      deliveryStaff?.phone_number === '' &&
+      deliveryStaff?.designation === '' &&
+      deliveryStaff.role_uid === '' &&
+      deliveryStaff.manager_uid === '' &&
+      deliveryStaff?.service_location_uid === []
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -101,19 +136,20 @@ export default function CreateAdmin({history}) {
       );
       return;
     } else {
-      let res = await dispatch(CreateAdminAction({ ...admin }));
-      // console.log(res, 'admin create res');
+      console.log(deliveryStaff);
+      let res = await dispatch(CreateAdminAction({ ...deliveryStaff }));
+      console.log(res, 'admin create res');
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'Delivery Staff Added Sucessfully',
           'Success',
           3000,
           null,
           ''
         );
-        history.push('/app/menu/levels/viewDoctor');
-      } else if (confirmPassword !== admin?.password) {
+        history.push('/app/menu/levels/ViewDeliveryStaff');
+      } else if (confirmPassword !== deliveryStaff?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
           'Error',
@@ -124,11 +160,19 @@ export default function CreateAdmin({history}) {
       }
     }
   };
+
+  const handleChange = (val) => {
+    setDeliveryStaff({
+      ...deliveryStaff,
+      service_location_uid: val?.key,
+    });
+  };
+
   return (
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Admin" />
+          <IntlMessages id="Create Delivery Staff" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -142,12 +186,15 @@ export default function CreateAdmin({history}) {
 
                   <Input
                     required
-                    value={admin.name}
+                    value={deliveryStaff.name}
                     className="form-control"
                     name="name"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setAdmin({ ...admin, name: e.target.value })
+                      setDeliveryStaff({
+                        ...deliveryStaff,
+                        name: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -161,12 +208,15 @@ export default function CreateAdmin({history}) {
 
                   <Input
                     required
-                    value={admin.email_address}
+                    value={deliveryStaff.email_address}
                     className="form-control"
                     name="email"
                     type="email"
                     onChange={(e) =>
-                      setAdmin({ ...admin, email_address: e.target.value })
+                      setDeliveryStaff({
+                        ...deliveryStaff,
+                        email_address: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -179,13 +229,16 @@ export default function CreateAdmin({history}) {
                   </Label>
                   <Input
                     required
-                    value={admin.password}
+                    value={deliveryStaff.password}
                     className="form-control"
                     name="password"
                     type="password"
                     //   validate={validate}
                     onChange={(e) =>
-                      setAdmin({ ...admin, password: e.target.value })
+                      setDeliveryStaff({
+                        ...deliveryStaff,
+                        password: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -221,14 +274,14 @@ export default function CreateAdmin({history}) {
                       name="form-field-name-gender"
                       // value={gender}
                       defaultValue={{
-                        label: admin?.gender,
-                        value: admin?.gender,
-                        key: admin?.gender,
+                        label: deliveryStaff?.gender,
+                        value: deliveryStaff?.gender,
+                        key: deliveryStaff?.gender,
                       }}
                       onChange={(val) =>
-                        setAdmin({
-                          ...admin,
-                          gender:  val?.value,
+                        setDeliveryStaff({
+                          ...deliveryStaff,
+                          gender: val?.value,
                         })
                       }
                       options={selectGender}
@@ -245,14 +298,17 @@ export default function CreateAdmin({history}) {
 
                   <Input
                     required
-                    value={admin?.phone_number}
+                    value={deliveryStaff?.phone_number}
                     type="text"
                     className="radio-in"
                     name="phone_number"
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
                     onChange={(e) =>
-                      setAdmin({ ...admin, phone_number: e.target.value })
+                      setDeliveryStaff({
+                        ...deliveryStaff,
+                        phone_number: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -266,13 +322,16 @@ export default function CreateAdmin({history}) {
 
                   <Input
                     required={true}
-                    value={admin.designation}
+                    value={deliveryStaff.designation}
                     className="form-control"
                     name="designation"
                     type="text"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setAdmin({ ...admin, designation: e.target.value })
+                      setDeliveryStaff({
+                        ...deliveryStaff,
+                        designation: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -289,19 +348,18 @@ export default function CreateAdmin({history}) {
                     className="react-select"
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
-                    // value={gender}
-                    
                     onChange={(val) =>
-                      setAdmin({ ...admin, role_uid: val?.key })
+                      setDeliveryStaff({ ...deliveryStaff, role_uid: val?.key })
                     }
                     options={options}
                   />
                 </FormGroup>
               </Col>
-              {/* <Col lg={6}>
+
+              <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Parent" />
+                    <IntlMessages id="Select Depo Manager" />
                   </Label>
 
                   <Select
@@ -311,14 +369,43 @@ export default function CreateAdmin({history}) {
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-                    
-                    // onChange={(val) =>
-                    //   setAdmin({ ...admin, role_uid: val?.key })
-                    // }
-                    options={deliveryStaffFilter}
+
+                    onChange={(val) => {
+                      setDeliveryStaff({
+                        ...deliveryStaff,
+                        manager_uid: val.key,
+                      });
+                      getServiceLocationUid(val?.key);
+                    }}
+                    options={depoManagerFilter}
                   />
                 </FormGroup>
-              </Col> */}
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select Territory" />
+                  </Label>
+
+                  <Select
+                    required
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name-gender"
+                    // value={gender}
+
+                    onChange={(val) => {
+                      setDeliveryStaff({
+                        ...deliveryStaff,
+                        service_location_uid: [val?.key],
+                      });
+                      // getServiceLocationUid(val?.key);
+                    }}
+                    options={option}
+                  />
+                </FormGroup>
+              </Col>
             </Row>
 
             <Button

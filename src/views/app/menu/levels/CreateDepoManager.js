@@ -41,7 +41,7 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 
 ];
-export default function CreateAdmin({history}) {
+export default function CreateDepoManager({history}) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -128,7 +128,7 @@ export default function CreateAdmin({history}) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Admin" />
+          <IntlMessages id="Create Depo Manager" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>

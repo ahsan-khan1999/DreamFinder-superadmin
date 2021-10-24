@@ -980,13 +980,13 @@ export const AdminTable = (props) => {
       },
       {
         Header: header[1],
-        accessor: 'designation',
+        accessor: 'date_of_birth',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
         Header: header[2],
-        accessor: 'email_address',
+        accessor: 'designation',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
@@ -1024,7 +1024,7 @@ export const AdminTable = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066B3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View

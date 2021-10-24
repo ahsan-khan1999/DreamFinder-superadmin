@@ -364,7 +364,7 @@ const data = [
           {
             // icon: 'simple-icon-arrow-right',
             label: 'menu.admin',
-            to: `${adminRoot}/menu/levels/viewDoctor`,
+            to: `${adminRoot}/menu/levels/viewAdmin`,
           },
 
           // {
@@ -374,13 +374,13 @@ const data = [
           // },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.sm',
-            to: `${adminRoot}/menu/levels/viewSuperAdmin`,
+            label: 'menu.director',
+            to: `${adminRoot}/menu/levels/ViewDirector`,
           },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.am',
-            to: `${adminRoot}/menu/levels/viewPatient`,
+            label: 'menu.depo',
+            to: `${adminRoot}/menu/levels/viewDepoManager`,
           },
           // {
           //   icon: 'simple-icon-arrow-right',
@@ -389,8 +389,8 @@ const data = [
           // },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.rsm',
-            to: `${adminRoot}/menu/levels/viewAdministrator`,
+            label: 'menu.fieldStaff',
+            to: `${adminRoot}/menu/levels/ViewDeliveryStaff`,
           },
           // {
           //   icon: 'simple-icon-arrow-right',
@@ -399,8 +399,8 @@ const data = [
           // },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.mpo',
-            to: `${adminRoot}/menu/levels/viewLabAdmin`,
+            label: 'menu.sm',
+            to: `${adminRoot}/menu/levels/ViewSm`,
           },
           // {
           //   icon: 'simple-icon-arrow-right',
@@ -409,8 +409,8 @@ const data = [
           // },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.fieldStaff',
-            to: `${adminRoot}/menu/levels/viewPharmacy`,
+            label: 'menu.rsm',
+            to: `${adminRoot}/menu/levels/ViewRsm`,
           },
           // {
           //   icon: 'simple-icon-arrow-right',
@@ -419,13 +419,13 @@ const data = [
           // },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.director',
-            to: `${adminRoot}/menu/levels/viewSuperAdmin`,
+            label: 'menu.am',
+            to: `${adminRoot}/menu/levels/ViewAm`,
           },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.depo',
-            to: `${adminRoot}/menu/levels/viewSuperAdmin`,
+            label: 'menu.mpo',
+            to: `${adminRoot}/menu/levels/ViewMpo`,
           },
         ],
       },
