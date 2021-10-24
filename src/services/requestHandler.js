@@ -61,6 +61,8 @@ const SERVICE_URLS = {
 
   //Concord Orders
   getorder: 'orders/read',
+  staticdataconcord: 'static-data',
+  createorder:'orders/create',
 
 };
 
@@ -333,8 +335,14 @@ const deleteReport = async (data) =>
 // Concord Orders
   const getorder = () =>
   get(SERVICE_URLS.getorder, { feature: featureConstants.static });
+  
 
 
+  const staticdataconcord = () =>
+  get(SERVICE_URLS.staticdataconcord, { feature: featureConstants.static });
+
+  const createorder = (data) =>
+  post(SERVICE_URLS.createorder, data, { feature: featureConstants.static });
 
 
 
@@ -401,8 +409,8 @@ const apiServices = {
 
 // Concord Orders
   getorder,
-
-
+  staticdataconcord,
+  createorder,
 
 };
 export default apiServices;

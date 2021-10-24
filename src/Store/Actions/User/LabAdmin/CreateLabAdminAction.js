@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import apiServices from '../../../../services/requestHandler';
 import {
   CREATE_LABADMIN_CONSTANT,
@@ -10,71 +9,66 @@ import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 export const CreateLabAdmin = (data) => async (dispatch) => {
 
-  try{
+  try {
     let res = await apiServices.createLabAdmin(data);
     // console.log(res);
-    
-//  Api Call
+
+    //  Api Call
 
     dispatch({
-      type:CREATE_LABADMIN_CONSTANT.CREATE_LABADMIN_LOADING,
-      payload:true
+      type: CREATE_LABADMIN_CONSTANT.CREATE_LABADMIN_LOADING,
+      payload: true
     })
 
-    if(res?.data?.response_code === 200){
+    if (res?.data?.response_code === 200) {
       dispatch({
-        type:CREATE_LABADMIN_CONSTANT.CREATE_LABADMIN_SUCESS,
-        payload:res
+        type: CREATE_LABADMIN_CONSTANT.CREATE_LABADMIN_SUCESS,
+        payload: res
       })
       return true
-    }else{
+    } else {
       dispatch({
-        type:CREATE_LABADMIN_CONSTANT.CREATE_LABADMIN_ERROR,
-        payload:res?.data?.response_code
+        type: CREATE_LABADMIN_CONSTANT.CREATE_LABADMIN_ERROR,
+        payload: res?.data?.response_code
       })
-      NotificationManager.error(res?.data?.response_message , "error", 5000, null, '');
+      NotificationManager.error(res?.data?.response_message, "error", 5000, null, '');
       return false
 
     }
 
 
-  }catch(error) {
-      throw error.response
-    }
-
-  
-
-
-
+  } catch (error) {
+    throw error.response
+  }
 };
 
 export const UpdateLabAdminAction = (data) => async (dispatch) => {
   try {
     let res = await apiServices.updateAdmin(data)
     // console.log(res);
-//  Api Call
+    //  Api Call
     dispatch({
-      type:UPDATE_LABADMIN_CONSTANT.UPDATE_LABADMIN_LOADING,
-      payload:true
+      type: UPDATE_LABADMIN_CONSTANT.UPDATE_LABADMIN_LOADING,
+      payload: true
     })
 
-    if(res?.response_data?.user[1] === 200){
+    if (res?.response_data?.user[1] === 200) {
       dispatch({
-        type:UPDATE_LABADMIN_CONSTANT.UPDATE_LABADMIN_SUCESS,
-        payload:res
+        type: UPDATE_LABADMIN_CONSTANT.UPDATE_LABADMIN_SUCESS,
+        payload: res
       })
       return true
     }
-    else{
+    else {
       dispatch({
-        type:UPDATE_LABADMIN_CONSTANT.UPDATE_LABADMIN_ERROR,
-        payload:res?.response_data?.user[2]
+        type: UPDATE_LABADMIN_CONSTANT.UPDATE_LABADMIN_ERROR,
+        payload: res?.response_data?.user[2]
       })
-      NotificationManager.error(res?.response_data?.user[2] , "Error", 5000, null, '');
+      NotificationManager.error(res?.response_data?.user[2], "Error", 5000, null, '');
 
       return false;
     }
-  } catch(error) {
+  } catch (error) {
     throw error.response
   }
 };

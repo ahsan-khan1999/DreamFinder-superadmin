@@ -26,6 +26,7 @@ import {
 import { searchArray } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
+import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
 
 export default function Orders({ match, history }) {
 
@@ -38,6 +39,8 @@ export default function Orders({ match, history }) {
     getOrders();
 
   }, []);
+    
+
 
   const getOrders = async () => {
 

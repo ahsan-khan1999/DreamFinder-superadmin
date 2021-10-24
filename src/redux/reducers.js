@@ -79,6 +79,7 @@ import chatApp from './chat/reducer';
 import surveyListApp from './surveyList/reducer';
 import surveyDetailApp from './surveyDetail/reducer';
 import { OrderReducer } from 'Store/Reducers/ConcordOrder/OrderReducer';
+import { StaticDataReducer } from 'Store/Reducers/StaticDataReducer/StaticDataReducer';
 
 const reducers = combineReducers({
   menu,
@@ -133,6 +134,8 @@ const reducers = combineReducers({
 
    //Concord Order Reducer
    orderReducer:OrderReducer,
+   //Concord Static Reducer
+   staticDataReducer:StaticDataReducer,
 
 });
 

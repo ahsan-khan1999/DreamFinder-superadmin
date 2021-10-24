@@ -284,11 +284,14 @@ export default function CreateMedicines({ history }) {
                       name="form-field-name-slot-duration"
                       // value={medicines?.currency}
                       // defaultValue={medicines?.currency?.name}
-                      onChange={(val) =>
+                      onChange={(val) =>{
+
+                        console.log("ye log value select",val)
                         setMedicines({
                           ...medicines,
                           currency: { id: val?.key, name: val?.value },
                         })
+                      }
                       }
                       options={currencyOption}
                     />

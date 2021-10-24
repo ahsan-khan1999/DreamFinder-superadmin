@@ -23,46 +23,92 @@ import { CreateLabAdmin } from 'Store/Actions/User/LabAdmin/CreateLabAdminAction
 import { NotificationManager } from 'components/common/react-notifications';
 import Select from 'react-select';
 
-import { getUsers } from 'Store/Actions/ConcordOrder/OrderAction';
+import { CreateOrder, getCustomer, getStockProductMedicine, getUsers, StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
+import moment from 'moment';
 export default function AddOrder() {
         
   const [assignto, setAssginto] = useState();
+  const [mpouid,setMpouid] = useState();
+  const [customeruid,setCustomeruid] = useState();
+  const [medproductuid,setMedproductuid] = useState();
+  const [availableproductquantity,setAvailableproductquantity] = useState();
+  const [medproductquantity,setMedproductquantity] = useState();
+  const [date,setDate] = useState();
+  const [time,setTime] = useState();
 
+
+
+
+  // console.log("assignto",assignto);
+  // console.log("mpouid",mpouid);
+  // console.log("customeruid",customeruid);
+  // console.log("medproductuid",medproductuid);
 
   let [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  
+  
+  
+  
   useEffect(() => {
-
     dispatch(getUsers('','sm'));
+    dispatch(StaticDataGet());
 
-
-  }, []);
+  },[]);
 
   const CreateOrder_obj = {
     on_behalf_of_uid: '',
     customer_uid: '',
     medicines: [
-        {
-            medicine_uid: '',
-            quantity: ''
-        }
+      {
+        medicine_uid: '',
+        quantity: ''
+      }
     ],
     payment_type: '',
     delivery_status: 'pending',
     payment_status: 'pending',
     order_datetime: '',
   };
-
+  
   let [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
+  
+  // console.log(orderCreate)
 
   const usersm = useSelector((state) => state?.orderReducer?.usersm);
   const userrsm = useSelector((state) => state?.orderReducer?.userrsm);
   const useram = useSelector((state) => state?.orderReducer?.useram);
   const usermpo = useSelector((state) => state?.orderReducer?.usermpo);
-  console.log("user",usersm)
+  const getcustomers = useSelector((state) => state?.orderReducer?.getCustomerOrder);
+  const stockproductmedicine = useSelector((state) => state?.orderReducer?.stockproductmedicine);
+  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   
   
 
+  let option_static_PaymentType = [];
+  staticdata?.filter((item) =>
+  option_static_PaymentType.push({ 
+         label: item?.name,
+         value: item?.value,
+         key: item?.id
+         })
+  );
+  let optiongetstocksproductget = [];
+  stockproductmedicine?.filter((item) =>
+  optiongetstocksproductget.push({ 
+         label: item?.product?.name,
+         value: item?.uid,
+         key: item?.quantity,
+         })
+  );
+  let optiongetcustomer = [];
+  getcustomers?.filter((item) =>
+  optiongetcustomer.push({ 
+         label: item?.name,
+         value: item?.uid,
+         key: item?.uid
+         })
+  );
   let optionsm = [];
   usersm?.filter((item) =>
     optionsm.push({ 
@@ -72,9 +118,8 @@ export default function AddOrder() {
          })
   );
   let optionrsm = [];
-  ////////////////////////////// Set
   userrsm?.filter((item) =>
-    optionsm.push({ 
+    optionrsm.push({ 
          label: item?.name,
          value: item?.uid,
          key: item?.uid
@@ -82,7 +127,7 @@ export default function AddOrder() {
   );
   let optionam = [];
   useram?.filter((item) =>
-    optionsm.push({ 
+    optionam.push({ 
          label: item?.name,
          value: item?.uid,
          key: item?.uid
@@ -90,66 +135,53 @@ export default function AddOrder() {
   );
   let optionmpo = [];
   usermpo?.filter((item) =>
-    optionsm.push({ 
+    optionmpo.push({ 
          label: item?.name,
          value: item?.uid,
          key: item?.uid
          })
   );
   const formikData = useFormik({
-    initialValues: {},
-    onSubmit: (values) => {
-    },
+    // initialValues: {},
+    // onSubmit: (values) => {
+    //   createNewOrder();
+    // },
   });
 
 
-
-//   const createNewOrder = async () => {
-//     setLoading(true);
-//     if (
-//       orderCreate?.orderCreate === '' &&
-//       orderCreate?.customer_uid === '' &&
-//       orderCreate?.medicines[0].medicine_uid === '' &&
-//       orderCreate?.medicines[0].quantity === '' &&
-//       orderCreate?.payment_type === '' &&
-//       orderCreate?.payment_status === ''
-//     ) {
-//       NotificationManager.error(
-//         'Please Enter Required Field',
-//         'Error',
-//         3000,
-//         null,
-//         ''
-//       );
-//       return;
-//     } else {
-//       setLabAdmin({
-//         ...orderCreate,
-//         // timings: { [selectedOptionsDay?.value]: { from: timeFrom, to: timeTo } },
-//       });
-
-//       let res = await dispatch(CreateLabAdmin(orderCreate));
-//       setLoading(false);
-//       if (res) {
-//         NotificationManager.success(
-//           'Lab Admin Added Sucessfully',
-//           'Sucess',
-//           3000,
-//           null,
-//           ''
-//         );
-//         history.push('/app/menu/levels/viewLabAdmin');
-//       } else if (confirmPassword !== orderCreate.password) {
-//         NotificationManager.warning(
-//           'Password Doesnt match',
-//           'Error',
-//           3000,
-//           null,
-//           ''
-//         );
-//       }
-//     }
-//   };
+  const createNewOrder = async () => {
+    // setLoading(true);
+    if (
+      orderCreate?.on_behalf_of_uid === '' &&
+      orderCreate?.customer_uid === '' &&
+      orderCreate?.payment_type === '' &&
+      orderCreate?.order_datetime === '' 
+    ) {
+      NotificationManager.error(
+        'Please Enter Required Field',
+        'Error',
+        3000,
+        null,
+        ''
+      );
+      return;
+    } else {
+      alert("hit")
+      let res = await dispatch(CreateOrder(...orderCreate));
+      console.log("OrderResponse",res)
+      // setLoading(false);
+      if (res) {
+        NotificationManager.success(
+          'New Order Added Sucessfully',
+          'Sucess',
+          3000,
+          null,
+          ''
+        );
+        // history.push('/app/Orders/orders');
+      } 
+    }
+  };
 
 
   return (
@@ -160,8 +192,7 @@ export default function AddOrder() {
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik
-        //   initialValues={formikData.initialValues}
-        //   onSubmit={formikData.handleSubmit}
+         
         >
           <Form>
             <Row className="h-100">
@@ -177,11 +208,11 @@ export default function AddOrder() {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      name="form-field-name-gender"
+                      
                       required
                       onChange={(e) => {
-                        dispatch(getUsers(e.target.value, 'rsm'));
-                        setAssginto(e.target.value);
+                        dispatch(getUsers(e.value, 'rsm'));
+                        setAssginto(e.value);
                       }}
                       options={optionsm}
                     />
@@ -200,12 +231,12 @@ export default function AddOrder() {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      name="form-field-name-gender"
+                      
                       required
                      
-                      onChange={(val) => {
-                        dispatch(getUsers(e.target.value, 'am'));
-                        setAssginto(e.target.value);
+                      onChange={(e) => {
+                        dispatch(getUsers(e.value, 'am'));
+                        setAssginto(e.value);
                       }}
                       options={optionrsm}
                     />
@@ -224,12 +255,12 @@ export default function AddOrder() {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      name="form-field-name-gender"
+                      
                       required
                     
-                      onChange={(val) => {
-                        dispatch(getUsers(e.target.value, 'mpo'));
-                        setAssginto(e.target.value);
+                      onChange={(e) => {
+                        dispatch(getUsers(e.value, 'mpo'));
+                        setAssginto(e.value);
                       }}
                       options={optionam}
                     />
@@ -248,12 +279,18 @@ export default function AddOrder() {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      name="form-field-name-gender"
+                      
                       required
                     
-                      onChange={(val) => {
+                      onChange={(e) => {
+                        dispatch(getCustomer(e.value));
+                        setAssginto(e.value);
+                        setMpouid(e.value);
+                        setOrderCreate({
+                          ...orderCreate,
                         
-                        setAssginto(e.target.value);
+                          on_behalf_of_uid: e.value,
+                        })
                       }}
                       options={optionmpo}
                     />
@@ -272,10 +309,19 @@ export default function AddOrder() {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      name="form-field-name-gender"
+                      
                       required
-                     
-                    //   options={options}
+                      onChange={(e) => {
+                        dispatch(getStockProductMedicine(mpouid));
+                        // setAssginto(e.value);
+                        setCustomeruid(e.value);
+                        setOrderCreate({
+                          ...orderCreate,
+                        
+                          customer_uid: e.value,
+                        })
+                      }}
+                      options={optiongetcustomer}
                     />
                   </>
                 </FormGroup>
@@ -292,12 +338,51 @@ export default function AddOrder() {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      name="form-field-name-gender"
+                      
                       required
-                     
-                    //   options={options}
+                      onChange={(e) => {
+                        setMedproductuid(e.value);
+                        setAvailableproductquantity(e.key);
+                        setOrderCreate({
+                          ...orderCreate,
+                        medicines: { medicine_uid: e.value ,quantity: medproductquantity},
+                        })
+                      }}
+                      options={optiongetstocksproductget}
                     />
                   </>
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Quantity" />
+                  </Label>
+                  <Label style={{float:'right'}}>
+                    <IntlMessages id="Available Quantity :"/>
+                    {availableproductquantity ? availableproductquantity : '00'}
+                  </Label>
+                  <Input
+                    required
+                    className="form-control"
+                    name="name"
+                    type="number"
+                    max={availableproductquantity}
+                    min={0}
+                    className="radio-in"
+                    onChange={(e) =>
+                      {
+                        setMedproductquantity(e.target.value);
+                        setOrderCreate({
+                          ...orderCreate,
+                        
+                          medicines: { medicine_uid: medproductuid ,quantity: e.target.value},
+                        })
+                      }
+            
+                    }
+                  />
                 </FormGroup>
               </Col>
 
@@ -313,10 +398,17 @@ export default function AddOrder() {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      name="form-field-name-gender"
+                      onChange={(e) =>{
+                        setOrderCreate({
+                          ...orderCreate,
+                        
+                          payment_type: e?.value,
+                        })
+                      }
+                      }  
                       required
                      
-                    //   options={options}
+                      options={option_static_PaymentType}
                     />
                   </>
                 </FormGroup>
@@ -325,33 +417,33 @@ export default function AddOrder() {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Date Of Birth" />
+                    <IntlMessages id="Select Date" />
                   </Label>
 
                   <Input
                     required
-                    // value={labAdmin.date_of_birth}
                     className="form-control"
                     name="date_of_birth"
                     type="date"
-                    // onChange={(e) =>
-                    //   setLabAdmin({
-                    //     ...labAdmin,
-                    //     date_of_birth: e.target.value,
-                    //   })
-                    // }
+                    onChange={(e) =>
+                      setOrderCreate({
+                        ...orderCreate,
+                        order_datetime: e.target.value + " " + moment(moment.utc(date).toDate()).format("hh:mm"),
+                      })
+                    }
                   />
                 </FormGroup>
               </Col>
+             
             </Row>
 
             <Button
-              className="btn btn-primary"
+             className="btn btn-primary"
               // type="submit"
-              //   onClick={createLabAdmin}
-              //   className={`btn-shadow btn-multiple-state ${
-              //     loading ? 'show-spinner' : ''
-              //   }`}
+                onClick={createNewOrder}
+                // className={`btn-shadow btn-multiple-state ${
+                //   loading ? 'show-spinner' : ''
+                // }`}
             >
               Add Order
               <span className="spinner d-inline-block">

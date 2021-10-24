@@ -27,7 +27,6 @@ export const OrderAction = () => async (dispatch) => {
         payload: res?.data?.response_data,
       });
     } else {
-      alert('in else');
       dispatch({
         type: ORDER_CONSTANTS.ORDER_ERROR,
         payload: [],
@@ -44,35 +43,126 @@ export const getUsers = (uid,user) => async (dispatch) => {
       `https://concord-backend-m2.herokuapp.com/api/users/read/${user}?manager_uid=${uid}`,
       { headers: head }
     );
-    console.log("Api Response",response)
     if (response?.data?.response_code === 200) {
-      if (role === "sm") {
+      if (user === "sm") {
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER,
           payload: response?.data?.response_data,
         });
       }
-      else if (role === "rsm") {
+      else if (user === "rsm") {
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER_RSM,
           payload: response?.data?.response_data,
         });
       }
-      else if (role === "am"){
+      else if (user === "am"){
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER_AM,
           payload: response?.data?.response_data,
         });
       }
-      else if (role === "mpo"){
+      else if (user === "mpo"){
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER_MPO,
           payload: response?.data?.response_data,
         });
       }
+      else{
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER,
+          payload: response?.data?.response_data,
+        });
+      }
+
      
     }
   } catch (error) {
     return "Fail";
   }
 };
+
+
+export const getCustomer = (uid) => async (dispatch) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  try {
+    const head = { "x-session-key": token.token, "x-session-type": token.type };
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/customers/read?child_uid=${uid}`,
+      { headers: head }
+    );
+    if (response?.data?.response_code === 200) {
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_CUSTOMER,
+          payload: response?.data?.response_data,
+        });
+    }
+  } catch (error) {
+    return "Fail";
+  }
+};
+
+
+export const getStockProductMedicine = (uid) => async (dispatch) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  try {
+    const head = { "x-session-key": token.token, "x-session-type": token.type };
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?child_uid=${uid}`,
+      { headers: head }
+    );
+    if (response?.data?.response_code === 200) {
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_STOCK_MEDICINE,
+          payload: response?.data?.response_data,
+        });
+    }
+  } catch (error) {
+    return "Fail";
+  }
+};
+
+
+export const StaticDataGet = () => async (dispatch) => {
+    try {
+      let res = await apiServices.staticdataconcord();
+  
+      if (res?.data?.response_code === 200) {
+        dispatch({
+          type: ORDER_CONSTANTS.STATIC_DATA,
+          payload: res?.data?.response_data.list_order__payment_types,
+        });
+      } 
+    } catch {
+      return "Fail";
+    }
+  };
+  
+
+  export const CreateOrder = (data) => async (dispatch) => {
+    try {
+      let res = await apiServices.createorder(data);
+      dispatch({
+        type: ORDER_CONSTANTS.CREATE_ORDER_LOADING,
+        payload: true
+      })
+  
+      if (res?.data?.response_code === 200) {
+        dispatch({
+          type: ORDER_CONSTANTS.CREATE_ORDER_SUCCESS,
+          payload: res
+        })
+        return true
+      } else {
+        dispatch({
+          type: ORDER_CONSTANTS.CREATE_ORDER_ERROR,
+          payload: res?.data?.response_code
+        })
+        NotificationManager.error(res?.data?.response_message, "error", 5000, null, '');
+        return false
+  
+      }
+  } catch (error) {
+      throw error.response
+    }
+  };

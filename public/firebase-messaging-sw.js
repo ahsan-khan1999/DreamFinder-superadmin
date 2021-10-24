@@ -29,5 +29,4 @@ messaging.setBackgroundMessageHandler(function (payload) {
   return promiseChain;
 });
 self.addEventListener('notificationclick', function (event) {
-  console.log(event);
 });
