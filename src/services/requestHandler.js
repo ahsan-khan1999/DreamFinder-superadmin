@@ -63,7 +63,7 @@ const SERVICE_URLS = {
   getorder: 'orders/read',
   staticdataconcord: 'static-data',
   createorder:'orders/create',
-
+  suspandorder:'orders/suspend'
 };
 
 const requestApproval = (data) =>
@@ -344,7 +344,14 @@ const deleteReport = async (data) =>
   const createorder = (data) =>
   post(SERVICE_URLS.createorder, data, { feature: featureConstants.static });
 
-
+  const suspandorder = async (data) =>
+   patch(
+     SERVICE_URLS.suspandorder,
+     data,
+     {
+       feature: featureConstants.static,
+     }
+   );
 
 const apiServices = {
   // define variables
@@ -411,6 +418,7 @@ const apiServices = {
   getorder,
   staticdataconcord,
   createorder,
+  suspandorder,
 
 };
 export default apiServices;

@@ -130,7 +130,7 @@ export const StaticDataGet = () => async (dispatch) => {
       if (res?.data?.response_code === 200) {
         dispatch({
           type: ORDER_CONSTANTS.STATIC_DATA,
-          payload: res?.data?.response_data.list_order__payment_types,
+          payload: res?.data?.response_data,
         });
       } 
     } catch {

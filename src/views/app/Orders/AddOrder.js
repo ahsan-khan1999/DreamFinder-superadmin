@@ -71,10 +71,9 @@ export default function AddOrder() {
     order_datetime: '',
   };
   
-  let [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
   
   // console.log(orderCreate)
-
+  
   const usersm = useSelector((state) => state?.orderReducer?.usersm);
   const userrsm = useSelector((state) => state?.orderReducer?.userrsm);
   const useram = useSelector((state) => state?.orderReducer?.useram);
@@ -84,90 +83,92 @@ export default function AddOrder() {
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   
   
-
+  
   let option_static_PaymentType = [];
-  staticdata?.filter((item) =>
+  staticdata?.list_order__payment_types?.filter((item) =>
   option_static_PaymentType.push({ 
-         label: item?.name,
-         value: item?.value,
-         key: item?.id
-         })
+    label: item?.name,
+    value: item?.value,
+    key: item?.id
+  })
   );
   let optiongetstocksproductget = [];
   stockproductmedicine?.filter((item) =>
   optiongetstocksproductget.push({ 
-         label: item?.product?.name,
-         value: item?.uid,
-         key: item?.quantity,
-         })
+    label: item?.product?.name,
+    value: item?.uid,
+    key: item?.quantity,
+  })
   );
   let optiongetcustomer = [];
   getcustomers?.filter((item) =>
   optiongetcustomer.push({ 
-         label: item?.name,
-         value: item?.uid,
-         key: item?.uid
-         })
+    label: item?.name,
+    value: item?.uid,
+    key: item?.uid
+  })
   );
   let optionsm = [];
   usersm?.filter((item) =>
-    optionsm.push({ 
+  optionsm.push({ 
+    label: item?.name,
+         value: item?.uid,
+         key: item?.uid
+        })
+        );
+        let optionrsm = [];
+        userrsm?.filter((item) =>
+        optionrsm.push({ 
          label: item?.name,
          value: item?.uid,
          key: item?.uid
-         })
-  );
-  let optionrsm = [];
-  userrsm?.filter((item) =>
-    optionrsm.push({ 
-         label: item?.name,
-         value: item?.uid,
-         key: item?.uid
-         })
-  );
+        })
+        );
   let optionam = [];
   useram?.filter((item) =>
-    optionam.push({ 
-         label: item?.name,
-         value: item?.uid,
-         key: item?.uid
-         })
+  optionam.push({ 
+    label: item?.name,
+    value: item?.uid,
+    key: item?.uid
+  })
   );
   let optionmpo = [];
   usermpo?.filter((item) =>
-    optionmpo.push({ 
-         label: item?.name,
-         value: item?.uid,
-         key: item?.uid
-         })
+  optionmpo.push({ 
+    label: item?.name,
+    value: item?.uid,
+    key: item?.uid
+  })
   );
   const formikData = useFormik({
     // initialValues: {},
     // onSubmit: (values) => {
-    //   createNewOrder();
-    // },
-  });
-
-
-  const createNewOrder = async () => {
+      //   createNewOrder();
+      // },
+    });
+    
+    
+    const [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
+    const createNewOrder = async () => {
     // setLoading(true);
     if (
       orderCreate?.on_behalf_of_uid === '' &&
       orderCreate?.customer_uid === '' &&
       orderCreate?.payment_type === '' &&
       orderCreate?.order_datetime === '' 
-    ) {
+      ) {
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
         3000,
         null,
         ''
-      );
-      return;
-    } else {
-      alert("hit")
-      let res = await dispatch(CreateOrder(...orderCreate));
+        );
+        return;
+      } else {
+        console.log(orderCreate);
+        
+        let res = await dispatch(CreateOrder({...orderCreate}));
       console.log("OrderResponse",res)
       // setLoading(false);
       if (res) {
@@ -191,10 +192,9 @@ export default function AddOrder() {
           <IntlMessages id="Create New Orders" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
-        <Formik
-         
-        >
+        <Formik>
           <Form>
+        
             <Row className="h-100">
               <Col lg={6}>
                 <FormGroup>
@@ -436,22 +436,23 @@ export default function AddOrder() {
               </Col>
              
             </Row>
-
             <Button
-             className="btn btn-primary"
+              className="btn btn-primary"
               // type="submit"
-                onClick={createNewOrder}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+              // className={`btn-shadow btn-multiple-state ${
+              //   loading ? 'show-spinner' : ''
+              // }`}
+              size="sm"
+              onClick={createNewOrder}
             >
-              Add Order
               <span className="spinner d-inline-block">
                 <span className="bounce1" />
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
+              Add Order
             </Button>
+            
           </Form>
         </Formik>
       </CardBody>
