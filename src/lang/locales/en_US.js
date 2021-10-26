@@ -84,6 +84,11 @@ module.exports = {
   'menu.region': 'Region',
   'menu.viewregion': 'View Region',
 
+
+  'menu.distribution-center-management':'Distribution',
+  'menu.distribution-center':'Distribution Center',
+  'menu.department-head':'Department Head',
+
   'menu.test': 'Test',
   'menu.viewTest': 'View Test',
   'menu.viewCategory': 'View Category',

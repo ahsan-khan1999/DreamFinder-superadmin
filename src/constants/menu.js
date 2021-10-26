@@ -482,6 +482,27 @@ const data = [
     ],
   },
 
+
+  {
+    id: 'Distribution Center',
+    icon: 'iconsminds-management',
+    label: 'menu.distribution-center-management',
+    to: `${adminRoot}/distributioncenter-management`,
+    subs: [
+      {
+        icon: 'iconsminds-management',
+        label: 'menu.distribution-center',
+        to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
+      },
+      {
+        icon: 'iconsminds-business-man',
+        label: 'menu.department-head',
+        to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
+      },
+    ],
+  },
+
+
   {
     id: 'requets',
     icon: 'simple-icon-bell',

@@ -178,6 +178,34 @@ export const StaticDataGet = () => async (dispatch) => {
   
       }
   } catch (error) {
+    dispatch({
+      type: ORDER_CONSTANTS.ORDER_LOADING_All,
+      payload: true,
+    });
       throw error.response
+    }
+  };
+
+
+  export const statusChange = (data) => async (dispatch) => {
+    dispatch({
+      type: ORDER_CONSTANTS.ORDER_LOADING_All,
+      payload: true,
+    });
+    const response = await apiServices.statusChanges(data);
+    
+    if (response?.response_code === 200) {
+      dispatch({
+        type: ORDER_CONSTANTS.ORDER_LOADING_All,
+        payload: false,
+      });
+      return true
+    } else {
+      dispatch({
+        type: ORDER_CONSTANTS.ORDER_LOADING_All,
+        payload: false,
+      });
+      NotificationManager.error(response?.data?.response_message, "error", 5000, null, '');
+      return false
     }
   };

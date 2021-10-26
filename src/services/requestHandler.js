@@ -62,8 +62,21 @@ const SERVICE_URLS = {
   //Concord Orders
   getorder: 'orders/read',
   staticdataconcord: 'static-data',
-  createorder:'orders/create',
-  suspandorder:'orders/suspend'
+  createorder: 'orders/create',
+  suspandorder: 'orders/suspend',
+  statusChanges: 'orders/status-update',
+
+  //Concord Department Head
+  getdepartmentHead: 'department_heads/read',
+  createdepartmentHead: 'department_heads/create',
+  updatedepartmentHead: 'department_heads/update',
+  suspanddepartmentHead: 'department_heads/suspend',
+
+  //Concord Distribution Center
+  getdistributionCentres: 'distribution_centres/read',
+  createdistributionCentres: 'distribution_centres/create',
+  updatedistributionCentres: 'distribution_centres/update',
+  suspanddistributionCentres: 'distribution_centres/suspend',
 };
 
 const requestApproval = (data) =>
@@ -330,28 +343,61 @@ const deleteReport = async (data) =>
   });
 // post getStatic
 
-
-
 // Concord Orders
-  const getorder = () =>
+const getorder = () =>
   get(SERVICE_URLS.getorder, { feature: featureConstants.static });
-  
 
-
-  const staticdataconcord = () =>
+const staticdataconcord = () =>
   get(SERVICE_URLS.staticdataconcord, { feature: featureConstants.static });
 
-  const createorder = (data) =>
+const createorder = (data) =>
   post(SERVICE_URLS.createorder, data, { feature: featureConstants.static });
 
-  const suspandorder = async (data) =>
-   patch(
-     SERVICE_URLS.suspandorder,
-     data,
-     {
-       feature: featureConstants.static,
-     }
-   );
+const suspandorder = async (data) =>
+  patch(SERVICE_URLS.suspandorder, data, {
+    feature: featureConstants.static,
+  });
+const statusChanges = (data) =>
+  put(SERVICE_URLS.statusChanges, data, { feature: featureConstants.static });
+
+//Concord Department Head
+
+const getdepartmentHead = () =>
+  get(SERVICE_URLS.getdepartmentHead, { feature: featureConstants.static });
+
+const createdepartmentHead = (data) =>
+  post(SERVICE_URLS.createdepartmentHead, data, {
+    feature: featureConstants.static,
+  });
+
+const suspanddepartmentHead = async (data) =>
+  patch(SERVICE_URLS.suspanddepartmentHead, data, {
+    feature: featureConstants.static,
+  });
+const updatedepartmentHead = async (data) =>
+  put(SERVICE_URLS.updatedepartmentHead, data, {
+    feature: featureConstants.static,
+  });
+
+//Concord Distribution Center
+
+
+const getdistributionCentres = () =>
+  get(SERVICE_URLS.getdistributionCentres, { feature: featureConstants.static });
+
+const createdistributionCentres = (data) =>
+  post(SERVICE_URLS.createdistributionCentres, data, {
+    feature: featureConstants.static,
+  });
+
+const suspanddistributionCentres = async (data) =>
+  patch(SERVICE_URLS.suspanddistributionCentres, data, {
+    feature: featureConstants.static,
+  });
+const updatedistributionCentres = async (data) =>
+  put(SERVICE_URLS.updatedistributionCentres, data, {
+    feature: featureConstants.static,
+  });
 
 const apiServices = {
   // define variables
@@ -412,13 +458,23 @@ const apiServices = {
   readArea,
   readThana,
 
-
-
-// Concord Orders
+  // Concord Orders
   getorder,
   staticdataconcord,
   createorder,
   suspandorder,
+  statusChanges,
 
+  // Concord Department Head
+  getdepartmentHead,
+  createdepartmentHead,
+  suspanddepartmentHead,
+  updatedepartmentHead,
+
+  // Concord Distribution Center
+  getdistributionCentres,
+  createdistributionCentres,
+  suspanddistributionCentres,
+  updatedistributionCentres,
 };
 export default apiServices;

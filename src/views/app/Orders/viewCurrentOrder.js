@@ -175,7 +175,6 @@ export default function viewCurrentOrderComponent(props) {
   //     history.push('/app/Orders/orders');
   //   }
   // };
-  let [thisView, setThisView] = useState(true);
 
   const handleAdd = () => {
 
@@ -379,7 +378,6 @@ export default function viewCurrentOrderComponent(props) {
                 </FormGroup>
               </Col>
             </Row>
-            {thisView ? (
               <Button
                 style={{  'background-color': '#003766',marginRight:"5px" }}
                 // className="btn btn-primary"
@@ -395,16 +393,12 @@ export default function viewCurrentOrderComponent(props) {
                 </span>
                 {buttonName}
               </Button>
-            ) : (
-              ''
-            )}
+         
             <Button
-              className="mx-3"
+              className="mx-2"
               onClick={handleShow}
               style={{
-                marginBottom: '15px',
                 'backgroundColor': '#003766',
-                marginTop: '10px',
               }}
             >
               Update Status

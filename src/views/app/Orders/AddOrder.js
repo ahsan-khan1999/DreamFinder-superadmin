@@ -67,8 +67,9 @@ export default function AddOrder(props) {
     (state) => state?.orderReducer?.stockproductmedicine
   );
   const loading = useSelector(
-    (state) => state?.orderReducer?.loading
+    (state) => state?.orderReducer?.loader
   );
+  // const loading = true;
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   useEffect(() => {
     dispatch(getUsers('', 'sm'));
@@ -513,8 +514,8 @@ export default function AddOrder(props) {
               {loading ?
                 <div className="d-flex justify-content-center">
                   <Loader
-                    height={20} width={20}
-                    type="ThreeDots"
+                    height={16} width={18}
+                    type="Oval"
                     color="#fff"
                   />
                   &nbsp; Creating Order

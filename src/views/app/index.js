@@ -72,6 +72,46 @@ const ViewCurrentOrder = React.lazy(() =>
     /* webpackChunkName: "components-badges" */ './Orders/viewCurrentOrder'
   )
 );
+
+
+// Distribution Concord --------------------------------------
+const ViewCurrentDepartmenthead = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './distributioncenter-management/viewCurrentDepartmenthead'
+  )
+);
+const ViewCurrentDistributioncenter = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './distributioncenter-management/viewCurrentDistributioncenter'
+  )
+);
+
+const ViewDepartmenthead = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './distributioncenter-management/viewDepartmenthead'
+  )
+);
+const ViewDistributioncenter = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './distributioncenter-management/viewDistributioncenter'
+  )
+);
+
+const CreateDepartmenthead = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './distributioncenter-management/CreateDepartmenthead'
+  )
+);
+const CreateDistributioncenter = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './distributioncenter-management/CreateDistributioncenter'
+  )
+);
+//--------------------------------------------
+
+
+
+
 const Applications = React.lazy(() =>
   import(/* webpackChunkName: "applications" */ './applications')
 );
@@ -141,8 +181,49 @@ const App = ({ match }) => {
               path={`${match.url}/Orders/AddOrder`}
               render={(props) => <AddOrder {...props} />}
             />
+           
+           
+           
+           
+           
+           
+            {/* Distribution Concord */}
+            <Route
+              path={`${match.url}/distributioncenter-management/viewCurrentDepartmenthead`}
+              render={(props) => <ViewCurrentDepartmenthead {...props} />}
+            />
+            <Route
+              path={`${match.url}/distributioncenter-management/viewCurrentDistributioncenter`}
+              render={(props) => <ViewCurrentDistributioncenter {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/distributioncenter-management/viewDepartmenthead`}
+              render={(props) => <ViewDepartmenthead {...props} />}
+            />
+            <Route
+              path={`${match.url}/distributioncenter-management/viewDistributioncenter`}
+              render={(props) => <ViewDistributioncenter {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/distributioncenter-management/CreateDepartmenthead`}
+              render={(props) => <CreateDepartmenthead {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/distributioncenter-management/CreateDistributioncenter`}
+              render={(props) => <CreateDistributioncenter {...props} />}
+            />
             
 
+           
+           
+           
+           
+           
+           
+           
             <Route
               path={`${match.url}/Test/viewTest`}
               render={(props) => <Test {...props} />}
