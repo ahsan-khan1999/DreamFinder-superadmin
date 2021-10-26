@@ -21,7 +21,7 @@ import Loader from 'react-loader-spinner';
 import { Formik, useFormik } from 'formik';
 import { CreateLabAdmin } from 'Store/Actions/User/LabAdmin/CreateLabAdminAction';
 import { NotificationManager } from 'components/common/react-notifications';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 
 import {
   CreateOrder,
@@ -32,8 +32,9 @@ import {
 } from 'Store/Actions/ConcordOrder/OrderAction';
 import moment from 'moment';
 import data from 'data/notifications';
+
 import { set } from 'react-hook-form';
-export default function AddOrder() {
+export default function AddOrder(props) {
   const [assignto, setAssginto] = useState();
   const [mpouid, setMpouid] = useState();
   // const [mpofield,setMpofield] = useState();
@@ -53,7 +54,6 @@ export default function AddOrder() {
   // console.log("customeruid",customeruid);
   // console.log("medproductuid",medproductuid);
 
-  let [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const usersm = useSelector((state) => state?.orderReducer?.usersm);
@@ -66,6 +66,9 @@ export default function AddOrder() {
   const stockproductmedicine = useSelector(
     (state) => state?.orderReducer?.stockproductmedicine
   );
+  const loading = useSelector(
+    (state) => state?.orderReducer?.loading
+  );
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   useEffect(() => {
     dispatch(getUsers('', 'sm'));
@@ -77,8 +80,8 @@ export default function AddOrder() {
     customer_uid: '',
     medicines: array?.map(item => {
       return {
-        medicine_uid : item?.medicine_uid,
-        quantity : item?.quantity
+        medicine_uid: item?.medicine_uid,
+        quantity: item?.quantity
       }
     }),
     payment_type: '',
@@ -150,7 +153,7 @@ export default function AddOrder() {
     // },
   });
 
- 
+
 
   const createNewOrder = async () => {
     // setLoading(true);
@@ -158,7 +161,7 @@ export default function AddOrder() {
       orderCreate?.on_behalf_of_uid === '' &&
       orderCreate?.customer_uid === '' &&
       orderCreate?.payment_type === '' &&
-      orderCreate?.order_datetime === '' 
+      orderCreate?.order_datetime === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -169,9 +172,9 @@ export default function AddOrder() {
       );
       return;
     } else {
-      console.log(orderCreate,"orderCreate");
+      console.log(orderCreate, "orderCreate");
 
-      
+
       let res = await dispatch(CreateOrder(orderCreate));
       // setLoading(false);
       if (res) {
@@ -182,12 +185,12 @@ export default function AddOrder() {
           null,
           ''
         );
-        history.push('/app/Orders/orders');
+        props.history.push('/app/Orders/orders');
       }
     }
   };
   const provalue = [];
-  const handleChangeProduct = async (e,index) => {
+  const handleChangeProduct = async (e, index) => {
     // console.log(e);
     let options = e;
     options?.map((item, index) => {
@@ -212,8 +215,11 @@ export default function AddOrder() {
 
 
   const QuantityHanle = async (e, index) => {
+    console.log("max", e)
     const obj = array[index];
-    obj.quantity = Number(e.target.value);
+    if (e.target.value <= Number(e.target.max)) {
+      obj.quantity = Number(e.target.value);
+    }
     array[index] = obj;
     const testArary = [...array];
     console.log(testArary);
@@ -222,8 +228,8 @@ export default function AddOrder() {
       ...orderCreate,
       medicines: array?.map(item => {
         return {
-          medicine_uid : item?.medicine_uid,
-          quantity : item?.quantity
+          medicine_uid: item?.medicine_uid,
+          quantity: item?.quantity
         }
       }),
     })
@@ -232,7 +238,7 @@ export default function AddOrder() {
 
   
 
-  
+
   return (
     <Card>
       <CardBody>
@@ -275,6 +281,7 @@ export default function AddOrder() {
                       required
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
+                      
                       classNamePrefix="react-select"
                       required
                       onChange={(e) => {
@@ -440,8 +447,8 @@ export default function AddOrder() {
                       //   medicines: [{ medicine_uid: e.value ,quantity: medproductquantity}],
                       //   })
                       // }}
-                      onChange={(e,index) => {
-                        handleChangeProduct(e,index);
+                      onChange={(e, index) => {
+                        handleChangeProduct(e, index);
                       }}
                       options={optiongetstocksproductget}
                     />
@@ -500,19 +507,20 @@ export default function AddOrder() {
 
             <Button
               className="btn btn-primary"
-              // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
               size="sm"
               onClick={createNewOrder}
             >
-              <span className="spinner d-inline-block">
-                <span className="bounce1" />
-                <span className="bounce2" />
-                <span className="bounce3" />
-              </span>
-              Add Order
+              {loading ?
+                <div className="d-flex justify-content-center">
+                  <Loader
+                    height={20} width={20}
+                    type="ThreeDots"
+                    color="#fff"
+                  />
+                  &nbsp; Creating Order
+                </div> : "Add Order"
+              }
+
             </Button>
           </Form>
         </Formik>

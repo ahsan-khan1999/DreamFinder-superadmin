@@ -49,6 +49,7 @@ export const getUsers = (uid,user) => async (dispatch) => {
           type: ORDER_CONSTANTS.ORDER_GET_USER,
           payload: response?.data?.response_data,
         });
+
       }
       else if (user === "rsm") {
         dispatch({
@@ -68,6 +69,7 @@ export const getUsers = (uid,user) => async (dispatch) => {
           payload: response?.data?.response_data,
         });
       }
+      
       else{
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER,
@@ -141,6 +143,11 @@ export const StaticDataGet = () => async (dispatch) => {
 
   export const CreateOrder = (data) => async (dispatch) => {
     try {
+      dispatch({
+        type: ORDER_CONSTANTS.ORDER_LOADING_All,
+        payload: true,
+      });
+      
       let res = await apiServices.createorder(data);
       dispatch({
         type: ORDER_CONSTANTS.CREATE_ORDER_LOADING,
@@ -152,6 +159,10 @@ export const StaticDataGet = () => async (dispatch) => {
           type: ORDER_CONSTANTS.CREATE_ORDER_SUCCESS,
           payload: res
         })
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_LOADING_All,
+          payload: false,
+        });    
         return true
       } else {
         dispatch({
@@ -159,6 +170,10 @@ export const StaticDataGet = () => async (dispatch) => {
           payload: res?.data?.response_code
         })
         NotificationManager.error(res?.data?.response_message, "error", 5000, null, '');
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_LOADING_All,
+          payload: false,
+        });    
         return false
   
       }

@@ -11,7 +11,7 @@ const initialState = {
   getCustomerOrder: [],
   stockproductmedicine: [],
   staticdata: [],
-  createorder:[],
+  createorder: [],
 };
 export const OrderReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -52,10 +52,15 @@ export const OrderReducer = (state = initialState, { type, payload }) => {
       return { ...state, createorder: true }
 
     case ORDER_CONSTANTS.CREATE_ORDER_SUCCESS:
-      return { ...state, createorder:payload }
+      return { ...state, createorder: payload }
 
     case ORDER_CONSTANTS.CREATE_ORDER_ERROR:
       return { ...state, createorder: true }
+
+
+    case ORDER_CONSTANTS.ORDER_LOADING_All:
+      return { ...state, loading: payload};
+
 
     default:
       return state;
