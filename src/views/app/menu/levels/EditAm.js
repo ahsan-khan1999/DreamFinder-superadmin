@@ -19,12 +19,16 @@ import {
 import {
   ViewRoleAction,
   UpdateUserAction,
+  ViewRegionalSalesManagerManagerAction,
 } from 'Store/Actions/User/UserActions';
 import Select from 'react-select';
-
+import makeAnimated from 'react-select/animated';
+import axios from 'axios';
+const animatedComponents = makeAnimated();
 import CustomSelectInput from '../../../../components/common/CustomSelectInput';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
+import { getToken } from 'Utils/auth.util';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
@@ -32,6 +36,9 @@ const selectGender = [
 ];
 export default function EditAm(props) {
   const [thisView, setThisView] = useState(true);
+  const [array, setArray] = useState(admin?.service_location_uid);
+  let [service_location, setService_location] = useState([]);
+
   const currentUser = props?.location?.state;
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -50,10 +57,12 @@ export default function EditAm(props) {
     phone_number: currentUser?.phone_number,
 
     role_uid: currentUser?.role?.uid,
+    manager_uid: '',
+    service_location_uid: array,
   };
   const dispatch = useDispatch();
   const readRoles = () => {
-    // dispatch(ViewRoleAction());
+    dispatch(ViewRoleAction());
   };
   useEffect(() => {
     if (currentUser?.status?.name === 'suspended') {
@@ -61,17 +70,22 @@ export default function EditAm(props) {
     } else if (currentUser?.status?.name === 'active') {
       setButtonName('Suspend');
     }
-    // readRoles();
+    readRoles();
+    dispatch(ViewRegionalSalesManagerManagerAction());
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   let options = [];
-  // roles?.filter((item) =>
-  //   options.push({ label: item?.name, value: item?.name, key: item?.uid })
-  // );
-  //   const [currentItem, setCurrentItem] = useState('');
-  //   roles?.filter((item) => (
+  roles?.filter((item) =>
+    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
+  const rsm = useSelector(
+    (state) => state?.ViewUserReducer?.regionalSalesManager
+  );
+  let rsmOptiopns = [];
 
-  //   ));
+  rsm?.filter((item) =>
+    rsmOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
 
   const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
@@ -79,15 +93,17 @@ export default function EditAm(props) {
     setThisView(false);
   };
   const handleChangeToView = () => {
-    props.history.push('/app/menu/levels/viewAdmin');
+    props.history.push('/app/menu/levels/ViewAm');
   };
   const editData = async (e) => {
+    let test = { ...admin, service_location_uid: array };
+
     e.preventDefault();
     console.log(admin);
-    let res = await dispatch(UpdateUserAction(admin));
+    let res = await dispatch(UpdateUserAction(test));
     if (res) {
       NotificationManager.success('Successful response', 'Success', 5000, '');
-      props.history.push('/app/menu/levels/viewAdmin');
+      props.history.push('/app/menu/levels/ViewAm');
     }
   };
   const suspandAdmin = async () => {
@@ -144,6 +160,36 @@ export default function EditAm(props) {
 
     // console.log(doctor?.password);
   };
+  const getServiceLocationUid = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/thana?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+
+    setService_location(response?.data?.response_data);
+  };
+  let value = [];
+  let option = [];
+  service_location?.filter((item) =>
+    option?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
+  const handleChange = async (e) => {
+    let options = e;
+    options?.map((item, index) => {
+      value.push(item?.key);
+    });
+    await setArray(value);
+    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+  };
+  let defaultOptions = currentUser?.field_staff?.service_location?.map(
+    (item) => ({label:item?.name,value:item?.name,id:item?.uid})
+  );
   return (
     <Card>
       <CardBody>
@@ -358,12 +404,77 @@ export default function EditAm(props) {
                       classNamePrefix="react-select"
                       name="form-field-name-gender"
                       //   defaultValue={}
+                      defaultValue={{
+                        label: currentUser?.role?.name,
+                        value: currentUser?.role?.name,
+                        id: currentUser?.role?.id,
+                      }}
                       // value={gender}
 
                       onChange={(val) =>
                         setAdmin({ ...admin, role_uid: val?.key })
                       }
                       options={options}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select RSM" />
+                  </Label>
+                  {thisView ? (
+                    <span>
+                      <p>{currentUser?.field_staff?.manager?.name}</p>
+                    </span>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      // value={gender}
+                      defaultValue={{
+                        label: currentUser?.field_staff?.manager?.name,
+                        value: currentUser?.field_staff?.manager?.name,
+                        id: currentUser?.field_staff?.manager?.id,
+                      }}
+                      onChange={(val) => {
+                        setAdmin({
+                          ...admin,
+                          manager_uid: val.key,
+                        });
+                        getServiceLocationUid(val.key);
+                      }}
+                      options={rsmOptiopns}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select Teritory" />
+                  </Label>
+                  {thisView ? (
+                    currentUser?.field_staff?.service_location?.map((item) => (
+                      <span>
+                        <p>{item?.name}</p>
+                      </span>
+                    ))
+                  ) : (
+                    <Select
+                      cacheOptions
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      defaultValue={defaultOptions[0]}
+                      value={admin?.service_location_uid}
+                      onChange={(e) => handleChange(e)}
+                      options={option}
                     />
                   )}
                 </FormGroup>
@@ -405,7 +516,7 @@ export default function EditAm(props) {
                 Save
               </Button>
             )}
-             {thisView ? (
+            {thisView ? (
               <Button
                 style={{ 'background-color': '#003766', marginRight: '5px' }}
                 // className="btn btn-primary"

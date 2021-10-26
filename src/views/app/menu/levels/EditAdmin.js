@@ -76,7 +76,13 @@ export default function EditAdmin(props) {
   const editData = async () => {
     let res = await dispatch(UpdateUserAction(admin));
     if (res) {
-      NotificationManager.success('Successful response', 'Success', 5000, null,'');
+      NotificationManager.success(
+        'Successful response',
+        'Success',
+        5000,
+        null,
+        ''
+      );
       props.history.push('/app/menu/levels/viewAdmin');
     }
   };
@@ -294,7 +300,6 @@ export default function EditAdmin(props) {
                       value={admin?.phone_number}
                       type="text"
                       className="radio-in"
-                      
                       name="phone_number"
                       // validate={validateEmail}
                       // onChange={(e) => setNumber()}
@@ -339,7 +344,7 @@ export default function EditAdmin(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin?.role_uid}</p>
+                      <p>{currentUser?.role?.name}</p>
                     </span>
                   ) : (
                     <Select
@@ -348,7 +353,11 @@ export default function EditAdmin(props) {
                       className="react-select"
                       classNamePrefix="react-select"
                       name="form-field-name-gender"
-                      //   defaultValue={}
+                      defaultValue={{
+                        label: currentUser?.role?.name,
+                        value: currentUser?.role?.name,
+                        id: currentUser?.role?.uid,
+                      }}
                       // value={gender}
 
                       onChange={(val) =>

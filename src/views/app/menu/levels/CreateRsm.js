@@ -4,6 +4,8 @@ import { NotificationManager } from 'components/common/react-notifications';
 import React, { useEffect } from 'react';
 import {
   CreateAdminAction,
+  CreateRsmAction,
+  CreateSmAction,
   ViewAdminAction,
   ViewRoleAction,
   ViewSalesManagerManagerAction,
@@ -35,16 +37,22 @@ import ModalExample from './ModelTo';
 import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
+import makeAnimated from 'react-select/animated';
+import axios from 'axios';
+const animatedComponents = makeAnimated();
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
-
 ];
-export default function CreateDirector({history}) {
+export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
+  let [service_location, setService_location] = useState([]);
+
+  const [array, setArray] = useState(admin?.service_location_uid);
+
   const admin_obj = {
     email_address: '',
 
@@ -56,10 +64,10 @@ export default function CreateDirector({history}) {
     designation: '',
 
     phone_number: '',
-    
+
     role_uid: '',
-    manager_uid:'',
-    service_location_uid:[]
+    manager_uid: '',
+    service_location_uid: array,
   };
 
   const readRoles = () => {
@@ -70,30 +78,57 @@ export default function CreateDirector({history}) {
   };
   useEffect(() => {
     readRoles();
-    readUser()
+    readUser();
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   const user = useSelector((state) => state?.ViewUserReducer?.salesManager);
+  let value = [];
 
+  const handleChange = async (e) => {
+    let options = e;
+    options?.map((item, index) => {
+      value.push(item?.key);
+    });
+    await setArray(value);
+    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+  };
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  let salesManager = []
-    user?.filter((item) => (
-      salesManager?.push({label:item?.name,value:item?.name,key:item?.uid})
-    ))
-  
-
+  let salesManager = [];
+  user?.filter((item) =>
+    salesManager?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
+  const getServiceLocationUid = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/area?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+    setService_location(response?.data?.response_data);
+  };
+  let option = [];
+  service_location?.filter((item) =>
+    option?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    let test = { ...admin, service_location_uid: array };
+
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
       admin?.password === '' &&
       admin?.gender === '' &&
-      admin?.phone_number === ''
-      && admin?.designation === '' && admin.role_uid === ''
+      admin?.phone_number === '' &&
+      admin?.designation === '' &&
+      admin.role_uid === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -104,8 +139,8 @@ export default function CreateDirector({history}) {
       );
       return;
     } else {
-      let res = await dispatch(CreateAdminAction({ ...admin }));
-      // console.log(res, 'admin create res');
+      let res = await dispatch(CreateRsmAction(test));
+      // console.log(test, 'admin create res');
 
       if (res) {
         NotificationManager.success(
@@ -115,7 +150,7 @@ export default function CreateDirector({history}) {
           null,
           ''
         );
-        history.push('/app/menu/levels/viewDoctor');
+        history.push('/app/menu/levels/viewRsm');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -231,7 +266,7 @@ export default function CreateDirector({history}) {
                       onChange={(val) =>
                         setAdmin({
                           ...admin,
-                          gender:  val?.value,
+                          gender: val?.value,
                         })
                       }
                       options={selectGender}
@@ -293,7 +328,7 @@ export default function CreateDirector({history}) {
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-                    
+
                     onChange={(val) =>
                       setAdmin({ ...admin, role_uid: val?.key })
                     }
@@ -323,6 +358,22 @@ export default function CreateDirector({history}) {
                       getServiceLocationUid(val.key);
                     }}
                     options={salesManager}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6>Select Teritory</h6>
+                  </Label>
+                  <Select
+                    cacheOptions
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                    isMulti
+                    value={admin?.service_location_uid}
+                    onChange={(e) => handleChange(e)}
+                    options={option}
                   />
                 </FormGroup>
               </Col>

@@ -19,12 +19,16 @@ import {
 import {
   ViewRoleAction,
   UpdateUserAction,
+  ViewDepoAction,
 } from 'Store/Actions/User/UserActions';
 import Select from 'react-select';
-
+import makeAnimated from 'react-select/animated';
+const animatedComponents = makeAnimated();
 import CustomSelectInput from '../../../../components/common/CustomSelectInput';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
+import axios from 'axios';
+import { getToken } from 'Utils/auth.util';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
@@ -32,10 +36,11 @@ const selectGender = [
 ];
 export default function EditDeliveryStaff(props) {
   const [thisView, setThisView] = useState(true);
+  const [array, setArray] = useState(admin?.service_location_uid);
+  let [service_location, setService_location] = useState();
   let [buttonName, setButtonName] = useState();
 
   const currentUser = props?.location?.state;
-  //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
   console.log(currentUser);
   const admin_obj = {
@@ -46,14 +51,43 @@ export default function EditDeliveryStaff(props) {
 
     gender: currentUser?.gender,
     designation: currentUser?.designation,
+    manager_uid: '',
 
     phone_number: currentUser?.phone_number,
+    service_location_uid: array,
 
     role_uid: currentUser?.role?.uid,
   };
   const dispatch = useDispatch();
   const readRoles = () => {
-    // dispatch(ViewRoleAction());
+    dispatch(ViewRoleAction());
+  };
+  let option = [];
+  const getServiceLocationUid = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+
+    setService_location(response?.data?.response_data);
+  };
+  service_location?.filter((item) =>
+    option?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
+  let value = [];
+  const handleChange = async (e) => {
+    let options = e;
+    options?.map((item, index) => {
+      value.push(item?.key);
+    });
+    await setArray(value);
+    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   useEffect(() => {
     if (currentUser?.status?.name === 'suspended') {
@@ -61,13 +95,26 @@ export default function EditDeliveryStaff(props) {
     } else if (currentUser?.status?.name === 'active') {
       setButtonName('Suspend');
     }
-    // readRoles();
+    readRoles();
+    dispatch(ViewDepoAction());
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
+  const depoManager = useSelector(
+    (state) => state?.ViewUserReducer?.depoManager
+  );
+
   let options = [];
-  // roles?.filter((item) =>
-  //   options.push({ label: item?.name, value: item?.name, key: item?.uid })
-  // );
+  roles?.filter((item) =>
+    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
+  let depoManagerFilter = [];
+  depoManager?.filter((item) =>
+    depoManagerFilter?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
   //   const [currentItem, setCurrentItem] = useState('');
   //   roles?.filter((item) => (
 
@@ -82,14 +129,20 @@ export default function EditDeliveryStaff(props) {
     props.history.push('/app/menu/levels/viewAdmin');
   };
   const editData = async (e) => {
+    let test = { ...admin, service_location_uid: array };
+
     e.preventDefault();
     console.log(admin);
-    let res = await dispatch(UpdateUserAction(admin));
+    let res = await dispatch(UpdateUserAction(test));
     if (res) {
       NotificationManager.success('Successful response', 'Success', 5000, '');
-      props.history.push('/app/menu/levels/viewAdmin');
+      props.history.push('/app/menu/levels/ViewDeliveryStaff');
     }
   };
+  let defaultOptions = currentUser?.field_staff?.service_location?.map(
+    (item) => ({label:item?.name,value:item?.name,id:item?.uid})
+  );
+  console.log(defaultOptions,"default option");
   const suspandAdmin = async () => {
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
@@ -357,13 +410,79 @@ export default function EditDeliveryStaff(props) {
                       className="react-select"
                       classNamePrefix="react-select"
                       name="form-field-name-gender"
-                      //   defaultValue={}
-                      // value={gender}
-
+                      defaultValue={{
+                        label: currentUser?.role?.name,
+                        value: currentUser?.role?.name,
+                        id: currentUser?.role?.id,
+                      }}
                       onChange={(val) =>
                         setAdmin({ ...admin, role_uid: val?.key })
                       }
                       options={options}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id=" Manager" />
+                  </Label>
+
+                  {thisView ? (
+                    <span>
+                      <p>{currentUser?.field_staff?.manager?.name}</p>
+                    </span>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      defaultValue={{
+                        label: currentUser?.field_staff?.manager?.name,
+                        value: currentUser?.field_staff?.manager?.name,
+                        id: currentUser?.field_staff?.manager?.id,
+                      }}
+                      // value={gender}
+
+                      onChange={(val) => {
+                        setAdmin({
+                          ...admin,
+                          manager_uid: val.key,
+                        });
+                        getServiceLocationUid(val?.key);
+                      }}
+                      options={depoManagerFilter}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Manager" />
+                  </Label>
+
+                  {thisView ? (
+                    <span>
+                      {currentUser?.field_staff?.service_location?.map(
+                        (item) => (
+                          <p>{item?.name}</p>
+                        )
+                      )}
+                    </span>
+                  ) : (
+                    <Select
+                      cacheOptions
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      defaultValue={defaultOptions[0]}
+                      value={admin?.service_location_uid}
+                      onChange={(e) => handleChange(e)}
+                      options={option}
                     />
                   )}
                 </FormGroup>

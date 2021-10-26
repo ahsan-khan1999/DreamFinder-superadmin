@@ -347,7 +347,7 @@ export default function EditDepoManager(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin?.role_uid}</p>
+                      <p>{currentUser?.role?.name}</p>
                     </span>
                   ) : (
                     <Select
@@ -357,6 +357,11 @@ export default function EditDepoManager(props) {
                       classNamePrefix="react-select"
                       name="form-field-name-gender"
                       //   defaultValue={}
+                      defaultValue={{
+                        label:currentUser?.role?.name,
+                        value:currentUser?.role?.name,
+                        id:currentUser?.role?.uid
+                      }}
                       // value={gender}
 
                       onChange={(val) =>

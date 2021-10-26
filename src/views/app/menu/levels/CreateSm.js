@@ -4,6 +4,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import React, { useEffect } from 'react';
 import {
   CreateAdminAction,
+  CreateSmAction,
   ViewAdminAction,
   ViewDirectorAction,
   ViewRoleAction,
@@ -36,6 +37,8 @@ import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
 import axios from 'axios';
+import makeAnimated from 'react-select/animated';
+const animatedComponents = makeAnimated();
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
@@ -44,6 +47,9 @@ const selectGender = [
 ];
 export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
+  let [service_location, setService_location] = useState([]);
+  const [array, setArray] = useState(admin?.service_location_uid);
+
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
     email_address: '',
@@ -59,7 +65,7 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
     manager_uid: '',
-    service_location_uid: [],
+    service_location_uid: array,
   };
 
   const readRoles = () => {
@@ -79,10 +85,7 @@ export default function CreateDirector({ history }) {
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  // let deliveryStaffFilter = []
-  //   user?.filter((item) => (
-  //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
-  //   ))
+ 
   let directorFilter = [];
   user?.filter((item) =>
     directorFilter?.push({
@@ -91,9 +94,21 @@ export default function CreateDirector({ history }) {
       key: item?.uid,
     })
   );
+  let option = [];
+  let value = [];
 
+  const handleChange = async (e) => {
+    let options = e;
+    options?.map((item, index) => {
+      value.push(item?.key);
+    });
+    await setArray(value);
+    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+  };
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    let test = { ...admin, service_location_uid: array };
+
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
@@ -101,7 +116,7 @@ export default function CreateDirector({ history }) {
       admin?.gender === '' &&
       admin?.phone_number === '' &&
       admin?.designation === '' &&
-      admin.role_uid === ''
+      admin.role_uid === '' && admin.service_location === undefined 
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -112,8 +127,7 @@ export default function CreateDirector({ history }) {
       );
       return;
     } else {
-      let res = await dispatch(CreateAdminAction({ ...admin }));
-      // console.log(res, 'admin create res');
+      let res = await dispatch(CreateSmAction(test));
 
       if (res) {
         NotificationManager.success(
@@ -123,7 +137,7 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-        history.push('/app/menu/levels/viewDoctor');
+        history.push('/app/menu/levels/viewSm');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -135,11 +149,10 @@ export default function CreateDirector({ history }) {
       }
     }
   };
-  const getServiceLocationUid = async (uid) => {
-    alert('at finc');
+  const getServiceLocationUid = async () => {
     let token = await getToken();
     const response = await axios.get(
-      `https://concord-backend-prod.herokuapp.com/api/region-classifications/read?child_uid=${uid}`,
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read`,
       {
         headers: {
           x_session_key: token.token,
@@ -147,8 +160,12 @@ export default function CreateDirector({ history }) {
         },
       }
     );
-    console.log(response);
+    setService_location(response?.data?.response_data);
+
   };
+  service_location?.filter((item) =>
+    option?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
   return (
     <Card>
       <CardBody>
@@ -323,11 +340,11 @@ export default function CreateDirector({ history }) {
                   />
                 </FormGroup>
               </Col>
-          
+
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Depo Manager" />
+                    <IntlMessages id="Select Director" />
                   </Label>
 
                   <Select
@@ -343,9 +360,25 @@ export default function CreateDirector({ history }) {
                         ...admin,
                         manager_uid: val.key,
                       });
-                      getServiceLocationUid(val.key);
+                      getServiceLocationUid();
                     }}
                     options={directorFilter}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6>Select Teritory</h6>
+                  </Label>
+                  <Select
+                    cacheOptions
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                    isMulti
+                    value={admin?.service_location_uid}
+                    onChange={(e) => handleChange(e)}
+                    options={option}
                   />
                 </FormGroup>
               </Col>

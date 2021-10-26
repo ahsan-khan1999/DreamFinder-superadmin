@@ -4,6 +4,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import React, { useEffect } from 'react';
 import {
   CreateAdminAction,
+  CreateAmAction,
   ViewAdminAction,
   ViewAreaManagerAction,
   ViewRegionalSalesManagerManagerAction,
@@ -37,6 +38,9 @@ import ModalExample from './ModelTo';
 import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
+import makeAnimated from 'react-select/animated';
+import axios from 'axios';
+const animatedComponents = makeAnimated();
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
@@ -46,6 +50,9 @@ const selectGender = [
 export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [array, setArray] = useState(admin?.service_location_uid);
+  let [service_location, setService_location] = useState([]);
+
   const admin_obj = {
     email_address: '',
 
@@ -60,6 +67,7 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
     manager_uid: '',
+    service_location_uid: array,
   };
 
   const readRoles = () => {
@@ -67,8 +75,7 @@ export default function CreateDirector({ history }) {
   };
   const readUser = () => {
     dispatch(ViewRegionalSalesManagerManagerAction());
-    dispatch(ViewSalesManagerManagerAction());
-
+    // dispatch(ViewSalesManagerManagerAction());
   };
   useEffect(() => {
     readRoles();
@@ -78,24 +85,27 @@ export default function CreateDirector({ history }) {
   const rsm = useSelector(
     (state) => state?.ViewUserReducer?.regionalSalesManager
   );
-  const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
+  // const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
 
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
   let rsmOptiopns = [];
-  let smOptiopns = [];
+  // let smOptiopns = [];
 
   rsm?.filter((item) =>
     rsmOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  sm?.filter((item) =>
-    smOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
-  );
- 
+  // sm?.filter((item) =>
+  //   smOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  // );
+
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    let test = { ...admin, service_location_uid: array };
+
+    // let test=
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
@@ -114,8 +124,8 @@ export default function CreateDirector({ history }) {
       );
       return;
     } else {
-      let res = await dispatch(CreateAdminAction({ ...admin }));
-      // console.log(res, 'admin create res');
+      let res = await dispatch(CreateAmAction(test));
+      // console.log(test, 'admin create res');
 
       if (res) {
         NotificationManager.success(
@@ -125,7 +135,7 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-        history.push('/app/menu/levels/viewDoctor');
+        history.push('/app/menu/levels/viewAm');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -136,6 +146,33 @@ export default function CreateDirector({ history }) {
         );
       }
     }
+  };
+  const getServiceLocationUid = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/thana?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+
+    setService_location(response?.data?.response_data);
+  };
+  let value = [];
+  let option = [];
+  service_location?.filter((item) =>
+    option?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
+  const handleChange = async (e) => {
+    let options = e;
+    options?.map((item, index) => {
+      value.push(item?.key);
+    });
+    await setArray(value);
+    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   return (
     <Card>
@@ -336,7 +373,7 @@ export default function CreateDirector({ history }) {
                   />
                 </FormGroup>
               </Col>
-              <Col lg={6}>
+              {/* <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select SM" />
@@ -358,6 +395,23 @@ export default function CreateDirector({ history }) {
                       getServiceLocationUid(val.key);
                     }}
                     options={smOptiopns}
+                  />
+                </FormGroup>
+              </Col> */}
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6>Select Teritory</h6>
+                  </Label>
+                  <Select
+                    cacheOptions
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                    isMulti
+                    value={admin?.service_location_uid}
+                    onChange={(e) => handleChange(e)}
+                    options={option}
                   />
                 </FormGroup>
               </Col>

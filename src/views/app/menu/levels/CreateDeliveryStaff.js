@@ -34,6 +34,8 @@ import ModalExample from './ModelTo';
 import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
+import makeAnimated from 'react-select/animated';
+const animatedComponents = makeAnimated();
 import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 
@@ -49,6 +51,9 @@ export default function CreateDeliveryStaff() {
 
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [array, setArray] = useState(deliveryStaff?.service_location_uid);
+
   const deliveryStaff_obj = {
     email_address: '',
 
@@ -59,12 +64,14 @@ export default function CreateDeliveryStaff() {
     designation: '',
 
     phone_number: '',
+    service_location_uid: array,
 
     role_uid: '',
     manager_uid: '',
-    service_location_uid: filterLocationIds,
   };
-  let [option, setoption] = useState([]);
+  const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
+
+  let option = [];
 
   const getServiceLocationUid = async (uid) => {
     let token = await getToken();
@@ -77,17 +84,13 @@ export default function CreateDeliveryStaff() {
         },
       }
     );
-    
-    setService_location(response?.data?.response_data)
 
-    
+    setService_location(response?.data?.response_data);
   };
+  service_location?.filter((item) =>
+    option?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
 
-
-  service_location?.map((item) => (
-    option?.push({label:item?.name,value:item?.name,key:item?.uid})  
-  ))
-  
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
@@ -112,10 +115,22 @@ export default function CreateDeliveryStaff() {
       key: item?.uid,
     })
   );
+  let value = [];
 
-  const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
-
+  const handleChange = async (e) => {
+    let options = e;
+    options?.map((item, index) => {
+      value.push(item?.key);
+    });
+    await setArray(value);
+    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+  };
   const onAdminCreate = async () => {
+    console.log(array);
+    let test = { ...deliveryStaff, service_location_uid: array };
+    console.log(test);
+    setDeliveryStaff(test);
+
     if (
       deliveryStaff?.email_address === '' &&
       deliveryStaff?.name === '' &&
@@ -127,6 +142,8 @@ export default function CreateDeliveryStaff() {
       deliveryStaff.manager_uid === '' &&
       deliveryStaff?.service_location_uid === []
     ) {
+      console.log(deliveryStaff, 'at  if');
+
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
@@ -136,9 +153,11 @@ export default function CreateDeliveryStaff() {
       );
       return;
     } else {
-      console.log(deliveryStaff);
-      let res = await dispatch(CreateAdminAction({ ...deliveryStaff }));
-      console.log(res, 'admin create res');
+      // setTimeout(() => {
+      // console.log(deliveryStaff,"at  else");
+
+      // }, 5000);
+      let res = await dispatch(CreateAdminAction(test));
 
       if (res) {
         NotificationManager.success(
@@ -159,13 +178,6 @@ export default function CreateDeliveryStaff() {
         );
       }
     }
-  };
-
-  const handleChange = (val) => {
-    setDeliveryStaff({
-      ...deliveryStaff,
-      service_location_uid: val?.key,
-    });
   };
 
   return (
@@ -381,7 +393,7 @@ export default function CreateDeliveryStaff() {
                   />
                 </FormGroup>
               </Col>
-              <Col lg={6}>
+              {/* <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select Territory" />
@@ -402,6 +414,22 @@ export default function CreateDeliveryStaff() {
                       });
                       // getServiceLocationUid(val?.key);
                     }}
+                    options={option}
+                  />
+                </FormGroup>
+              </Col> */}
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6>Select Teritory</h6>
+                  </Label>
+                  <Select
+                    cacheOptions
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                    isMulti
+                    value={deliveryStaff?.service_location_uid}
+                    onChange={(e) => handleChange(e)}
                     options={option}
                   />
                 </FormGroup>

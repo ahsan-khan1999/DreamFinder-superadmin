@@ -4,6 +4,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import React, { useEffect } from 'react';
 import {
   CreateAdminAction,
+  CreateMpoAction,
   ViewAdminAction,
   ViewAreaManagerAction,
   ViewRegionalSalesManagerManagerAction,
@@ -37,6 +38,10 @@ import ModalExample from './ModelTo';
 import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
+import axios from 'axios';
+import makeAnimated from 'react-select/animated';
+
+const animatedComponents = makeAnimated();
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
@@ -45,6 +50,10 @@ const selectGender = [
 ];
 export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
+  let [service_location, setService_location] = useState([]);
+
+  const [array, setArray] = useState(admin?.service_location_uid);
+
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
     email_address: '',
@@ -59,14 +68,15 @@ export default function CreateDirector({ history }) {
     phone_number: '',
 
     role_uid: '',
+    service_location_uid: array,
   };
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
   const readUser = () => {
-    dispatch(ViewRegionalSalesManagerManagerAction());
-    dispatch(ViewSalesManagerManagerAction());
+    // dispatch(ViewRegionalSalesManagerManagerAction());
+    // dispatch(ViewSalesManagerManagerAction());
     dispatch(ViewAreaManagerAction());
   };
   useEffect(() => {
@@ -80,30 +90,48 @@ export default function CreateDirector({ history }) {
   const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
 
   const am = useSelector((state) => state?.ViewUserReducer?.areaManager);
+  const getServiceLocationUid = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
 
+    setService_location(response?.data?.response_data);
+  };
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  // let deliveryStaffFilter = []
-  //   user?.filter((item) => (
-  //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
-  //   ))
-  let rsmOptiopns = [];
-  let smOptiopns = [];
+  
   let amOptiopns = [];
-
-  rsm?.filter((item) =>
-    rsmOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  let value = [];
+  let option = [];
+  service_location?.filter((item) =>
+    option?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  sm?.filter((item) =>
-    smOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
-  );
+  const handleChange = async (e) => {
+    let options = e;
+    options?.map((item, index) => {
+      value.push(item?.key);
+    });
+    await setArray(value);
+    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+  };
+ 
+  
   am?.filter((item) =>
     amOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    let test = { ...admin, service_location_uid: array };
+    
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
@@ -122,7 +150,7 @@ export default function CreateDirector({ history }) {
       );
       return;
     } else {
-      let res = await dispatch(CreateAdminAction({ ...admin }));
+      let res = await dispatch(CreateMpoAction(test));
       // console.log(res, 'admin create res');
 
       if (res) {
@@ -133,7 +161,7 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-        history.push('/app/menu/levels/viewDoctor');
+        history.push('/app/menu/levels/viewMpo');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -319,56 +347,7 @@ export default function CreateDirector({ history }) {
                   />
                 </FormGroup>
               </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select RSM" />
-                  </Label>
 
-                  <Select
-                    required
-                    components={{ Input: CustomSelectInput }}
-                    className="react-select"
-                    classNamePrefix="react-select"
-                    name="form-field-name-gender"
-                    // value={gender}
-
-                    onChange={(val) => {
-                      setAdmin({
-                        ...admin,
-                        manager_uid: val.key,
-                      });
-                      getServiceLocationUid(val.key);
-                    }}
-                    options={rsmOptiopns}
-                  />
-                </FormGroup>
-              </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select SM" />
-                  </Label>
-
-                  <Select
-                    required
-                    components={{ Input: CustomSelectInput }}
-                    className="react-select"
-                    classNamePrefix="react-select"
-                    name="form-field-name-gender"
-                    // value={gender}
-
-                    onChange={(val) => {
-                      setAdmin({
-                        ...admin,
-                        manager_uid: val.key,
-                      });
-                      getServiceLocationUid(val.key);
-                    }}
-                    options={smOptiopns}
-                  />
-                </FormGroup>
-              </Col>
               <Col lg={6}>
                 <FormGroup>
                   <Label>
@@ -391,6 +370,22 @@ export default function CreateDirector({ history }) {
                       getServiceLocationUid(val.key);
                     }}
                     options={amOptiopns}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6>Select Teritory</h6>
+                  </Label>
+                  <Select
+                    cacheOptions
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                    isMulti
+                    value={admin?.service_location_uid}
+                    onChange={(e) => handleChange(e)}
+                    options={option}
                   />
                 </FormGroup>
               </Col>
