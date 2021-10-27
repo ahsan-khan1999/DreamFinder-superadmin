@@ -149,7 +149,7 @@ export default function Orders({ match, history }) {
               <OrderRequestTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={orders}
+                data={orderTable}
               />
             )}
           </Colxx>

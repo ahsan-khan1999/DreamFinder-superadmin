@@ -515,7 +515,7 @@ export default function AddOrder(props) {
                 <div className="d-flex justify-content-center">
                   <Loader
                     height={16} width={18}
-                    type="Oval"
+                    type="Bars"
                     color="#fff"
                   />
                   &nbsp; Creating Order

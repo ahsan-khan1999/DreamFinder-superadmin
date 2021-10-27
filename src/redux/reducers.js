@@ -80,6 +80,8 @@ import surveyListApp from './surveyList/reducer';
 import surveyDetailApp from './surveyDetail/reducer';
 import { OrderReducer } from 'Store/Reducers/ConcordOrder/OrderReducer';
 import { StaticDataReducer } from 'Store/Reducers/StaticDataReducer/StaticDataReducer';
+import { DistributionCenterReducer } from 'Store/Reducers/ConcordDistributionCenter/DistributionCenterReducer';
+import { DepartmentHeadReducer } from 'Store/Reducers/ConcordDepartmentHead/DepartmentHeadReducer';
 
 const reducers = combineReducers({
   menu,
@@ -136,6 +138,10 @@ const reducers = combineReducers({
    orderReducer:OrderReducer,
    //Concord Static Reducer
    staticDataReducer:StaticDataReducer,
+   //concord Department
+   distributionCenterReducer:DistributionCenterReducer,
+   //concord Distribution Center
+   departmentHeadReducer:DepartmentHeadReducer,
 
 });
 

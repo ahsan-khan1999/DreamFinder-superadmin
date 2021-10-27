@@ -492,12 +492,12 @@ const data = [
       {
         icon: 'iconsminds-management',
         label: 'menu.distribution-center',
-        to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
+        to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
       },
       {
         icon: 'iconsminds-business-man',
         label: 'menu.department-head',
-        to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
+         to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
       },
     ],
   },

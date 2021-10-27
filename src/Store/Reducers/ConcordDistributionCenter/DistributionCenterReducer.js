@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
@@ -13,7 +15,7 @@ const initialState = {
   createdistributioncenter: [],
   updatedistributioncenter: [],
 };
-export const OrderReducer = (state = initialState, { type, payload }) => {
+export const DistributionCenterReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING:
       return { ...state, loading: payload, distributioncenter: [] };

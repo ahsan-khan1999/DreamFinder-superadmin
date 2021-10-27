@@ -77,6 +77,9 @@ const SERVICE_URLS = {
   createdistributionCentres: 'distribution_centres/create',
   updatedistributionCentres: 'distribution_centres/update',
   suspanddistributionCentres: 'distribution_centres/suspend',
+  regiondistributionCentres:'region-classifications/read/region',
+  areadistributionCentres:'region-classifications/read/area',
+
 };
 
 const requestApproval = (data) =>

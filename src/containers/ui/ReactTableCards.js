@@ -587,6 +587,246 @@ export const OrderRequestTable = (props) => {
 
   return <Table columns={cols} data={props?.data} />;
 };
+
+
+
+
+
+
+
+
+
+
+//Department Head Start
+export const DepartmentHeadTable = (props) => {
+  // console.log(props?.doctor);
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[2],
+        accessor: 'email',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'phone',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+     
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ 'backgroundColor': '#003766' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+//Department Head
+
+
+
+
+
+
+//Distribution Center Start
+export const DistributionCenter = (props) => {
+  // console.log(props?.doctor);
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[2],
+        accessor: 'email',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'phone',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+     
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ 'backgroundColor': '#003766' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+//Distribution Center
+
+
+
+
+
+
+
+
 export const ReactTableWithPaginationCard = (props) => {
   // console.log(props?.doctor);
   const { changeRoute } = props;

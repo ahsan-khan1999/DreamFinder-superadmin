@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';

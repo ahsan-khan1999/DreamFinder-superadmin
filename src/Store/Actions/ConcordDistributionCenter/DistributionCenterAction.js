@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
@@ -16,7 +18,7 @@ export const GetDistributionCenter = () => async (dispatch) => {
       payload: true,
     });
 
-    let res = await apiServices.getdepartmentHead();
+    let res = await apiServices.getdistributionCentres();
 
     if (res?.data?.response_code === 200) {
       dispatch({
@@ -44,7 +46,7 @@ export const CreateDistributionCenter = (data) => async (dispatch) => {
       payload: true,
     });
     
-    let res = await apiServices.createdepartmentHead(data);
+    let res = await apiServices.createdistributionCentres(data);
     dispatch({
       type: DISTRIBUTION_CENTER_CONSTANT.CREATE_DISTRIBUTION_CENTER_LOADING,
       payload: true
@@ -89,7 +91,7 @@ export const UpdateDistributionCenter = (data) => async (dispatch) => {
       type: DISTRIBUTION_CENTER_CONSTANT.UPDATE_DISTRIBUTION_CENTER_LOADING,
       payload: true,
     });
-    let res = await apiServices.updatedepartmentHead(data);
+    let res = await apiServices.updatedistributionCentres(data);
     console.log(res);
     if (res?.response_code === 200) {
       dispatch({

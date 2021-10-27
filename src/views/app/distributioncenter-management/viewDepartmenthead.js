@@ -20,6 +20,7 @@ import Loader from 'react-loader-spinner';
 import apiServices from 'services/requestHandler';
 
 import {
+  DepartmentHeadTable,
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
@@ -27,6 +28,7 @@ import { searchArray } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
+import { GetDepartmentHead } from '../../../Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
 
 export default function viewDepartmenthead({ match, history }) {
 
@@ -36,61 +38,57 @@ export default function viewDepartmenthead({ match, history }) {
 
   useEffect(() => {
 
-    getOrders();
+    getDepartmentheads();
 
   }, []);
     
 
 
-  const getOrders = async () => {
+  const getDepartmentheads = async () => {
 
-    let res = await dispatch(OrderAction());
+    let res = await dispatch(GetDepartmentHead());
 
-    console.log("res Concord Order",res);
+    console.log("res Concord DepartmentHeads",res);
   };
 
-  const orders = useSelector((state) => state?.orderReducer?.order);
-  const loading = useSelector((state) => state?.orderReducer?.loading);
-  console.log("LoadingOrder")
-  console.log(orders);
+  const departmenthead = useSelector((state) => state?.departmentHeadReducer?.departmenthead);
+  const loading = useSelector((state) => state?.departmentHeadReducer?.loading);
+  console.log(departmenthead);
 
 
   const changeRoute = async (item) => {
-    history.push('/app/Orders/viewCurrentOrder',item);
+    history.push('/app/distributioncenter-management/viewCurrentDepartmenthead',item);
   };
-  const [orderTable, setOrderTable] = useState(orders);
+  const [departmentTable, setDepartmentTable] = useState(departmenthead);
 
 
   const handleAdd = () => {
-
-    history.push('/app/Orders/AddOrder');
+    history.push('/app/distributioncenter-management/CreateDepartmenthead');
   };
 
   useEffect(() => {
-    setOrderTable(orders);
-  }, [orders]);
+    setDepartmentTable(departmenthead);
+  }, [departmenthead]);
   const headers = [
-    'Orders ID',
-    'Customer Name',
-    'Market & Address',
-    'Order Date/Time',
-    'Payment Type',
-    'Delivery Status',
-    'Payment Status',
-    'Proceed By',
-    'Status',
+    'Name',
+    'Designation',
+    'Email',
+    'Address',
+    'Phone',
     'Actions',
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setOrderTable(searchArray(orders, search));
+    setDepartmentTable(searchArray(departmenthead, search));
   };
+
+
   return (
     <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
-            <h4>Order</h4>
+            <h4>Department Head</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
@@ -146,10 +144,10 @@ export default function viewDepartmenthead({ match, history }) {
                 />
               </div>
             ) : (
-              <OrderRequestTable
+              <DepartmentHeadTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={orders}
+                data={departmentTable}
               />
             )}
           </Colxx>

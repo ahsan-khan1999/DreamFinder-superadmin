@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
@@ -7,20 +9,20 @@ import { DEPARTMENT_HEAD_CONSTANT } from '../../Constant/Constants';
 const initialState = {
   loading: false,
   loader: false,
-  departmentheadcenter: [],
+  departmenthead: [],
   createdepartmenthead: [],
   updatedepartmenthead: [],
 };
-export const OrderReducer = (state = initialState, { type, payload }) => {
+export const DepartmentHeadReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case DEPARTMENT_HEAD_CONSTANT.DEPARTMENT_HEAD_LOADING:
-      return { ...state, loading: payload, departmentheadcenter: [] };
+      return { ...state, loading: payload, departmenthead: [] };
 
     case DEPARTMENT_HEAD_CONSTANT.DEPARTMENT_HEAD_SUCESS:
-      return { ...state, departmentheadcenter: payload };
+      return { ...state, departmenthead: payload };
 
     case DEPARTMENT_HEAD_CONSTANT.DEPARTMENT_HEAD_ERROR:
-      return { ...state, departmentheadcenter: payload };
+      return { ...state, departmenthead: payload };
 
     case DEPARTMENT_HEAD_CONSTANT.CREATE_DEPARTMENT_HEAD_LOADING:
       return { ...state, createdepartmenthead: true }
