@@ -65,11 +65,12 @@ import {
   ViewCurrentAppointmentRemovalRequest,
 } from 'Store/Reducers/AppoinmentRescheduleRequest/appoinmentRecheduleReqReducer';
 import { GetAvilableSlotsReducer } from 'Store/Reducers/AvilableSlots/avilableSlotsReducer';
-import {CreateRegionReducer} from 'Store/Reducers/RegionClassification/regionClassificationReducer'
+import { CreateRegionReducer } from 'Store/Reducers/RegionClassification/regionClassificationReducer';
 import { ViewReportReducer } from 'Store/Reducers/ReportReducer/reportReducer';
-import {ViewUserReducer} from 'Store/Reducers/Users/UserReducer'
+import { ViewUserReducer } from 'Store/Reducers/Users/UserReducer';
 import { ViewMedicinesReducer } from 'Store/Reducers/Medicines/medicinesRedcuer';
 import { ViewTestReducer } from 'Store/Reducers/Test/testsReducer';
+import { TargetReducer } from 'Store/Reducers/Target/TargetReducer';
 import { combineReducers } from 'redux';
 import settings from './settings/reducer';
 import menu from './menu/reducer';
@@ -126,7 +127,9 @@ const reducers = combineReducers({
   ViewMedicinesReducer,
   ViewReportReducer,
   CreateRegionReducer,
-  ViewUserReducer
+  ViewUserReducer,
+  TargetReducer,
+
   // DepartmentReducer,
 });
 

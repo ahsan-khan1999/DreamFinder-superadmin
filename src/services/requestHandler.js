@@ -68,7 +68,12 @@ const SERVICE_URLS = {
   createUsers: 'users/create',
   readRoles: 'roles/read',
   updateUsers: 'users/update',
-  suspandUser:'users/suspend'
+  suspandUser: 'users/suspend',
+  readTargets: 'targets/read',
+  createTarget: 'targets/create',
+  readOrder: 'orders/read',
+  suspandtarget: 'targets/suspend',
+  updateTarget: 'targets/update',
 };
 
 const requestApproval = (data) =>
@@ -87,6 +92,12 @@ const readRoles = () =>
   get(SERVICE_URLS.readRoles, {}, { feature: featureConstants.static });
 const readArea = () =>
   get(SERVICE_URLS.area, {}, { feature: featureConstants.static });
+const readTarget = () =>
+  get(SERVICE_URLS.readTargets, {}, { feature: featureConstants.static });
+const readOrder = () =>
+  get(SERVICE_URLS.readOrder, {}, { feature: featureConstants.static });
+const createTarget = (data) =>
+  post(SERVICE_URLS.createTarget, data, { feature: featureConstants.static });
 const readThana = () =>
   get(SERVICE_URLS.thana, {}, { feature: featureConstants.static });
 const readTest = () =>
@@ -157,7 +168,7 @@ const changeDeliveryStatus = (data) =>
     feature: featureConstants.static,
   });
 
-const getAdmin =  () =>
+const getAdmin = () =>
   get(
     SERVICE_URLS.getAdmin,
     {},
@@ -345,13 +356,9 @@ const updateAdmin = async (data) =>
     feature: featureConstants.static,
   });
 const suspandUser = async (data) =>
-  patch(
-    SERVICE_URLS.suspandUser,
-    data,
-    {
-      feature: featureConstants.static,
-    }
-  );
+  patch(SERVICE_URLS.suspandUser, data, {
+    feature: featureConstants.static,
+  });
 const getTodaysAppoinments = async () =>
   post(
     SERVICE_URLS.getTodaysAppoinment,
@@ -400,13 +407,21 @@ const deleteReport = async (data) =>
   patch(SERVICE_URLS.deleteReport, data, {
     feature: featureConstants.static,
   });
+const suspandTarget = async (data) =>
+  patch(SERVICE_URLS.suspandtarget, data, {
+    feature: featureConstants.static,
+  });
 
 const updateUser = async (data) =>
   put(SERVICE_URLS.updateUsers, data, {
     feature: featureConstants.static,
   });
 // post getStatic
-
+const updateTarget = async (data) =>
+  put(SERVICE_URLS.updateTarget, data, {
+    feature: featureConstants.static,
+  });
+// post g
 const apiServices = {
   // define variables
   getAllSlots,
@@ -475,6 +490,11 @@ const apiServices = {
   getRsm,
   getAm,
   getMpo,
-  suspandUser
+  suspandUser,
+  readTarget,
+  createTarget,
+  readOrder,
+  suspandTarget,
+  updateTarget,
 };
 export default apiServices;

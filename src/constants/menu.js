@@ -480,6 +480,20 @@ const data = [
       },
     ],
   },
+  {
+    id: 'Target',
+    icon: 'iconsminds-shopping-cart',
+    label: 'menu.target',
+    to: `${adminRoot}/Target/ViewTarget`,
+    // subs: [
+    //   {
+    //     icon: 'simple-icon-check',
+
+    //     label: 'menu.viewOrders',
+    //     to: `${adminRoot}/Orders/orders`,
+    //   },
+    // ],
+  },
 
   {
     id: 'requets',

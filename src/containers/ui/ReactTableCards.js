@@ -1043,3 +1043,76 @@ export const AdminTable = (props) => {
     </div>
   );
 };
+
+
+export const TargetTable = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'assigned_to.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'amount.amount',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[2],
+        accessor: 'assigned_to.role.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'start_date',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{moment.unix(props.value).format("MMM DD, YYYY")}</>,
+      },
+
+     
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+     
+      {
+        Header: header[5],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <CardTitle>
+        <IntlMessages id="Admin Table" />
+      </CardTitle>
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};

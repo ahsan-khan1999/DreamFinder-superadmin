@@ -70,7 +70,7 @@ module.exports = {
   'menu.fieldStaff': 'Delivery Staff',
   'menu.am': 'Area Manager',
   'menu.sm': 'Sales Manager',
-
+  'menu.target':'Target',
   'menu.rsm': 'Regional Sales Manager',
   'menu.mpo': 'MPO',
   'menu.admin': 'Admin',

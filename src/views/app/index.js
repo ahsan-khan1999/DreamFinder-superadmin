@@ -20,6 +20,15 @@ const Test = React.lazy(() =>
 const ViewRegion = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './TreeView/RegionTreeView')
 );
+const ViewTarget = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Target/ViewTarget')
+);
+const CreateTarget = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Target/CreateTarget')
+);
+const EditTarget = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Target/EditTarget')
+);
 const Category = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Test/viewCategory')
 );
@@ -57,7 +66,9 @@ const UploadReport = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Reports/uploadReport')
 );
 const ViewCurrentMedicines = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines')
+  import(
+    /* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines'
+  )
 );
 const ViewCurrentOrder = React.lazy(() =>
   import(
@@ -94,9 +105,23 @@ const App = ({ match }) => {
             />
 
             <Route
+              path={`${match.url}/Target/ViewTarget`}
+              render={(props) => <ViewTarget {...props} />}
+            />
+            <Route
+              path={`${match.url}/Target/CreateTarget`}
+              render={(props) => <CreateTarget {...props} />}
+            />
+            <Route
+              path={`${match.url}/Target/EditTarget`}
+              render={(props) => <EditTarget {...props} />}
+            />
+
+            <Route
               path={`${match.url}/Orders/viewCurrentOrder`}
               render={(props) => <ViewCurrentOrder {...props} />}
             />
+
             <Route
               path={`${match.url}/Reports/viewReports`}
               render={(props) => <ViewReport {...props} />}
@@ -147,7 +172,7 @@ const App = ({ match }) => {
               path={`${match.url}/Medicines/CreateMedicines`}
               render={(props) => <CreateMedicines {...props} />}
             />
-            
+
             <Route
               path={`${match.url}/Test/CreateCategory`}
               render={(props) => <CreateCategory {...props} />}
