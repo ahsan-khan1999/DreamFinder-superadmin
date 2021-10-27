@@ -21,51 +21,93 @@ import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { CreateDistributionCenter, getAreas, GetDepoManagers, GetDistributionCenterRegions } from 'Store/Actions/ConcordDistributionCenter/DistributionCenterAction';
 
 export default function CreateDistributioncenter({ history }) {
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const [array, setArray] = useState([]);
+  const [depoarray, setDepoarray] = useState([]);
 
-  const dephead_obj = {
-    name: '',
 
-    designation: '',
+  useEffect(() => {
+    dispatch(GetDistributionCenterRegions());
+    dispatch(GetDepoManagers());
+  }, []);
 
-    email: '',
+  const distributioncenterregions = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenterregions
+  );
+  const depoManager = useSelector(
+    (state) => state?.distributionCenterReducer?.depoManager
+  );
+  const distributionRegionAreas = useSelector(
+    (state) => state?.distributionCenterReducer?.distributionRegionAreas
+  );
 
-    address: '',
 
-    phone: '',
+  let distributionRegions = [];
+  distributioncenterregions?.map((item) =>
+  distributionRegions?.push({
+      label: item?.name,
+      value: item?.uid,
+      key: item?.region_id,
+    })
+  );
+
+
+  //==============Areas
+  let distributionRegionsArea = [];
+  distributionRegionAreas?.map((item) =>
+  distributionRegionsArea?.push({
+      label: item?.name,
+      value: item?.uid,
+      key: item?.uid,
+    })
+  );
+
+  let AllDepoManagers = [];
+  depoManager?.map((item) =>
+  AllDepoManagers?.push({
+      label: item?.name,
+      value: item?.uid,
+      key: item?.uid,
+    })
+  );
+  
+  
+
+  const distributioncenter_obj = {
+    depot_managers_uid: depoarray,
+
+    areas_uid: array,
+    
   };
-
+  
   const loading = useSelector(
     (state) => state?.departmentHeadReducer?.loader
-  );
-  const [departhead, setDeparthead] = useState(dephead_obj);
-
-  const onDepartHeadCreate = async () => {
-    if (
-      departhead?.name === '' &&
-      departhead?.designation === '' &&
-      departhead?.email === '' &&
-      departhead?.address === '' &&
-      departhead?.phone === ''
-    ) {
-      NotificationManager.error(
-        'Please Enter Required Field',
-        'Error',
-        3000,
-        null,
-        ''
-      );
-      return;
-    } else {
-      console.log(departhead);
-        let res = await dispatch(CreateDepartmentHead({ ...departhead }));
-
-      if (res) {
+    );
+    
+    const onDepartHeadCreate = async () => {
+      if (
+        distributioncenter_obj?.depot_managers_uid === '' &&
+        distributioncenter_obj?.areas_uid === '' 
+        ) {
+          NotificationManager.error(
+            'Please Enter Required Field',
+            'Error',
+            3000,
+            null,
+            ''
+            );
+            return;
+          } else {
+            console.log({...distributioncenter_obj},"sdsd")
+            let res = await dispatch(CreateDistributionCenter({ ...distributioncenter_obj }));
+            
+            if (res) {
         NotificationManager.success(
-          'Department Head Added Sucessfully',
+          'Distribution Center Added Sucessfully',
           'Success',
           3000,
           null,
@@ -75,11 +117,29 @@ export default function CreateDistributioncenter({ history }) {
       }
     }
   };
-
+  
   const handleChangeToView = () => {
     history.push('/app/distributioncenter-management/viewDepartmenthead');
   };
+  
+  const regionareavalue = [];
+  const handleChangeRegion = async (e, index) => {
+    // console.log(e);
+    let options = e;
+    options?.map((item, index) => {
+      regionareavalue.push(item?.value);
+    }); 
+    await setArray(regionareavalue);
+  };
 
+  const depovalue = [];
+  const handleChangeDepoManagers = async (e, index) => {
+    let options = e;
+    options?.map((item, index) => {
+      depovalue.push(item?.value);
+    }); 
+    await setDepoarray(depovalue);
+  };
   return (
     <Card>
       <CardBody>
@@ -87,7 +147,7 @@ export default function CreateDistributioncenter({ history }) {
             className="btn btn-primary mb-4 "
             onClick={handleChangeToView}
             style={{ marginRight: '20px'}}
-          >
+            >
             Back
           </Button>
         <CardTitle>
@@ -98,10 +158,11 @@ export default function CreateDistributioncenter({ history }) {
         <Formik>
           <Form>
             <Row className="h-100">
-              <Col lg={6}>
+            
+            <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Regions Name" />
+                    <IntlMessages id="Select Regions" />
                   </Label>
 
                   <>
@@ -110,20 +171,12 @@ export default function CreateDistributioncenter({ history }) {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      isMulti
                       required
-                      // onChange={(e) => {
-                      //   setMedproductuid(e.value);
-                      //   setAvailableproductquantity(e.key);
-                      //   setOrderCreate({
-                      //     ...orderCreate,
-                      //   medicines: [{ medicine_uid: e.value ,quantity: medproductquantity}],
-                      //   })
-                      // }}
                       onChange={(e, index) => {
-                        handleChangeProduct(e, index);
+                        dispatch(getAreas(e.value));
+                        
                       }}
-                      options={{label:'Hello'}}
+                      options={distributionRegions}
                     />
                   </>
                 </FormGroup>
@@ -132,7 +185,7 @@ export default function CreateDistributioncenter({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Area Name" />
+                    <IntlMessages id="Select Areas" />
                   </Label>
 
                   <>
@@ -143,18 +196,34 @@ export default function CreateDistributioncenter({ history }) {
                       classNamePrefix="react-select"
                       isMulti
                       required
-                      // onChange={(e) => {
-                      //   setMedproductuid(e.value);
-                      //   setAvailableproductquantity(e.key);
-                      //   setOrderCreate({
-                      //     ...orderCreate,
-                      //   medicines: [{ medicine_uid: e.value ,quantity: medproductquantity}],
-                      //   })
-                      // }}
                       onChange={(e, index) => {
-                        handleChangeProduct(e, index);
+                        handleChangeRegion(e, index);
                       }}
-                      options={{label:'Hello'}  }
+                      options={distributionRegionsArea}
+                    />
+                  </>
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select Depot Managers" />
+                  </Label>
+
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      isMulti
+                      required
+                      onChange={(e, index) => {
+                        handleChangeDepoManagers(e, index);
+                        
+                      }}
+                      options={AllDepoManagers}
                     />
                   </>
 
@@ -178,13 +247,14 @@ export default function CreateDistributioncenter({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary w-15"
+              className="btn btn-primary"
               size="sm"
               onClick={onDepartHeadCreate}
             >
               {loading ? (
                 <div className="d-flex justify-content-center">
-                  <Loader height={20} width={20} type="Oval" color="#fff" />
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  Creating
                 </div> 
               ) : (
                 'Add DistributionCenter'

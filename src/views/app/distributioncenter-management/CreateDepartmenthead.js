@@ -202,13 +202,14 @@ export default function CreateDepartmenthead({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary w-15"
+              className="btn btn-primary"
               size="sm"
               onClick={onDepartHeadCreate}
             >
               {loading ? (
                 <div className="d-flex justify-content-center">
-                  <Loader height={20} width={20} type="Oval" color="#fff" />
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Creating
                 </div> 
               ) : (
                 'Add DepartmentHead'

@@ -77,8 +77,9 @@ const SERVICE_URLS = {
   createdistributionCentres: 'distribution_centres/create',
   updatedistributionCentres: 'distribution_centres/update',
   suspanddistributionCentres: 'distribution_centres/suspend',
-  regiondistributionCentres:'region-classifications/read/region',
-  areadistributionCentres:'region-classifications/read/area',
+  regiondistributionCentres: 'region-classifications/read/region',
+  // areadistributionCentres:'region-classifications/read/area',
+  getDepoManager: 'users/read/depot_manager',
 
 };
 
@@ -402,6 +403,18 @@ const updatedistributionCentres = async (data) =>
     feature: featureConstants.static,
   });
 
+const regiondistributionCentres = () =>
+  get(SERVICE_URLS.regiondistributionCentres, { feature: featureConstants.static });
+
+const getDepoManager = async () =>
+  get(
+    SERVICE_URLS.getDepoManager,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
+
 const apiServices = {
   // define variables
   getAllSlots,
@@ -479,5 +492,7 @@ const apiServices = {
   createdistributionCentres,
   suspanddistributionCentres,
   updatedistributionCentres,
+  regiondistributionCentres,
+  getDepoManager,
 };
 export default apiServices;

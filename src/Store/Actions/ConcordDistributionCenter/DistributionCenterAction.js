@@ -10,7 +10,6 @@ import {
 
 // Distribution Center
 
-// Department Head
 export const GetDistributionCenter = () => async (dispatch) => {
   try {
     dispatch({
@@ -112,4 +111,80 @@ export const UpdateDistributionCenter = (data) => async (dispatch) => {
       return false;
     }
   } catch {}
+};
+
+
+
+export const GetDistributionCenterRegions = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_LOADING,
+      payload: true,
+    });
+
+    let res = await apiServices.regiondistributionCentres();
+
+    if (res?.data?.response_code === 200) {
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_SUCESS,
+        payload: res?.data?.response_data,
+      });
+    } else {
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_ERROR,
+        payload: [],
+      });
+    }
+  } catch {}
+};
+
+export const GetDepoManagers = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING,
+      payload: true,
+    });
+
+    let response = await apiServices.getDepoManager();
+    if (response?.data?.response_code === 200) {
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+    } else {
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_ERROR,
+        payload: true,
+      });
+    }
+  } catch {}
+};
+
+
+
+export const getAreas = (uid) => async (dispatch) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  try {
+    const head = { "x-session-key": token.token, "x-session-type": token.type };
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/area?parent_uid=${uid}`,
+      { headers: head }
+    );
+    if (response?.data?.response_code === 200) {
+        dispatch({
+          type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_GET_AREAS,
+          payload: response?.data?.response_data,
+        });
+    }
+  } catch (error) {
+    return "Fail";
+  }
 };

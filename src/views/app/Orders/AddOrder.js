@@ -201,16 +201,7 @@ export default function AddOrder(props) {
         availalbequantity: item?.key,
         quantity: array?.length > 0 ? array[index]?.quantity : 0,
       });
-    });
-    // await setOrderCreate({
-    //   ...orderCreate,
-    //   medicines: provalue?.map(item => {
-    //     return {
-    //       medicine_uid : item?.medicine_uid,
-    //       quantity : item?.quantity
-    //     }
-    //   }),
-    // }) 
+    }); 
     await setArray(provalue);
   };
 
@@ -225,6 +216,8 @@ export default function AddOrder(props) {
     const testArary = [...array];
     console.log(testArary);
     setArray(testArary);
+    
+    
     await setOrderCreate({
       ...orderCreate,
       medicines: array?.map(item => {
