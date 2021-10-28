@@ -429,28 +429,28 @@ const data = [
           },
         ],
       },
-      // {
-      //   icon: 'simple-icon-layers',
-      //   label: 'Patient',
-      //   to: `${adminRoot}/menu/levels`,
-      //   subs: [
-      //     {
-      //       icon: 'simple-icon-arrow-right',
-      //       label: 'Create Patient',
-      //       to: `${adminRoot}/menu/levels/third-level-1`,
-      //     },
-      //     {
-      //       icon: 'simple-icon-arrow-right',
-      //       label: 'View Patient',
-      //       to: `${adminRoot}/menu/levels/third-level-2`,
-      //     },
-      //     {
-      //       icon: 'simple-icon-arrow-right',
-      //       label: 'Edit Patient',
-      //       to: `${adminRoot}/menu/levels/third-level-3`,
-      //     },
-      //   ],
-      // },
+      {
+        icon: 'simple-icon-layers',
+        label: 'Patient',
+        to: `${adminRoot}/menu/levels`,
+        subs: [
+          {
+            icon: 'simple-icon-arrow-right',
+            label: 'Create Patient',
+            to: `${adminRoot}/menu/levels/third-level-1`,
+          },
+          {
+            icon: 'simple-icon-arrow-right',
+            label: 'View Patient',
+            to: `${adminRoot}/menu/levels/third-level-2`,
+          },
+          {
+            icon: 'simple-icon-arrow-right',
+            label: 'Edit Patient',
+            to: `${adminRoot}/menu/levels/third-level-3`,
+          },
+        ],
+      },
     ],
   },
   // {
@@ -501,6 +501,77 @@ const data = [
       },
     ],
   },
+
+
+  {
+    id: 'Stocks',
+    icon: 'iconsminds-bag-items',
+    label: 'Stocks',
+    to: `${adminRoot}/stocks-management`,
+    subs: [
+      {
+        icon: 'iconsminds-add-cart',
+        label: 'Product Category',
+        to: `${adminRoot}/stocks-management/viewProductCategory`,
+      },
+      {
+        icon: 'iconsminds-add-basket',
+        label: 'Product',
+         to: `${adminRoot}/stocks-management/viewProduct`,
+      },
+      {
+        icon: 'iconsminds-cart-quantity',
+        label: 'Stock',
+         to: `${adminRoot}/stocks-management/viewStock`,
+      },
+      {
+        icon: 'iconsminds-credit-card',
+        label: 'Stock Transaction',
+         to: `${adminRoot}/stocks-management/ViewStockTransaction`,
+      },
+    ],
+  },
+
+
+  // {
+  //   id: 'Doctors',
+  //   icon: 'iconsminds-bag-items',
+  //   label: 'menu.distribution-center-management',
+  //   to: `${adminRoot}/distributioncenter-management`,
+  //   subs: [
+  //     {
+  //       icon: 'iconsminds-add-cart',
+  //       label: 'menu.distribution-center',
+  //       to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
+  //     },
+  //     {
+  //       icon: 'iconsminds-add-cart',
+  //       label: 'menu.department-head',
+  //        to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
+  //     },
+  //   ],
+  // },
+
+
+
+  // {
+  //   id: 'Customers',
+  //   icon: 'iconsminds-bag-items',
+  //   label: 'menu.distribution-center-management',
+  //   to: `${adminRoot}/distributioncenter-management`,
+  //   subs: [
+  //     {
+  //       icon: 'iconsminds-add-cart',
+  //       label: 'menu.distribution-center',
+  //       to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
+  //     },
+  //     {
+  //       icon: 'iconsminds-add-cart',
+  //       label: 'menu.department-head',
+  //        to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
+  //     },
+  //   ],
+  // },
 
 
   {

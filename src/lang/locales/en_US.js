@@ -85,9 +85,26 @@ module.exports = {
   'menu.viewregion': 'View Region',
 
 
+
   'menu.distribution-center-management':'Distribution',
   'menu.distribution-center':'Distribution Center',
   'menu.department-head':'Department Head',
+
+
+  // 'menu.stocks-management':'Stocks',
+  // 'menu.product_category':'Product Category',
+  // 'menu.product':'Product',
+  // 'menu.stock':'Stock',
+  // 'menu.stock_transaction':'Stock Transaction',
+
+
+
+  // 'menu.doctor-management':'Doctors',
+  // 'menu.doctor_category':'Doctors Category',
+  // 'menu.doctor':'Doctors',
+
+  // 'menu.customer-management':'Customer',
+  // 'menu.customer':'Customer',
 
   'menu.test': 'Test',
   'menu.viewTest': 'View Test',

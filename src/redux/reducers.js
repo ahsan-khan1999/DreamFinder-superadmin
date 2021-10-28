@@ -82,6 +82,13 @@ import { OrderReducer } from 'Store/Reducers/ConcordOrder/OrderReducer';
 import { StaticDataReducer } from 'Store/Reducers/StaticDataReducer/StaticDataReducer';
 import { DistributionCenterReducer } from 'Store/Reducers/ConcordDistributionCenter/DistributionCenterReducer';
 import { DepartmentHeadReducer } from 'Store/Reducers/ConcordDepartmentHead/DepartmentHeadReducer';
+import { ProductReducer } from 'Store/Reducers/ConcordProduct/ProductReducer';
+import { ProductCategoryReducer } from 'Store/Reducers/ConcordProductCategory/ProductCategoryReducer';
+import { StockTransactionReducer } from 'Store/Reducers/ConcordStockTransaction/StockTransactionReducer';
+import { StockReducer } from 'Store/Reducers/ConcordStock/StockReducer';
+import { DoctorCategoryReducer } from 'Store/Reducers/ConcordDoctorCategorys/DoctorCategorysReducer';
+import { DoctorReducer } from 'Store/Reducers/ConcordDoctor/DoctorReducer';
+import { CustomerReducer } from 'Store/Reducers/ConcordCustomer/CustomerReducer';
 
 const reducers = combineReducers({
   menu,
@@ -142,6 +149,28 @@ const reducers = combineReducers({
    distributionCenterReducer:DistributionCenterReducer,
    //concord Distribution Center
    departmentHeadReducer:DepartmentHeadReducer,
+   
+   
+   //concord Product 
+   productReducer:ProductReducer,
+
+   //concord Product Category 
+   productCategoryReducer:ProductCategoryReducer,
+
+   //concord Stocks
+   stockReducer:StockReducer,
+
+   //concord StocksTransactions
+   stockTransactionReducer:StockTransactionReducer,
+
+   //concord DoctorCategorys
+   doctorCategoryReducer:DoctorCategoryReducer,
+   
+   //concord Doctors
+   doctorsReducer:DoctorReducer,
+
+   //concord Customers
+   customerReducer:CustomerReducer,
 
 });
 

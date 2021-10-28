@@ -93,14 +93,15 @@ export const checkWhiteSpace = (text) => {
 
 export const CheckConditionArray = (array,condition,key,subkey) => {
   const obj = array?.filter(item => { 
-    return  item[condition]
+    return  item[condition] 
   })
   if(subkey)
   {
-    return obj[0][key][subkey];
+    return obj[0][key][subkey] === undefined ? "N/A" : obj[0][key][subkey];
   }
   else
   {
-    return obj[0][key];
+
+    return obj[0][key] === undefined ? "N/A" : obj[0][key];
   }
 }

@@ -112,6 +112,81 @@ const CreateDistributioncenter = React.lazy(() =>
 
 
 
+// Stocks Concord --------------------------------------
+const ViewCurrentProductCategory = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/ProductCategory/ViewCurrentProductsCategory'
+  )
+);
+const ViewCurrentProduct = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/Product/ViewCurrentProducts'
+  )
+);
+
+const ViewCurrentStock = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/Stock/ViewCurrentStock'
+  )
+);
+
+const ViewCurrentStockTransaction = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/StockTransaction/ViewCurrentStockTransaction'
+  )
+);
+
+
+const ViewProductCategory = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/ProductCategory/ViewProductCategory'
+  )
+);
+const ViewProduct = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/Product/ViewProduct'
+  )
+);
+
+const ViewStock = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/Stock/ViewStock'
+  )
+);
+const ViewStockTransaction = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/StockTransaction/ViewStockTransaction'
+  )
+);
+
+const CreateProductCategory = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/ProductCategory/CreateProductsCategory'
+  )
+);
+const CreateProduct = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/Product/CreateProducts'
+  )
+);
+
+const CreateStock = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/Stock/CreateStock'
+  )
+);
+const CreateStockTransaction = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Stock-management/StockTransaction/CreateStockTransaction'
+  )
+);
+//--------------------------------------------
+
+
+
+
+
+
 const Applications = React.lazy(() =>
   import(/* webpackChunkName: "applications" */ './applications')
 );
@@ -214,6 +289,61 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/distributioncenter-management/CreateDistributioncenter`}
               render={(props) => <CreateDistributioncenter {...props} />}
+            />
+
+
+            {/* Stock Product */}
+            <Route
+              path={`${match.url}/stocks-management/viewCurrentProductsCategory`}
+              render={(props) => <ViewCurrentProductCategory {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/viewCurrentProducts`}
+              render={(props) => <ViewCurrentProduct {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/viewCurrentStock`}
+              render={(props) => <ViewCurrentStock {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/viewCurrentStockTransaction`}
+              render={(props) => <ViewCurrentStockTransaction {...props} />}
+            />
+
+
+            <Route
+              path={`${match.url}/stocks-management/viewProductCategory`}
+              render={(props) => <ViewProductCategory {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/viewProduct`}
+              render={(props) => <ViewProduct {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/viewStock`}
+              render={(props) => <ViewStock {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/ViewStockTransaction`}
+              render={(props) => <ViewStockTransaction {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/stocks-management/CreateProductsCategory`}
+              render={(props) => <CreateProductCategory {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/stocks-management/CreateProducts`}
+              render={(props) => <CreateProduct {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/CreateStock`}
+              render={(props) => <CreateStock {...props} />}
+            />
+            <Route
+              path={`${match.url}/stocks-management/CreateStockTransaction`}
+              render={(props) => <CreateStockTransaction {...props} />}
             />
             
 

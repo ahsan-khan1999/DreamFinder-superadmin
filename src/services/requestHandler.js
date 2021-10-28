@@ -81,6 +81,46 @@ const SERVICE_URLS = {
   // areadistributionCentres:'region-classifications/read/area',
   getDepoManager: 'users/read/depot_manager',
 
+  //Concord Products Categorys
+  getproductcategory: 'product-categorys/read',
+  createproductcategory: 'product-categorys/create',
+  updateproductcategory: 'product-categorys/update',
+  suspandproductcategory: 'product-categorys/suspend',
+
+  //Concord Products
+  getproducts: 'products/read',
+  createproducts: 'products/create',
+  updateproducts: 'products/update',
+  suspandproducts: 'products/suspend',
+
+  //Concord Stocks
+  getstocks: 'stocks/read',
+  createstocks: 'stocks/create',
+  updatestocks: 'stocks/update',
+  suspandstocks: 'stocks/suspend',
+
+  //Concord StocksTransactions
+  getstockstransaction: 'stock-transactions/read',
+  createstockstransaction: 'stock-transactions/create',
+  suspandstockstransaction: 'stock-transactions/suspend',
+
+  //Concord Doctor Categorys
+  getdoctorcategorys: 'doctor-categorys/read',
+  createdoctorcategorys: 'doctor-categorys/create',
+  updatedoctorcategorys: 'doctor-categorys/update',
+  suspanddoctorcategorys: 'doctor-categorys/suspend',
+
+  //Concord Doctors
+  getdoctors: 'doctors/read',
+  createdoctors: 'doctors/create',
+  updatedoctors: 'doctors/update',
+  suspanddoctors: 'doctors/suspend',
+
+  //Concord Customers
+  getcustomers: 'customers/read',
+  createcustomers: 'customers/create',
+  updatecustomers: 'customers/update',
+  suspandcustomers: 'customers/suspend',
 };
 
 const requestApproval = (data) =>
@@ -385,9 +425,10 @@ const updatedepartmentHead = async (data) =>
 
 //Concord Distribution Center
 
-
 const getdistributionCentres = () =>
-  get(SERVICE_URLS.getdistributionCentres, { feature: featureConstants.static });
+  get(SERVICE_URLS.getdistributionCentres, {
+    feature: featureConstants.static,
+  });
 
 const createdistributionCentres = (data) =>
   post(SERVICE_URLS.createdistributionCentres, data, {
@@ -404,7 +445,9 @@ const updatedistributionCentres = async (data) =>
   });
 
 const regiondistributionCentres = () =>
-  get(SERVICE_URLS.regiondistributionCentres, { feature: featureConstants.static });
+  get(SERVICE_URLS.regiondistributionCentres, {
+    feature: featureConstants.static,
+  });
 
 const getDepoManager = async () =>
   get(
@@ -414,6 +457,135 @@ const getDepoManager = async () =>
       feature: featureConstants.static,
     }
   );
+
+//Concord Products Category
+
+const getproductcategory = () =>
+  get(SERVICE_URLS.getproductcategory, { feature: featureConstants.static });
+
+const createproductcategory = (data) =>
+  post(SERVICE_URLS.createproductcategory, data, {
+    feature: featureConstants.static,
+  });
+
+const suspandproductcategory = async (data) =>
+  patch(SERVICE_URLS.suspandproductcategory, data, {
+    feature: featureConstants.static,
+  });
+const updateproductcategory = async (data) =>
+  put(SERVICE_URLS.updateproductcategory, data, {
+    feature: featureConstants.static,
+  });
+
+//Concord Products
+
+const getproducts = () =>
+  get(SERVICE_URLS.getproducts, { feature: featureConstants.static });
+
+const createproducts = (data) =>
+  post(SERVICE_URLS.createproducts, data, {
+    feature: featureConstants.static,
+  });
+
+const suspandproducts = async (data) =>
+  patch(SERVICE_URLS.suspandproducts, data, {
+    feature: featureConstants.static,
+  });
+const updateproducts = async (data) =>
+  put(SERVICE_URLS.updateproducts, data, {
+    feature: featureConstants.static,
+  });
+
+//Concord Stocks
+
+const getstocks = () =>
+  get(SERVICE_URLS.getstocks, { feature: featureConstants.static });
+
+const createstocks = (data) =>
+  post(SERVICE_URLS.createstocks, data, {
+    feature: featureConstants.static,
+  });
+
+const suspandstocks = async (data) =>
+  patch(SERVICE_URLS.suspandstocks, data, {
+    feature: featureConstants.static,
+  });
+const updatestocks = async (data) =>
+  put(SERVICE_URLS.updatestocks, data, {
+    feature: featureConstants.static,
+  });
+
+//Concord Stocks Transaction
+
+const getstockstransaction = () =>
+  get(SERVICE_URLS.getstockstransaction, { feature: featureConstants.static });
+
+const createstockstransaction = (data) =>
+  post(SERVICE_URLS.createstockstransaction, data, {
+    feature: featureConstants.static,
+  });
+
+const suspandstockstransaction = async (data) =>
+  patch(SERVICE_URLS.suspandstockstransaction, data, {
+    feature: featureConstants.static,
+  });
+
+//Concord Doctor Categorys
+
+const getdoctorcategorys = () =>
+  get(SERVICE_URLS.getdoctorcategorys, { feature: featureConstants.static });
+
+const createdoctorcategorys = (data) =>
+  post(SERVICE_URLS.createdoctorcategorys, data, {
+    feature: featureConstants.static,
+  });
+
+const suspanddoctorcategorys = async (data) =>
+  patch(SERVICE_URLS.suspanddoctorcategorys, data, {
+    feature: featureConstants.static,
+  });
+const updatedoctorcategorys = async (data) =>
+  put(SERVICE_URLS.updatedoctorcategorys, data, {
+    feature: featureConstants.static,
+  });
+
+//Concord Doctors
+
+const getdoctors = () =>
+  get(SERVICE_URLS.getdoctors, { feature: featureConstants.static });
+
+const createdoctors = (data) =>
+  post(SERVICE_URLS.createdoctors, data, {
+    feature: featureConstants.static,
+  });
+
+const suspanddoctors = async (data) =>
+  patch(SERVICE_URLS.suspanddoctors, data, {
+    feature: featureConstants.static,
+  });
+const updatedoctors = async (data) =>
+  put(SERVICE_URLS.updatedoctors, data, {
+    feature: featureConstants.static,
+  });
+
+//Concord Customers
+
+const getcustomers = () =>
+  get(SERVICE_URLS.getcustomers, { feature: featureConstants.static });
+
+const createcustomers = (data) =>
+  post(SERVICE_URLS.createcustomers, data, {
+    feature: featureConstants.static,
+  });
+
+const suspandcustomers = async (data) =>
+  patch(SERVICE_URLS.suspandcustomers, data, {
+    feature: featureConstants.static,
+  });
+const updatecustomers = async (data) =>
+  put(SERVICE_URLS.updatecustomers, data, {
+    feature: featureConstants.static,
+  });
 
 const apiServices = {
   // define variables
@@ -494,5 +666,46 @@ const apiServices = {
   updatedistributionCentres,
   regiondistributionCentres,
   getDepoManager,
+
+  //Concord Products Category
+  getproductcategory,
+  createproductcategory,
+  updateproductcategory,
+  suspandproductcategory,
+
+  //Concord Products
+  getproducts,
+  createproducts,
+  updateproducts,
+  suspandproducts,
+
+  //Concord Stocks
+  getstocks,
+  createstocks,
+  updatestocks,
+  suspandstocks,
+
+  //Concord StocksTransaction
+  getstockstransaction,
+  createstockstransaction,
+  suspandstockstransaction,
+
+  //Concord Doctor Categorys
+  getdoctorcategorys,
+  createdoctorcategorys,
+  updatedoctorcategorys,
+  suspanddoctorcategorys,
+
+  //Concord Doctors
+  getdoctors,
+  createdoctors,
+  updatedoctors,
+  suspanddoctors,
+
+  //Concord Customers
+  getcustomers,
+  createcustomers,
+  updatecustomers,
+  suspandcustomers,
 };
 export default apiServices;
