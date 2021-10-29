@@ -21,11 +21,26 @@ import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { CreateProducts, getCategory } from 'Store/Actions/ConcordProduct/ProductAction';
+import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
 
 export default function CreateProduct({ history }) {
 
-    const dispatch = useDispatch();
+  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
+  let option_static_Category = [];
+  staticdata?.product_category__category_list?.filter((item) =>
+  option_static_Category.push({
+      label: item?.name,
+      value: item?.value,
+      key: item?.id,
+    })
+  );
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(StaticDataGet());
+  }, []);
   const product_obj = {
     name: '',
 
@@ -35,18 +50,29 @@ export default function CreateProduct({ history }) {
 
   };
 
-  const loading = useSelector(
-    (state) => state?.departmentHeadReducer?.loader
+  const loading = useSelector((state) => state?.productReducer?.loading);
+  const getProductCategory = useSelector((state) => state?.productReducer?.getProductCategory);
+  
+  
+  
+  const [product, setProduct] = useState(product_obj);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  
+  let optioncategory = [];
+  getProductCategory?.filter((item) =>
+  optioncategory.push({
+    label: item?.name,
+    value: item?.uid,
+    key: item?.uid,
+  })
   );
-  const [departhead, setDeparthead] = useState(dephead_obj);
-
+  console.log(getProductCategory,"getProductCategory")
+  
   const onDepartHeadCreate = async () => {
     if (
-      departhead?.name === '' &&
-      departhead?.designation === '' &&
-      departhead?.email === '' &&
-      departhead?.address === '' &&
-      departhead?.phone === ''
+      product?.name === '' &&
+      product?.category_uid === '' &&
+      product?.price === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -57,8 +83,8 @@ export default function CreateProduct({ history }) {
       );
       return;
     } else {
-      console.log(departhead);
-        let res = await dispatch(CreateDepartmentHead({ ...departhead }));
+      console.log(product);
+      let res = await dispatch(CreateProducts({ ...product }));
 
       if (res) {
         NotificationManager.success(
@@ -80,17 +106,17 @@ export default function CreateProduct({ history }) {
   return (
     <Card>
       <CardBody>
-      <Button
-            className="btn btn-primary mb-4 "
-            onClick={handleChangeToView}
-            style={{ marginRight: '20px'}}
-          >
-            Back
-          </Button>
+        <Button
+          className="btn btn-primary mb-4 "
+          onClick={handleChangeToView}
+          style={{ marginRight: '20px' }}
+        >
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="Create Product" />
         </CardTitle>
-     
+
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
@@ -103,94 +129,94 @@ export default function CreateProduct({ history }) {
 
                   <Input
                     required
-                    value={departhead.name}
+                    value={product.name}
                     className="form-control"
                     name="name"
-                    // validate={validateEmail}
                     onChange={(e) =>
-                      setDeparthead({ ...departhead, name: e.target.value })
+                      setProduct({ ...product, name: e.target.value })
                     }
                   />
                 </FormGroup>
               </Col>
 
+
               <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    <IntlMessages id="Designation" />
-                  </Label>
+                  <label>
+                    <IntlMessages id="Select Category" />
+                  </label>
 
-                  <Input
-                    required
-                    value={departhead.designation}
-                    className="form-control"
-                    name="designation"
-                    type="text"
-                    onChange={(e) =>
-                      setDeparthead({
-                        ...departhead,
-                        designation: e.target.value,
-                      })
-                    }
-                  />
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        dispatch(getCategory(e.value));
+                        setSelectedCategory(e.label)
+                        // setOrderCreate({
+                        //   ...orderCreate,
+
+                        //   payment_type: e?.value,
+                        //   delivery_status: 'pending',
+                        //   payment_status: 'pending',
+                        // });
+                      }}
+                      required
+                      options={option_static_Category}
+                    />
+                  </>
                 </FormGroup>
               </Col>
 
+
               <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    <IntlMessages id="Email" />
-                  </Label>
+                  <label>
+                    <IntlMessages id="Select "/>
+                    {selectedCategory}
+                  </label>
 
-                  <Input
-                    required
-                    value={departhead.email}
-                    className="form-control"
-                    name="email"
-                    type="email"
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, email: e.target.value })
-                    }
-                  />
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      // onChange={(e) => {
+                      //   setOrderCreate({
+                      //     ...orderCreate,
+
+                      //     payment_type: e?.value,
+                      //     delivery_status: 'pending',
+                      //     payment_status: 'pending',
+                      //   });
+                      // }}
+                      required
+                      options={optioncategory}
+                    />
+                  </>
                 </FormGroup>
               </Col>
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Address" />
-                  </Label>
-
-                  <Input
-                    required
-                    value={departhead.address}
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, address: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
 
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Phone Number" />
+                    <IntlMessages id="Price" />
                   </Label>
 
                   <Input
                     required
-                    value={departhead?.phone}
-                    type="text"
+                    value={product?.phone}
+                    type="number"
                     className="radio-in"
                     name="phone"
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
                     onChange={(e) =>
-                      setDeparthead({ ...departhead, phone: e.target.value })
+                      setProduct({ ...product, phone: e.target.value })
                     }
                   />
                 </FormGroup>
@@ -206,7 +232,7 @@ export default function CreateProduct({ history }) {
                 <div className="d-flex justify-content-center">
                   <Loader height={18} width={18} type="Oval" color="#fff" />
                   &nbsp; Creating
-                </div> 
+                </div>
               ) : (
                 'Add Product'
               )}

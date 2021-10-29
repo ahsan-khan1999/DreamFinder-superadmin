@@ -433,14 +433,7 @@ export default function AddOrder(props) {
                       classNamePrefix="react-select"
                       isMulti
                       required
-                      // onChange={(e) => {
-                      //   setMedproductuid(e.value);
-                      //   setAvailableproductquantity(e.key);
-                      //   setOrderCreate({
-                      //     ...orderCreate,
-                      //   medicines: [{ medicine_uid: e.value ,quantity: medproductquantity}],
-                      //   })
-                      // }}
+                      
                       onChange={(e, index) => {
                         handleChangeProduct(e, index);
                       }}

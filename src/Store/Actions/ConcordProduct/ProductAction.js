@@ -38,7 +38,7 @@ export const GetProduct = () => async (dispatch) => {
   };
 
 
-  export const CreateProduct = (data) => async (dispatch) => {
+  export const CreateProducts = (data) => async (dispatch) => {
     try {
       dispatch({
         type: PRODUCT_CONSTANT.PRODUCT_LOADING_All,
@@ -111,4 +111,25 @@ export const GetProduct = () => async (dispatch) => {
         return false;
       }
     } catch {}
+  };
+
+
+
+  export const getCategory = (category) => async (dispatch) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    try {
+      const head = { "x-session-key": token.token, "x-session-type": token.type };
+      const response = await axios.get(
+        `https://concord-backend-m2.herokuapp.com/api/product-categorys/read?category=${category}`,
+        { headers: head }
+      );
+      if (response?.data?.response_code === 200) {
+          dispatch({
+            type: PRODUCT_CONSTANT.PRODUCT_GET_CATEGORY,
+            payload: response?.data?.response_data,
+          });
+      }
+    } catch (error) {
+      return "Fail";
+    }
   };
