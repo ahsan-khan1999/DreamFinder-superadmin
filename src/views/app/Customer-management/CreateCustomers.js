@@ -22,17 +22,20 @@ import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
 
-export default function CreateProduct({ history }) {
+export default function CreateCustomers({ history }) {
 
     const dispatch = useDispatch();
 
-  const product_obj = {
+  const dephead_obj = {
     name: '',
 
-    category_uid: '',
+    designation: '',
 
-    price: '',
+    email: '',
 
+    address: '',
+
+    phone: '',
   };
 
   const loading = useSelector(
@@ -68,13 +71,13 @@ export default function CreateProduct({ history }) {
           null,
           ''
         );
-        history.push('/app/stocks-management/viewProduct');
+        history.push('/app/customer-management/viewCustomers');
       }
     }
   };
 
   const handleChangeToView = () => {
-    history.push('/app/stocks-management/viewProduct');
+    history.push('/app/customer-management/viewCustomers');
   };
 
   return (
@@ -88,7 +91,7 @@ export default function CreateProduct({ history }) {
             Back
           </Button>
         <CardTitle>
-          <IntlMessages id="Create Product" />
+          <IntlMessages id="Create Customers" />
         </CardTitle>
      
         <div style={{ marginBottom: '30px' }}></div>

@@ -23,12 +23,14 @@ import {
   DepartmentHeadTable,
   OrderRequestTable,
   RemovalRequestTable,
+  StockTable,
 } from 'containers/ui/ReactTableCards';
 import { searchArray } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
 import { GetDepartmentHead } from '../../../../Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { GetStocks } from 'Store/Actions/ConcordStock/StockAction';
 
 export default function ViewStock({ match, history }) {
 
@@ -38,28 +40,28 @@ export default function ViewStock({ match, history }) {
 
   useEffect(() => {
 
-    getDepartmentheads();
+    getStocksdata();
 
   }, []);
     
 
 
-  const getDepartmentheads = async () => {
+  const getStocksdata = async () => {
 
-    let res = await dispatch(GetDepartmentHead());
+    let res = await dispatch(GetStocks());
 
-    console.log("res Concord DepartmentHeads",res);
+    console.log("res Concord Stocksdata",res);
   };
 
-  const departmenthead = useSelector((state) => state?.departmentHeadReducer?.departmenthead);
-  const loading = useSelector((state) => state?.departmentHeadReducer?.loading);
-  console.log(departmenthead);
+  const stock = useSelector((state) => state?.stockReducer?.stock);
+  const loading = useSelector((state) => state?.stockReducer?.loading);
+  console.log(stock);
 
 
   const changeRoute = async (item) => {
     history.push('/app/stocks-management/viewCurrentStock',item);
   };
-  const [departmentTable, setDepartmentTable] = useState(departmenthead);
+  const [stockTable, setStockTable] = useState(stock);
 
 
   const handleAdd = () => {
@@ -67,19 +69,20 @@ export default function ViewStock({ match, history }) {
   };
 
   useEffect(() => {
-    setDepartmentTable(departmenthead);
-  }, [departmenthead]);
+    setStockTable(stock);
+  }, [stock]);
   const headers = [
-    'Name',
-    'Designation',
-    'Email',
-    'Address',
-    'Phone',
+    'Product Name',
+    'Category Name',
+    'Quantity',
+    'Formula',
+    'Price',
+    'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDepartmentTable(searchArray(departmenthead, search));
+    setStockTable(searchArray(stock, search));
   };
 
 
@@ -144,10 +147,10 @@ export default function ViewStock({ match, history }) {
                 />
               </div>
             ) : (
-              <DepartmentHeadTable
+              <StockTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={departmentTable}
+                data={stockTable}
               />
             )}
           </Colxx>

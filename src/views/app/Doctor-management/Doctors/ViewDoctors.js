@@ -21,7 +21,7 @@ import apiServices from 'services/requestHandler';
 
 import {
   DepartmentHeadTable,
-  DistributionCenter,
+  DoctorTable,
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
@@ -29,101 +29,73 @@ import { searchArray } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
-import { GetDepartmentHead } from '../../../Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
-import { GetDistributionCenter } from 'Store/Actions/ConcordDistributionCenter/DistributionCenterAction';
-import { CheckConditionArray } from 'Utils/functions';
+import { GetDepartmentHead } from '../../../../Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { GetDoctor } from 'Store/Actions/ConcordDoctor/DoctorAction';
 
-export default function viewDistributioncenter({ match, history }) {
+export default function ViewDoctors({ match, history }) {
+
   let dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    getDistributionCenter();
-  }, []);
 
-  const getDistributionCenter = async () => {
-    let res = await dispatch(GetDistributionCenter());
+    getDoctor();
+
+  }, []);
+    
+
+
+  const getDoctor = async () => {
+
+    let res = await dispatch(GetDoctor());
+
+    console.log("res Concord Doctor",res);
   };
 
-  const distributioncenter = useSelector(
-    (state) => state?.distributionCenterReducer?.distributioncenter
-  );
+  const doctor = useSelector((state) => state?.doctorsReducer?.doctor);
+  const loading = useSelector((state) => state?.doctorsReducer?.loading);
+  console.log(doctor);
 
-  let distributioncenterData = [];
-  distributioncenter?.map((item) =>
-    distributioncenterData.push({
-      name: item?.areas[0].parent.name,
-      designation: CheckConditionArray(
-        item?.depot_managers,
-        'is_primary',
-        'designation'
-        
-      ),
-      email: CheckConditionArray(
-        item?.depot_managers,
-        'is_primary',
-        'email_address'
-        
-      ),
-      address:
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','street_address') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','area') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','province') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','city') ,
-      phone: CheckConditionArray(
-        item?.depot_managers,
-        'is_primary',
-        'phone_number',
-       
-      ),
-      status: item?.status.name,
-    })
-  );
-
-  console.log(distributioncenterData, 'distributioncenterssssssssssssss');
-
-  const loading = useSelector(
-    (state) => state?.distributionCenterReducer?.loading
-  );
 
   const changeRoute = async (item) => {
-    history.push(
-      '/app/distributioncenter-management/viewCurrentDistributioncenter',
-      item
-    );
+    history.push('/app/doctor-management/viewCurrentDoctors',item);
   };
-  const [distributionTable, setDistributionTable] = useState(
-    distributioncenterData
-  );
+  const [doctorTable, setDocterTable] = useState(doctor);
+
 
   const handleAdd = () => {
-    history.push('/app/distributioncenter-management/CreateDistributioncenter');
+    history.push('/app/doctor-management/createDoctors');
   };
 
   useEffect(() => {
-    setDistributionTable(distributioncenterData);
-  }, [distributioncenter]);
+    setDocterTable(doctor);
+  }, [doctor]);
   const headers = [
     'Name',
     'Designation',
-    'Email',
-    'Address',
+    'Degree',
+    'Doctor Category',
+    'Organization',
+    'Speciality',
+    'Station Type',
     'Phone',
+    'Special Day',
     'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDistributionTable(searchArray(distributioncenterData, search));
+    setDocterTable(searchArray(doctor, search));
   };
+
 
   return (
     <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
-            <h4>Department Head</h4>
+            <h4>Doctors</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
@@ -131,18 +103,18 @@ export default function viewDistributioncenter({ match, history }) {
           onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#003766',
+            'backgroundColor': '#003766',
             marginTop: '10px',
           }}
         >
-          Add New Department Head
+          Add New Doctors
         </Button>
         <Row>
           <Col lg={12}>
             {/* <label htmlFor="search">
               <input id="search" type="text" onChange={handleSearch} />
             </label> */}
-
+            
             <div className="header-search">
               <form action="#" className="">
                 <i className="fas fa-search search-icon"></i>
@@ -158,7 +130,7 @@ export default function viewDistributioncenter({ match, history }) {
             </div>
           </Col>
         </Row>
-
+        
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (
@@ -179,10 +151,10 @@ export default function viewDistributioncenter({ match, history }) {
                 />
               </div>
             ) : (
-              <DistributionCenter
+              <DoctorTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={distributionTable}
+                data={doctorTable}
               />
             )}
           </Colxx>
@@ -191,3 +163,4 @@ export default function viewDistributioncenter({ match, history }) {
     </Card>
   );
 }
+

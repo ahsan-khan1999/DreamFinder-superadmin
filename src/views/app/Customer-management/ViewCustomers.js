@@ -20,8 +20,8 @@ import Loader from 'react-loader-spinner';
 import apiServices from 'services/requestHandler';
 
 import {
+  CustomersTable,
   DepartmentHeadTable,
-  DistributionCenter,
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
@@ -30,100 +30,69 @@ import { searchArray } from 'Utils/auth.util';
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
 import { GetDepartmentHead } from '../../../Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
-import { GetDistributionCenter } from 'Store/Actions/ConcordDistributionCenter/DistributionCenterAction';
-import { CheckConditionArray } from 'Utils/functions';
+import { GetCustomer } from 'Store/Actions/ConcordCustomer/CustomerAction';
 
-export default function viewDistributioncenter({ match, history }) {
+export default function ViewCustomers({ match, history }) {
+
   let dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    getDistributionCenter();
-  }, []);
 
-  const getDistributionCenter = async () => {
-    let res = await dispatch(GetDistributionCenter());
+    getCustomer();
+
+  }, []);
+    
+
+
+  const getCustomer = async () => {
+
+    let res = await dispatch(GetCustomer());
+
+    console.log("res Concord Customer",res);
   };
 
-  const distributioncenter = useSelector(
-    (state) => state?.distributionCenterReducer?.distributioncenter
-  );
+  const customer = useSelector((state) => state?.customerReducer?.customer);
+  const loading = useSelector((state) => state?.customerReducer?.loading);
+  console.log(customer);
 
-  let distributioncenterData = [];
-  distributioncenter?.map((item) =>
-    distributioncenterData.push({
-      name: item?.areas[0].parent.name,
-      designation: CheckConditionArray(
-        item?.depot_managers,
-        'is_primary',
-        'designation'
-        
-      ),
-      email: CheckConditionArray(
-        item?.depot_managers,
-        'is_primary',
-        'email_address'
-        
-      ),
-      address:
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','street_address') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','area') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','province') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','city') ,
-      phone: CheckConditionArray(
-        item?.depot_managers,
-        'is_primary',
-        'phone_number',
-       
-      ),
-      status: item?.status.name,
-    })
-  );
-
-  console.log(distributioncenterData, 'distributioncenterssssssssssssss');
-
-  const loading = useSelector(
-    (state) => state?.distributionCenterReducer?.loading
-  );
 
   const changeRoute = async (item) => {
-    history.push(
-      '/app/distributioncenter-management/viewCurrentDistributioncenter',
-      item
-    );
+    history.push('/app/customer-management/viewCurrentCustomers',item);
   };
-  const [distributionTable, setDistributionTable] = useState(
-    distributioncenterData
-  );
+  const [customerTable, setCustomerTable] = useState(customer);
+
 
   const handleAdd = () => {
-    history.push('/app/distributioncenter-management/CreateDistributioncenter');
+    history.push('/app/customer-management/createCustomers');
   };
 
   useEffect(() => {
-    setDistributionTable(distributioncenterData);
-  }, [distributioncenter]);
+    setCustomerTable(customer);
+  }, [customer]);
   const headers = [
     'Name',
-    'Designation',
+    'Client Type',
     'Email',
-    'Address',
+    'Market & Address',
     'Phone',
+    'Special Day',
     'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDistributionTable(searchArray(distributioncenterData, search));
+    setCustomerTable(searchArray(customer, search));
   };
+
 
   return (
     <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
-            <h4>Department Head</h4>
+            <h4>Customers</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
@@ -131,18 +100,18 @@ export default function viewDistributioncenter({ match, history }) {
           onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#003766',
+            'backgroundColor': '#003766',
             marginTop: '10px',
           }}
         >
-          Add New Department Head
+          Add New Customer
         </Button>
         <Row>
           <Col lg={12}>
             {/* <label htmlFor="search">
               <input id="search" type="text" onChange={handleSearch} />
             </label> */}
-
+            
             <div className="header-search">
               <form action="#" className="">
                 <i className="fas fa-search search-icon"></i>
@@ -158,7 +127,7 @@ export default function viewDistributioncenter({ match, history }) {
             </div>
           </Col>
         </Row>
-
+        
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (
@@ -179,10 +148,10 @@ export default function viewDistributioncenter({ match, history }) {
                 />
               </div>
             ) : (
-              <DistributionCenter
+              <CustomersTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={distributionTable}
+                data={customerTable}
               />
             )}
           </Colxx>
@@ -191,3 +160,4 @@ export default function viewDistributioncenter({ match, history }) {
     </Card>
   );
 }
+

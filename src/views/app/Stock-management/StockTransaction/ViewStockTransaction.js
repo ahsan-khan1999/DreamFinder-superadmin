@@ -23,12 +23,14 @@ import {
   DepartmentHeadTable,
   OrderRequestTable,
   RemovalRequestTable,
+  StockTransaction,
 } from 'containers/ui/ReactTableCards';
 import { searchArray } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
 import { GetDepartmentHead } from '../../../../Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { GetStocksTransaction } from 'Store/Actions/ConcordStockTransaction/StockTransactionAction';
 
 export default function ViewStockTransaction({ match, history }) {
 
@@ -38,28 +40,28 @@ export default function ViewStockTransaction({ match, history }) {
 
   useEffect(() => {
 
-    getDepartmentheads();
+    getStocksTransaction();
 
   }, []);
     
 
 
-  const getDepartmentheads = async () => {
+  const getStocksTransaction = async () => {
 
-    let res = await dispatch(GetDepartmentHead());
+    let res = await dispatch(GetStocksTransaction());
 
     console.log("res Concord DepartmentHeads",res);
   };
 
-  const departmenthead = useSelector((state) => state?.departmentHeadReducer?.departmenthead);
-  const loading = useSelector((state) => state?.departmentHeadReducer?.loading);
-  console.log(departmenthead);
+  const stocktransaction = useSelector((state) => state?.stockTransactionReducer?.stocktransaction);
+  const loading = useSelector((state) => state?.stockTransactionReducer?.loading);
+  console.log(stocktransaction);
 
 
   const changeRoute = async (item) => {
     history.push('/app/stocks-management/viewCurrentStockTransaction',item);
   };
-  const [departmentTable, setDepartmentTable] = useState(departmenthead);
+  const [stocktransactionTable, setStocktransactionTableTable] = useState(stocktransaction);
 
 
   const handleAdd = () => {
@@ -67,19 +69,22 @@ export default function ViewStockTransaction({ match, history }) {
   };
 
   useEffect(() => {
-    setDepartmentTable(departmenthead);
-  }, [departmenthead]);
+    setStocktransactionTableTable(stocktransaction);
+  }, [stocktransaction]);
   const headers = [
     'Name',
-    'Designation',
-    'Email',
-    'Address',
-    'Phone',
+    'Category',
+    'Product Name',
+    'Date',
+    'Price',
+    'Quantity',
+    'Transaction Type',
+    'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDepartmentTable(searchArray(departmenthead, search));
+    setStocktransactionTableTable(searchArray(stocktransaction, search));
   };
 
 
@@ -144,10 +149,10 @@ export default function ViewStockTransaction({ match, history }) {
                 />
               </div>
             ) : (
-              <DepartmentHeadTable
+              <StockTransaction
                 header={headers}
                 changeRoute={changeRoute}
-                data={departmentTable}
+                data={stocktransactionTable}
               />
             )}
           </Colxx>

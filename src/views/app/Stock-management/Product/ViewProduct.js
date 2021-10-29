@@ -22,6 +22,7 @@ import apiServices from 'services/requestHandler';
 import {
   DepartmentHeadTable,
   OrderRequestTable,
+  ProductTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
 import { searchArray } from 'Utils/auth.util';
@@ -29,6 +30,7 @@ import { searchArray } from 'Utils/auth.util';
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
 import { GetDepartmentHead } from '../../../../Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { GetProduct } from 'Store/Actions/ConcordProduct/ProductAction';
 
 export default function ViewProduct({ match, history }) {
 
@@ -38,28 +40,28 @@ export default function ViewProduct({ match, history }) {
 
   useEffect(() => {
 
-    getDepartmentheads();
+    getGetProduct();
 
   }, []);
     
 
 
-  const getDepartmentheads = async () => {
+  const getGetProduct = async () => {
 
-    let res = await dispatch(GetDepartmentHead());
+    let res = await dispatch(GetProduct());
 
-    console.log("res Concord DepartmentHeads",res);
+    console.log("res Concord product",res);
   };
 
-  const departmenthead = useSelector((state) => state?.departmentHeadReducer?.departmenthead);
-  const loading = useSelector((state) => state?.departmentHeadReducer?.loading);
-  console.log(departmenthead);
+  const product = useSelector((state) => state?.productReducer?.product);
+  const loading = useSelector((state) => state?.productReducer?.loading);
+  console.log(product);
 
 
   const changeRoute = async (item) => {
     history.push('/app/stocks-management/viewCurrentProducts',item);
   };
-  const [departmentTable, setDepartmentTable] = useState(departmenthead);
+  const [productTable, setProductTable] = useState(product);
 
 
   const handleAdd = () => {
@@ -67,19 +69,19 @@ export default function ViewProduct({ match, history }) {
   };
 
   useEffect(() => {
-    setDepartmentTable(departmenthead);
-  }, [departmenthead]);
+    setProductTable(product);
+  }, [product]);
   const headers = [
     'Name',
-    'Designation',
-    'Email',
-    'Address',
-    'Phone',
+    'Category Name',
+    'Price',
+    'Created By',
+    'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDepartmentTable(searchArray(departmenthead, search));
+    setProductTable(searchArray(product, search));
   };
 
 
@@ -144,10 +146,10 @@ export default function ViewProduct({ match, history }) {
                 />
               </div>
             ) : (
-              <DepartmentHeadTable
+              <ProductTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={departmentTable}
+                data={productTable}
               />
             )}
           </Colxx>

@@ -429,28 +429,28 @@ const data = [
           },
         ],
       },
-      {
-        icon: 'simple-icon-layers',
-        label: 'Patient',
-        to: `${adminRoot}/menu/levels`,
-        subs: [
-          {
-            icon: 'simple-icon-arrow-right',
-            label: 'Create Patient',
-            to: `${adminRoot}/menu/levels/third-level-1`,
-          },
-          {
-            icon: 'simple-icon-arrow-right',
-            label: 'View Patient',
-            to: `${adminRoot}/menu/levels/third-level-2`,
-          },
-          {
-            icon: 'simple-icon-arrow-right',
-            label: 'Edit Patient',
-            to: `${adminRoot}/menu/levels/third-level-3`,
-          },
-        ],
-      },
+      // {
+      //   icon: 'simple-icon-layers',
+      //   label: 'Patient',
+      //   to: `${adminRoot}/menu/levels`,
+      //   subs: [
+      //     {
+      //       icon: 'simple-icon-arrow-right',
+      //       label: 'Create Patient',
+      //       to: `${adminRoot}/menu/levels/third-level-1`,
+      //     },
+      //     {
+      //       icon: 'simple-icon-arrow-right',
+      //       label: 'View Patient',
+      //       to: `${adminRoot}/menu/levels/third-level-2`,
+      //     },
+      //     {
+      //       icon: 'simple-icon-arrow-right',
+      //       label: 'Edit Patient',
+      //       to: `${adminRoot}/menu/levels/third-level-3`,
+      //     },
+      //   ],
+      // },
     ],
   },
   // {
@@ -533,45 +533,41 @@ const data = [
   },
 
 
-  // {
-  //   id: 'Doctors',
-  //   icon: 'iconsminds-bag-items',
-  //   label: 'menu.distribution-center-management',
-  //   to: `${adminRoot}/distributioncenter-management`,
-  //   subs: [
-  //     {
-  //       icon: 'iconsminds-add-cart',
-  //       label: 'menu.distribution-center',
-  //       to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
-  //     },
-  //     {
-  //       icon: 'iconsminds-add-cart',
-  //       label: 'menu.department-head',
-  //        to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
-  //     },
-  //   ],
-  // },
+  {
+    id: 'Doctors',
+    icon: 'iconsminds-doctor',
+    label: 'Doctors',
+    to: `${adminRoot}/doctor-management`,
+    subs: [
+      {
+        icon: 'iconsminds-doctor',
+        label: 'Doctors Category',
+        to: `${adminRoot}/doctor-management/viewDoctorsCategory`,
+      },
+      {
+        icon: 'iconsminds-doctor',
+        label: 'Doctors ',
+         to: `${adminRoot}/doctor-management/viewDoctors`,
+      },
+    ],
+  },
 
 
 
-  // {
-  //   id: 'Customers',
-  //   icon: 'iconsminds-bag-items',
-  //   label: 'menu.distribution-center-management',
-  //   to: `${adminRoot}/distributioncenter-management`,
-  //   subs: [
-  //     {
-  //       icon: 'iconsminds-add-cart',
-  //       label: 'menu.distribution-center',
-  //       to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
-  //     },
-  //     {
-  //       icon: 'iconsminds-add-cart',
-  //       label: 'menu.department-head',
-  //        to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
-  //     },
-  //   ],
-  // },
+  {
+    id: 'Customers',
+    icon: 'iconsminds-business-man',
+    label: 'Customers',
+    to: `${adminRoot}/customer-management`,
+    subs: [
+      {
+        icon: 'iconsminds-business-man',
+        label: 'Customers',
+        to: `${adminRoot}/customer-management/viewCustomers`,
+      },
+     
+    ],
+  },
 
 
   {

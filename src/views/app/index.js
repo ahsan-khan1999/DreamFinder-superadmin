@@ -185,6 +185,72 @@ const CreateStockTransaction = React.lazy(() =>
 
 
 
+// // Customer Concord --------------------------------------
+const ViewCurrentCustomers = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Customer-management/ViewCurrentCustomers'
+  )
+);
+
+const ViewCustomers = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Customer-management/ViewCustomers'
+  )
+);
+
+const CreateCustomers = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Customer-management/CreateCustomers'
+  )
+);
+// //--------------------------------------------
+
+
+
+// Doctor Concord --------------------------------------
+const ViewCurrentDoctors = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Doctor-management/Doctors/ViewCurrentDoctors'
+  )
+);
+
+const ViewDoctors = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Doctor-management/Doctors/ViewDoctors'
+  )
+);
+
+const CreateDoctors = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Doctor-management/Doctors/CreateDoctors'
+  )
+);
+//--------------------------------------------
+
+
+
+// Doctor Category Concord --------------------------------------
+const ViewCurrentDoctorsCategory = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Doctor-management/DoctorsCategory/ViewCurrentDoctorsCategory'
+  )
+);
+
+const ViewDoctorsCategory = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Doctor-management/DoctorsCategory/ViewDoctorsCategory'
+  )
+);
+
+const CreateDoctorsCategory = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Doctor-management/DoctorsCategory/CreateDoctorsCategory'
+  )
+);
+//--------------------------------------------
+
+
+
 
 
 const Applications = React.lazy(() =>
@@ -310,7 +376,6 @@ const App = ({ match }) => {
               render={(props) => <ViewCurrentStockTransaction {...props} />}
             />
 
-
             <Route
               path={`${match.url}/stocks-management/viewProductCategory`}
               render={(props) => <ViewProductCategory {...props} />}
@@ -346,11 +411,63 @@ const App = ({ match }) => {
               render={(props) => <CreateStockTransaction {...props} />}
             />
             
+            {/* Stock Product End */}
+           
+           
+           
+           
+          {/* Customer Concord */}
+            
+            <Route
+              path={`${match.url}/customer-management/viewCurrentCustomers`}
+              render={(props) => <ViewCurrentCustomers {...props} />}
+            />
 
-           
-           
-           
-           
+            <Route
+              path={`${match.url}/customer-management/viewCustomers`}
+              render={(props) => <ViewCustomers {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/customer-management/createCustomers`}
+              render={(props) => <CreateCustomers {...props} />}
+            />
+
+
+            {/* Doctor && DoctorCategory Concord */}
+            
+            <Route
+              path={`${match.url}/doctor-management/viewCurrentDoctors`}
+              render={(props) => <ViewCurrentDoctors {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/doctor-management/viewDoctors`}
+              render={(props) => <ViewDoctors {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/doctor-management/createDoctors`}
+              render={(props) => <CreateDoctors {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/doctor-management/viewCurrentDoctorsCategory`}
+              render={(props) => <ViewCurrentDoctorsCategory {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/doctor-management/viewDoctorsCategory`}
+              render={(props) => <ViewDoctorsCategory {...props} />}
+            />
+
+            <Route
+              path={`${match.url}/doctor-management/createDoctorsCategory`}
+              render={(props) => <CreateDoctorsCategory {...props} />}
+            />
+
+
+
            
            
            

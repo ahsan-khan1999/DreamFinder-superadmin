@@ -75,6 +75,7 @@ export default function viewDepartmenthead({ match, history }) {
     'Email',
     'Address',
     'Phone',
+    'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
@@ -100,7 +101,7 @@ export default function viewDepartmenthead({ match, history }) {
             marginTop: '10px',
           }}
         >
-          Add New Order
+          Add New Department Head
         </Button>
         <Row>
           <Col lg={12}>
