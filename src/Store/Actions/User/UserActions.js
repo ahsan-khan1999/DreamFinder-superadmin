@@ -28,6 +28,9 @@ import {
   UPDATE_SM_CONSTANT,
   UPDATE_MPO_CONSTANT,
   VIEW_ROLE_CONSTANT,
+  VIEW_CATEGORY_CONSTANT,
+  CREATE_CATEGORY__CONSTANT,
+  UPDATE_CATEGORY__CONSTANT,
 } from 'Store/Constant/Constants';
 
 export const ViewAdminAction = () => async (dispatch) => {
@@ -466,6 +469,111 @@ export const UpdateUserAction = (data) => async (dispatch) => {
         payload: true,
       });
       NotificationManager.error(res?.response_message, 'Error', 5000, '');
+      return false;
+    }
+  } catch {}
+};
+
+export const ViewUserRoleAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: VIEW_CATEGORY_CONSTANT.VIEW_CATEGORY_LOADING,
+      payload: true,
+    });
+    // readUserRoles,
+    // createRoles,
+    // updateRoles,
+    // suspandRoles
+    let response = await apiServices.readUserRoles();
+    if (response?.data?.response_code === 200) {
+      dispatch({
+        type: VIEW_CATEGORY_CONSTANT.VIEW_CATEGORY_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: VIEW_CATEGORY_CONSTANT.VIEW_CATEGORY_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+    } else {
+      dispatch({
+        type: VIEW_CATEGORY_CONSTANT.VIEW_CATEGORY_ERROR,
+        payload: false,
+      });
+    }
+  } catch {}
+};
+
+export const CreateRoleAction = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CREATE_CATEGORY__CONSTANT.CREATE_CATEGORY_LOADING,
+      payload: true,
+    });
+    // readUserRoles,
+    // createRoles,
+    // updateRoles,
+    // suspandRoles
+    let response = await apiServices.createRoles(data);
+    if (response?.data?.response_code === 200) {
+      dispatch({
+        type: CREATE_CATEGORY__CONSTANT.CREATE_CATEGORY_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_CATEGORY__CONSTANT.CREATE_CATEGORY_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_CATEGORY__CONSTANT.CREATE_CATEGORY_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      return false;
+    }
+  } catch {}
+};
+
+export const UpdateRoleAction = (data) => async(dispatch) => {
+  try {
+    dispatch({
+      type: UPDATE_CATEGORY__CONSTANT.UPDATE_CATEGORY_LOADING,
+      payload: true,
+    });
+    // readUserRoles,
+    // createRoles,
+    // updateRoles,
+    // suspandRoles
+    let response = await apiServices.updateRoles(data);
+    if (response?.response_code === 200) {
+      dispatch({
+        type: UPDATE_CATEGORY__CONSTANT.UPDATE_CATEGORY_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: UPDATE_CATEGORY__CONSTANT.UPDATE_CATEGORY_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+      return true;
+    } else {
+      dispatch({
+        type: UPDATE_CATEGORY__CONSTANT.UPDATE_CATEGORY_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.response_message,
+        'Error',
+        5000,
+        null,
+        ''
+      );
       return false;
     }
   } catch {}

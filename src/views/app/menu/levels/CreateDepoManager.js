@@ -81,9 +81,11 @@ export default function CreateDepoManager({history}) {
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
   
+  const [loading, setLoading] = useState(false);
 
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    setLoading(true)
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
@@ -99,8 +101,12 @@ export default function CreateDepoManager({history}) {
         null,
         ''
       );
+    setLoading(false)
+
       return;
     } else {
+    setLoading(true)
+
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
 
@@ -112,6 +118,8 @@ export default function CreateDepoManager({history}) {
           null,
           ''
         );
+    setLoading(false)
+
         history.push('/app/menu/levels/viewDoctor');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
@@ -121,6 +129,8 @@ export default function CreateDepoManager({history}) {
           null,
           ''
         );
+    setLoading(false)
+
       }
     }
   };
@@ -324,9 +334,9 @@ export default function CreateDepoManager({history}) {
             <Button
               className="btn btn-primary"
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={onAdminCreate}
             >

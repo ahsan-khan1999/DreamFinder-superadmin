@@ -39,9 +39,8 @@ const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
-
 ];
-export default function CreateDirector({history}) {
+export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -55,7 +54,7 @@ export default function CreateDirector({history}) {
     designation: '',
 
     phone_number: '',
-    
+
     role_uid: '',
   };
 
@@ -67,7 +66,7 @@ export default function CreateDirector({history}) {
   };
   useEffect(() => {
     readRoles();
-    readUser()
+    readUser();
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   const user = useSelector((state) => state?.ViewUserReducer?.admin);
@@ -80,17 +79,20 @@ export default function CreateDirector({history}) {
   //   user?.filter((item) => (
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
-  
+
+  const [loading, setLoading] = useState(false);
 
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    setLoading(true);
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
       admin?.password === '' &&
       admin?.gender === '' &&
-      admin?.phone_number === ''
-      && admin?.designation === '' && admin.role_uid === ''
+      admin?.phone_number === '' &&
+      admin?.designation === '' &&
+      admin.role_uid === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -99,8 +101,12 @@ export default function CreateDirector({history}) {
         null,
         ''
       );
+      setLoading(false);
+
       return;
     } else {
+      setLoading(true);
+
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
 
@@ -112,6 +118,8 @@ export default function CreateDirector({history}) {
           null,
           ''
         );
+        setLoading(false);
+
         history.push('/app/menu/levels/viewDoctor');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
@@ -121,6 +129,7 @@ export default function CreateDirector({history}) {
           null,
           ''
         );
+        setLoading(false);
       }
     }
   };
@@ -228,7 +237,7 @@ export default function CreateDirector({history}) {
                       onChange={(val) =>
                         setAdmin({
                           ...admin,
-                          gender:  val?.value,
+                          gender: val?.value,
                         })
                       }
                       options={selectGender}
@@ -290,7 +299,7 @@ export default function CreateDirector({history}) {
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-                    
+
                     onChange={(val) =>
                       setAdmin({ ...admin, role_uid: val?.key })
                     }
@@ -324,9 +333,9 @@ export default function CreateDirector({history}) {
             <Button
               className="btn btn-primary"
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={onAdminCreate}
             >

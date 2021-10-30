@@ -100,9 +100,11 @@ export default function CreateDirector({ history }) {
   // sm?.filter((item) =>
   //   smOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   // );
+  const [loading, setLoading] = useState(false);
 
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    setLoading(true)
     let test = { ...admin, service_location_uid: array };
 
     // let test=
@@ -122,6 +124,8 @@ export default function CreateDirector({ history }) {
         null,
         ''
       );
+    setLoading(false)
+
       return;
     } else {
       let res = await dispatch(CreateAmAction(test));
@@ -135,6 +139,8 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+    setLoading(false)
+
         history.push('/app/menu/levels/viewAm');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
@@ -144,6 +150,8 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+    setLoading(false)
+
       }
     }
   };
@@ -441,9 +449,9 @@ export default function CreateDirector({ history }) {
             <Button
               className="btn btn-primary"
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={onAdminCreate}
             >

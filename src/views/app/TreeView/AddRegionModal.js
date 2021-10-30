@@ -1,7 +1,7 @@
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 /* eslint-disable */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Modal,
@@ -20,57 +20,256 @@ import { Colxx } from 'components/common/CustomBootstrap';
 import AddRegionForm from './AddRegionForm';
 import IntlMessages from 'helpers/IntlMessages';
 import { NotificationManager } from 'components/common/react-notifications';
-import { CreateRegionAction } from '../../../Store/Actions/RegionClassification/regionClassificationAction';
+import {
+  CreateRegionAction,
+  ReadRegionAction,
+  // UpdateRegionClassificationAction,
+} from '../../../Store/Actions/RegionClassification/regionClassificationAction';
+import apiServices from 'services/requestHandler';
 
 const AddRegionModal = (props) => {
-  const { handleClose, show } = props;
-  const dispatch = useDispatch();
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
-  const onCreateRegion = async () => {
-    let apiData = {
-      name: name,
-      category: category,
-    };
-    console.log(apiData);
-    let res = await dispatch(CreateRegionAction(apiData));
-    if(res){
-        NotificationManager.success("Successfully Created","Success",5000,'')
+  const { handleClose, show, header, id, history, editField, action, cat } =
+    props;
 
+  const dispatch = useDispatch();
+  // console.log(header, editField);
+  const [name, setName] = useState(editField);
+
+  useEffect(() => {
+    setName(editField);
+  }, [editField]);
+  const [category, setCategory] = useState('');
+  const onCreateRegion = async (e) => {
+    e.preventDefault();
+
+    if (header === 'Add Region') {
+      let apiData = {
+        name: name,
+        category: 'region',
+      };
+      let res = await dispatch(CreateRegionAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Created',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+      }
+    } else if (header === 'Add area') {
+      // console.log(header,id,"at prrent area id header");
+      let apiData = {
+        name: name,
+        category: 'area',
+        parent_id: id,
+      };
+      let res = await dispatch(CreateRegionAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Created',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+      }
+    } else if (header === 'Add thana') {
+      let apiData = {
+        name: name,
+        category: 'thana',
+        parent_id: id,
+      };
+      let res = await dispatch(CreateRegionAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Created',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+      }
+    } else if (header === 'Add teritory') {
+      let apiData = {
+        name: name,
+        category: 'territory',
+        parent_id: id,
+      };
+      let res = await dispatch(CreateRegionAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Created',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+      }
+    } else if (header === 'Add market') {
+      let apiData = {
+        name: name,
+        category: 'market',
+        parent_id: id,
+      };
+      let res = await dispatch(CreateRegionAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Created',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+        // dispatch(ReadRegionAction())
+        // history.push('/app/TreeView/RegionTreeView')
+      }
     }
   };
+
+  const editRegion = async (e) => {
+    e.preventDefault();
+    if (cat === 'region') {
+      // console.log(name);
+      let apiData = {
+        name: name,
+        category: 'region',
+        region_id: id,
+      };
+      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Updated',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+        // dispatch(ReadRegionAction())
+        // history.push('/app/TreeView/RegionTreeView')
+      }
+    } else if (cat === 'area') {
+      // console.log(name);
+      let apiData = {
+        name: name,
+        category: 'area',
+        region_id: id,
+      };
+      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Updated',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+        // dispatch(ReadRegionAction())
+        // history.push('/app/TreeView/RegionTreeView')
+      }
+    } else if (cat === 'thana') {
+      // console.log(name);
+      let apiData = {
+        name: name,
+        category: 'thana',
+        region_id: id,
+      };
+      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Updated',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+        // dispatch(ReadRegionAction())
+        // history.push('/app/TreeView/RegionTreeView')
+      }
+    } else if (cat === 'territory') {
+      // console.log(name);
+      let apiData = {
+        name: name,
+        category: 'territory',
+        region_id: id,
+      };
+      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Updated',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+      }
+    } else if (cat === 'market') {
+      let apiData = {
+        name: name,
+        category: 'market',
+        region_id: id,
+      };
+      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      if (res) {
+        NotificationManager.success(
+          'Successfully Updated',
+          'Success',
+          5000,
+          ''
+        );
+        handleClose(true);
+      }
+    }
+  };
+
   // let showHideClassName = show ? 'display-block' : 'display-none';
   // console.log(show,"show value",showHideClassName);
   return (
     <Modal isOpen={show} size="sm" centered style={{ boxShadow: 'none' }}>
-      <ModalHeader toggle={handleClose} style={{ padding: '15px 20px' }}>
-        Add Region
+      <ModalHeader
+        toggle={handleClose}
+        style={{ padding: '15px 20px' }}
+        className="text-capitalize"
+      >
+        {action === 'edit' ? `Edit ${cat}` : header}{' '}
       </ModalHeader>
       <ModalBody>
         <Formik
         // initialValues={formikData.initialValues}
         // onSubmit={formikData.handleSubmit}
         >
-          <Form>
+          <Form onSubmit={action === 'edit' ? editRegion : onCreateRegion}>
             <Row className="h-100">
               <Col lg={12}>
                 <FormGroup>
                   <Label>
-                    <h6>Region Name</h6>
+                    <h6 className="text-capitalize">Name</h6>
                   </Label>
-
-                  <Input
-                    required
-                    value={name}
-                    className="form-control"
-                    name="name"
-                    // validate={validateEmail}
-                    onChange={(e) => setName(e.target.value)}
-                  />
+                  {action === 'edit' ? (
+                    <Input
+                      required
+                      value={name}
+                      className="form-control"
+                      name="name"
+                      defaultValue={name}
+                      // validate={validateEmail}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  ) : (
+                    <Input
+                      required
+                      value={name}
+                      className="form-control"
+                      name="name"
+                      // defaultValue={name}
+                      // validate={validateEmail}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  )}
                 </FormGroup>
               </Col>
 
-              <Col lg={12}>
+              {/* <Col lg={12}>
                 <FormGroup>
                   <Label>
                     <h6>Category</h6>
@@ -86,7 +285,7 @@ const AddRegionModal = (props) => {
                     onChange={(e) => setCategory(e.target.value)}
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
             </Row>
 
             <Button
@@ -97,14 +296,14 @@ const AddRegionModal = (props) => {
               //   loading ? 'show-spinner' : ''
               // }`}
               size="sm"
-              onClick={onCreateRegion}
+              onClick={action === 'edit' ? editRegion : onCreateRegion}
             >
               <span className="spinner d-inline-block">
                 <span className="bounce1" />
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Region
+              Save
             </Button>
           </Form>
         </Formik>

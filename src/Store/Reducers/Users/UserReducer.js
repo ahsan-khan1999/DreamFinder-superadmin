@@ -26,6 +26,9 @@ import {
   UPDATE_SM_CONSTANT,
   UPDATE_MPO_CONSTANT,
   VIEW_ROLE_CONSTANT,
+  VIEW_CATEGORY_CONSTANT,
+  CREATE_CATEGORY__CONSTANT,
+  UPDATE_CATEGORY__CONSTANT
 } from 'Store/Constant/Constants';
 
 const initial_state = {
@@ -38,6 +41,7 @@ const initial_state = {
   regionalSalesManager: [],
   mpo: [],
   roles:[],
+  
   loading: false,
 };
 

@@ -1044,7 +1044,6 @@ export const AdminTable = (props) => {
   );
 };
 
-
 export const TargetTable = (props) => {
   const { changeRoute, header } = props;
   const cols = React.useMemo(
@@ -1071,10 +1070,9 @@ export const TargetTable = (props) => {
         Header: header[3],
         accessor: 'start_date',
         cellClass: 'list-item-heading w-10',
-        Cell: (props) => <>{moment.unix(props.value).format("MMM DD, YYYY")}</>,
+        Cell: (props) => <>{moment.unix(props.value).format('MMM DD, YYYY')}</>,
       },
 
-     
       {
         Header: header[4],
         accessor: 'status.name',
@@ -1090,7 +1088,7 @@ export const TargetTable = (props) => {
           </span>
         ),
       },
-     
+
       {
         Header: header[5],
         accessor: 'action',
@@ -1112,6 +1110,489 @@ export const TargetTable = (props) => {
       <CardTitle>
         <IntlMessages id="Admin Table" />
       </CardTitle>
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+export const DCPTable = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'assigned_to.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'doctor.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[2],
+        accessor: 'doctor.designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'purpose',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+      {
+        Header: header[5],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+export const DCRTable = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'dcp.assigned_to.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'dcp.doctor.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+
+      {
+        Header: header[2],
+        accessor: 'visit_by',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'visited_with.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+      {
+        Header: header[5],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+export const ScheduleTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'assigned_to.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'assigned_to.role.category.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      // {
+      //   Header: header[2],
+      //   accessor:row => row?.attributes?.is_doctor_customer === true ? row?.attributes?.doctor?.name : row?.attributes?.customer?.name,
+      //   // accessor: 'is_doctor_customer ? doctor.name :customer.name',
+
+      //   cellClass: 'list-item-heading w-10',
+      //   Cell: (props) => <>{props.value}</>,
+      // },
+      {
+        Header: header[2],
+        accessor: 'scheduled_by.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+
+      {
+        Header: header[3],
+        accessor: 'approval_status',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'approved' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+      {
+        Header: header[4],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+
+export const AttendanceTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'user.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'user.email_address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      // {
+      //   Header: header[2],
+      //   accessor:row => row?.attributes?.is_doctor_customer === true ? row?.attributes?.doctor?.name : row?.attributes?.customer?.name,
+      //   // accessor: 'is_doctor_customer ? doctor.name :customer.name',
+
+      //   cellClass: 'list-item-heading w-10',
+      //   Cell: (props) => <>{props.value}</>,
+      // },
+      {
+        Header: header[2],
+        accessor: 'user.field_staff.manager.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'user.phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: header[5],
+        accessor: 'datetime',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) =><span>{moment.unix(props?.value).format('MMM DD YYYY h:mm:ss')}</span>,
+      },
+
+      {
+        Header: header[6],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+export const ViewCategoryTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'category.title',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+    
+    
+      {
+        Header: header[2],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+   
+      {
+        Header: header[3],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+export const ViewCustomerPeriorityTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'customer.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'customer.email_address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[2],
+        accessor: 'customer.phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'customer.street_address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+    
+    
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+   
+      {
+        Header: header[5],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+export const ViewDoctorPeriorityTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'doctor.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'doctor.designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[2],
+        accessor: 'doctor.phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'doctor.speciality',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+    
+    
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+   
+      {
+        Header: header[5],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
       <Table columns={cols} data={props?.data} />
     </div>
   );

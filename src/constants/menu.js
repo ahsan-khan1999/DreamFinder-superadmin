@@ -427,6 +427,11 @@ const data = [
             label: 'menu.mpo',
             to: `${adminRoot}/menu/levels/ViewMpo`,
           },
+          {
+            // icon: 'simple-icon-arrow-right',
+            label: 'View Role',
+            to: `${adminRoot}/menu/levels/ViewRole`,
+          },
         ],
       },
       // {
@@ -466,23 +471,10 @@ const data = [
   //   to: 'https://gogo-react-docs.coloredstrategies.com/',
   //   newWindow: true,
   // },
-  {
-    id: 'order',
-    icon: 'iconsminds-shopping-cart',
-    label: 'menu.orders',
-    to: `${adminRoot}/Orders/orders`,
-    subs: [
-      {
-        icon: 'simple-icon-check',
 
-        label: 'menu.viewOrders',
-        to: `${adminRoot}/Orders/orders`,
-      },
-    ],
-  },
   {
     id: 'Target',
-    icon: 'iconsminds-shopping-cart',
+    icon: 'simple-icon-target',
     label: 'menu.target',
     to: `${adminRoot}/Target/ViewTarget`,
     // subs: [
@@ -494,148 +486,77 @@ const data = [
     //   },
     // ],
   },
+  {
+    id: 'Field Work',
+    icon: 'iconsminds-shopping-cart',
+    label: 'Field Work',
+    to: `${adminRoot}/FieldWorkManagment`,
+    subs: [
+      {
+        icon: 'simple-icon-check',
 
-  {
-    id: 'requets',
-    icon: 'simple-icon-bell',
-    label: 'menu.request',
-    to: `${adminRoot}/applications`,
-    subs: [
+        label: 'View Dcp',
+        to: `${adminRoot}/FieldWorkManagment/ViewDcp`,
+      },
       {
         icon: 'simple-icon-check',
-        label: 'menu.viewRequest',
-        to: `${adminRoot}/applications/viewRequests`,
+
+        label: 'View Schedule',
+        to: `${adminRoot}/FieldWorkManagment/ViewSchedule`,
+      },
+      {
+        icon: 'simple-icon-check',
+
+        label: 'View Dcr',
+        to: `${adminRoot}/FieldWorkManagment/ViewDcr`,
       },
     ],
   },
   {
-    id: 'test',
-    icon: 'iconsminds-test-tube',
-    label: 'menu.test',
-    to: `${adminRoot}/Test`,
-    subs: [
-      {
-        icon: 'simple-icon-check',
-        label: 'menu.viewTest',
-        to: `${adminRoot}/Test/viewTest`,
-      },
-      {
-        icon: 'simple-icon-check',
-        label: 'menu.viewCategory',
-        to: `${adminRoot}/Test/viewCategory`,
-      },
-    ],
-  },
-  {
-    id: 'medicine',
-    icon: 'iconsminds-medicine-3',
-    label: 'menu.medicine',
-    to: `${adminRoot}/Medicines`,
-    subs: [
-      {
-        icon: 'simple-icon-check',
-        label: 'menu.viewmedicine',
-        to: `${adminRoot}/Medicines/viewMedicines`,
-      },
-      
-    ],
-  },
-  {
-    id: 'reports',
-    icon: 'iconsminds-open-book',
-    label: 'menu.report',
-    to: `${adminRoot}/Reports`,
-    subs: [
-      {
-        icon: 'simple-icon-check',
-        label: 'menu.viewreport',
-        to: `${adminRoot}/Reports/viewReports`,
-      },
-      // {
-      //   icon: 'simple-icon-check',
-      //   label: 'Upload Report',
-      //   to: `${adminRoot}/Reports/uploadReport`,
-      // },
-      
-    ],
-  },
-  {
-    id: 'payment',
-    icon: 'simple-icon-paypal',
-    label: 'menu.payment',
-    to: `${adminRoot}/Payment`,
-    subs: [
-      {
-        icon: 'simple-icon-check',
-        label: 'menu.viewpayment',
-        to: `${adminRoot}/Payment/viewPayment`,
-      },
-      // {
-      //   icon: 'simple-icon-check',
-      //   label: 'Upload Report',
-      //   to: `${adminRoot}/Reports/uploadReport`,
-      // },
-      
-    ],
+    id: 'Attendance',
+    icon: 'simple-icon-target',
+    label: 'Attendance',
+    to: `${adminRoot}/Attendance/ViewAttendance`,
+    // subs: [
+    //   {
+    //     icon: 'simple-icon-check',
+
+    //     label: 'menu.viewOrders',
+    //     to: `${adminRoot}/Orders/orders`,
+    //   },
+    // ],
   },
   {
     id: 'Region',
-    icon: 'simple-icon-paypal',
+    icon: 'iconsminds-embassy',
     label: 'menu.region',
-    to: `${adminRoot}/TreeView`,
+    to: `${adminRoot}/TreeView/RegionTreeView`,
+    // subs: [
+    //   {
+    //     icon: 'simple-icon-check',
+    //     label: 'menu.viewRegion',
+    //     to: `${adminRoot}/TreeView/RegionTreeView`,
+    //   },
+
+    // ],
+  },
+  {
+    id: 'Periority List',
+    icon: 'iconsminds-embassy',
+    label: 'Periority List',
+    to: `${adminRoot}/PeriorityList`,
     subs: [
       {
         icon: 'simple-icon-check',
-        label: 'menu.viewregion',
-        to: `${adminRoot}/TreeView/RegionTreeView`,
+        label: 'Customer',
+        to: `${adminRoot}/PeriorityList/ViewPeriorityList`,
       },
-      // {
-      //   icon: 'simple-icon-check',
-      //   label: 'Upload Report',
-      //   to: `${adminRoot}/Reports/uploadReport`,
-      // },
-      
-    ],
-  },
-  {
-    id: 'Appoinmnet',
-    icon: 'simple-icon-notebook',
-    label: 'menu.appointment',
-    to: `${adminRoot}/blank-page`,
-    subs: [
-      // {
-      //   icon: 'simple-icon-bell',
-      //   label: 'Create Appointment',
-      //   to: `${adminRoot}/ui/components/viewAppoinment`,
-      // },
       {
-        icon: 'simple-icon-arrow-right',
-        label: 'menu.viewappointment',
-        to: `${adminRoot}/ui/components/`,
-
-        subs: [
-          {
-            // icon: 'simple-icon-arrow-right',
-            label: 'menu.today',
-            to: `${adminRoot}/ui/components/todaysAppoinment`,
-          },
-          {
-            // icon: 'simple-icon-arrow-right',
-            label: 'menu.past',
-            to: `${adminRoot}/ui/components/pastAppoinment`,
-          },
-          {
-            // icon: 'simple-icon-arrow-right',
-            label: 'menu.upcoming',
-            to: `${adminRoot}/ui/components/upcomingAppoinments`,
-          },
-          {
-            // icon: 'simple-icon-arrow-right',
-            label: 'menu.reschedule',
-            to: `${adminRoot}/ui/components/rescheduleRequest`,
-          },
-        ],
+        icon: 'simple-icon-check',
+        label: 'Doctor',
+        to: `${adminRoot}/PeriorityList/ViewPeriorityListDoctor`,
       },
+
     ],
   },
 ];

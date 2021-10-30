@@ -85,7 +85,7 @@ export default function CreateDirector({ history }) {
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
- 
+
   let directorFilter = [];
   user?.filter((item) =>
     directorFilter?.push({
@@ -106,7 +106,10 @@ export default function CreateDirector({ history }) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+
   const onAdminCreate = async () => {
+    setLoading(true);
     let test = { ...admin, service_location_uid: array };
 
     if (
@@ -116,7 +119,8 @@ export default function CreateDirector({ history }) {
       admin?.gender === '' &&
       admin?.phone_number === '' &&
       admin?.designation === '' &&
-      admin.role_uid === '' && admin.service_location === undefined 
+      admin.role_uid === '' &&
+      admin.service_location === undefined
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -125,8 +129,12 @@ export default function CreateDirector({ history }) {
         null,
         ''
       );
+      setLoading(false);
+
       return;
     } else {
+      setLoading(true);
+
       let res = await dispatch(CreateSmAction(test));
 
       if (res) {
@@ -137,6 +145,8 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+      setLoading(false);
+
         history.push('/app/menu/levels/viewSm');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
@@ -146,6 +156,8 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+      setLoading(false);
+
       }
     }
   };
@@ -161,7 +173,6 @@ export default function CreateDirector({ history }) {
       }
     );
     setService_location(response?.data?.response_data);
-
   };
   service_location?.filter((item) =>
     option?.push({ label: item?.name, value: item?.name, key: item?.uid })
@@ -387,9 +398,9 @@ export default function CreateDirector({ history }) {
             <Button
               className="btn btn-primary"
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={onAdminCreate}
             >

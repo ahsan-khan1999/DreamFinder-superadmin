@@ -52,6 +52,7 @@ export default function CreateDirector({ history }) {
   let [service_location, setService_location] = useState([]);
 
   const [array, setArray] = useState(admin?.service_location_uid);
+  const [loading, setLoading] = useState(false);
 
   const admin_obj = {
     email_address: '',
@@ -119,6 +120,7 @@ export default function CreateDirector({ history }) {
   );
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
+    setLoading(true);
     let test = { ...admin, service_location_uid: array };
 
     if (
@@ -137,8 +139,12 @@ export default function CreateDirector({ history }) {
         null,
         ''
       );
+      setLoading(true);
+
       return;
     } else {
+      setLoading(true);
+
       let res = await dispatch(CreateRsmAction(test));
       // console.log(test, 'admin create res');
 
@@ -150,6 +156,8 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+        setLoading(false);
+
         history.push('/app/menu/levels/viewRsm');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
@@ -159,6 +167,7 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+        setLoading(false);
       }
     }
   };
@@ -403,9 +412,9 @@ export default function CreateDirector({ history }) {
             <Button
               className="btn btn-primary"
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={onAdminCreate}
             >

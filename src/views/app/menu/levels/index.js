@@ -42,6 +42,15 @@ const ViewMpo = React.lazy(() =>
 const ViewDirector = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-2" */ './ViewDirector')
 );
+const ViewRole = React.lazy(() =>
+  import(/* webpackChunkName: "menu-level-2" */ './ViewRole')
+);
+const CreateRole = React.lazy(() =>
+  import(/* webpackChunkName: "menu-level-2" */ './CreateRole')
+);
+const EditRole = React.lazy(() =>
+  import(/* webpackChunkName: "menu-level-2" */ './EditRole')
+);
 const ViewDepoManager = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-2" */ './ViewDepoManager')
 );
@@ -219,6 +228,18 @@ const MenuLevels = ({ match }) => (
       <Route
         path={`${match.url}/viewAdmin`}
         render={(props) => <ViewAdmin {...props} />}
+      />
+      <Route
+        path={`${match.url}/ViewRole`}
+        render={(props) => <ViewRole {...props} />}
+      />
+      <Route
+        path={`${match.url}/CreateRole`}
+        render={(props) => <CreateRole {...props} />}
+      />
+      <Route
+        path={`${match.url}/EditRole`}
+        render={(props) => <EditRole {...props} />}
       />
       <Route
         path={`${match.url}/CreateDeliveryStaff`}

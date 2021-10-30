@@ -63,7 +63,7 @@ const SERVICE_URLS = {
   deleteReport: 'test-report/delete',
   readPayment: 'payment/read',
   upadtePay: 'payment/update',
-  region: 'region-classifications/read/region',
+  region: 'region-classifications/read_hierarchy',
   area: 'region-classifications/read/area',
   createUsers: 'users/create',
   readRoles: 'roles/read',
@@ -71,9 +71,38 @@ const SERVICE_URLS = {
   suspandUser: 'users/suspend',
   readTargets: 'targets/read',
   createTarget: 'targets/create',
-  readOrder: 'orders/read',
+  readOrder: 'stocks/read/medicine',
   suspandtarget: 'targets/suspend',
   updateTarget: 'targets/update',
+  readDistributionCenter: 'distribution_centres/read',
+  readDcp: 'dcps/read',
+  createDcp: 'dcps/create',
+  readSch: `schedules/read`,
+  readDCR: 'dcrs/read',
+  suspandDCP: 'dcps/suspend',
+  suspandDCR: 'dcrs/suspend',
+  suspandSch: 'schedules/suspend',
+  editSchedule: 'schedules/status',
+  attendanceRead: 'attendances/read',
+  suspandAttendance: 'attendances/suspend',
+  uploadImage: 'attendances/image_upload',
+  createAttendance: 'attendances/create',
+  readRole: 'roles/read',
+  createRole: 'roles/create',
+  updateRole: 'roles/update',
+  suspandRole: 'roles/suspend',
+  readPeriority: 'priority_lists/customer/read',
+  readPeriorityDoctor: 'priority_lists/doctor/read',
+
+  createPeriority: 'priority_lists/customer/create',
+  createPeriorityDoctor: 'priority_lists/doctor/create',
+
+  updatePeriority: 'priority_lists/customer/update',
+  updateDoctorPeriority: 'priority_lists/doctor/update',
+
+  suspandPeriority: 'priority_lists/customer/suspend',
+  suspandDoctorPeriority: 'priority_lists/doctor/suspend',
+
 };
 
 const requestApproval = (data) =>
@@ -84,16 +113,61 @@ const updateCategory = (data) =>
   put(SERVICE_URLS.updateCategory, data, { feature: featureConstants.static });
 const login = (data) =>
   post(SERVICE_URLS.login, data, { feature: featureConstants.login });
+const CreatePeriorityList = (data) =>
+  post(SERVICE_URLS.createPeriority, data, {
+    feature: featureConstants.static,
+  });
+  const CreateDoctorPeriorityList = (data) =>
+  post(SERVICE_URLS.createPeriorityDoctor, data, {
+    feature: featureConstants.static,
+  });
+const UpdatePeriorityList = (data) =>
+  put(SERVICE_URLS.updatePeriority, data, {
+    feature: featureConstants.static,
+  });
+  const UpdateDoctorPeriorityList = (data) =>
+  put(SERVICE_URLS.updateDoctorPeriority, data, {
+    feature: featureConstants.static,
+  });
+const SuspandPeriorityList = (data) =>
+  patch(SERVICE_URLS.suspandPeriority, data, {
+    feature: featureConstants.static,
+  });
+  const SuspandDoctorPeriorityList = (data) =>
+  patch(SERVICE_URLS.suspandDoctorPeriority, data, {
+    feature: featureConstants.static,
+  });
+
 const readPayment = () =>
   post(SERVICE_URLS.readPayment, {}, { feature: featureConstants.static });
+const UploadImage = (data) =>
+  post(SERVICE_URLS.uploadImage, data, { feature: featureConstants.static });
 const readRegion = () =>
   get(SERVICE_URLS.region, {}, { feature: featureConstants.static });
+const readAttendance = () =>
+  get(SERVICE_URLS.attendanceRead, {}, { feature: featureConstants.static });
 const readRoles = () =>
   get(SERVICE_URLS.readRoles, {}, { feature: featureConstants.static });
+const readPeriorityList = () =>
+  get(SERVICE_URLS.readPeriority, {}, { feature: featureConstants.static });
+const readPeriorityListDoctor = () =>
+  get(SERVICE_URLS.readPeriorityDoctor, {}, { feature: featureConstants.static });
+const readDcps = () =>
+  get(SERVICE_URLS.readDcp, {}, { feature: featureConstants.static });
+const readDcr = () =>
+  get(SERVICE_URLS.readDCR, {}, { feature: featureConstants.static });
 const readArea = () =>
   get(SERVICE_URLS.area, {}, { feature: featureConstants.static });
 const readTarget = () =>
   get(SERVICE_URLS.readTargets, {}, { feature: featureConstants.static });
+const ReadDistributionCenter = () =>
+  get(
+    SERVICE_URLS.readDistributionCenter,
+    {},
+    { feature: featureConstants.static }
+  );
+const CreateDcp = (data) =>
+  post(SERVICE_URLS.createDcp, data, { feature: featureConstants.static });
 const readOrder = () =>
   get(SERVICE_URLS.readOrder, {}, { feature: featureConstants.static });
 const createTarget = (data) =>
@@ -421,6 +495,54 @@ const updateTarget = async (data) =>
   put(SERVICE_URLS.updateTarget, data, {
     feature: featureConstants.static,
   });
+const readSchedule = async (data) =>
+  get(SERVICE_URLS.readSch, data, {
+    feature: featureConstants.static,
+  });
+const suspandDcp = async (data) =>
+  patch(SERVICE_URLS.suspandDCP, data, {
+    feature: featureConstants.static,
+  });
+const suspandSchedule = async (data) =>
+  patch(SERVICE_URLS.suspandSch, data, {
+    feature: featureConstants.static,
+  });
+const createAttendance = async (data) =>
+  post(SERVICE_URLS.createAttendance, data, {
+    feature: featureConstants.static,
+  });
+const editSchedule = async (data) =>
+  put(SERVICE_URLS.editSchedule, data, {
+    feature: featureConstants.static,
+  });
+const suspandDcr = async (data) =>
+  patch(SERVICE_URLS.suspandDCR, data, {
+    feature: featureConstants.static,
+  });
+const suspandAttendance = async (data) =>
+  patch(SERVICE_URLS.suspandAttendance, data, {
+    feature: featureConstants.static,
+  });
+const readUserRoles = async (data) =>
+  get(SERVICE_URLS.readRole, data, {
+    feature: featureConstants.static,
+  });
+const readPeriority = async (data) =>
+  get(SERVICE_URLS.readRole, data, {
+    feature: featureConstants.static,
+  });
+const createRoles = async (data) =>
+  post(SERVICE_URLS.createRole, data, {
+    feature: featureConstants.static,
+  });
+const updateRoles = async (data) =>
+  put(SERVICE_URLS.updateRole, data, {
+    feature: featureConstants.static,
+  });
+const suspandRoles = async (data) =>
+  patch(SERVICE_URLS.suspandRole, data, {
+    feature: featureConstants.static,
+  });
 // post g
 const apiServices = {
   // define variables
@@ -496,5 +618,30 @@ const apiServices = {
   readOrder,
   suspandTarget,
   updateTarget,
+  ReadDistributionCenter,
+  readDcps,
+  CreateDcp,
+  readSchedule,
+  readDcr,
+  suspandDcp,
+  suspandDcr,
+  suspandSchedule,
+  editSchedule,
+  readAttendance,
+  suspandAttendance,
+  UploadImage,
+  createAttendance,
+  readUserRoles,
+  createRoles,
+  updateRoles,
+  suspandRoles,
+  readPeriorityList,
+  CreatePeriorityList,
+  UpdatePeriorityList,
+  SuspandPeriorityList,
+  CreateDoctorPeriorityList,
+  readPeriorityListDoctor,
+  UpdateDoctorPeriorityList,
+  SuspandDoctorPeriorityList
 };
 export default apiServices;

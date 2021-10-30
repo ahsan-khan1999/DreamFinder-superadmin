@@ -108,7 +108,7 @@ export default function CreateDirector({ history }) {
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  
+
   let amOptiopns = [];
   let value = [];
   let option = [];
@@ -123,15 +123,17 @@ export default function CreateDirector({ history }) {
     await setArray(value);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
- 
-  
+
   am?.filter((item) =>
     amOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
   const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+
   const onAdminCreate = async () => {
+    setLoading(true);
     let test = { ...admin, service_location_uid: array };
-    
+
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
@@ -148,8 +150,12 @@ export default function CreateDirector({ history }) {
         null,
         ''
       );
+      setLoading(false);
+
       return;
     } else {
+      setLoading(true);
+
       let res = await dispatch(CreateMpoAction(test));
       // console.log(res, 'admin create res');
 
@@ -161,6 +167,8 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+        setLoading(false);
+
         history.push('/app/menu/levels/viewMpo');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
@@ -170,6 +178,7 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
+        setLoading(false);
       }
     }
   };
@@ -415,9 +424,9 @@ export default function CreateDirector({ history }) {
             <Button
               className="btn btn-primary"
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={onAdminCreate}
             >

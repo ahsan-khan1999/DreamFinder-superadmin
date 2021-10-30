@@ -70,6 +70,7 @@ export default function CreateDeliveryStaff() {
     manager_uid: '',
   };
   const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
+  const [loading, setLoading] = useState(false);
 
   let option = [];
 
@@ -126,6 +127,7 @@ export default function CreateDeliveryStaff() {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   const onAdminCreate = async () => {
+    setLoading(true)
     console.log(array);
     let test = { ...deliveryStaff, service_location_uid: array };
     console.log(test);
@@ -142,7 +144,7 @@ export default function CreateDeliveryStaff() {
       deliveryStaff.manager_uid === '' &&
       deliveryStaff?.service_location_uid === []
     ) {
-      console.log(deliveryStaff, 'at  if');
+      // console.log(deliveryStaff, 'at  if');
 
       NotificationManager.error(
         'Please Enter Required Field',
@@ -151,12 +153,16 @@ export default function CreateDeliveryStaff() {
         null,
         ''
       );
+    setLoading(false)
+
       return;
     } else {
       // setTimeout(() => {
       // console.log(deliveryStaff,"at  else");
 
       // }, 5000);
+    setLoading(true)
+
       let res = await dispatch(CreateAdminAction(test));
 
       if (res) {
@@ -167,6 +173,8 @@ export default function CreateDeliveryStaff() {
           null,
           ''
         );
+    setLoading(false)
+
         history.push('/app/menu/levels/ViewDeliveryStaff');
       } else if (confirmPassword !== deliveryStaff?.password) {
         NotificationManager.warning(
@@ -176,6 +184,8 @@ export default function CreateDeliveryStaff() {
           null,
           ''
         );
+    setLoading(false)
+
       }
     }
   };
@@ -439,9 +449,9 @@ export default function CreateDeliveryStaff() {
             <Button
               className="btn btn-primary"
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={onAdminCreate}
             >
