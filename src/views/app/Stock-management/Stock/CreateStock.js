@@ -20,36 +20,83 @@ import AddNewModal from 'containers/pages/AddNewModal';
 import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { CreateStocks } from 'Store/Actions/ConcordStock/StockAction';
+import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
+import { getStockProductCategory } from 'Store/Actions/ConcordStock/StockAction';
+import { GetDistributionCenter } from 'Store/Actions/ConcordDistributionCenter/DistributionCenterAction';
 
 export default function CreateStock({ history }) {
 
-    const dispatch = useDispatch();
 
-  const dephead_obj = {
-    name: '',
+  const distributioncenter = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenter
+  );
+  let distributioncenterData = [];
+  distributioncenter?.map((item) =>
+    distributioncenterData.push({
+      label: item?.areas[0].parent.name,
+      value: item?.uid,
+      key: item?.uid,
+    })
+  );
 
-    designation: '',
 
-    email: '',
+  console.log("distributioncenterData",distributioncenterData);
+  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
+  
+  let option_static_Category = [];
+  staticdata?.product_category__category_list?.filter((item) =>
+  option_static_Category.push({
+      label: item?.name,
+      value: item?.value,
+      key: item?.id,
+    })
+  );
+  
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(StaticDataGet());
+  }, []);
+  
+  
+  const [selectedCategory, setSelectedCategory] = useState(''); 
+  
+  const getstockCategory = useSelector(
+    (state) => state?.stockReducer?.getstockCategory
+  );
 
-    address: '',
+  let optioncategory = [];
+  getstockCategory?.filter((item) =>
+  optioncategory.push({
+    label: item?.name,
+    value: item?.uid,
+    key: item?.uid,
+  })
+  );
 
-    phone: '',
+
+  const stock_obj = {
+
+    product_uid: '',
+
+    distribution_centre_uid: '',
+
+    quantity: 0,
+
   };
 
-  const loading = useSelector(
-    (state) => state?.departmentHeadReducer?.loader
-  );
-  const [departhead, setDeparthead] = useState(dephead_obj);
+  
+    const loading = useSelector(
+      (state) => state?.stockReducer?.loader
+    );
+  const [stocksall, setStocksall] = useState(stock_obj);
 
-  const onDepartHeadCreate = async () => {
+  const onStockCreate = async () => {
     if (
-      departhead?.name === '' &&
-      departhead?.designation === '' &&
-      departhead?.email === '' &&
-      departhead?.address === '' &&
-      departhead?.phone === ''
+      stocksall?.product_uid === '' &&
+      stocksall?.distribution_centre_uid === '' &&
+      stocksall?.quantity === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -60,8 +107,9 @@ export default function CreateStock({ history }) {
       );
       return;
     } else {
-      console.log(departhead);
-        let res = await dispatch(CreateDepartmentHead({ ...departhead }));
+      console.log(stocksall);
+        // console.log({...stocksall})
+        let res = await dispatch(CreateStocks({ ...stocksall }));
 
       if (res) {
         NotificationManager.success(
@@ -98,112 +146,125 @@ export default function CreateStock({ history }) {
         <Formik>
           <Form>
             <Row className="h-100">
-              <Col lg={6}>
+             
+             
+            <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    <IntlMessages id="Name" />
-                  </Label>
+                  <label>
+                    <IntlMessages id="Select Product Category" />
+                  </label>
 
-                  <Input
-                    required
-                    value={departhead.name}
-                    className="form-control"
-                    name="name"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, name: e.target.value })
-                    }
-                  />
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        dispatch(getStockProductCategory(e.value));
+                        setSelectedCategory(e.label)
+                        
+                      }}
+                      required
+                      options={option_static_Category}
+                    />
+                  </>
                 </FormGroup>
               </Col>
 
+
+
               <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    <IntlMessages id="Designation" />
-                  </Label>
+                  <label>
+                    <IntlMessages id="Select "/>
+                    {selectedCategory}
+                  </label>
 
-                  <Input
-                    required
-                    value={departhead.designation}
-                    className="form-control"
-                    name="designation"
-                    type="text"
-                    onChange={(e) =>
-                      setDeparthead({
-                        ...departhead,
-                        designation: e.target.value,
-                      })
-                    }
-                  />
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        setStocksall({
+                          ...stocksall,
+
+                          product_uid: e?.value,
+                          
+                          
+                        });
+                        dispatch(GetDistributionCenter());
+                      }}
+                      required
+                      options={optioncategory}
+                    />
+                  </>
                 </FormGroup>
               </Col>
 
+             
+
               <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    <IntlMessages id="Email" />
-                  </Label>
+                  <label>
+                    <IntlMessages id="Select Distribution Center"/>
+                  </label>
 
-                  <Input
-                    required
-                    value={departhead.email}
-                    className="form-control"
-                    name="email"
-                    type="email"
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, email: e.target.value })
-                    }
-                  />
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        setStocksall({
+                          ...stocksall,
+
+                          distribution_centre_uid: e?.value,
+                          
+                          
+                        });
+                      }}
+                      required
+                      options={distributioncenterData}
+                    />
+                  </>
                 </FormGroup>
               </Col>
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Address" />
-                  </Label>
-
-                  <Input
-                    required
-                    value={departhead.address}
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, address: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
+             
 
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Phone Number" />
+                    <IntlMessages id="Select Quantity" />
                   </Label>
 
                   <Input
                     required
-                    value={departhead?.phone}
-                    type="text"
+                    type="number"
                     className="radio-in"
-                    name="phone"
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
                     onChange={(e) =>
-                      setDeparthead({ ...departhead, phone: e.target.value })
+                      setStocksall({ ...stocksall, quantity: Number(e.target.value) })
                     }
                   />
                 </FormGroup>
               </Col>
+
+
+
+
+             
             </Row>
 
             <Button
               className="btn btn-primary"
               size="sm"
-              onClick={onDepartHeadCreate}
+              onClick={onStockCreate}
             >
               {loading ? (
                 <div className="d-flex justify-content-center">

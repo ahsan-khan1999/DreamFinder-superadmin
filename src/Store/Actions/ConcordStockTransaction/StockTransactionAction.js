@@ -84,3 +84,22 @@ export const GetStocksTransaction = () => async (dispatch) => {
   };
 
 
+
+  export const getCategoryDistributionCenter = (uid,category) => async (dispatch) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    try {
+      const head = { "x-session-key": token.token, "x-session-type": token.type };
+      const response = await axios.get(
+        `https://concord-backend-m2.herokuapp.com/api/stocks/read/${category}?distribution_center_uid=${uid}`,
+        { headers: head }
+      );
+      if (response?.data?.response_code === 200) {
+          dispatch({
+            type: STOCKS_TRANSACTION_CONSTANT.STOCK_DISTRIBUTION_CENTER_CATEGORY,
+            payload: response?.data?.response_data,
+          });
+      }
+    } catch (error) {
+      return "Fail";
+    }
+  };

@@ -112,3 +112,23 @@ export const GetStocks = () => async (dispatch) => {
       }
     } catch {}
   };
+
+
+  export const getStockProductCategory = (category) => async (dispatch) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    try {
+      const head = { "x-session-key": token.token, "x-session-type": token.type };
+      const response = await axios.get(
+        `https://concord-backend-m2.herokuapp.com/api/products/read/${category}`,
+        { headers: head }
+      );
+      if (response?.data?.response_code === 200) {
+          dispatch({
+            type: STOCKS_CONSTANT.STOCKS_GET_PRODUCT_CATEGORY,
+            payload: response?.data?.response_data,
+          });
+      }
+    } catch (error) {
+      return "Fail";
+    }
+  };

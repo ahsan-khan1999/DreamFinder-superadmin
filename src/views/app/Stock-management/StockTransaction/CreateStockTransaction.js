@@ -21,35 +21,107 @@ import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
+import {
+  CreateStocksTransaction,
+  getCategoryDistributionCenter,
+} from 'Store/Actions/ConcordStockTransaction/StockTransactionAction';
+import { GetDistributionCenter } from 'Store/Actions/ConcordDistributionCenter/DistributionCenterAction';
+import moment from 'moment';
 
 export default function CreateStockTransaction({ history }) {
+  const selectGender = [
+    { label: 'IN', value: 'in', key: 1 },
+    { label: 'OUT', value: 'out', key: 2 },
+  ];
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectsinglecategory, setSelectsinglecategory] = useState({
+    quantity: 0,
+    transactiontype: '',
+  });
 
-    const dispatch = useDispatch();
+  console.log('selectsinglecategory', selectsinglecategory);
 
-  const dephead_obj = {
-    name: '',
+  const dispatch = useDispatch();
 
-    designation: '',
+  useEffect(() => {
+    dispatch(StaticDataGet());
+    dispatch(GetDistributionCenter());
+  }, []);
 
-    email: '',
+  const [distributionuid, setDistributionuid] = useState('');
 
-    address: '',
-
-    phone: '',
-  };
+  const distributioncenter = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenter
+  );
+  let distributioncenterData = [];
+  distributioncenter?.map((item) =>
+    distributioncenterData.push({
+      label: item?.areas[0].parent.name,
+      value: item?.uid,
+      key: item?.uid,
+    })
+  );
 
   const loading = useSelector(
-    (state) => state?.departmentHeadReducer?.loader
+    (state) => state?.stockTransactionReducer?.loader
   );
-  const [departhead, setDeparthead] = useState(dephead_obj);
+  const getstock_uid = useSelector(
+    (state) =>
+      state?.stockTransactionReducer
+        ?.get_stock_transaction_distribution_category
+  );
+
+  let optioncategory = [];
+  getstock_uid?.filter((item) =>
+    optioncategory.push({
+      label: item?.product?.name,
+      value: item?.uid,
+      key: item?.quantity,
+    })
+  );
+
+  const getstockDataSelectedCategory = [];
+  getstock_uid?.map((item) => getstockDataSelectedCategory.push(item?.uid));
+
+  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
+
+  let option_static_Category = [];
+  staticdata?.product_category__category_list?.filter((item) =>
+    option_static_Category.push({
+      label: item?.name,
+      value: item?.value,
+      key: item?.id,
+    })
+  );
+
+  const stocktransaction_obj = {
+    stock_uid: '',
+
+    executed_by: '',
+
+    price: 0,
+
+    quantity: 0,
+
+    transaction_type: '',
+
+    date: '',
+
+    name: '',
+  };
+
+  const [stocktransaction, setStocktransaction] =
+    useState(stocktransaction_obj);
 
   const onDepartHeadCreate = async () => {
     if (
-      departhead?.name === '' &&
-      departhead?.designation === '' &&
-      departhead?.email === '' &&
-      departhead?.address === '' &&
-      departhead?.phone === ''
+      stocktransaction?.stock_uid === '' &&
+      stocktransaction?.executed_by === '' &&
+      stocktransaction?.price === '' &&
+      stocktransaction?.quantity === '' &&
+      stocktransaction?.transaction_type === '' &&
+      stocktransaction?.date === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -60,12 +132,14 @@ export default function CreateStockTransaction({ history }) {
       );
       return;
     } else {
-      console.log(departhead);
-        let res = await dispatch(CreateDepartmentHead({ ...departhead }));
+      // console.log({...stocktransaction});
+      let res = await dispatch(
+        CreateStocksTransaction({ ...stocktransaction })
+      );
 
       if (res) {
         NotificationManager.success(
-          'Department Head Added Sucessfully',
+          'Stock Transaction Added Sucessfully',
           'Success',
           3000,
           null,
@@ -83,17 +157,17 @@ export default function CreateStockTransaction({ history }) {
   return (
     <Card>
       <CardBody>
-      <Button
-            className="btn btn-primary mb-4 "
-            onClick={handleChangeToView}
-            style={{ marginRight: '20px'}}
-          >
-            Back
-          </Button>
+        <Button
+          className="btn btn-primary mb-4 "
+          onClick={handleChangeToView}
+          style={{ marginRight: '20px' }}
+        >
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="Create Stock Transaction" />
         </CardTitle>
-     
+
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
@@ -105,13 +179,16 @@ export default function CreateStockTransaction({ history }) {
                   </Label>
 
                   <Input
-                    required
-                    value={departhead.name}
+                    value={stocktransaction.address}
                     className="form-control"
                     name="name"
+                    type="text"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setDeparthead({ ...departhead, name: e.target.value })
+                      setStocktransaction({
+                        ...stocktransaction,
+                        name: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -119,20 +196,97 @@ export default function CreateStockTransaction({ history }) {
 
               <Col lg={6}>
                 <FormGroup>
+                  <label>
+                    <IntlMessages id="Select Distribution Center" />
+                  </label>
+
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        setDistributionuid(e.value);
+                      }}
+                      required
+                      options={distributioncenterData}
+                    />
+                  </>
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <label>
+                    <IntlMessages id="Select Product Category" />
+                  </label>
+
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        setSelectedCategory(e.label);
+                        dispatch(
+                          getCategoryDistributionCenter(
+                            distributionuid,
+                            e.value
+                          )
+                        );
+                      }}
+                      required
+                      options={option_static_Category}
+                    />
+                  </>
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <label>
+                    <IntlMessages id="Select " />
+                    {selectedCategory}
+                  </label>
+
+                  <>
+                    <Select
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        setStocktransaction({
+                          ...stocktransaction,
+                          stock_uid: e?.value,
+                        });
+                        setSelectsinglecategory({
+                          quantity: e?.key,
+                        });
+                      }}
+                      required
+                      options={optioncategory}
+                    />
+                  </>
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
                   <Label>
-                    <IntlMessages id="Designation" />
+                    <IntlMessages id="Executed By" />
                   </Label>
 
                   <Input
                     required
-                    value={departhead.designation}
-                    className="form-control"
-                    name="designation"
+                    value={stocktransaction.executed_by}
+                    name="executed_by"
                     type="text"
                     onChange={(e) =>
-                      setDeparthead({
-                        ...departhead,
-                        designation: e.target.value,
+                      setStocktransaction({
+                        ...stocktransaction,
+                        executed_by: e.target.value,
                       })
                     }
                   />
@@ -142,58 +296,113 @@ export default function CreateStockTransaction({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Email" />
+                    <IntlMessages id="Select Price" />
                   </Label>
 
                   <Input
                     required
-                    value={departhead.email}
-                    className="form-control"
-                    name="email"
-                    type="email"
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, email: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Address" />
-                  </Label>
-
-                  <Input
-                    required
-                    value={departhead.address}
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, address: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Phone Number" />
-                  </Label>
-
-                  <Input
-                    required
-                    value={departhead?.phone}
-                    type="text"
+                    type="number"
+                    min={0}
                     className="radio-in"
-                    name="phone"
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
                     onChange={(e) =>
-                      setDeparthead({ ...departhead, phone: e.target.value })
+                      setStocktransaction({
+                        ...stocktransaction,
+                        price: Number(e.target.value),
+                      })
+                    }
+                  />
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <label>
+                    <IntlMessages id="Select Transition Type" />
+                  </label>
+
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      onChange={(e) => {
+                        setStocktransaction({
+                          ...stocktransaction,
+                          transaction_type: e.value,
+                        });
+
+                        setSelectsinglecategory({
+                          ...selectsinglecategory,
+                          transactiontype: e?.value,
+                        });
+                      }}
+                      required
+                      options={selectGender}
+                    />
+                  </>
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select Quantity" />
+                  </Label>
+
+                  <Input
+                    required
+                    type="number"
+                    min={0}
+                    max={
+                      selectsinglecategory.transactiontype === 'out'
+                        ? selectsinglecategory.quantity
+                        : ''
+                    }
+                    className="radio-in"
+                    // validate={validateEmail}
+                    // onChange={(e) => setNumber()}
+                    onChange={(e, index) => {
+                      if (selectsinglecategory.transactiontype === 'out') {
+                        if (e.target.value <= Number(e.target.max)) {
+                          setStocktransaction({
+                            ...stocktransaction,
+                            quantity: Number(e.target.value),
+                          });
+                        }
+                      }
+                      else{
+                        setStocktransaction({
+                          ...stocktransaction,
+                          quantity: Number(e.target.value),
+                        });
+                      }
+                    }}
+                  />
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select Date" />
+                  </Label>
+
+                  <Input
+                    required
+                    className="form-control"
+                    name="date_of_birth"
+                    type="date"
+                    onChange={(e) =>
+                      setStocktransaction({
+                        ...stocktransaction,
+                        date:
+                          e.target.value +
+                          ' ' +
+                          moment(moment.utc().toDate()).format('hh:mm:ss'),
+                      })
                     }
                   />
                 </FormGroup>
@@ -209,7 +418,7 @@ export default function CreateStockTransaction({ history }) {
                 <div className="d-flex justify-content-center">
                   <Loader height={18} width={18} type="Oval" color="#fff" />
                   &nbsp; Creating
-                </div> 
+                </div>
               ) : (
                 'Add Stock Transaction'
               )}

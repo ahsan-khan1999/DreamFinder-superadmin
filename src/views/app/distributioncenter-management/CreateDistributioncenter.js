@@ -28,12 +28,7 @@ export default function CreateDistributioncenter({ history }) {
   const dispatch = useDispatch();
   const [array, setArray] = useState([]);
   const [depoarray, setDepoarray] = useState([]);
-
-
-  useEffect(() => {
-    dispatch(GetDistributionCenterRegions());
-    dispatch(GetDepoManagers());
-  }, []);
+  
 
   const distributioncenterregions = useSelector(
     (state) => state?.distributionCenterReducer?.distributioncenterregions
@@ -44,6 +39,29 @@ export default function CreateDistributioncenter({ history }) {
   const distributionRegionAreas = useSelector(
     (state) => state?.distributionCenterReducer?.distributionRegionAreas
   );
+
+  const regionareavalue = [];
+   //==============Areas
+   let distributionRegionsArea = [];
+   distributionRegionAreas?.map((item) =>
+   distributionRegionsArea?.push({
+       label: item?.name,
+       value: item?.uid,
+       key: item?.uid,
+     })
+   );
+ 
+  distributionRegionsArea?.map((item, index) => {
+        regionareavalue.push(item?.value);
+      }); 
+     
+
+  useEffect(() => {
+    dispatch(GetDistributionCenterRegions());
+    dispatch(GetDepoManagers());
+  }, []);
+
+
 
 
   let distributionRegions = [];
@@ -56,15 +74,7 @@ export default function CreateDistributioncenter({ history }) {
   );
 
 
-  //==============Areas
-  let distributionRegionsArea = [];
-  distributionRegionAreas?.map((item) =>
-  distributionRegionsArea?.push({
-      label: item?.name,
-      value: item?.uid,
-      key: item?.uid,
-    })
-  );
+
 
   let AllDepoManagers = [];
   depoManager?.map((item) =>
@@ -80,7 +90,7 @@ export default function CreateDistributioncenter({ history }) {
   const distributioncenter_obj = {
     depot_managers_uid: depoarray,
 
-    areas_uid: array,
+    areas_uid:  regionareavalue,
     
   };
   
@@ -122,15 +132,18 @@ export default function CreateDistributioncenter({ history }) {
     history.push('/app/distributioncenter-management/viewDepartmenthead');
   };
   
-  const regionareavalue = [];
-  const handleChangeRegion = async (e, index) => {
-    // console.log(e);
-    let options = e;
-    options?.map((item, index) => {
-      regionareavalue.push(item?.value);
-    }); 
-    await setArray(regionareavalue);
-  };
+  // const regionareavalue = [];
+  // const handleChangeRegion = async (e, index) => {
+  //   // console.log(e);
+  //   let options = e;
+  //   options?.map((item, index) => {
+  //     regionareavalue.push(item?.value);
+  //   }); 
+  //   await setArray(regionareavalue);
+  // };
+
+ 
+
 
   const depovalue = [];
   const handleChangeDepoManagers = async (e, index) => {
@@ -140,6 +153,8 @@ export default function CreateDistributioncenter({ history }) {
     }); 
     await setDepoarray(depovalue);
   };
+
+
   return (
     <Card>
       <CardBody>
@@ -182,7 +197,7 @@ export default function CreateDistributioncenter({ history }) {
                 </FormGroup>
               </Col>
 
-              <Col lg={6}>
+              {/* <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select Areas" />
@@ -203,7 +218,7 @@ export default function CreateDistributioncenter({ history }) {
                     />
                   </>
                 </FormGroup>
-              </Col>
+              </Col> */}
 
               <Col lg={6}>
                 <FormGroup>

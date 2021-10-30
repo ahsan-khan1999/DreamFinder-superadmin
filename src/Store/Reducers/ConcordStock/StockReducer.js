@@ -12,6 +12,7 @@ const initialState = {
   stock: [],
   createstock: [],
   updatestock: [],
+  getstockCategory:[],
 };
 export const StockReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -47,6 +48,10 @@ export const StockReducer = (state = initialState, { type, payload }) => {
     case STOCKS_CONSTANT.STOCKS_LOADING_All:
       return { ...state, loader: payload};
 
+
+    case STOCKS_CONSTANT.STOCKS_GET_PRODUCT_CATEGORY:
+      return { ...state, getstockCategory: payload };
+  
 
     default:
       return state;

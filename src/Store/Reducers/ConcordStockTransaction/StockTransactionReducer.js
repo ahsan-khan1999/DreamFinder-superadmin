@@ -11,6 +11,7 @@ const initialState = {
   loader: false,
   stocktransaction: [],
   createstocktransaction: [],
+  get_stock_transaction_distribution_category:[],
 };
 export const StockTransactionReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -32,6 +33,8 @@ export const StockTransactionReducer = (state = initialState, { type, payload })
     case STOCKS_TRANSACTION_CONSTANT.CREATE_STOCKS_TRANSACTION_ERROR:
       return { ...state, createstocktransaction: true }
 
+    case STOCKS_TRANSACTION_CONSTANT.STOCK_DISTRIBUTION_CENTER_CATEGORY:
+      return { ...state, get_stock_transaction_distribution_category: payload }
 
     default:
       return state;
