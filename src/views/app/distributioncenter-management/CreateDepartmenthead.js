@@ -1,41 +1,54 @@
 /* eslint-disable */
 
 import { NotificationManager } from 'components/common/react-notifications';
-import React, { useEffect } from 'react';
 import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
-import Select from 'react-select';
-import CustomSelectInput from 'components/common/CustomSelectInput';
-
 import { useState } from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getToken } from 'Utils/auth.util';
-import BestSellers from 'containers/dashboards/BestSellers';
-import AdvancedSearch from 'containers/dashboards/AdvancedSearch';
-import { Link, NavLink } from 'react-router-dom';
-import products from 'data/products';
-import AddNewSurveyModal from 'containers/applications/AddNewSurveyModal';
-import AddNewModal from 'containers/pages/AddNewModal';
-import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import * as Yup from 'yup';
 
 export default function CreateDepartmenthead({ history }) {
 
-    const dispatch = useDispatch();
+
+  const DepartmentHeadSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Please enter your name'),
+    designation: Yup.string()
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Please provide your designation'),
+    email: Yup.string()
+      .email('Invalid email')
+      .required('Please enter your email address'),
+    address: Yup.string().required('Please provide the address'),
+    phone: Yup.number()
+    .typeError("That doesn't look like a phone number")
+    .positive("A phone number can't start with a minus")
+    .integer("A phone number can't include a decimal point")
+    .required('A phone number is required'),
+  });
+
+  const dispatch = useDispatch();
+
+
+  const onSubmit = (values) => {
+    onDepartHeadCreate(values);
+    console.log(values,"Hello");
+  };
+
 
   const dephead_obj = {
     name: '',
-
     designation: '',
-
     email: '',
-
     address: '',
-
     phone: '',
   };
 
@@ -44,13 +57,13 @@ export default function CreateDepartmenthead({ history }) {
   );
   const [departhead, setDeparthead] = useState(dephead_obj);
 
-  const onDepartHeadCreate = async () => {
+  const onDepartHeadCreate = async (values) => {
     if (
-      departhead?.name === '' &&
-      departhead?.designation === '' &&
-      departhead?.email === '' &&
-      departhead?.address === '' &&
-      departhead?.phone === ''
+      values?.name === '' &&
+      values?.designation === '' &&
+      values?.email === '' &&
+      values?.address === '' &&
+      values?.phone === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -61,8 +74,8 @@ export default function CreateDepartmenthead({ history }) {
       );
       return;
     } else {
-      console.log(departhead);
-        let res = await dispatch(CreateDepartmentHead({ ...departhead }));
+      console.log(values,"ResPnoseWala");
+      let res = await dispatch(CreateDepartmentHead({ ...values }));
 
       if (res) {
         NotificationManager.success(
@@ -82,140 +95,189 @@ export default function CreateDepartmenthead({ history }) {
   };
 
   return (
+
     <Card>
       <CardBody>
-      <Button
-            className="btn btn-primary mb-4 "
-            onClick={handleChangeToView}
-            style={{ marginRight: '20px'}}
-          >
-            Back
-          </Button>
+        <Button
+          className="btn btn-primary mb-4 "
+          onClick={handleChangeToView}
+          style={{ marginRight: '20px' }}
+        >
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="Create Department Head" />
         </CardTitle>
-     
+
         <div style={{ marginBottom: '30px' }}></div>
-        <Formik>
-          <Form>
-            <Row className="h-100">
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Name" />
-                  </Label>
+        <Formik
 
-                  <Input
-                    required
-                    value={departhead.name}
-                    className="form-control"
-                    name="name"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, name: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
+          initialValues={{
+            name: '',
+            designation: '',
+            email: '',
+            address: '',
+            phone: '',
+          }}
+          validationSchema={DepartmentHeadSchema}
+          onSubmit={onSubmit}
+        >
+          {({
+            handleSubmit,
+            setFieldValue,
+            setFieldTouched,
+            values,
+            errors,
+            touched,
+            isSubmitting,
+          }) => (
+            <Form className="av-tooltip tooltip-label-right"> 
+              <Row className="h-100">
+               
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>Name</Label>
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Designation" />
-                  </Label>
+                    <Field
+                      // value={departhead.name}
+                      className="form-control"
+                      name="name"
+                      type="text"
+                      // validate={validateEmail}
+                      // onChange={(e) =>
+                      //   setDeparthead({ ...departhead, name: e.target.value })
+                      // }
+                    />
+                    {errors.name && touched.name ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.name}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                </Col>
 
-                  <Input
-                    required
-                    value={departhead.designation}
-                    className="form-control"
-                    name="designation"
-                    type="text"
-                    onChange={(e) =>
-                      setDeparthead({
-                        ...departhead,
-                        designation: e.target.value,
-                      })
-                    }
-                  />
-                </FormGroup>
-              </Col>
+                <Col lg={6}>
+                  <FormGroup className="error-l-75">
+                    <Label>
+                      Designation
+                    </Label>
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Email" />
-                  </Label>
+                    <Field
+                      
+                      // value={departhead.designation}
+                      className="form-control"
+                      name="designation"
+                      type="text"
+                      // onChange={(e) =>
+                      //   setDeparthead({
+                      //     ...departhead,
+                      //     designation: e.target.value,
+                      //   })
+                      // }
+                    />
+                    {errors.designation && touched.designation ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.designation}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                </Col>
 
-                  <Input
-                    required
-                    value={departhead.email}
-                    className="form-control"
-                    name="email"
-                    type="email"
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, email: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
+                <Col lg={6}>
+                  <FormGroup >
+                    <Label>
+                      <IntlMessages id="Email" />
+                    </Label>
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Address" />
-                  </Label>
+                    <Field
+                      
+                      // value={departhead.email}
+                      className="form-control"
+                      name="email"
+                      type="email"
+                      // onChange={(e) =>
+                      //   setDeparthead({ ...departhead, email: e.target.value })
+                      // }
+                    />
+                    {errors.email && touched.email ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.email}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                </Col>
 
-                  <Input
-                    required
-                    value={departhead.address}
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, address: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
+                <Col lg={6}>
+                  <FormGroup className="error-l-75">
+                    <Label>
+                      <IntlMessages id="Address" />
+                    </Label>
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Phone Number" />
-                  </Label>
+                    <Field
+                      
+                      // value={departhead.address}
+                      className="form-control"
+                      name="address"
+                      type="text"
+                      // validate={validateEmail}
+                      // onChange={(e) =>
+                      //   setDeparthead({ ...departhead, address: e.target.value })
+                      // }
+                    />
+                    {errors.address && touched.address ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.address}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                </Col>
 
-                  <Input
-                    required
-                    value={departhead?.phone}
-                    type="text"
-                    className="radio-in"
-                    name="phone"
-                    // validate={validateEmail}
-                    // onChange={(e) => setNumber()}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, phone: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
+                <Col lg={6}>
+                  <FormGroup >
+                    <Label>
+                      <IntlMessages id="Phone" />
+                    </Label>
 
-            <Button
-              className="btn btn-primary"
-              size="sm"
-              onClick={onDepartHeadCreate}
-            >
-              {loading ? (
-                <div className="d-flex justify-content-center">
-                  <Loader height={18} width={18} type="Oval" color="#fff" />
-                  &nbsp; Creating
-                </div> 
-              ) : (
-                'Add DepartmentHead'
-              )}
-            </Button>
-          </Form>
+                    <Field
+                      
+                      // value={departhead?.phone}
+                      type="text"
+                      className="form-control"
+                      name="phone"
+                      // validate={validateEmail}
+                      // onChange={(e) => setNumber()}
+                      // onChange={(e) =>
+                      //   setDeparthead({ ...departhead, phone: e.target.value })
+                      // }
+                    />
+                    {errors.phone && touched.phone ? (
+                      <div className="invalid-feedback d-block">
+                        {errors.phone}
+                      </div>
+                    ) : null}
+                  </FormGroup>
+                </Col>
+              </Row>
+
+              <Button
+                className="btn btn-primary"
+                size="sm"
+                type="submit"
+              >
+                {loading ? (
+                  <div className="d-flex justify-content-center">
+                    <Loader height={18} width={18} type="Oval" color="#fff" />
+                    &nbsp; Creating
+                  </div>
+                ) : (
+                  'Add DepartmentHead'
+                )}
+              </Button>
+            </Form>
+
+
+          )}
+
         </Formik>
         <div style={{ marginTop: '30px' }} />
       </CardBody>

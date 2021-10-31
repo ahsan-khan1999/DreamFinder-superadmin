@@ -2,7 +2,6 @@
 import { arrowFunctionExpression } from '@babel/types';
 import { NotificationManager } from 'components/common/react-notifications';
 import { Formik, useFormik } from 'formik';
-// import leftArrow from '../../../assets/logos/leftArrow.svg';
 
 import IntlMessages from 'helpers/IntlMessages';
 import moment from 'moment';
@@ -16,53 +15,86 @@ import {
   Col,
   Form,
   FormGroup,
+  Input,
   Label,
   Row,
   Table,
 } from 'reactstrap';
 import apiServices from 'services/requestHandler';
-import { updateOrderAction } from 'Store/Actions/Orders/ViewOrderAction';
+import { UpdateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+
+
+
 export default function viewCurrentDepartmenthead(props) {
-  // let view = useSelector((state) => state?.ViewCurrentOrderRedcuer?.view);
-  let currentDepartmenthead = props?.location?.state;
-  console.log(currentDepartmenthead)
-  const formikData = useFormik({
-    initialValues: {
-      //   password: doctor_obj?.password,
-      //   confirmPassword: confirmPassword,
-    },
-    // validate: validate,
+  let [buttonName, setButtonName] = useState();
+  
+  const [thisView, setThisView] = useState(true);
+  
+  
+  const currentDepartmenthead = props?.location?.state;
+  
+  // console.log("currentDepartmenthead",currentDepartmenthead.uid)
+  
+  const dephead_obj = {
+    name: currentDepartmenthead?.name,
+    designation: currentDepartmenthead?.designation,
+    email: currentDepartmenthead?.email,
+    address: currentDepartmenthead?.address,
+    phone: currentDepartmenthead?.phone,
+    uid: currentDepartmenthead?.uid,
+  };
+  const [departhead, setDeparthead] = useState(dephead_obj);
+  
+  console.log("departhead",departhead?.uid)
 
-    onSubmit: (values) => { },
-  });
-  useEffect(() => {
-    if (currentDepartmenthead?.length === 0) {
-      props.history.push('/app/distributioncenter-management/viewDepartmenthead');
-    }
-  }, []);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // readRoles();
+
     if (currentDepartmenthead?.status?.name === 'suspended') {
-      setButtonName('Active Order');
+      setButtonName('Active');
     } else if (currentDepartmenthead?.status?.name === 'active') {
-      setButtonName('Suspend Order');
+      setButtonName('Suspend');
     }
   }, []);
+
 
   const handleChangeToView = () => {
     props.history.push('/app/distributioncenter-management/viewDepartmenthead');
   };
-  const dispatch = useDispatch();
 
-  let [buttonName, setButtonName] = useState();
 
-  const suspandOrder = async () => {
-    if (currentOrder?.status?.name === 'suspended') {
+  let options = [];
+
+
+
+  const editProfile = (e) => {
+    e.preventDefault();
+    setThisView(!thisView);
+  };
+
+
+  const editData = async () => {
+    let res = await dispatch(UpdateDepartmentHead(departhead));
+    if (res) {
+      NotificationManager.success(
+        'Successful response',
+        'Success',
+        5000,
+        null,
+        ''
+      );
+      props.history.push('/app/distributioncenter-management/viewDepartmenthead');
+    }
+  };
+  const suspandDepartmenthead = async () => {
+    if (currentDepartmenthead?.status?.name === 'suspended') {
       let apiData = {
-        uid: currentOrder?.uid,
+        uid: currentDepartmenthead?.uid,
       };
-      let res = await apiServices.suspandorder(apiData);
+      console.log(apiData);
+      let res = await apiServices.suspanddepartmentHead(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
         NotificationManager.success(
@@ -84,9 +116,9 @@ export default function viewCurrentDepartmenthead(props) {
       }
     } else {
       let apiData = {
-        uid: currentOrder?.uid,
+        uid: currentDepartmenthead?.uid,
       };
-      let res = await apiServices.suspandorder(apiData);
+      let res = await apiServices.suspanddepartmentHead(apiData);
       console.log(res);
       if (res?.response_code === 200) {
         NotificationManager.success(
@@ -96,7 +128,7 @@ export default function viewCurrentDepartmenthead(props) {
           null,
           ''
         );
-        props.history.push('/app/Orders/orders');
+        props.history.push('/app/distributioncenter-management/viewDepartmenthead');
       } else {
         NotificationManager.error(
           res?.response_message,
@@ -108,35 +140,34 @@ export default function viewCurrentDepartmenthead(props) {
       }
     }
   };
-
-
-  const [show, setShow] = useState(false);
-
-  // MODAL CLOSE FUCNTION
-  const handleClose = () => {
-    setShow(!show);
-  };
-  // MODAL OPEN FUCNTION
-  const handleShow = () => {
-    setShow(!show);
-};
-
-  const handleAdd = () => {
-
-    history.push('/app/menu/levels/CreateOrders');
-  };
   return (
     <Card>
       <CardBody>
         <CardTitle>
-          <Button
-            className="btn btn-primary"
-            onClick={handleChangeToView}
-            style={{ marginRight: '20px'}}
-          >
-            Back
-          </Button>
-          <IntlMessages id="View Order" />
+          {thisView ? (
+            <>
+            <Button
+              className="btn btn-primary"
+              onClick={handleChangeToView}
+              style={{ marginRight: '20px'}}
+            >
+              Back
+            </Button>
+            <IntlMessages id="View Department Head" />
+            </>
+            ) : (
+              
+              <>
+              <Button
+                className="btn btn-primary"
+                onClick={editProfile}
+                style={{ marginRight: '20px'}}
+              >
+                Close Edit
+              </Button>
+              <IntlMessages id="Edit Department Head" />
+              </>
+              )}
         </CardTitle>
 
         <div
@@ -147,7 +178,7 @@ export default function viewCurrentDepartmenthead(props) {
           }}
         ></div>
 
-        <Formik initialValues={formikData.initialValues}>
+        <Formik>
           <Form>
             <Row className="h-100">
              
@@ -162,9 +193,26 @@ export default function viewCurrentDepartmenthead(props) {
                       }}
                     >Name</h6>
                   </Label>
+
+                  {thisView ? (
                   <span>
                     <p>{currentDepartmenthead?.name.toUpperCase()}</p>
                   </span>
+         
+                  ):(
+                    <Input
+                      
+                        value={departhead?.name}
+                        className="form-control"
+                        name="name"
+                        type="text"
+                        // validate={validateEmail}
+                        onChange={(e) =>
+                          setDeparthead({ ...departhead, name: e.target.value })
+                        }
+                    />
+                  )}
+
                 </FormGroup>
               </Col>
              
@@ -178,9 +226,28 @@ export default function viewCurrentDepartmenthead(props) {
                       }}
                     >Designation</h6>
                   </Label>
+
+                  {thisView ? (
                   <span>
                     <p>{currentDepartmenthead?.designation.toUpperCase()}</p>
                   </span>
+
+                  ):(
+                    <Input
+                      
+                    value={departhead?.designation}
+                    className="form-control"
+                    name="designation"
+                    type="text"
+                    onChange={(e) =>
+                      setDeparthead({
+                        ...departhead,
+                        designation: e.target.value,
+                      })
+                    }
+                  />
+                  )}
+
                 </FormGroup>
               </Col>
 
@@ -195,9 +262,23 @@ export default function viewCurrentDepartmenthead(props) {
                       }}
                     >Email</h6>
                   </Label>
+                  {thisView ? (
                   <span>
                     <p>{currentDepartmenthead?.email.toUpperCase()}</p>
                   </span>
+
+                  ):(
+                    <Input
+                      
+                    value={departhead?.email}
+                    className="form-control"
+                    name="email"
+                    type="email"
+                    onChange={(e) =>
+                      setDeparthead({ ...departhead, email: e.target.value })
+                    }
+                  />
+                  )}
                 </FormGroup>
               </Col>
 
@@ -212,9 +293,26 @@ export default function viewCurrentDepartmenthead(props) {
                       }}
                     >Address</h6>
                   </Label>
+
+
+              {thisView ? (
                   <span>
                     <p>{currentDepartmenthead?.address.toUpperCase()}</p>
                   </span>
+              ): (
+                <Input
+                      
+                value={departhead?.address}
+                className="form-control"
+                name="address"
+                type="text"
+                // validate={validateEmail}
+                onChange={(e) =>
+                  setDeparthead({ ...departhead, address: e.target.value })
+                }
+              />
+              )}
+
                 </FormGroup>
               </Col>
 
@@ -229,19 +327,67 @@ export default function viewCurrentDepartmenthead(props) {
                       }}
                     >Phone</h6>
                   </Label>
+                  {thisView ? (
                   <span>
-                    <p>{currentDepartmenthead.phone.toUpperCase()}</p>
+                    <p>{currentDepartmenthead?.phone}</p>
                   </span>
+
+                  ): (
+                    <Input
+                      
+                    value={departhead?.phone}
+                    type="text"
+                    className="form-control"
+                    name="phone"
+                    // validate={validateEmail}
+                    // onChange={(e) => setNumber()}
+                    onChange={(e) =>
+                      setDeparthead({ ...departhead, phone: e.target.value })
+                    }
+                  />
+                  )}
                 </FormGroup>
               </Col>
           
             </Row>
+
+
+
+
+
+            {thisView ? (
+              <Button
+                className="btn btn-primary mr-3"
+              
+                onClick={editProfile}
+              >
+              
+                Edit Profile
+              </Button>
+            ) : (
               <Button
                 className="btn btn-primary"
-                onClick={suspandOrder}
+              
+                onClick={editData}
+              >
+              
+                Save
+              </Button>
+            )}
+
+
+
+            {thisView ? (
+              <Button
+                className="btn btn-primary"
+                onClick={suspandDepartmenthead}
               >
                 {buttonName}
               </Button>
+
+            ) : (
+                ""
+            )}
          
         
             {/* <StatuschangedModal show={show} onHide={handleClose} data={currentDepartmenthead} {...props} /> */}

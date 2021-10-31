@@ -38,7 +38,7 @@ export const GetProductCategory = () => async (dispatch) => {
   };
 
 
-  export const CreateProductCategory = (data) => async (dispatch) => {
+  export const CreateProductCategories = (data) => async (dispatch) => {
     try {
       dispatch({
         type: PRODUCT_CATEGORY_CONSTANT.PRODUCT_CATEGORY_LOADING_All,

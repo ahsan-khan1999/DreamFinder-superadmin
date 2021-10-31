@@ -12,6 +12,11 @@ const initialState = {
   doctor: [],
   createdoctor: [],
   updatedoctor: [],
+  hierarchy_region: [],
+  hierarchy_area: [],
+  hierarchy_thana: [],
+  hierarchy_territory: [],
+  hierarchy_market: [],
 };
 export const DoctorReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -45,7 +50,23 @@ export const DoctorReducer = (state = initialState, { type, payload }) => {
 
 
     case DOCTOR_CONSTANT.DOCTOR_LOADING_All:
-      return { ...state, loader: payload};
+      return { ...state, loader: payload };
+
+
+    case DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION:
+      return { ...state, hierarchy_region: payload };
+
+    case DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_AREA:
+      return { ...state, hierarchy_area: payload };
+
+    case DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_THANA:
+      return { ...state, hierarchy_thana: payload };
+
+    case DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_TERRITORY:
+      return { ...state, hierarchy_territory: payload };
+
+    case DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_MARKET:
+      return { ...state, hierarchy_market: payload };
 
 
     default:

@@ -242,19 +242,6 @@ export default function CreateDistributioncenter({ history }) {
                     />
                   </>
 
-                  {/* <Input
-                    required
-                    value={departhead.designation}
-                    className="form-control"
-                    name="designation"
-                    type="text"
-                    onChange={(e) =>
-                      setDeparthead({
-                        ...departhead,
-                        designation: e.target.value,
-                      })
-                    }
-                  /> */}
                 </FormGroup>
               </Col>
 

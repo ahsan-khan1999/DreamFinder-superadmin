@@ -38,7 +38,7 @@ export const GetDoctor = () => async (dispatch) => {
   };
 
 
-  export const CreateDoctor = (data) => async (dispatch) => {
+  export const CreateDoctorsRecord = (data) => async (dispatch) => {
     try {
       dispatch({
         type: DOCTOR_CONSTANT.DOCTOR_LOADING_All,
@@ -111,5 +111,60 @@ export const GetDoctor = () => async (dispatch) => {
         return false;
       }
     } catch {}
+  };
+  
+
+  export const GetMarketsData = (uid,hierarchy) => async (dispatch) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    try {
+      const head = { "x-session-key": token.token, "x-session-type": token.type };
+      const response = await axios.get(
+        `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/${hierarchy}?parent_uid=${uid}`,
+        { headers: head }
+      );
+      if (response?.data?.response_code === 200) {
+        if (hierarchy === "region") {
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION,
+            payload: response?.data?.response_data,
+          });
+  
+        }
+        else if (hierarchy === "area") {
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_AREA,
+            payload: response?.data?.response_data,
+          });
+        }
+        else if (hierarchy === "thana"){
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_THANA,
+            payload: response?.data?.response_data,
+          });
+        }
+        else if (hierarchy === "territory"){
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_TERRITORY,
+            payload: response?.data?.response_data,
+          });
+        }
+        else if (hierarchy === "market"){
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_MARKET,
+            payload: response?.data?.response_data,
+          });
+        }      
+        else{
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION,
+            payload: response?.data?.response_data,
+          });
+        }
+  
+       
+      }
+    } catch (error) {
+      return "Fail";
+    }
   };
   

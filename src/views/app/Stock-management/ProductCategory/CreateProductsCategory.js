@@ -10,20 +10,30 @@ import { useState } from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getToken } from 'Utils/auth.util';
-import BestSellers from 'containers/dashboards/BestSellers';
-import AdvancedSearch from 'containers/dashboards/AdvancedSearch';
-import { Link, NavLink } from 'react-router-dom';
-import products from 'data/products';
-import AddNewSurveyModal from 'containers/applications/AddNewSurveyModal';
-import AddNewModal from 'containers/pages/AddNewModal';
-import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
+import { CreateProducts } from 'Store/Actions/ConcordProduct/ProductAction';
+import { CreateProductCategories } from 'Store/Actions/ConcordProductCategory/ProductCategoryAction';
 
 export default function CreateProductCategory({ history }) {
   const dispatch = useDispatch();
+
+  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
+  let option_static_Category = [];
+  staticdata?.product_category__category_list?.filter((item) =>
+  option_static_Category.push({
+      label: item?.name,
+      value: item?.value,
+      key: item?.id,
+    })
+  );
+
+
+  useEffect(() => {
+    dispatch(StaticDataGet());
+  }, []);
 
   const productcategory_obj = {
     name: '',
@@ -33,16 +43,14 @@ export default function CreateProductCategory({ history }) {
     description: '',
   };
 
-  const loading = useSelector((state) => state?.departmentHeadReducer?.loader);
+  const loading = useSelector((state) => state?.productCategoryReducer?.loader);
   const [productcategory, setProductcategory] = useState(productcategory_obj);
 
   const onProductCategoryCreate = async () => {
     if (
       productcategory?.name === '' &&
-      productcategory?.designation === '' &&
-      productcategory?.email === '' &&
-      productcategory?.address === '' &&
-      productcategory?.phone === ''
+      productcategory?.category === '' &&
+      productcategory?.description === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -54,7 +62,7 @@ export default function CreateProductCategory({ history }) {
       return;
     } else {
       console.log(productcategory);
-      let res = await dispatch(CreateDepartmentHead({ ...productcategory }));
+      let res = await dispatch(CreateProductCategories({ ...productcategory }));
 
       if (res) {
         NotificationManager.success(
@@ -74,16 +82,6 @@ export default function CreateProductCategory({ history }) {
   };
 
 
-
-  const [categoryarray,setCategoryarray] = useState([]);
-  const categoryvalue = [];
-  const handleChangeCategory = async (e, index) => {
-    let options = e;
-    options?.map((item, index) => {
-      categoryvalue.push(item?.value);
-    }); 
-    await setCategoryarray(categoryvalue);
-  };
 
 
   return (
@@ -112,12 +110,11 @@ export default function CreateProductCategory({ history }) {
 
                   <Input
                     required
-                    value={productcategory.name}
                     className="form-control"
                     name="name"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setDeparthead({ ...productcategory, name: e.target.value })
+                      setProductcategory({ ...productcategory, name: e.target.value })
                     }
                   />
                 </FormGroup>
@@ -135,12 +132,11 @@ export default function CreateProductCategory({ history }) {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      isMulti
                       required
                       onChange={(e, index) => {
-                        handleChangeCategory(e, index);
+                        setProductcategory({ ...productcategory, category: e.value })
                       }}
-                      options={''}
+                      options={option_static_Category}
                     />
                   </>
                 </FormGroup>
@@ -153,10 +149,8 @@ export default function CreateProductCategory({ history }) {
                   </Label>
                       <Input
                        type="textarea"
-                       value={productcategory.name}
                        className="form-control"
                        name="description"
-                       // validate={validateEmail}
                        onChange={(e) =>
                         setProductcategory({ ...productcategory, description: e.target.value })
                        }

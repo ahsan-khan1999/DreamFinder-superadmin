@@ -50,6 +50,9 @@ export default function viewDistributioncenter({ match, history }) {
     (state) => state?.distributionCenterReducer?.distributioncenter
   );
 
+
+  // console.log(distributioncenter,"distributioncenter")
+
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
@@ -78,6 +81,20 @@ export default function viewDistributioncenter({ match, history }) {
        
       ),
       status: item?.status.name,
+      area_uid:item?.areas[0].parent.uid,
+      depo_uid:CheckConditionArray(
+        item?.depot_managers,
+        'is_primary',
+        'uid',
+       
+      ),
+      depo_name:CheckConditionArray(
+        item?.depot_managers,
+        'is_primary',
+        'name',
+       
+      ),
+      uid: item?.uid,
     })
   );
 
@@ -123,7 +140,7 @@ export default function viewDistributioncenter({ match, history }) {
       <CardBody>
         <Row>
           <Colxx xxs="12">
-            <h4>Department Head</h4>
+            <h4>Distribution Center</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
@@ -135,7 +152,7 @@ export default function viewDistributioncenter({ match, history }) {
             marginTop: '10px',
           }}
         >
-          Add New Department Head
+          Add New Distribution Center
         </Button>
         <Row>
           <Col lg={12}>
