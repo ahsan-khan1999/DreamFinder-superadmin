@@ -102,8 +102,38 @@ const SERVICE_URLS = {
 
   suspandPeriority: 'priority_lists/customer/suspend',
   suspandDoctorPeriority: 'priority_lists/doctor/suspend',
-
+  readSample: 'samples/read',
+  createSample: 'samples/create',
+  updateSample: 'samples/update',
+  suspandSample: 'samples/suspend',
+  createSampleTransaction: 'sample_transactions/create',
+  readSampleTransaction: 'sample_transactions/read',
+  suspandSampleTransaction: 'sample_transactions/suspend',
+  updateRegion:'region-classifications/suspend',
+  addregion:'region-classifications/create',
+  editRegion:'region-classifications/update'
 };
+
+const CreateSample = (data) =>
+  post(SERVICE_URLS.createSample, data, { feature: featureConstants.static });
+const UpdateSample = (data) =>
+  put(SERVICE_URLS.updateSample, data, { feature: featureConstants.static });
+const ReadSample = (data) =>
+  get(SERVICE_URLS.readSample, data, { feature: featureConstants.static });
+const SuapandSample = (data) =>
+  patch(SERVICE_URLS.suspandSample, data, { feature: featureConstants.static });
+const CreateSampleTransaction = (data) =>
+  post(SERVICE_URLS.createSampleTransaction, data, {
+    feature: featureConstants.static,
+  });
+const ReadSampleTransaction = (data) =>
+  get(SERVICE_URLS.readSampleTransaction, data, {
+    feature: featureConstants.static,
+  });
+const SuspandSampleTransaction = (data) =>
+  patch(SERVICE_URLS.suspandSampleTransaction, data, {
+    feature: featureConstants.static,
+  });
 
 const requestApproval = (data) =>
   put(SERVICE_URLS.reqApproval, data, { feature: featureConstants.static });
@@ -117,7 +147,7 @@ const CreatePeriorityList = (data) =>
   post(SERVICE_URLS.createPeriority, data, {
     feature: featureConstants.static,
   });
-  const CreateDoctorPeriorityList = (data) =>
+const CreateDoctorPeriorityList = (data) =>
   post(SERVICE_URLS.createPeriorityDoctor, data, {
     feature: featureConstants.static,
   });
@@ -125,7 +155,7 @@ const UpdatePeriorityList = (data) =>
   put(SERVICE_URLS.updatePeriority, data, {
     feature: featureConstants.static,
   });
-  const UpdateDoctorPeriorityList = (data) =>
+const UpdateDoctorPeriorityList = (data) =>
   put(SERVICE_URLS.updateDoctorPeriority, data, {
     feature: featureConstants.static,
   });
@@ -133,7 +163,7 @@ const SuspandPeriorityList = (data) =>
   patch(SERVICE_URLS.suspandPeriority, data, {
     feature: featureConstants.static,
   });
-  const SuspandDoctorPeriorityList = (data) =>
+const SuspandDoctorPeriorityList = (data) =>
   patch(SERVICE_URLS.suspandDoctorPeriority, data, {
     feature: featureConstants.static,
   });
@@ -151,7 +181,11 @@ const readRoles = () =>
 const readPeriorityList = () =>
   get(SERVICE_URLS.readPeriority, {}, { feature: featureConstants.static });
 const readPeriorityListDoctor = () =>
-  get(SERVICE_URLS.readPeriorityDoctor, {}, { feature: featureConstants.static });
+  get(
+    SERVICE_URLS.readPeriorityDoctor,
+    {},
+    { feature: featureConstants.static }
+  );
 const readDcps = () =>
   get(SERVICE_URLS.readDcp, {}, { feature: featureConstants.static });
 const readDcr = () =>
@@ -543,9 +577,25 @@ const suspandRoles = async (data) =>
   patch(SERVICE_URLS.suspandRole, data, {
     feature: featureConstants.static,
   });
+  const deleteRegion = (data) =>
+  patch(SERVICE_URLS.updateRegion, data, {
+    feature: featureConstants.static,
+  });
+  const addRegion = (data) =>
+  post(SERVICE_URLS.addregion, data, {
+    feature: featureConstants.static,
+  });
+  const EditRegion = (data) =>
+  put(SERVICE_URLS.editRegion, data, {
+    feature: featureConstants.static,
+  });
+  
 // post g
 const apiServices = {
   // define variables
+  EditRegion,
+  addRegion,
+  deleteRegion,
   getAllSlots,
   login,
   getStaticData,
@@ -642,6 +692,13 @@ const apiServices = {
   CreateDoctorPeriorityList,
   readPeriorityListDoctor,
   UpdateDoctorPeriorityList,
-  SuspandDoctorPeriorityList
+  SuspandDoctorPeriorityList,
+  CreateSample,
+  UpdateSample,
+  ReadSample,
+  SuapandSample,
+  CreateSampleTransaction,
+  ReadSampleTransaction,
+  SuspandSampleTransaction
 };
 export default apiServices;

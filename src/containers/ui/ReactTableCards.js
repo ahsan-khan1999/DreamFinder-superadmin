@@ -1597,3 +1597,142 @@ export const ViewDoctorPeriorityTabel = (props) => {
     </div>
   );
 };
+
+
+export const SampleTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'assigned_to.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'assigned_to.field_staff.manager.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[2],
+        accessor: 'assigned_to.designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'assigned_to.phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+    
+    
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+   
+      {
+        Header: header[5],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+export const SampleTransactionTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'sample.assigned_to.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'sample.assigned_to.field_staff.manager.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[2],
+        accessor: 'sample.assigned_to.designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[3],
+        accessor: 'sample.assigned_to.phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+    
+    
+      {
+        Header: header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' ? 'green' : 'red',
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+   
+      {
+        Header: header[5],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};

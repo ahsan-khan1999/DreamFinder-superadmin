@@ -23,6 +23,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import {
   CreateRegionAction,
   ReadRegionAction,
+  UpdateRegionClassificationActionTest,
   // UpdateRegionClassificationAction,
 } from '../../../Store/Actions/RegionClassification/regionClassificationAction';
 import apiServices from 'services/requestHandler';
@@ -62,7 +63,7 @@ const AddRegionModal = (props) => {
       let apiData = {
         name: name,
         category: 'area',
-        parent_id: id,
+        parent_uid: id,
       };
       let res = await dispatch(CreateRegionAction(apiData));
       if (res) {
@@ -78,7 +79,7 @@ const AddRegionModal = (props) => {
       let apiData = {
         name: name,
         category: 'thana',
-        parent_id: id,
+        parent_uid: id,
       };
       let res = await dispatch(CreateRegionAction(apiData));
       if (res) {
@@ -94,7 +95,7 @@ const AddRegionModal = (props) => {
       let apiData = {
         name: name,
         category: 'territory',
-        parent_id: id,
+        parent_uid: id,
       };
       let res = await dispatch(CreateRegionAction(apiData));
       if (res) {
@@ -110,7 +111,7 @@ const AddRegionModal = (props) => {
       let apiData = {
         name: name,
         category: 'market',
-        parent_id: id,
+        parent_uid: id,
       };
       let res = await dispatch(CreateRegionAction(apiData));
       if (res) {
@@ -133,10 +134,10 @@ const AddRegionModal = (props) => {
       // console.log(name);
       let apiData = {
         name: name,
-        category: 'region',
-        region_id: id,
+        // category: 'region',
+        uid: id,
       };
-      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      let res = await dispatch(UpdateRegionClassificationActionTest(apiData));
       if (res) {
         NotificationManager.success(
           'Successfully Updated',
@@ -152,10 +153,10 @@ const AddRegionModal = (props) => {
       // console.log(name);
       let apiData = {
         name: name,
-        category: 'area',
-        region_id: id,
+        // category: 'area',
+        uid: id,
       };
-      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      let res = await dispatch(UpdateRegionClassificationActionTest(apiData));
       if (res) {
         NotificationManager.success(
           'Successfully Updated',
@@ -171,10 +172,10 @@ const AddRegionModal = (props) => {
       // console.log(name);
       let apiData = {
         name: name,
-        category: 'thana',
-        region_id: id,
+        // category: 'thana',
+        uid: id,
       };
-      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      let res = await dispatch(UpdateRegionClassificationActionTest(apiData));
       if (res) {
         NotificationManager.success(
           'Successfully Updated',
@@ -190,10 +191,10 @@ const AddRegionModal = (props) => {
       // console.log(name);
       let apiData = {
         name: name,
-        category: 'territory',
-        region_id: id,
+        // category: 'territory',
+        uid: id,
       };
-      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      let res = await dispatch(UpdateRegionClassificationActionTest(apiData));
       if (res) {
         NotificationManager.success(
           'Successfully Updated',
@@ -206,10 +207,10 @@ const AddRegionModal = (props) => {
     } else if (cat === 'market') {
       let apiData = {
         name: name,
-        category: 'market',
-        region_id: id,
+        // category: 'market',
+        uid: id,
       };
-      let res = await dispatch(UpdateRegionClassificationAction(apiData));
+      let res = await dispatch(UpdateRegionClassificationActionTest(apiData));
       if (res) {
         NotificationManager.success(
           'Successfully Updated',

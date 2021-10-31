@@ -74,6 +74,7 @@ import { TargetReducer } from 'Store/Reducers/Target/TargetReducer';
 import { DcpReducer } from 'Store/Reducers/FieldWorkManagmentReducer/FieldWorkManagmentReducer';
 import { AttendanceReducer } from 'Store/Reducers/AttendanceReducer/AttendanceReducer';
 import { ViewPeriorityRedcuer } from 'Store/Reducers/PeriorityListReducer/PeriorityListReducer';
+import {SampleReducer} from 'Store/Reducers/SampleReducer/SampleReducer'
 import { combineReducers } from 'redux';
 import settings from './settings/reducer';
 import menu from './menu/reducer';
@@ -135,6 +136,7 @@ const reducers = combineReducers({
   DcpReducer,
   AttendanceReducer,
   ViewPeriorityRedcuer,
+  SampleReducer
   // DepartmentReducer,
 });
 

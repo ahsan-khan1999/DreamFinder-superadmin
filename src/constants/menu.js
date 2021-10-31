@@ -487,6 +487,26 @@ const data = [
     // ],
   },
   {
+    id: 'Sample',
+    icon: 'simple-icon-target',
+    label: 'Sample',
+    to: `${adminRoot}/Sample/`,
+    subs: [
+      {
+        icon: 'simple-icon-check',
+
+        label: 'View Sample',
+        to: `${adminRoot}/Sample/ViewSample`,
+      },
+      {
+        icon: 'simple-icon-check',
+
+        label: 'View Sample Transaction',
+        to: `${adminRoot}/Sample/ViewSampleTransaction`,
+      },
+    ],
+  },
+  {
     id: 'Field Work',
     icon: 'iconsminds-shopping-cart',
     label: 'Field Work',

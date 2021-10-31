@@ -114,7 +114,7 @@ export default function EditPeriorityList(props) {
       <CardBody>
         <Button onClick={handleBack}>Back</Button>
         <CardTitle>
-          <IntlMessages id="Create Customer Periority List" />
+          <IntlMessages id="View Customer Periority List" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -151,6 +151,63 @@ export default function EditPeriorityList(props) {
                       />
                     </>
                   )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Customer Email Addres</Label>
+                  
+                  <span>
+                    <p>{currentList?.customer?.email_address}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Customer Phone Number</Label>
+                  <span>
+                    <p>{currentList?.customer?.phone_number}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Customer Market Street Address</Label>
+                  <span>
+                    <p>{currentList?.customer?.market__street_address}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Customer Market Name</Label>
+                  <span>
+                    <p>{currentList?.customer?.market?.name}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Customer Client Type</Label>
+                  <span>
+                    <p>{currentList?.customer?.client_type}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Customer Status</Label>
+                  <span style={{color:currentList?.status?.name === 'active' ? 'green' : 'red'}}>
+                    <p>{currentList?.customer?.status?.name?.toUpperCase()}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Customer Periority List Status</Label>
+                  <span style={{color:currentList?.status?.name === 'active' ? 'green' : 'red'}}>
+                    <p>{currentList?.status?.name?.toUpperCase()}</p>
+                  </span>
                 </FormGroup>
               </Col>
             </Row>

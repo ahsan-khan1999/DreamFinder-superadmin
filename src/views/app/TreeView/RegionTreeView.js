@@ -13,7 +13,7 @@ import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import AddRegionModal from './AddRegionModal';
 import apiServices from 'services/requestHandler';
 import {
-  ReadRegionAction,
+  ReadRegionAction, UpdateRegionClassificationAction,
   // UpdateRegionClassificationAction,
 } from 'Store/Actions/RegionClassification/regionClassificationAction';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,11 +54,23 @@ export default function RegionTreeView({ history }) {
 
   const regions = useSelector((state) => state?.CreateRegionReducer?.region);
   const loading = useSelector((state) => state?.CreateRegionReducer?.loading);
-  console.log(regions);
-  let [data, setData] = useState(regions);
+  // console.log(regions, 'tree view');
+  console.log(regions,"data");
+  // const [newData, setnewData] = useState([]);
+  let newdata = [];
+  const [data, setData] = useState(regions);
   useEffect(() => {
     readRegionClassification();
   }, []);
+
+  // let myData =Object.values(regions)
+  // console.log(myData,"mydata");
+
+  // useEffect(() => {
+  //   newdata = {...regions};
+  // }, [newdata]);
+  // console.log(newdata, 'new data');
+
   useEffect(() => {
     setData(regions);
   }, [regions]);
@@ -107,9 +119,9 @@ export default function RegionTreeView({ history }) {
   const deleteRegion = async (id, category, action) => {
     // console.log(action, 'at delete func');
     let apiData = {
-      region_id: id,
-      status: { id: 2, name: 'inactive' },
-      category: category,
+      uid: id,
+      // status: { id: 2, name: 'inactive' },
+      // category: category,
     };
     let res = await dispatch(UpdateRegionClassificationAction(apiData));
     if (res) {
@@ -141,7 +153,6 @@ export default function RegionTreeView({ history }) {
       .toLowerCase()
       .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
   }
-
 
   const submit = (id, category, action) => {
     confirmAlert({
@@ -308,7 +319,11 @@ export default function RegionTreeView({ history }) {
           </Row>
           {/* <Box sx={{ height: 'auto', flexGrow: 1, overflowY: 'auto' }}> */}
           <Box sx={{ mb: 1 }}>
-            <Button onClick={addRegion} variant="outlined" className="text-capitalize">
+            <Button
+              onClick={addRegion}
+              variant="outlined"
+              className="text-capitalize"
+            >
               Add Region
             </Button>
           </Box>
@@ -332,8 +347,11 @@ export default function RegionTreeView({ history }) {
           ) : (
             <SortableTree
               treeData={data}
-              getNodeKey={({ node }) => node.id}
-              onChange={(treeData) => setData(treeData)}
+              getNodeKey={({ node }) => node.uid}
+              onChange={(treeData) => {
+                console.log(treeData,"onChgange");
+                setData(treeData)
+              }}
               isVirtualized={false}
               // getNodeAtPath
 

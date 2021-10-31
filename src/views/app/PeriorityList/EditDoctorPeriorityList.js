@@ -155,6 +155,63 @@ export default function EditDoctorPeriorityList(props) {
                   )}
                 </FormGroup>
               </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Doctor Category</Label>
+                  
+                  <span>
+                    <p>{currentList?.doctor?.doctor_category?.name}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Doctor Phone Number</Label>
+                  <span>
+                    <p>{currentList?.doctor?.phone_number}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Doctor Organization</Label>
+                  <span>
+                    <p>{currentList?.doctor?.organization}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Doctor Market Name</Label>
+                  <span>
+                    <p>{currentList?.doctor?.market?.name}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Doctor Designation</Label>
+                  <span>
+                    <p>{currentList?.doctor?.designation}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Doctor Status</Label>
+                  <span style={{color:currentList?.doctor?.status?.name === 'active' ? 'green' : 'red'}}>
+                    <p>{currentList?.doctor?.status?.name?.toUpperCase()}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Doctor Periority List Status</Label>
+                  <span style={{color:currentList?.status?.name === 'active' ? 'green' : 'red'}}>
+                    <p>{currentList?.status?.name?.toUpperCase()}</p>
+                  </span>
+                </FormGroup>
+              </Col>
             </Row>
             {view ? (
               <Button onClick={editPeriority}>Edit Profile</Button>

@@ -59,18 +59,18 @@ export default function CreateTarget(props) {
   const sm = useSelector((state) => state?.AttendanceReducer?.sm);
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
   const am = useSelector((state) => state?.AttendanceReducer?.am);
-  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);  
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetDistributionCenter());
 
     dispatch(ViewDirectorAction());
-    dispatch(OrderRead());
-    dispatch(ViewAreaManagerAction());
-    dispatch(ViewSalesManagerManagerAction());
-    dispatch(ViewRegionalSalesManagerManagerAction());
-    dispatch(ViewMPOManagerAction());
+    // dispatch(OrderRead());
+    // dispatch(ViewAreaManagerAction());
+    // dispatch(ViewSalesManagerManagerAction());
+    // dispatch(ViewRegionalSalesManagerManagerAction());
+    // dispatch(ViewMPOManagerAction());
   }, []);
 
   const director = useSelector((state) => state?.ViewUserReducer?.director);
@@ -154,8 +154,8 @@ export default function CreateTarget(props) {
   stocks?.map((item) =>
     medicineOptionFromStock?.push({
       label: item?.product?.name,
-      value: item?.product?.name,
-      key: item?.product?.uid,
+      value: item?.uid,
+      key: item?.quantity,
     })
   );
 
@@ -397,10 +397,13 @@ export default function CreateTarget(props) {
 
   };
   // console.log(targets[0]?.by_customer_visits?.by_customer_visits);
-
+  const handleBack = () => {
+    props.history.push('/app/Target/ViewTarget')
+  }
   return (
     <Card>
       <CardBody>
+        <Button onClick={handleBack}>Back</Button>
         <CardTitle>
           <IntlMessages id="Create Target" />
         </CardTitle>
@@ -461,7 +464,6 @@ export default function CreateTarget(props) {
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'sm'));
 
-                          await getDirectorTarget(val?.key);
                         }}
                         options={directorOption}
                       />
@@ -481,6 +483,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           setTarget({ ...target, assigned_to_uid: val?.key });
+                          await getDirectorTarget(val?.key);
 
                           //   setTimeout(async() => {
                           //     await console.log(targets[0]?.start_date);
@@ -525,7 +528,7 @@ export default function CreateTarget(props) {
                         type="number"
                         // value={targets[0]?.by_customer_visits?.by_customer_visits}
                         // min=[0]
-                        max={targets[0]?.by_customer_visits?.by_customer_visits}
+                        // max={targets[0]?.by_customer_visits?.by_customer_visits}
                         onChange={(e) => {
                           let va = 0;
                           if (e.target?.value <= Number(e.target.max)) {
@@ -804,7 +807,6 @@ export default function CreateTarget(props) {
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'rsm'));
 
-                          await getDirectorTarget(val?.key);
 
                           //   setTimeout(async() => {
                           //     await console.log(targets[0]?.start_date);
@@ -829,6 +831,8 @@ export default function CreateTarget(props) {
                         onChange={async (val) => {
                           setTarget({ ...target, assigned_to_uid: val?.key });
                           // await getDirectorTarget(val?.key);
+                          await getDirectorTarget(val?.key);
+
                         }}
                         options={regionalSalesManagerOption}
                       />
@@ -1020,7 +1024,6 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'am'));
-                          await getDirectorTarget(val?.key);
 
                           // await getDirectorTarget(val?.key);
                         }}
@@ -1043,6 +1046,8 @@ export default function CreateTarget(props) {
                         onChange={async (val) => {
                           setTarget({ ...target, assigned_to_uid: val?.key });
                           // await getDirectorTarget(val?.key);
+                          await getDirectorTarget(val?.key);
+
                         }}
                         options={areaManagerOption}
                       />
@@ -1097,12 +1102,12 @@ export default function CreateTarget(props) {
                         onChange={(val, index) => {
                           handleChangeProduct(val, index);
 
-                          setTarget({
-                            ...target,
-                            start_date: moment
-                              .unix(targets[0]?.start_date)
-                              .format('YYYY-MM-DD h:mm:ss'),
-                          });
+                          // setTarget({
+                          //   ...target,
+                          //   start_date: moment
+                          //     .unix(targets[0]?.start_date)
+                          //     .format('YYYY-MM-DD h:mm:ss'),
+                          // });
                         }}
                         options={medicineOption}
                       />

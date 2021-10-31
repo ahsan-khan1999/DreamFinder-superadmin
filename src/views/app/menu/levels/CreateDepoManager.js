@@ -53,7 +53,7 @@ export default function CreateDepoManager({history}) {
 
     gender: '',
     designation: '',
-
+    is_primary:true,
     phone_number: '',
     
     role_uid: '',

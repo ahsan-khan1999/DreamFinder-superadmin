@@ -75,10 +75,14 @@ const EditAttendance = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Attendance/EditAttendance')
 );
 const ViewSchedule = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/ViewSchedule')
+  import(
+    /* webpackChunkName: "dashboards" */ './FieldWorkManagment/ViewSchedule'
+  )
 );
 const EditSchedule = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditSchedule')
+  import(
+    /* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditSchedule'
+  )
 );
 
 const EditDcp = React.lazy(() =>
@@ -86,25 +90,37 @@ const EditDcp = React.lazy(() =>
 );
 
 const ViewPeriority = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './PeriorityList/ViewPeriorityList')
+  import(
+    /* webpackChunkName: "dashboards" */ './PeriorityList/ViewPeriorityList'
+  )
 );
 const ViewPeriorityListDoctor = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './PeriorityList/ViewPeriorityListDoctor')
+  import(
+    /* webpackChunkName: "dashboards" */ './PeriorityList/ViewPeriorityListDoctor'
+  )
 );
 const CreatePeriority = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './PeriorityList/CreatePeriorityList')
+  import(
+    /* webpackChunkName: "dashboards" */ './PeriorityList/CreatePeriorityList'
+  )
 );
 const CreateDoctorPeriority = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './PeriorityList/CreateDoctorPeriority')
+  import(
+    /* webpackChunkName: "dashboards" */ './PeriorityList/CreateDoctorPeriority'
+  )
 );
 const EditPeriority = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './PeriorityList/EditPeriorityList')
+  import(
+    /* webpackChunkName: "dashboards" */ './PeriorityList/EditPeriorityList'
+  )
 );
 const EditDoctorPeriority = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './PeriorityList/EditDoctorPeriorityList')
+  import(
+    /* webpackChunkName: "dashboards" */ './PeriorityList/EditDoctorPeriorityList'
+  )
 );
 const EditDcr = React.lazy(() =>
-import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditDcr')
+  import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditDcr')
 );
 const ViewCurrentPayment = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Payment/viewCurrentPayment')
@@ -122,6 +138,31 @@ const ViewCurrentOrder = React.lazy(() =>
     /* webpackChunkName: "components-badges" */ './Orders/viewCurrentOrder'
   )
 );
+const ViewSample = React.lazy(() =>
+  import(/* webpackChunkName: "components-badges" */ './Sample/ViewSample')
+);
+const CreateSample = React.lazy(() =>
+  import(/* webpackChunkName: "components-badges" */ './Sample/CreateSample')
+);
+const EditSample = React.lazy(() =>
+  import(/* webpackChunkName: "components-badges" */ './Sample/UpdateSample')
+);
+const ViewSampleTranscation = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Sample/ViewSampleTransaction'
+  )
+);
+const CreateSampleTranscation = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Sample/CreateSampleTransaction'
+  )
+);
+const EditSampleTranscation = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Sample/EditSampleTransaction'
+  )
+);
+
 const Applications = React.lazy(() =>
   import(/* webpackChunkName: "applications" */ './applications')
 );
@@ -150,7 +191,35 @@ const App = ({ match }) => {
               path={`${match.url}/applications`}
               render={(props) => <Applications {...props} />}
             />
-
+            <Route
+              path={`${match.url}/Sample/ViewSample`}
+              render={(props) => <ViewSample {...props} />}
+            />
+            <Route
+              path={`${match.url}/Sample/ViewSample`}
+              render={(props) => <ViewSample {...props} />}
+            />
+            <Route
+              path={`${match.url}/Sample/CreateSample`}
+              render={(props) => <CreateSample {...props} />}
+            />
+            <Route
+              path={`${match.url}/Sample/UpdateSample`}
+              render={(props) => <EditSample {...props} />}
+            />
+            <Route
+              path={`${match.url}/Sample/ViewSampleTransaction`}
+              render={(props) => <ViewSampleTranscation {...props} />}
+            />
+            <Route
+              path={`${match.url}/Sample/CreateSampleTransaction`}
+              render={(props) => <CreateSampleTranscation {...props} />}
+            />
+            <Route
+              path={`${match.url}/Sample/EditSampleTransaction`}
+              render={(props) => <EditSampleTranscation {...props} />}
+            />
+            ViewTarget
             <Route
               path={`${match.url}/Target/ViewTarget`}
               render={(props) => <ViewTarget {...props} />}
@@ -163,12 +232,10 @@ const App = ({ match }) => {
               path={`${match.url}/Target/EditTarget`}
               render={(props) => <EditTarget {...props} />}
             />
-
             <Route
               path={`${match.url}/Orders/viewCurrentOrder`}
               render={(props) => <ViewCurrentOrder {...props} />}
             />
-
             <Route
               path={`${match.url}/Reports/viewReports`}
               render={(props) => <ViewReport {...props} />}
@@ -225,7 +292,7 @@ const App = ({ match }) => {
               path={`${match.url}/FieldWorkManagment/ViewDcp`}
               render={(props) => <ViewDcp {...props} />}
             />
-             <Route
+            <Route
               path={`${match.url}/FieldWorkManagment/ViewDcr`}
               render={(props) => <ViewDcr {...props} />}
             />
@@ -241,17 +308,14 @@ const App = ({ match }) => {
               path={`${match.url}/FieldWorkManagment/ViewSchedule`}
               render={(props) => <ViewSchedule {...props} />}
             />
-            
             <Route
               path={`${match.url}/FieldWorkManagment/EditSchedule`}
               render={(props) => <EditSchedule {...props} />}
             />
-            
             <Route
               path={`${match.url}/orders`}
               render={(props) => <Orders {...props} />}
             />
-
             <Route
               path={`${match.url}/Test/viewTest`}
               render={(props) => <Test {...props} />}
@@ -264,7 +328,7 @@ const App = ({ match }) => {
               path={`${match.url}/Attendance/CreateAttendance`}
               render={(props) => <CreateAttendance {...props} />}
             />
-             <Route
+            <Route
               path={`${match.url}/Attendance/EditAttendance`}
               render={(props) => <EditAttendance {...props} />}
             />
@@ -272,7 +336,6 @@ const App = ({ match }) => {
               path={`${match.url}/Medicines/viewMedicines`}
               render={(props) => <ViewMedicines {...props} />}
             />
-
             <Route
               path={`${match.url}/Test/viewCategory`}
               render={(props) => <Category {...props} />}
@@ -281,7 +344,6 @@ const App = ({ match }) => {
               path={`${match.url}/Medicines/CreateMedicines`}
               render={(props) => <CreateMedicines {...props} />}
             />
-
             <Route
               path={`${match.url}/Test/CreateCategory`}
               render={(props) => <CreateCategory {...props} />}
