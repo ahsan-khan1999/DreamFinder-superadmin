@@ -79,7 +79,7 @@ const SERVICE_URLS = {
   suspanddistributionCentres: 'distribution_centres/suspend',
   regiondistributionCentres: 'region-classifications/read/region',
   // areadistributionCentres:'region-classifications/read/area',
-  getDepoManager: 'users/read/depot_manager',
+  getDepoManager: 'users/read/depot_manager?assigned_to_dc=0',
 
   //Concord Products Categorys
   getproductcategory: 'product-categorys/read',
