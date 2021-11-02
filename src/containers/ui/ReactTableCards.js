@@ -1516,27 +1516,10 @@ export const DoctorTable = (props) => {
         ),
       },
 
+     
+
       {
         Header: props?.header[8],
-        accessor: 'special_day.birthday',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => (
-          <span
-            style={{
-             
-              fontSize: '0.9rem',
-            }}
-          >
-            {props?.value?.toUpperCase()}
-          </span>
-        ),
-      },
-
-
-      
-
-      {
-        Header: props?.header[9],
         accessor: 'status.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
@@ -1556,7 +1539,7 @@ export const DoctorTable = (props) => {
 
       {
         Header: (
-          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[10]}</span>
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[9]}</span>
         ),
         accessor: 'title6',
         cellClass: 'text-muted w-10',

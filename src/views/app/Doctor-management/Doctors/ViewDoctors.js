@@ -80,7 +80,6 @@ export default function ViewDoctors({ match, history }) {
     'Speciality',
     'Station Type',
     'Phone',
-    'Special Day',
     'Status',
     'Actions',
   ];

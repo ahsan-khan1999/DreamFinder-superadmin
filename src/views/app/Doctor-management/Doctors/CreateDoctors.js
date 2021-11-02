@@ -5,10 +5,11 @@ import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
 import Select from 'react-select';
 import CustomSelectInput from 'components/common/CustomSelectInput';
+import { AvForm, AvField, AvGroup } from 'availity-reactstrap-validation';
 
 import { useState } from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
-import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
+import { Card, CardTitle, Label, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
@@ -17,43 +18,28 @@ import {
   GetMarketsData,
 } from 'Store/Actions/ConcordDoctor/DoctorAction';
 import { GetDoctorCategory } from 'Store/Actions/ConcordDoctorCategorys/DoctorCategorysAction';
-import * as Yup from 'yup';
-import moment from 'moment';
 import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
 
-const DoctorSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Please enter your name'),
-  designation: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Please provide your designation'),
-  degree: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Please provide your degree'),
-  organization: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Please provide your Organization Name'),
-  speciality: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Please provide your Speciality'),
-  station_type: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Please provide your Station Type'),
-  phone_number: Yup.number()
-    .typeError("That doesn't look like a phone number")
-    .positive("A phone number can't start with a minus")
-    .integer("A phone number can't include a decimal point")
-    .required('A phone number is required'),
-});
-
 export default function CreateDoctors({ history }) {
+  
+  
+    const onSubmit = (event, errors, values) => {
+      console.log(errors);
+      console.log(values);
+      if (errors.length === 0) {
+        onDoctorCreate();
+      }
+      else{
+      NotificationManager.error(
+        'Please Enter Required Field',
+        'Error',
+        3000,
+        null,
+        ''
+      );  
+      }
+    };
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -250,47 +236,68 @@ export default function CreateDoctors({ history }) {
 
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
-          <Form className="av-tooltip tooltip-label-right">
+        <AvForm
+          className="av-tooltip tooltip-label-right"
+          onSubmit={(event, errors, values) => onSubmit(event, errors, values)}
+        >
             <Row className="h-100">
               {/* Name */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>Name</Label>
 
-                  <Input
+                  <AvField
                     required
-                    // value={doctorCreate.name}
                     className="form-control"
                     name="name"
                     type="text"
-                    // validate={validateEmail}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Please enter your name',
+                      },
+                      pattern: {
+                        value: '^[A-Za-z]+$',
+                        errorMessage: 'Your name must be composed only with letters',
+                      },
+                      minLength: {
+                        value: 2,
+                        errorMessage: 'To Short',
+                      },
+                      maxLength: {
+                        value: 25,
+                        errorMessage: 'To Long',
+                      },
+                    }}
                     onChange={(e) =>
                       setDoctorCreate({ ...doctorCreate, name: e.target.value })
                     }
                   />
-                  {/* {errors.name && touched.name ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.name}
-                    </div>
-                  ) : null} */}
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Phone */}
 
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Phone" />
                   </Label>
 
-                  <Input
-                    // value={doctorCreate?.phone}
+                  <AvField
                     className="form-control"
                     type="text"
+                    validate={{
+                      number: {
+                        value: true,
+                        errorMessage: 'Value must be a number',
+                      },
+                      required: {
+                        value: true,
+                        errorMessage: 'Please enter a number',
+                      },
+                    }}
                     name="phone_number"
-                    // validate={validateEmail}
-                    // onChange={(e) => setNumber()}
                     onChange={(e) =>
                       setDoctorCreate({
                         ...doctorCreate,
@@ -298,25 +305,36 @@ export default function CreateDoctors({ history }) {
                       })
                     }
                   />
-                  {/* {errors.phone_number && touched.phone_number ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.phone_number}
-                    </div>
-                  ) : null} */}
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Degree */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>Degree</Label>
 
-                  <Input
-                    // value={doctorCreate.name}
+                  <AvField
                     className="form-control"
                     name="degree"
                     type="text"
-                    // validate={validateEmail}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Please enter your Degree',
+                      },
+                      pattern: {
+                        value: '^[A-Za-z]+$',
+                        errorMessage: 'Your degree must be composed only with letters',
+                      },
+                      minLength: {
+                        value: 2,
+                        errorMessage: 'To Short',
+                      },
+                      maxLength: {
+                        value: 25,
+                        errorMessage: 'To Long',
+                      },
+                    }}
                     onChange={(e) =>
                       setDoctorCreate({
                         ...doctorCreate,
@@ -324,25 +342,38 @@ export default function CreateDoctors({ history }) {
                       })
                     }
                   />
-                  {/* {errors.degree && touched.degree ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.degree}
-                    </div>
-                  ) : null} */}
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Designation */}
               <Col lg={6}>
-                <FormGroup className="error-l-75">
+                <AvGroup className="error-t-negative" className="error-l-75">
                   <Label>Designation</Label>
 
-                  <Input
-                    // value={doctorCreate.name}
+                  <AvField
                     className="form-control"
                     name="designation"
                     type="text"
-                    // validate={validateEmail}
+
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Please enter your Designation',
+                      },
+                      pattern: {
+                        value: '^[A-Za-z]+$',
+                        errorMessage: 'Your designation must be composed only with letters',
+                      },
+                      minLength: {
+                        value: 2,
+                        errorMessage: 'To Short',
+                      },
+                      maxLength: {
+                        value: 25,
+                        errorMessage: 'To Long',
+                      },
+                    }}
+
                     onChange={(e) =>
                       setDoctorCreate({
                         ...doctorCreate,
@@ -350,25 +381,33 @@ export default function CreateDoctors({ history }) {
                       })
                     }
                   />
-                  {/* {errors.designation && touched.designation ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.designation}
-                    </div>
-                  ) : null} */}
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Organization */}
               <Col lg={6}>
-                <FormGroup className="error-l-100">
+                <AvGroup className="error-t-negative" className="error-l-100">
                   <Label>Organization</Label>
 
-                  <Input
-                    // value={doctorCreate.name}
+                  <AvField
                     className="form-control"
                     name="organization"
+
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Please enter your Organization',
+                      },
+                      minLength: {
+                        value: 2,
+                        errorMessage: 'To Short',
+                      },
+                      maxLength: {
+                        value: 25,
+                        errorMessage: 'To Long',
+                      },
+                    }}
                     type="text"
-                    // validate={validateEmail}
                     onChange={(e) =>
                       setDoctorCreate({
                         ...doctorCreate,
@@ -376,25 +415,44 @@ export default function CreateDoctors({ history }) {
                       })
                     }
                   />
-                  {/* {errors.organization && touched.organization ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.organization}
-                    </div>
-                  ) : null} */}
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Speciality */}
               <Col lg={6}>
-                <FormGroup className="error-l-75">
+                <AvGroup className="error-t-negative" className="error-l-75">
                   <Label>Speciality</Label>
 
-                  <Input
-                    // value={doctorCreate.name}
+                  <AvField
                     className="form-control"
                     name="speciality"
                     type="text"
-                    // validate={validateEmail}
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Please enter your Speciality',
+                      },
+                      minLength: {
+                        value: 2,
+                        errorMessage: 'To Short',
+                      },
+                      pattern: {
+                        value: '^[A-Za-z]+$',
+                        errorMessage: 'Your designation must be composed only with letters',
+                      },
+                      maxLength: {
+                        value: 25,
+                        errorMessage: 'To Long',
+                      },
+                    }}
+                    type="text"
+                    onChange={(e) =>
+                      setDoctorCreate({
+                        ...doctorCreate,
+                        organization: e.target.value,
+                      })
+                    }
+
                     onChange={(e) =>
                       setDoctorCreate({
                         ...doctorCreate,
@@ -402,17 +460,13 @@ export default function CreateDoctors({ history }) {
                       })
                     }
                   />
-                  {/* {errors.speciality && touched.speciality ? (
-                    <div className="invalid-feedback d-block">
-                      {errors.speciality}
-                    </div>
-                  ) : null} */}
-                </FormGroup>
+
+                </AvGroup>
               </Col>
 
               {/* Doctors Category */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Select Doctors Category" />
                   </Label>
@@ -433,12 +487,12 @@ export default function CreateDoctors({ history }) {
                       options={optiongetdoc_category}
                     />
                   </>
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Select Region */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Select Regions" />
                   </Label>
@@ -456,11 +510,11 @@ export default function CreateDoctors({ history }) {
                       options={optionregion}
                     />
                   </>
-                </FormGroup>
+                </AvGroup>
               </Col>
               {/* Select Areas */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Select Areas" />
                   </Label>
@@ -478,11 +532,11 @@ export default function CreateDoctors({ history }) {
                       options={optionarea}
                     />
                   </>
-                </FormGroup>
+                </AvGroup>
               </Col>
               {/* Select Thanas */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Select Thana" />
                   </Label>
@@ -500,12 +554,12 @@ export default function CreateDoctors({ history }) {
                       options={optionthana}
                     />
                   </>
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Select Territory */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Select Territory" />
                   </Label>
@@ -523,12 +577,12 @@ export default function CreateDoctors({ history }) {
                       options={optionterritory}
                     />
                   </>
-                </FormGroup>
+                </AvGroup>
               </Col>
 
               {/* Select Market */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Select Market" />
                   </Label>
@@ -549,59 +603,14 @@ export default function CreateDoctors({ history }) {
                       options={optionmarket}
                     />
                   </>
-                </FormGroup>
+                </AvGroup>
               </Col>
 
-              {/* Select Special Day */}
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Special Day" />
-                  </Label>
 
-                  <>
-                    <Input
-                      // value={doctorCreate.name}
-                      className="form-control"
-                      name="specialday"
-                      type="text"
-                      // validate={validateEmail}
-                      onChange={(e) => {
-                        setSpecialday(e.target.value);
-                      }}
-                    />
-                  </>
-                </FormGroup>
-              </Col>
-
-              <Col lg={10}>
-                <FormGroup>
-                  <Input
-                    required
-                    className="form-control"
-                    name="date-dd"
-                    type="date"
-                    onChange={(e) => setSpecialdate(e.target.value)}
-                  />
-                </FormGroup>
-              </Col>
-              <Col lg={2}>
-                <FormGroup>
-                  <Button
-                    className="btn btn-primary"
-                    size="sm"
-                    onClick={() => {
-                      handlespecialdaydate(specialday, specialdate);
-                    }}
-                  >
-                    Add SpecialDay
-                  </Button>
-                </FormGroup>
-              </Col>
 
               {/* Station TYPE */}
               <Col lg={6}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <Label>
                     <IntlMessages id="Select Station Type" />
                   </Label>
@@ -622,19 +631,72 @@ export default function CreateDoctors({ history }) {
                       options={option_static_stationtype}
                     />
                   </>
-                </FormGroup>
+                </AvGroup>
               </Col>
+
+              {/* Select Special Day */}
+              <Col lg={6}>
+                <AvGroup className="error-t-negative">
+                  <Label>
+                    <IntlMessages id="Select Special Day" />
+                  </Label>
+
+                  <>
+                    <AvField
+                      // value={doctorCreate.name}
+                      className="form-control"
+                      name="specialday"
+                      type="text"
+                      // validate={validateEmail}
+                      onChange={(e) => {
+                        setSpecialday(e.target.value);
+                      }}
+                    />
+                  </>
+                </AvGroup>
+              </Col>
+
+
+              <Col lg={10}>
+                <AvGroup className="error-t-negative">
+                <Label>
+                    <IntlMessages id="Select Special Day Date" />
+                  </Label>
+                  <AvField
+                    required
+                    className="form-control"
+                    name="date-dd"
+                    type="date"
+                    onChange={(e) => setSpecialdate(e.target.value)}
+                  />
+                </AvGroup>
+              </Col>
+              <Col lg={2}>
+                <AvGroup className="error-t-negative" className="my-4">
+             
+                  <Button
+                    className="btn btn-primary"
+                    size="sm"
+                    onClick={() => {
+                      handlespecialdaydate(specialday, specialdate);
+                    }}
+                  >
+                    Add SpecialDay
+                  </Button>
+                </AvGroup>
+              </Col>
+
             </Row>
 
             <Row>
               <Col xl={12}>
-                <FormGroup>
+                <AvGroup className="error-t-negative">
                   <div className="table-form">
                     <Table>
                       <thead>
                         <tr>
                           <th>Special Day</th>
-                          <th>Select Date</th>
+                          <th>Special Date</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -662,14 +724,15 @@ export default function CreateDoctors({ history }) {
                       </tbody>
                     </Table>
                   </div>
-                </FormGroup>
+                </AvGroup>
               </Col>
             </Row>
 
             <Button
               className="btn btn-primary"
               size="sm"
-              onClick={onDoctorCreate}
+              // onClick={onSubmit}
+              // type="submit"
             >
               {loading ? (
                 <div className="d-flex justify-content-center">
@@ -680,7 +743,7 @@ export default function CreateDoctors({ history }) {
                 'Add Doctor'
               )}
             </Button>
-          </Form>
+            </AvForm>
         </Formik>
         <div style={{ marginTop: '30px' }} />
       </CardBody>

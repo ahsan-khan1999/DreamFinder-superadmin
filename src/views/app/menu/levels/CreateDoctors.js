@@ -368,7 +368,7 @@ const ThirdLevel1 = ({ match, history }) => {
                     className="form-control"
                     name="email"
                     type="email"
-                    validate={validate}
+                    // validate={validate}
                     onChange={(e) =>
                       setDoctor({ ...doctor, email_address: e.target.value })
                     }
