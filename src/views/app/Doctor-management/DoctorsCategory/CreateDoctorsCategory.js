@@ -7,49 +7,50 @@ import Select from 'react-select';
 import CustomSelectInput from 'components/common/CustomSelectInput';
 
 import { useState } from 'react';
+import { AvForm, AvField, AvGroup } from 'availity-reactstrap-validation';
 import { Formik, Form, Field, useFormik } from 'formik';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getToken } from 'Utils/auth.util';
-import BestSellers from 'containers/dashboards/BestSellers';
-import AdvancedSearch from 'containers/dashboards/AdvancedSearch';
-import { Link, NavLink } from 'react-router-dom';
-import products from 'data/products';
-import AddNewSurveyModal from 'containers/applications/AddNewSurveyModal';
-import AddNewModal from 'containers/pages/AddNewModal';
-import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
+import { CreateDoctorCategory } from 'Store/Actions/ConcordDoctorCategorys/DoctorCategorysAction';
 
 export default function CreateDoctorsCategory({ history }) {
+ 
 
-    const dispatch = useDispatch();
-
-  const dephead_obj = {
-    name: '',
-
-    designation: '',
-
-    email: '',
-
-    address: '',
-
-    phone: '',
+  const onSubmit = (event, errors, values) => {
+    console.log(errors);
+    console.log(values);
+    if (errors.length === 0) {
+      onDoctorCategoryCreate();
+    }
+    else{
+    NotificationManager.error(
+      'Please Enter Required Field',
+      'Error',
+      3000,
+      null,
+      ''
+    );  
+    }
   };
 
-  const loading = useSelector(
-    (state) => state?.departmentHeadReducer?.loader
-  );
-  const [departhead, setDeparthead] = useState(dephead_obj);
+  const dispatch = useDispatch();
 
-  const onDepartHeadCreate = async () => {
+
+ const doctorcategory_obj = {
+    name: '',
+    description: '',
+  };
+
+  const loading = useSelector((state) => state?.doctorCategoryReducer?.loader);
+  
+  const [doctorcategory, setDoctorcategory] = useState(doctorcategory_obj);
+
+  const onDoctorCategoryCreate = async () => {
     if (
-      departhead?.name === '' &&
-      departhead?.designation === '' &&
-      departhead?.email === '' &&
-      departhead?.address === '' &&
-      departhead?.phone === ''
+      doctorcategory?.name === '' &&
+      doctorcategory?.description === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -60,12 +61,12 @@ export default function CreateDoctorsCategory({ history }) {
       );
       return;
     } else {
-      console.log(departhead);
-        let res = await dispatch(CreateDepartmentHead({ ...departhead }));
+      console.log(doctorcategory);
+      let res = await dispatch(CreateDoctorCategory({ ...doctorcategory }));
 
       if (res) {
         NotificationManager.success(
-          'Department Head Added Sucessfully',
+          'Doctor Category Added Sucessfully',
           'Success',
           3000,
           null,
@@ -80,141 +81,108 @@ export default function CreateDoctorsCategory({ history }) {
     history.push('/app/doctor-management/viewDoctorsCategory');
   };
 
+
+
+
   return (
     <Card>
       <CardBody>
-      <Button
-            className="btn btn-primary mb-4 "
-            onClick={handleChangeToView}
-            style={{ marginRight: '20px'}}
-          >
-            Back
-          </Button>
+        <Button
+          className="btn btn-primary mb-4 "
+          onClick={handleChangeToView}
+          style={{ marginRight: '20px' }}
+        >
+          Back
+        </Button>
         <CardTitle>
-          <IntlMessages id="Create DoctorsCategory" />
+          <IntlMessages id="Create Doctor Category" />
         </CardTitle>
-     
+
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
-          <Form>
+          <AvForm
+          className="av-tooltip tooltip-label-right"
+          onSubmit={(event, errors, values) => onSubmit(event, errors, values)}
+          >
             <Row className="h-100">
-              <Col lg={6}>
-                <FormGroup>
+              <Col lg={12}>
+                <AvGroup>
                   <Label>
-                    <IntlMessages id="Name" />
+                    <IntlMessages id="Name"/>
                   </Label>
 
-                  <Input
+                  <AvField
                     required
-                    value={departhead.name}
                     className="form-control"
                     name="name"
+                    validate={{
+                      required: {
+                        value: true,
+                        errorMessage: 'Please enter your name',
+                      },
+                     
+                      minLength: {
+                        value: 2,
+                        errorMessage: 'To Short',
+                      },
+                      maxLength: {
+                        value: 25,
+                        errorMessage: 'To Long',
+                      },
+                    }}
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setDeparthead({ ...departhead, name: e.target.value })
+                      setDoctorcategory({ ...doctorcategory, name: e.target.value })
                     }
                   />
-                </FormGroup>
+                </AvGroup>
               </Col>
 
-              <Col lg={6}>
-                <FormGroup>
+            
+              <Col lg={12}>
+                <AvGroup>
                   <Label>
-                    <IntlMessages id="Designation" />
+                    <IntlMessages id="Description" />
                   </Label>
-
-                  <Input
-                    required
-                    value={departhead.designation}
-                    className="form-control"
-                    name="designation"
-                    type="text"
-                    onChange={(e) =>
-                      setDeparthead({
-                        ...departhead,
-                        designation: e.target.value,
-                      })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Email" />
-                  </Label>
-
-                  <Input
-                    required
-                    value={departhead.email}
-                    className="form-control"
-                    name="email"
-                    type="email"
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, email: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Address" />
-                  </Label>
-
-                  <Input
-                    required
-                    value={departhead.address}
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, address: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Phone Number" />
-                  </Label>
-
-                  <Input
-                    required
-                    value={departhead?.phone}
-                    type="text"
-                    className="radio-in"
-                    name="phone"
-                    // validate={validateEmail}
-                    // onChange={(e) => setNumber()}
-                    onChange={(e) =>
-                      setDeparthead({ ...departhead, phone: e.target.value })
-                    }
-                  />
-                </FormGroup>
+                      <AvField
+                       type="textarea"
+                       validate={{
+                        required: {
+                          value: true,
+                          errorMessage: 'Please enter descirption',
+                        },
+                        
+                        minLength: {
+                          value: 2,
+                          errorMessage: 'To Short',
+                        },
+                        
+                      }}
+                       className="form-control"
+                       name="description"
+                       onChange={(e) =>
+                        setDoctorcategory({ ...doctorcategory, description: e.target.value })
+                       }
+                      />
+                </AvGroup>
               </Col>
             </Row>
 
             <Button
               className="btn btn-primary"
               size="sm"
-              onClick={onDepartHeadCreate}
+              onClick={onDoctorCategoryCreate}
             >
               {loading ? (
                 <div className="d-flex justify-content-center">
                   <Loader height={18} width={18} type="Oval" color="#fff" />
                   &nbsp; Creating
-                </div> 
+                </div>
               ) : (
-                'Add Product'
+                'Add Doctor Category'
               )}
             </Button>
-          </Form>
+          </AvForm>
         </Formik>
         <div style={{ marginTop: '30px' }} />
       </CardBody>

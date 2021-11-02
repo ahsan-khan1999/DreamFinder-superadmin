@@ -77,7 +77,6 @@ export default function ViewCustomers({ match, history }) {
     'Email',
     'Market & Address',
     'Phone',
-    'Special Day',
     'Status',
     'Actions',
   ];

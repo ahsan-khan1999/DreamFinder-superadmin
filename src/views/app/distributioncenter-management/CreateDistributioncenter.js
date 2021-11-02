@@ -40,7 +40,7 @@ export default function CreateDistributioncenter({ history }) {
     (state) => state?.distributionCenterReducer?.distributionRegionAreas
   );
 
-  const regionareavalue = [];
+  // const regionareavalue = [];
    //==============Areas
    let distributionRegionsArea = [];
    distributionRegionAreas?.map((item) =>
@@ -50,10 +50,13 @@ export default function CreateDistributioncenter({ history }) {
        key: item?.uid,
      })
    );
- 
-  distributionRegionsArea?.map((item, index) => {
-        regionareavalue.push(item?.value);
-      }); 
+   console.log(distributionRegionsArea,"distributionRegionsArea")
+
+
+
+  // distributionRegionsArea?.map((item, index) => {
+  //       regionareavalue.push(item?.value);
+  //     }); 
      
 
   useEffect(() => {
@@ -90,7 +93,7 @@ export default function CreateDistributioncenter({ history }) {
   const distributioncenter_obj = {
     depot_managers_uid: depoarray,
 
-    areas_uid:  regionareavalue,
+    areas_uid:  array,
     
   };
   
@@ -132,16 +135,17 @@ export default function CreateDistributioncenter({ history }) {
     history.push('/app/distributioncenter-management/viewDepartmenthead');
   };
   
-  // const regionareavalue = [];
-  // const handleChangeRegion = async (e, index) => {
-  //   // console.log(e);
-  //   let options = e;
-  //   options?.map((item, index) => {
-  //     regionareavalue.push(item?.value);
-  //   }); 
-  //   await setArray(regionareavalue);
-  // };
+  const regionareavalue = [];
+  const handleChangeRegion = async (e, index) => {
+    // console.log(e);
+    let options = e;
+    options?.map((item, index) => {
+      regionareavalue.push(item?.value);
+    }); 
+    await setArray(regionareavalue);
+  };
 
+  
  
 
 
@@ -173,7 +177,9 @@ export default function CreateDistributioncenter({ history }) {
         <Formik>
           <Form>
             <Row className="h-100">
-            
+
+
+         
             <Col lg={6}>
                 <FormGroup>
                   <Label>
@@ -197,28 +203,46 @@ export default function CreateDistributioncenter({ history }) {
                 </FormGroup>
               </Col>
 
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Areas" />
-                  </Label>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      isMulti
-                      required
-                      onChange={(e, index) => {
-                        handleChangeRegion(e, index);
-                      }}
-                      options={distributionRegionsArea}
-                    />
-                  </>
-                </FormGroup>
-              </Col> */}
+                      {console.log(distributionRegionsArea,"text")}
+        {distributionRegionsArea?.length !== 0  ?
+         (  
+          <Col lg={6}>
+          <FormGroup>
+            <Label>
+              <IntlMessages id="Select Areas" />
+            </Label>
+
+            <>
+              <Select
+                required
+                components={{ Input: CustomSelectInput }}
+                className="react-select"
+                classNamePrefix="react-select"
+                isMulti
+                required
+               
+                onChange={(e, index) => {
+                  handleChangeRegion(e, index);
+                }}
+                options={distributionRegionsArea}
+              />
+            </>
+          </FormGroup>
+        </Col>
+         ):(
+           
+          <Col lg={6}>
+          <FormGroup>
+            <Label>
+              <span style={{color:'red',fontWeight:'600'}}>No Available Area For This Region All Area's Have Already Been Assigned</span>
+            </Label>
+          </FormGroup>
+        </Col>
+         )
+        } 
+
+              
 
               <Col lg={6}>
                 <FormGroup>

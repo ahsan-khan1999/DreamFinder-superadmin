@@ -25,7 +25,7 @@ export const DoctorCategoryReducer = (state = initialState, { type, payload }) =
       return { ...state, doctorcategory: payload };
 
     case DOCTOR_CATEGORY_CONSTANT.CREATE_DOCTOR_CATEGORY_LOADING:
-      return { ...state, createdoctorcategory: true }
+      return { ...state, loading: true }
 
     case DOCTOR_CATEGORY_CONSTANT.CREATE_DOCTOR_CATEGORY_SUCCESS:
       return { ...state, createdoctorcategory: payload }
@@ -35,7 +35,7 @@ export const DoctorCategoryReducer = (state = initialState, { type, payload }) =
 
 
     case DOCTOR_CATEGORY_CONSTANT.UPDATE_DOCTOR_CATEGORY_LOADING:
-      return { ...state, updatedoctorcategory: true }
+      return { ...state, loading: true }
 
     case DOCTOR_CATEGORY_CONSTANT.UPDATE_DOCTOR_CATEGORY_SUCCESS:
       return { ...state, updatedoctorcategory: payload }

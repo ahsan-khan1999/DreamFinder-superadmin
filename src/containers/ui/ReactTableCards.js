@@ -1722,21 +1722,6 @@ export const CustomersTable = (props) => {
         ),
       },
 
-      {
-        Header: props?.header[5],
-        accessor: 'special_day.birthday',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => (
-          <span
-            style={{
-             
-              fontSize: '0.9rem',
-            }}
-          >
-            {props?.value?.toUpperCase()}
-          </span>
-        ),
-      },
 
 
       

@@ -25,46 +25,38 @@ import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
 import apiServices from 'services/requestHandler';
 
 export default function ViewCurrentDoctors(props) {
-  
   const dispatch = useDispatch();
   let [buttonName, setButtonName] = useState();
-  
+
   const [thisView, setThisView] = useState(true);
-  
-  
+
   const currentDoctor = props?.location?.state;
- 
-      console.log(currentDoctor,"currentDoctor");
 
+  console.log(currentDoctor, 'currentDoctor');
 
-      useEffect(() => {
+  useEffect(() => {
+    if (currentDoctor?.status?.name === 'suspended') {
+      setButtonName('Active');
+    } else if (currentDoctor?.status?.name === 'active') {
+      setButtonName('Suspend');
+    }
+  }, []);
 
-        if (currentDoctor?.status?.name === 'suspended') {
-          setButtonName('Active');
-        } else if (currentDoctor?.status?.name === 'active') {
-          setButtonName('Suspend');
-        }
-      }, []);
-    
-    
-    
-    const onSubmit = (event, errors, values) => {
-      // console.log(errors);
-      // console.log(values);
-      if (errors.length === 0) {
-        onDoctorCreate();
-      }
-      else{
+  const onSubmit = (event, errors, values) => {
+    // console.log(errors);
+    // console.log(values);
+    if (errors.length === 0) {
+      editData();
+    } else {
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
         3000,
         null,
         ''
-      );  
-      }
-    };
-
+      );
+    }
+  };
 
   useEffect(() => {
     dispatch(GetMarketsData('', 'region'));
@@ -108,16 +100,16 @@ export default function ViewCurrentDoctors(props) {
     (state) => state?.doctorsReducer?.hierarchy_market
   );
 
-  // let SpecialDay = [];
-  // currentDoctor?.special_day?.filter((item) =>
-  // SpecialDay.push({
-  //     day: Object.keys(currentDoctor?.special_day),
-  //     date: Object.values(currentDoctor?.special_day),
-  //   })
-  // );
+    var specialDay_arr = []; 
+  for(var i = 0; i < Object.keys(currentDoctor?.special_day).length; i++) {
+    var objectspecialday = {}; 
+    objectspecialday['day'] = Object.keys(currentDoctor?.special_day)[i];
+    objectspecialday['date'] = Object.values(currentDoctor?.special_day)[i];
+    specialDay_arr.push(objectspecialday);
+    }
 
-  console.log(Object.keys(currentDoctor?.special_day),"csada")
-  console.log(Object.values(currentDoctor?.special_day),"csada")
+
+
 
   let optiongetdoc_category = [];
   doctorcategory?.filter((item) =>
@@ -177,16 +169,16 @@ export default function ViewCurrentDoctors(props) {
     organization: currentDoctor?.organization,
     speciality: currentDoctor?.speciality,
     station_type: currentDoctor?.station_type,
-    doctor_category_uid: currentDoctor?.doctor_category_uid,
-    market_uid: currentDoctor?.market_uid,
+    doctor_category_uid: currentDoctor?.doctor_category.uid,
+    market_uid: currentDoctor?.market.uid,
     special_day: currentDoctor?.special_day,
-    uid:uid,
+    uid: currentDoctor?.uid,
   };
 
   const [doctorCreate, setDoctorCreate] = useState(Doctor_obj);
   const [specialday, setSpecialday] = useState();
   const [specialdate, setSpecialdate] = useState('');
-  const [array, setArray] = useState([]);
+  let [array, setArray] = useState([]);
   const [obj, setObj] = useState();
 
 
@@ -195,17 +187,29 @@ export default function ViewCurrentDoctors(props) {
   };
 
   const handlespecialdaydate = async (day, date) => {
-    const prearray = [...array];
-    prearray.push({
-      day: day,
-      date: date,
-    });
-    setArray(prearray);
-    const object = {
-      ...obj,
-      [day]: date,
-    };
-    setObj(object);
+    if(day!== undefined && date !== ""  )
+    {
+      const prearray = [...array];
+      prearray.push({
+        day: day,
+        date: date,
+      });
+      setArray(prearray);
+      const object = {
+        ...obj,
+        [day]: date,
+      };
+      setObj(object);
+    }
+    else{
+      NotificationManager.error(
+        'Please Enter Required Special Date Fields',
+        'Error',
+        3000,
+        null,
+        ''
+      );
+    }
   };
   const apiData = {
     name: currentDoctor?.name,
@@ -218,53 +222,16 @@ export default function ViewCurrentDoctors(props) {
     doctor_category_uid: currentDoctor?.doctor_category?.uid,
     market_uid: currentDoctor?.market?.uid,
     special_day: obj,
-    uid : uid ,
+    uid: currentDoctor?.uid,
   };
-
-  // const onDoctorCreate = async () => {
-  //   if (
-  //     doctorCreate?.name === '' &&
-  //     doctorCreate?.phone_number === '' &&
-  //     doctorCreate?.degree === '' &&
-  //     doctorCreate?.designation === '' &&
-  //     doctorCreate?.organization === '' &&
-  //     doctorCreate?.speciality === '' &&
-  //     doctorCreate?.station_type === '' &&
-  //     doctorCreate?.doctor_category_uid === '' &&
-  //     doctorCreate?.market_uid === ''
-  //   ) {
-  //     NotificationManager.error(
-  //       'Please Enter Required Field',
-  //       'Error',
-  //       3000,
-  //       null,
-  //       ''
-  //     );
-  //     return;
-  //   } else {
-  //   console.log(apiData, 'doctorCreate');
-  //   let res = await dispatch(CreateDoctorsRecord( {...apiData} ));
-
-  //   if (res) {
-  //     NotificationManager.success(
-  //       'Doctor Added Sucessfully',
-  //       'Success',
-  //       3000,
-  //       null,
-  //       ''
-  //     );
-  //     history.push('/app/doctor-management/viewDoctors');
-  //   }
-  //   }
-  // };
 
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(!thisView);
   };
 
-
   const editData = async () => {
+    console.log(apiData);
     let res = await dispatch(UpdateDoctor(apiData));
     if (res) {
       NotificationManager.success(
@@ -330,497 +297,697 @@ export default function ViewCurrentDoctors(props) {
     }
   };
 
-
-
   return (
     <Card>
       <CardBody>
-       
-       {thisView ? (
-            <>
+      <CardTitle>
+        {thisView ? (
+          <>
             <Button
               className="btn btn-primary"
               onClick={handleChangeToView}
-              style={{ marginRight: '20px'}}
+              style={{ marginRight: '20px' }}
             >
               Back
             </Button>
-            <IntlMessages id="View Department Head" />
-            </>
-            ) : (
-              
-              <>
-              <Button
-                className="btn btn-primary"
-                onClick={editProfile}
-                style={{ marginRight: '20px'}}
-              >
-                Close Edit
-              </Button>
-              <IntlMessages id="Edit Department Head" />
-              </>
-              )}
-
-        <CardTitle>
-          <IntlMessages id="Create Doctors" />
-        </CardTitle>
+            <IntlMessages id="Doctors" />
+          </>
+        ) : (
+          <>
+            <Button
+              className="btn btn-primary"
+              onClick={editProfile}
+              style={{ marginRight: '20px' }}
+            >
+              Close Edit
+            </Button>
+            <IntlMessages id="Edit Doctors" />
+          </>
+        )}
+       </CardTitle>
 
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
-        <AvForm
-          className="av-tooltip tooltip-label-right"
-          onSubmit={(event, errors, values) => onSubmit(event, errors, values)}
-        >
+          <AvForm
+            className="av-tooltip tooltip-label-right"
+            onSubmit={(event, errors, values) =>
+              onSubmit(event, errors, values)
+            }
+          >
             <Row className="h-100">
-              {/* Name */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>Name</Label>
+ 
+              {thisView ? (
+                <>
+                  <Col lg={6}>
+                    <AvGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Name
+                        </h6>
+                      </Label>
 
-                  <AvField
-                    required
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter your name',
-                      },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your name must be composed only with letters',
-                      },
-                      minLength: {
-                        value: 2,
-                        errorMessage: 'To Short',
-                      },
-                      maxLength: {
-                        value: 25,
-                        errorMessage: 'To Long',
-                      },
-                    }}
-                    onChange={(e) =>
-                      setDoctorCreate({ ...doctorCreate, name: e.target.value })
-                    }
-                  />
-                </AvGroup>
-              </Col>
+                      <span>
+                        <p>{currentDoctor?.name.toUpperCase()}</p>
+                      </span>
+                    </AvGroup>
+                  </Col>
 
-              {/* Phone */}
+                  <Col lg={6}>
+                    <AvGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Phone Number
+                        </h6>
+                      </Label>
 
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Phone" />
-                  </Label>
+                      <span>
+                        <p>{currentDoctor?.phone_number}</p>
+                      </span>
+                    </AvGroup>
+                  </Col>
 
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    validate={{
-                      number: {
-                        value: true,
-                        errorMessage: 'Value must be a number',
-                      },
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter a number',
-                      },
-                    }}
-                    name="phone_number"
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        phone_number: e.target.value,
-                      })
-                    }
-                  />
-                </AvGroup>
-              </Col>
+                  <Col lg={6}>
+                    <AvGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Organization
+                        </h6>
+                      </Label>
+                      <span>
+                        <p>{currentDoctor?.organization.toUpperCase()}</p>
+                      </span>
+                    </AvGroup>
+                  </Col>
 
-              {/* Degree */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>Degree</Label>
+                  <Col lg={6}>
+                    <AvGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Speciality
+                        </h6>
+                      </Label>
 
-                  <AvField
-                    className="form-control"
-                    name="degree"
-                    type="text"
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter your Degree',
-                      },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your degree must be composed only with letters',
-                      },
-                      minLength: {
-                        value: 2,
-                        errorMessage: 'To Short',
-                      },
-                      maxLength: {
-                        value: 25,
-                        errorMessage: 'To Long',
-                      },
-                    }}
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        degree: e.target.value,
-                      })
-                    }
-                  />
-                </AvGroup>
-              </Col>
+                      <span>
+                        <p>{currentDoctor?.speciality.toUpperCase()}</p>
+                      </span>
+                    </AvGroup>
+                  </Col>
 
-              {/* Designation */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative" className="error-l-75">
-                  <Label>Designation</Label>
+                  <Col lg={6}>
+                    <AvGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Station Type
+                        </h6>
+                      </Label>
+                      <span>
+                        <p>{currentDoctor?.station_type.toUpperCase()}</p>
+                      </span>
+                    </AvGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <AvGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Doctor Category
+                        </h6>
+                      </Label>
+                      <span>
+                        <p>{currentDoctor?.doctor_category?.name?.toUpperCase()}</p>
+                      </span>
+                    </AvGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <AvGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Market Name
+                        </h6>
+                      </Label>
+                      <span>
+                        <p>{currentDoctor?.market?.name?.toUpperCase()}</p>
+                      </span>
+                    </AvGroup>
+                  </Col>
+                </>
+              ) : (
+                <>
+                  {/* Name */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>Name</Label>
 
-                  <AvField
-                    className="form-control"
-                    name="designation"
-                    type="text"
+                      <AvField
+                        required
+                        className="form-control"
+                        name="name"
+                        type="text"
+                        value={currentDoctor?.name}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Please enter your name',
+                          },
+                          pattern: {
+                            value: '^[A-Za-z]+$',
+                            errorMessage:
+                              'Your name must be composed only with letters',
+                          },
+                          minLength: {
+                            value: 2,
+                            errorMessage: 'To Short',
+                          },
+                          maxLength: {
+                            value: 25,
+                            errorMessage: 'To Long',
+                          },
+                        }}
+                        onChange={(e) =>
+                          setDoctorCreate({
+                            ...doctorCreate,
+                            name: e.target.value,
+                          })
+                        }
+                      />
+                    </AvGroup>
+                  </Col>
 
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter your Designation',
-                      },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your designation must be composed only with letters',
-                      },
-                      minLength: {
-                        value: 2,
-                        errorMessage: 'To Short',
-                      },
-                      maxLength: {
-                        value: 25,
-                        errorMessage: 'To Long',
-                      },
-                    }}
+                  {/* Phone */}
 
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        designation: e.target.value,
-                      })
-                    }
-                  />
-                </AvGroup>
-              </Col>
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Phone" />
+                      </Label>
 
-              {/* Organization */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative" className="error-l-100">
-                  <Label>Organization</Label>
+                      <AvField
+                        className="form-control"
+                        type="text"
+                        value={currentDoctor?.phone_number}
+                        validate={{
+                          number: {
+                            value: true,
+                            errorMessage: 'Value must be a number',
+                          },
+                          required: {
+                            value: true,
+                            errorMessage: 'Please enter a number',
+                          },
+                        }}
+                        name="phone_number"
+                        onChange={(e) =>
+                          setDoctorCreate({
+                            ...doctorCreate,
+                            phone_number: e.target.value,
+                          })
+                        }
+                      />
+                    </AvGroup>
+                  </Col>
 
-                  <AvField
-                    className="form-control"
-                    name="organization"
+                  {/* Degree */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>Degree</Label>
 
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter your Organization',
-                      },
-                      minLength: {
-                        value: 2,
-                        errorMessage: 'To Short',
-                      },
-                      maxLength: {
-                        value: 25,
-                        errorMessage: 'To Long',
-                      },
-                    }}
-                    type="text"
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        organization: e.target.value,
-                      })
-                    }
-                  />
-                </AvGroup>
-              </Col>
+                      <AvField
+                        className="form-control"
+                        name="degree"
+                        value={currentDoctor?.degree}
+                        type="text"
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Please enter your Degree',
+                          },
+                          pattern: {
+                            value: '^[A-Za-z]+$',
+                            errorMessage:
+                              'Your degree must be composed only with letters',
+                          },
+                          minLength: {
+                            value: 2,
+                            errorMessage: 'To Short',
+                          },
+                          maxLength: {
+                            value: 25,
+                            errorMessage: 'To Long',
+                          },
+                        }}
+                        onChange={(e) =>
+                          setDoctorCreate({
+                            ...doctorCreate,
+                            degree: e.target.value,
+                          })
+                        }
+                      />
+                    </AvGroup>
+                  </Col>
 
-              {/* Speciality */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative" className="error-l-75">
-                  <Label>Speciality</Label>
+                  {/* Designation */}
+                  <Col lg={6}>
+                    <AvGroup
+                      className="error-t-negative"
+                      className="error-l-75"
+                    >
+                      <Label>Designation</Label>
 
-                  <AvField
-                    className="form-control"
-                    name="speciality"
-                    type="text"
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter your Speciality',
-                      },
-                      minLength: {
-                        value: 2,
-                        errorMessage: 'To Short',
-                      },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your designation must be composed only with letters',
-                      },
-                      maxLength: {
-                        value: 25,
-                        errorMessage: 'To Long',
-                      },
-                    }}
-                    type="text"
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        organization: e.target.value,
-                      })
-                    }
+                      <AvField
+                        className="form-control"
+                        name="designation"
+                        type="text"
+                        value={currentDoctor?.designation}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Please enter your Designation',
+                          },
+                          pattern: {
+                            value: '^[A-Za-z]+$',
+                            errorMessage:
+                              'Your designation must be composed only with letters',
+                          },
+                          minLength: {
+                            value: 2,
+                            errorMessage: 'To Short',
+                          },
+                          maxLength: {
+                            value: 25,
+                            errorMessage: 'To Long',
+                          },
+                        }}
+                        onChange={(e) =>
+                          setDoctorCreate({
+                            ...doctorCreate,
+                            designation: e.target.value,
+                          })
+                        }
+                      />
+                    </AvGroup>
+                  </Col>
 
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        speciality: e.target.value,
-                      })
-                    }
-                  />
+                  {/* Organization */}
+                  <Col lg={6}>
+                    <AvGroup
+                      className="error-t-negative"
+                      className="error-l-100"
+                    >
+                      <Label>Organization</Label>
 
-                </AvGroup>
-              </Col>
+                      <AvField
+                        className="form-control"
+                        name="organization"
+                        value={currentDoctor?.organization}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Please enter your Organization',
+                          },
+                          minLength: {
+                            value: 2,
+                            errorMessage: 'To Short',
+                          },
+                          maxLength: {
+                            value: 25,
+                            errorMessage: 'To Long',
+                          },
+                        }}
+                        type="text"
+                        onChange={(e) =>
+                          setDoctorCreate({
+                            ...doctorCreate,
+                            organization: e.target.value,
+                          })
+                        }
+                      />
+                    </AvGroup>
+                  </Col>
 
-              {/* Doctors Category */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Doctors Category" />
-                  </Label>
+                  {/* Speciality */}
+                  <Col lg={6}>
+                    <AvGroup
+                      className="error-t-negative"
+                      className="error-l-75"
+                    >
+                      <Label>Speciality</Label>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        setDoctorCreate({
-                          ...doctorCreate,
-                          doctor_category_uid: e.value,
-                        });
-                      }}
-                      options={optiongetdoc_category}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
+                      <AvField
+                        className="form-control"
+                        name="speciality"
+                        value={currentDoctor?.speciality}
+                        type="text"
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Please enter your Speciality',
+                          },
+                          minLength: {
+                            value: 2,
+                            errorMessage: 'To Short',
+                          },
+                          pattern: {
+                            value: '^[A-Za-z]+$',
+                            errorMessage:
+                              'Your designation must be composed only with letters',
+                          },
+                          maxLength: {
+                            value: 25,
+                            errorMessage: 'To Long',
+                          },
+                        }}
+                        type="text"
+                        onChange={(e) =>
+                          setDoctorCreate({
+                            ...doctorCreate,
+                            organization: e.target.value,
+                          })
+                        }
+                        onChange={(e) =>
+                          setDoctorCreate({
+                            ...doctorCreate,
+                            speciality: e.target.value,
+                          })
+                        }
+                      />
+                    </AvGroup>
+                  </Col>
 
-              {/* Select Region */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Regions" />
-                  </Label>
+                  {/* Doctors Category */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Doctors Category" />
+                      </Label>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        dispatch(GetMarketsData(e.value, 'area'));
-                      }}
-                      options={optionregion}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
-              {/* Select Areas */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Areas" />
-                  </Label>
+                      <>
+                        <Select
+                        required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          required
+                          defaultValue={{
+                            label:currentDoctor?.doctor_category?.name,
+                            value:currentDoctor?.doctor_category?.uid,
+                          }}
+                          onChange={(e, index) => {
+                            setDoctorCreate({
+                              ...doctorCreate,
+                              doctor_category_uid: e.value,
+                            });
+                          }}
+                          options={optiongetdoc_category}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        dispatch(GetMarketsData(e.value, 'thana'));
-                      }}
-                      options={optionarea}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
-              {/* Select Thanas */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Thana" />
-                  </Label>
+                  {/* Select Region */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Regions" />
+                      </Label>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        dispatch(GetMarketsData(e.value, 'territory'));
-                      }}
-                      options={optionthana}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
+                      <>
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          required
+                          defaultValue={{
+                            label:currentDoctor?.market?.parent?.parent?.parent?.parent?.name,
+                            value:currentDoctor?.market?.parent?.parent?.parent?.parent?.uid,
+                          }}
+                          onChange={(e, index) => {
+                            dispatch(GetMarketsData(e.value, 'area'));
+                          }}
+                          options={optionregion}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
+                  {/* Select Areas */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Areas" />
+                      </Label>
 
-              {/* Select Territory */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Territory" />
-                  </Label>
+                      <>
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          required
+                          defaultValue={{
+                            label:currentDoctor?.market?.parent?.parent?.parent?.name,
+                            value:currentDoctor?.market?.parent?.parent?.parent?.uid,
+                          }}
+                          onChange={(e, index) => {
+                            dispatch(GetMarketsData(e.value, 'thana'));
+                          }}
+                          options={optionarea}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
+                  {/* Select Thanas */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Thana" />
+                      </Label>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        dispatch(GetMarketsData(e.value, 'market'));
-                      }}
-                      options={optionterritory}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
+                      <>
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          required
+                          defaultValue={{
+                            label:currentDoctor?.market?.parent?.parent?.name,
+                            value:currentDoctor?.market?.parent?.parent?.uid,
+                          }}
+                          onChange={(e, index) => {
+                            dispatch(GetMarketsData(e.value, 'territory'));
+                          }}
+                          options={optionthana}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
 
-              {/* Select Market */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Market" />
-                  </Label>
+                  {/* Select Territory */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Territory" />
+                      </Label>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        setDoctorCreate({
-                          ...doctorCreate,
-                          market_uid: e.value,
-                        });
-                      }}
-                      options={optionmarket}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
+                      <>
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          defaultValue={{
+                            label:currentDoctor?.market?.parent?.name,
+                            value:currentDoctor?.market?.parent?.uid,
+                          }}
+                          required
+                          onChange={(e, index) => {
+                            dispatch(GetMarketsData(e.value, 'market'));
+                          }}
+                          options={optionterritory}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
 
+                  {/* Select Market */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Market" />
+                      </Label>
 
+                      <>
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          defaultValue={{
+                            label:currentDoctor?.market?.name,
+                            value:currentDoctor?.market?.uid,
+                          }}
+                          onChange={(e, index) => {
+                            setDoctorCreate({
+                              ...doctorCreate,
+                              market_uid: e.value,
+                            });
+                          }}
+                          options={optionmarket}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
 
-              {/* Station TYPE */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Station Type" />
-                  </Label>
+                  {/* Station TYPE */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Station Type" />
+                      </Label>
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        setDoctorCreate({
-                          ...doctorCreate,
-                          station_type: e.value,
-                        });
-                      }}
-                      options={option_static_stationtype}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
+                      <>
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          
+                          defaultValue={{
+                            label:currentDoctor?.station_type.toUpperCase(),
+                            value:currentDoctor?.station_type,
+                          }}
 
-              {/* Select Special Day */}
-              <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Special Day" />
-                  </Label>
+                          onChange={(e, index) => {
+                            setDoctorCreate({
+                              ...doctorCreate,
+                              station_type: e.value,
+                            });
+                          }}
+                          options={option_static_stationtype}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
 
-                  <>
-                    <AvField
-                      // value={doctorCreate.name}
-                      className="form-control"
-                      name="specialday"
-                      type="text"
-                      // validate={validateEmail}
-                      onChange={(e) => {
-                        setSpecialday(e.target.value);
-                      }}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
+                  {/* Select Special Day */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Special Day" />
+                      </Label>
 
+                      <>
+                        <AvField
+                          className="form-control"
+                          name="specialday"
+                          type="text"
+                          // validate={validateEmail}
+                          onChange={(e) => {
+                            setSpecialday(e.target.value);
+                          }}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
 
-              <Col lg={10}>
-                <AvGroup className="error-t-negative">
-                <Label>
-                    <IntlMessages id="Select Special Day Date" />
-                  </Label>
-                  <AvField
-                    required
-                    className="form-control"
-                    name="date-dd"
-                    type="date"
-                    onChange={(e) => setSpecialdate(e.target.value)}
-                  />
-                </AvGroup>
-              </Col>
-              <Col lg={2}>
-                <AvGroup className="error-t-negative" className="my-4">
-             
-                  <Button
-                    className="btn btn-primary"
-                    size="sm"
-                    onClick={() => {
-                      handlespecialdaydate(specialday, specialdate);
-                    }}
-                  >
-                    Add SpecialDay
-                  </Button>
-                </AvGroup>
-              </Col>
-
+                  <Col lg={10}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Special Day Date" />
+                      </Label>
+                      <AvField
+                        required
+                        className="form-control"
+                        name="date-dd"
+                        type="date"
+                        onChange={(e) => setSpecialdate(e.target.value)}
+                      />
+                    </AvGroup>
+                  </Col>
+                  <Col lg={2}>
+                    <AvGroup className="error-t-negative" className="my-4">
+                      <Button
+                        className="btn btn-primary"
+                        size="sm"
+                        onClick={() => {
+                          handlespecialdaydate(specialday, specialdate);
+                        }}
+                      >
+                        Add SpecialDay
+                      </Button>
+                    </AvGroup>
+                  </Col>
+                </>
+              )}
             </Row>
 
             <Row>
-              <Col xl={12}>
+              {thisView ? (
+                <>
+                  <Col xl={12}>
+                    <AvGroup className="error-t-negative">
+                      <div className="table-form">
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>Special Day</th>
+                              <th>Special Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {specialDay_arr?.map((item, index) => {
+                              return (
+                                <tr>
+                                  <td className="text-capitalize">{item?.day}</td>
+
+                                  <td>{item?.date}</td>
+                                 
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </Table>
+                      </div>
+                    </AvGroup>
+                  </Col>
+                </>
+              ) : (
+                <>
+                 <Col xl={12}>
                 <AvGroup className="error-t-negative">
                   <div className="table-form">
                     <Table>
@@ -842,6 +1009,7 @@ export default function ViewCurrentDoctors(props) {
                                   onClick={() => {
                                     const test = [...array];
                                     test.splice(index, 1);
+                                    console.log(test);
                                     setArray(test);
                                   }}
                                   style={{ fontSize: '20px', color: 'red' }}
@@ -856,9 +1024,11 @@ export default function ViewCurrentDoctors(props) {
                   </div>
                 </AvGroup>
               </Col>
+                </>
+              )}
             </Row>
 
-            <Button
+            {/* <Button
               className="btn btn-primary"
               size="sm"
               // onClick={onSubmit}
@@ -872,8 +1042,29 @@ export default function ViewCurrentDoctors(props) {
               ) : (
                 'Add Doctor'
               )}
-            </Button>
-            </AvForm>
+            </Button> */}
+
+            {thisView ? (
+              <Button className="btn btn-primary mr-3" onClick={editProfile}>
+                Edit Doctor
+              </Button>
+            ) : (
+              <Button className="btn btn-primary" onClick={editData}>
+                Save
+              </Button>
+            )}
+
+            {thisView ? (
+              <Button
+                className="btn btn-primary"
+                onClick={suspandDepartmenthead}
+              >
+                {buttonName}
+              </Button>
+            ) : (
+              ''
+            )}
+          </AvForm>
         </Formik>
         <div style={{ marginTop: '30px' }} />
       </CardBody>

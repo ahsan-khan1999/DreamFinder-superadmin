@@ -158,17 +158,29 @@ export default function CreateDoctors({ history }) {
   };
 
   const handlespecialdaydate = async (day, date) => {
-    const prearray = [...array];
-    prearray.push({
-      day: day,
-      date: date,
-    });
-    setArray(prearray);
-    const object = {
-      ...obj,
-      [day]: date,
-    };
-    setObj(object);
+    if(day!== undefined && date !== ""  )
+    {
+      const prearray = [...array];
+      prearray.push({
+        day: day,
+        date: date,
+      });
+      setArray(prearray);
+      const object = {
+        ...obj,
+        [day]: date,
+      };
+      setObj(object);
+    }
+    else{
+      NotificationManager.error(
+        'Please Enter Required Special Date Fields',
+        'Error',
+        3000,
+        null,
+        ''
+      );
+    }
   };
   const apiData = {
     name: doctorCreate?.name,

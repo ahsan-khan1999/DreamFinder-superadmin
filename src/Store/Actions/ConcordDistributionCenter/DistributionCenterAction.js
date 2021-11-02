@@ -175,7 +175,7 @@ export const getAreas = (uid) => async (dispatch) => {
   try {
     const head = { "x-session-key": token.token, "x-session-type": token.type };
     const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/area?parent_uid=${uid}`,
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/area?parent_uid=${uid}&assigned_to_dc=0`,
       { headers: head }
     );
     if (response?.data?.response_code === 200) {

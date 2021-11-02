@@ -38,7 +38,7 @@ export const GetCustomer = () => async (dispatch) => {
   };
 
 
-  export const CreateCustomer = (data) => async (dispatch) => {
+  export const CreateCustomerRecord = (data) => async (dispatch) => {
     try {
       dispatch({
         type: CUSTOMER_CONSTANT.CUSTOMER_LOADING_All,
@@ -91,7 +91,6 @@ export const GetCustomer = () => async (dispatch) => {
         payload: true,
       });
       let res = await apiServices.updatecustomers(data);
-      console.log(res);
       if (res?.response_code === 200) {
         dispatch({
           type: CUSTOMER_CONSTANT.UPDATE_CUSTOMER_LOADING,
