@@ -32,8 +32,11 @@ const selectGender = [
 ];
 export default function EditAdmin(props) {
   let [buttonName, setButtonName] = useState();
+  // let [laoding, setLoa] = useState();
 
   const [thisView, setThisView] = useState(true);
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
+
   const currentUser = props?.location?.state;
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -50,12 +53,14 @@ export default function EditAdmin(props) {
     role_uid: currentUser?.role?.uid,
   };
   const dispatch = useDispatch();
-  const readRoles = () => {
-    // dispatch(ViewRoleAction());
-  };
-  useEffect(() => {
-    // readRoles();
 
+  // const viewRole = () => {
+  //   ViewRoleAction();
+  // };
+  useEffect(() => {
+    dispatch(ViewRoleAction());
+  }, []);
+  useEffect(() => {
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -63,8 +68,13 @@ export default function EditAdmin(props) {
     }
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  let options = [];
+  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
 
+  let options = [];
+  roles?.filter((item) =>
+    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
+  console.log(options);
   const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
     e.preventDefault();
@@ -87,6 +97,7 @@ export default function EditAdmin(props) {
     }
   };
   const suspandAdmin = async () => {
+    setLoadingSuspand(true);
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
         uid: currentUser?.uid,
@@ -101,6 +112,8 @@ export default function EditAdmin(props) {
           null,
           ''
         );
+        setLoadingSuspand(false);
+
         props.history.push('/app/menu/levels/viewAdmin');
       } else {
         NotificationManager.error(
@@ -110,13 +123,16 @@ export default function EditAdmin(props) {
           null,
           ''
         );
+        setLoadingSuspand(false);
+
       }
     } else {
+    setLoadingSuspand(true);
+
       let apiData = {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Suspaned',
@@ -125,6 +141,8 @@ export default function EditAdmin(props) {
           null,
           ''
         );
+    setLoadingSuspand(false);
+
         props.history.push('/app/menu/levels/viewAdmin');
       } else {
         NotificationManager.error(
@@ -134,8 +152,11 @@ export default function EditAdmin(props) {
           null,
           ''
         );
+    setLoadingSuspand(false);
+
       }
     }
+
     //  setStatusUpdate()
 
     // console.log(doctor?.password);
@@ -147,7 +168,7 @@ export default function EditAdmin(props) {
           <Button
             className="btn-btn-secondary"
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', 'background-color': '#0066B3' }}
           >
             Back
           </Button>
@@ -195,6 +216,7 @@ export default function EditAdmin(props) {
                   ) : (
                     <Input
                       required
+                      disabled
                       value={admin.email_address}
                       className="form-control"
                       name="email"
@@ -261,6 +283,7 @@ export default function EditAdmin(props) {
                     ) : (
                       <Select
                         required
+                        disabled
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
                         classNamePrefix="react-select"
@@ -297,6 +320,7 @@ export default function EditAdmin(props) {
                   ) : (
                     <Input
                       required
+                      disabled
                       value={admin?.phone_number}
                       type="text"
                       className="radio-in"
@@ -349,6 +373,7 @@ export default function EditAdmin(props) {
                   ) : (
                     <Select
                       required
+                      // isDisabled={currentUser?.role?.name}
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
@@ -373,6 +398,7 @@ export default function EditAdmin(props) {
             {thisView ? (
               <Button
                 className="btn btn-primary"
+                style={{ backgroundColor: '#0066B3' }}
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
@@ -390,10 +416,11 @@ export default function EditAdmin(props) {
             ) : (
               <Button
                 className="btn btn-primary"
+                style={{ backgroundColor: '#0066B3' }}
                 // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 size="sm"
                 onClick={editData}
               >
@@ -407,12 +434,12 @@ export default function EditAdmin(props) {
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#003766', marginRight: '5px' }}
+                style={{ 'background-color': '#0066B3', marginLeft: '5px' }}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 // className="btn btn-primary"
                 onClick={suspandAdmin}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />

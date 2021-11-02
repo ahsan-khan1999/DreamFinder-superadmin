@@ -37,6 +37,11 @@ export const logout = async () => {
   await updateHeaders();
   return true;
 };
+export const Check_Authentication = async (response,history) => {
+  if (response?.data?.response_code === 401) {
+    history.push('/user/login');
+  }
+};
 
 class Auth {
   constructor() {

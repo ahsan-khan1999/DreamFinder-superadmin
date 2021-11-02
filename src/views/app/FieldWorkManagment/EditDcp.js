@@ -133,7 +133,8 @@ export default function EditDcp(props) {
            
             
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{backgroundColor:"#0066B3"}}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''

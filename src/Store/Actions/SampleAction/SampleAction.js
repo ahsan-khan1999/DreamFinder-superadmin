@@ -46,7 +46,7 @@ export const CreateSampleAction = (data) => async (dispatch) => {
     if (res?.data?.response_code === 200) {
       dispatch({
         type: CREATE_SAMPLE_CONSTANT.CREATE_SAMPLE_LOADING,
-        payload: true,
+        payload: false,
       });
       dispatch({
         type: CREATE_SAMPLE_CONSTANT.CREATE_SAMPLE_SUCCESS,
@@ -80,11 +80,11 @@ export const UpdateSampleAction = (data) => async (dispatch) => {
     if (res?.response_code === 200) {
       dispatch({
         type: UPDATE_SAMPLE_CONSTANT.UPDATE_SAMPLE_LOADING,
-        payload: true,
+        payload: false,
       });
       dispatch({
         type: UPDATE_SAMPLE_CONSTANT.UPDATE_SAMPLE_SUCCESS,
-        payload: res?.data?.response_data,
+        payload: res?.response_data,
       });
       return true;
     } else {

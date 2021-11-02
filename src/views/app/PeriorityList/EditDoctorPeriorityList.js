@@ -114,7 +114,9 @@ export default function EditDoctorPeriorityList(props) {
   return (
     <Card>
       <CardBody>
-          <Button onClick={handleBack}>Back</Button>
+          <Button 
+          style={{backgroundColor:"#0066B3"}}
+          onClick={handleBack}>Back</Button>
         <CardTitle>
           <IntlMessages id="View Doctor Periority List" />
         </CardTitle>
@@ -214,11 +216,15 @@ export default function EditDoctorPeriorityList(props) {
               </Col>
             </Row>
             {view ? (
-              <Button onClick={editPeriority}>Edit Profile</Button>
+              
+              <Button
+              style={{backgroundColor:"#0066B3"}}
+               onClick={editPeriority}>Edit Profile</Button>
             ) : (
               <>
                 <Button
-                  className="btn btn-primary"
+                  // className="btn btn-primary"
+                  style={{backgroundColor:"#0066B3"}}
                   // type="submit"
                   className={`btn-shadow btn-multiple-state ${
                     loading ? 'show-spinner' : ''
@@ -237,7 +243,8 @@ export default function EditDoctorPeriorityList(props) {
               </>
             )}
             <Button
-                  className="btn btn-primary"
+                  // className="btn btn-primary"
+                  style={{backgroundColor:"#0066B3"}}
                   // type="submit"
                   className={`btn-shadow btn-multiple-state ${
                     suspandloading ? 'show-spinner' : ''

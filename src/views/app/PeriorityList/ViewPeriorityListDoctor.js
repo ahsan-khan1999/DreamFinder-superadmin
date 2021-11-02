@@ -64,7 +64,7 @@ export default function ViewPeriorityListDoctor(props) {
           onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#003766',
+            backgroundColor: '#0066B3',
             marginTop: '10px',
           }}
         >
@@ -93,10 +93,10 @@ export default function ViewPeriorityListDoctor(props) {
               >
                 <Loader
                   type="Puff"
-                  color="#00BFFF"
+                  color="#0066B3"
                   height={100}
                   width={100}
-                  color="#003766"
+                  // color="#003766"
                 />
               </div>
             ) : (

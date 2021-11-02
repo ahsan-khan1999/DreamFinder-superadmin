@@ -48,7 +48,7 @@ import { SampleReducer } from 'Store/Reducers/SampleReducer/SampleReducer';
 
 export default function CreateSampleTransaction(props) {
   const [array, setArray] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const [stock, setStock] = useState([]);
 
@@ -59,6 +59,8 @@ export default function CreateSampleTransaction(props) {
     dispatch(ViewSampleAction());
   }, []);
   const sample = useSelector((state) => state?.SampleReducer?.sample);
+  const loading = useSelector((state) => state?.SampleReducer?.loading);
+
   // console.log(sample);
   let sampleOptions = [];
   sample?.map((item) =>
@@ -144,7 +146,6 @@ export default function CreateSampleTransaction(props) {
     });
   };
   const AddSampleTransaction = async () => {
-    setLoading(true);
   
 
 
@@ -157,13 +158,10 @@ export default function CreateSampleTransaction(props) {
         null,
         ''
       );
-      setLoading(false);
 
       props.history.push('/app/Sample/ViewSampleTransaction');
     } else {
-      setLoading(false);
     }
-    setLoading(false);
 
   };
   let [option, setOption] = useState('');
@@ -322,6 +320,7 @@ export default function CreateSampleTransaction(props) {
           </Form>
         </Formik>
         <Button
+        style={{backgroundColor:"#0066B3"}}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}

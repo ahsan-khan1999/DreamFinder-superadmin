@@ -41,7 +41,9 @@ export default function EditDcr(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack} style={{ marginBottom: '10px' }}>
+        <Button
+        style={{backgroundColor:"#0066B3"}}
+        onClick={handleBack} style={{ marginBottom: '10px' }}>
           Back
         </Button>
         <CardTitle>
@@ -226,7 +228,8 @@ export default function EditDcr(props) {
               </Col>
             </Row>
             <Button
-              className="btn btn-primary"
+            style={{backgroundColor:"#0066B3"}}
+              // className="btn btn-primary"
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''

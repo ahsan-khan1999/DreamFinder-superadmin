@@ -32,8 +32,10 @@ import {
   CREATE_CATEGORY__CONSTANT,
   UPDATE_CATEGORY__CONSTANT,
 } from 'Store/Constant/Constants';
+import { Check_Authentication, logout } from 'Utils/auth.util';
+import { logOutUser } from '../Auth/Actions';
 
-export const ViewAdminAction = () => async (dispatch) => {
+export const ViewAdminAction = (history) => async (dispatch) => {
   try {
     dispatch({
       type: VIEW_ADMIN_CONSTANT.VIEW_ADMIN_LOADING,
@@ -41,6 +43,9 @@ export const ViewAdminAction = () => async (dispatch) => {
     });
 
     let response = await apiServices.getAdmin();
+    console.log(response);
+    Check_Authentication(response,history);
+
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_ADMIN_CONSTANT.VIEW_ADMIN_LOADING,
@@ -93,6 +98,7 @@ export const ViewDepoAction = () => async (dispatch) => {
     });
 
     let response = await apiServices.getDepo();
+    
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_DEPO_CONSTANT.VIEW_DEPO_LOADING,
@@ -279,19 +285,19 @@ export const CreateAdminAction = (data) => async (dispatch) => {
       });
       dispatch({
         type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
-        payload: true,
+        payload: response?.data?.response_data,
       });
       return true;
     } else {
       dispatch({
         type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
-        payload: true,
+        payload: false,
       });
 
-      let message = response?.data?.response_data[0];
-      let mess = Object.values(message);
-      console.log(mess);
-      NotificationManager.error(mess, 'Error', 5000, '');
+      // let message = response?.data?.response_data[0];
+      // let mess = Object.values(message);
+      // console.log(mess);
+      // NotificationManager.error(response?.data?.response_message, 'Error', 5000, '');
       NotificationManager.error(
         response?.data?.response_message,
         'Error',
@@ -303,6 +309,7 @@ export const CreateAdminAction = (data) => async (dispatch) => {
     }
   } catch {}
 };
+
 export const CreateSmAction = (data) => async (dispatch) => {
   try {
     dispatch({
@@ -451,7 +458,6 @@ export const UpdateUserAction = (data) => async (dispatch) => {
       payload: true,
     });
     let res = await apiServices.updateUser(data);
-    console.log(res);
     if (res?.response_code === 200) {
       // dispatch(ViewAdminAction())
       dispatch({
@@ -460,13 +466,13 @@ export const UpdateUserAction = (data) => async (dispatch) => {
       });
       dispatch({
         type: UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_SUCCESS,
-        payload: true,
+        payload: res?.response_data,
       });
       return true;
     } else {
       dispatch({
         type: UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_ERROR,
-        payload: true,
+        payload: false,
       });
       NotificationManager.error(res?.response_message, 'Error', 5000, '');
       return false;
@@ -480,10 +486,7 @@ export const ViewUserRoleAction = () => async (dispatch) => {
       type: VIEW_CATEGORY_CONSTANT.VIEW_CATEGORY_LOADING,
       payload: true,
     });
-    // readUserRoles,
-    // createRoles,
-    // updateRoles,
-    // suspandRoles
+
     let response = await apiServices.readUserRoles();
     if (response?.data?.response_code === 200) {
       dispatch({
@@ -541,7 +544,7 @@ export const CreateRoleAction = (data) => async (dispatch) => {
   } catch {}
 };
 
-export const UpdateRoleAction = (data) => async(dispatch) => {
+export const UpdateRoleAction = (data) => async (dispatch) => {
   try {
     dispatch({
       type: UPDATE_CATEGORY__CONSTANT.UPDATE_CATEGORY_LOADING,

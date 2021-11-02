@@ -44,7 +44,7 @@ import { CreateSampleAction } from 'Store/Actions/SampleAction/SampleAction';
 
 export default function CreateSample(props) {
   const [array, setArray] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const [stock, setStock] = useState([]);
 
@@ -53,6 +53,7 @@ export default function CreateSample(props) {
   useEffect(() => {
     dispatch(ViewDirectorAction());
   }, []);
+  const loading = useSelector(state => state?.SampleReducer?.loading)
   let medicineOptionFromStock = [];
   stock?.map((item) =>
     medicineOptionFromStock?.push({
@@ -131,7 +132,6 @@ export default function CreateSample(props) {
     });
   };
   const AddSample = async () => {
-    setLoading(true);
     console.log(sample);
     let res = await dispatch(CreateSampleAction(sample));
     if (res) {
@@ -142,11 +142,9 @@ export default function CreateSample(props) {
         null,
         ''
       );
-      setLoading(false);
 
       props.history.push('/app/Sample/ViewSample');
     } else {
-      setLoading(false);
     }
   };
   return (
@@ -278,6 +276,7 @@ export default function CreateSample(props) {
           </Form>
         </Formik>
         <Button
+        style={{backgroundColor:"#0066B3"}}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}

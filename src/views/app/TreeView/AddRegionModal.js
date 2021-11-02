@@ -290,8 +290,8 @@ const AddRegionModal = (props) => {
             </Row>
 
             <Button
-              className="btn btn-primary"
-              style={{ 'background-color': '#003766' }}
+              // className="btn btn-primary"
+              style={{ 'background-color': '#0066B3' }}
               // type="submit"
               // className={`btn-shadow btn-multiple-state ${
               //   loading ? 'show-spinner' : ''

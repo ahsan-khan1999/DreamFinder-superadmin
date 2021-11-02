@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import IntlMessages from 'helpers/IntlMessages';
 import moment from 'moment';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   Card,
@@ -21,10 +21,11 @@ import { SuspandAttendanceAction } from 'Store/Actions/AttendanceActions/Attenda
 
 export default function EditAttendance(props) {
   let currentAttendance = props?.location.state;
-  const [loading, setLoading] = useState(false);
+  const loading = useSelector(state => state?.AttendanceReducer?.loading)
+  // const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const suspandAttendance = async () => {
-    setLoading(true);
+    // setLoading(true);
     let res = await dispatch(
       SuspandAttendanceAction({ uid: currentAttendance?.uid })
     );
@@ -36,11 +37,11 @@ export default function EditAttendance(props) {
         null,
         ''
       );
-      setLoading(false);
+      // setLoading(false);
 
       props.history.push('/app/Attendance/ViewAttendance');
     }
-    setLoading(false);
+    // setLoading(false);
   };
   const handleBack = () => {
     props.history.push('/app/Attendance/ViewAttendance');
@@ -48,7 +49,9 @@ export default function EditAttendance(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack}>Back</Button>
+        <Button 
+        style={{backgroundColor:"#0066B3"}}
+        onClick={handleBack}>Back</Button>
         <CardTitle>
           <IntlMessages id="View Attendance" />
         </CardTitle>
@@ -136,6 +139,7 @@ export default function EditAttendance(props) {
               </Col>
             </Row>
             <Button
+            style={{backgroundColor:"#0066B3"}}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}

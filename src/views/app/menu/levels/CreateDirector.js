@@ -66,9 +66,11 @@ export default function CreateDirector({ history }) {
   };
   useEffect(() => {
     readRoles();
-    readUser();
+    // readUser();
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
+  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
+
   const user = useSelector((state) => state?.ViewUserReducer?.admin);
 
   let options = [];
@@ -80,11 +82,9 @@ export default function CreateDirector({ history }) {
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
 
-  const [loading, setLoading] = useState(false);
 
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
-    setLoading(true);
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
@@ -101,11 +101,9 @@ export default function CreateDirector({ history }) {
         null,
         ''
       );
-      setLoading(false);
 
       return;
     } else {
-      setLoading(true);
 
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
@@ -118,7 +116,6 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-        setLoading(false);
 
         history.push('/app/menu/levels/viewDoctor');
       } else if (confirmPassword !== admin?.password) {
@@ -129,7 +126,6 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-        setLoading(false);
       }
     }
   };
@@ -332,6 +328,8 @@ export default function CreateDirector({ history }) {
 
             <Button
               className="btn btn-primary"
+              style={{ backgroundColor: '#0066B3' }}
+
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -344,7 +342,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Admin
+              Add Director
             </Button>
           </Form>
         </Formik>

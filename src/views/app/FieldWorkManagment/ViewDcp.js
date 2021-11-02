@@ -84,10 +84,10 @@ export default function ViewDcp(props) {
               >
                 <Loader
                   type="Puff"
-                  color="#00BFFF"
+                  color="#0066B3"
                   height={100}
                   width={100}
-                  color="#003766"
+                  // color="#003766"
                 />
               </div>
             ) : (

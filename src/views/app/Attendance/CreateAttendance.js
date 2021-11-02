@@ -55,14 +55,13 @@ export default function CreateAttendance(props) {
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
   const [loadingFileUpload, setLoadingFileUpload] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const [file, setFile] = useState();
   useEffect(() => {
     // dispatch(ViewMPOManagerAction());
     dispatch(ViewDepoAction());
     dispatch(ViewDeliveryStaffAction());
-    dispatch(ViewDirectorAction())
+    dispatch(ViewDirectorAction());
     // dispatch(ViewAreaManagerAction());
     // dispatch(ViewSalesManagerManagerAction());
     // dispatch(ViewRegionalSalesManagerManagerAction());
@@ -71,6 +70,7 @@ export default function CreateAttendance(props) {
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
   const am = useSelector((state) => state?.AttendanceReducer?.am);
   const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+  const loading = useSelector((state) => state?.AttendanceReducer?.loading);
 
   const depo = useSelector((state) => state?.ViewUserReducer?.depoManager);
   const directorUser = useSelector((state) => state?.ViewUserReducer?.director);
@@ -191,7 +191,6 @@ export default function CreateAttendance(props) {
   };
   //   console.log(imageUploadData);
   const createAttendance = async () => {
-    setLoading(true);
     if (
       attendance?.datetime === '' &&
       attendance?.image_url === '' &&
@@ -204,7 +203,6 @@ export default function CreateAttendance(props) {
         null,
         ''
       );
-      setLoading(false);
 
       return;
     } else {
@@ -226,11 +224,9 @@ export default function CreateAttendance(props) {
           null,
           ''
         );
-        setLoading(false);
 
         props.history.push('/app/Attendance/ViewAttendance');
       }
-      setLoading(false);
     }
   };
   return (
@@ -248,6 +244,7 @@ export default function CreateAttendance(props) {
                   <Label>Select User</Label>
                   <Select
                     required
+                    isDisabled={selected === '' ? false : true}
                     components={{ Input: CustomSelectInput }}
                     className="react-select"
                     classNamePrefix="react-select"
@@ -858,6 +855,11 @@ export default function CreateAttendance(props) {
               }`}
               onClick={createAttendance}
             >
+              <span className="spinner d-inline-block">
+                <span className="bounce1" />
+                <span className="bounce2" />
+                <span className="bounce3" />
+              </span>
               Add Attendance
             </Buttin>
           </Form>

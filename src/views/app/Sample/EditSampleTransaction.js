@@ -49,29 +49,27 @@ import { SampleReducer } from 'Store/Reducers/SampleReducer/SampleReducer';
 
 export default function EditSampleTransaction(props) {
   let currentTransaction = props.location.state;
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
+  const loading = useSelector(state => state?.SampleReducer?.loading)
   const dispatch = useDispatch()
-  console.log(currentTransaction);
   
   const handleBack = () => {
     props.history.push('/app/Sample/ViewSampleTransaction');
   };
   const suspandSample=async ()=>{
-      setLoading(true)
+      // setLoading(true)
       let res = await dispatch(SuspandSampleTransactionAction({uid:currentTransaction?.uid}))
       if(res){
           NotificationManager.success("Successfully Suspanded","Success",5000,null,'')
-          setLoading(false)
           props.history.push('/app/Sample/ViewSampleTransaction')
       }else{
-        setLoading(false)
 
       }
   }
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack}>Back</Button>
+        <Button style={{backgroundColor:"#0066B3"}} onClick={handleBack}>Back</Button>
         <CardTitle>
           <IntlMessages id="View Sample Transaction" />
         </CardTitle>
@@ -242,6 +240,7 @@ export default function EditSampleTransaction(props) {
           </Form>
         </Formik>
         <Button
+        style={{backgroundColor:"#0066B3"}}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}

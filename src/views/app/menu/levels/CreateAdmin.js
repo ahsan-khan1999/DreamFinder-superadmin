@@ -62,29 +62,25 @@ export default function CreateAdmin({ history }) {
     dispatch(ViewRoleAction());
   };
   const readUser = () => {
-    dispatch(ViewAdminAction());
+    // dispatch(ViewAdminAction());
   };
   useEffect(() => {
     readRoles();
-    readUser();
+    // readUser();
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   const user = useSelector((state) => state?.ViewUserReducer?.admin);
+  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
 
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  // let deliveryStaffFilter = []
-  //   user?.filter((item) => (
-  //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
-  //   ))
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
-    setLoading(true);
     if (
       admin?.email_address === '' &&
       admin?.name === '' &&
@@ -94,6 +90,7 @@ export default function CreateAdmin({ history }) {
       admin?.designation === '' &&
       admin.role_uid === ''
     ) {
+
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
@@ -101,11 +98,9 @@ export default function CreateAdmin({ history }) {
         null,
         ''
       );
-      setLoading(false);
 
       return;
     } else {
-      setLoading(true);
 
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
@@ -118,7 +113,6 @@ export default function CreateAdmin({ history }) {
           null,
           ''
         );
-        setLoading(false);
 
         history.push('/app/menu/levels/viewAdmin');
       } else if (confirmPassword !== admin?.password) {
@@ -129,7 +123,6 @@ export default function CreateAdmin({ history }) {
           null,
           ''
         );
-        setLoading(false);
       }
     }
   };
@@ -307,12 +300,9 @@ export default function CreateAdmin({ history }) {
                   />
                 </FormGroup>
               </Col>
-              
             </Row>
-
             <Button
-              className="btn btn-primary"
-              // type="submit"
+              style={{ backgroundColor: '#0066B3' }}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
@@ -328,7 +318,6 @@ export default function CreateAdmin({ history }) {
             </Button>
           </Form>
         </Formik>
-        <div style={{ marginTop: '30px' }} />
       </CardBody>
     </Card>
   );

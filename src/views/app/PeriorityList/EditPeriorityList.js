@@ -112,7 +112,9 @@ export default function EditPeriorityList(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack}>Back</Button>
+        <Button 
+        style={{backgroundColor:"#0066B3"}}
+        onClick={handleBack}>Back</Button>
         <CardTitle>
           <IntlMessages id="View Customer Periority List" />
         </CardTitle>
@@ -212,9 +214,12 @@ export default function EditPeriorityList(props) {
               </Col>
             </Row>
             {view ? (
-              <Button onClick={editPeriority}>Edit Profile</Button>
+              <Button 
+              style={{backgroundColor:"#0066B3"}}
+              onClick={editPeriority}>Edit Profile</Button>
             ) : (
               <Button
+              style={{backgroundColor:"#0066B3"}}
                 className="btn btn-primary"
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
@@ -232,6 +237,7 @@ export default function EditPeriorityList(props) {
               </Button>
             )}
             <Button
+            style={{backgroundColor:"#0066B3"}}
               className="btn btn-primary"
               // type="submit"
               className={`btn-shadow btn-multiple-state ${

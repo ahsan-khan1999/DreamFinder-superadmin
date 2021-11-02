@@ -80,7 +80,9 @@ export default function EditSchedule(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack} style={{marginBottom:'10px'}}>Back</Button>
+        <Button 
+        style={{backgroundColor:'#0066B3'}}
+        onClick={handleBack} style={{marginBottom:'10px'}}>Back</Button>
         <CardTitle>
           <IntlMessages id="View Schedule" />
         </CardTitle>
@@ -206,7 +208,8 @@ export default function EditSchedule(props) {
               </Col>
             </Row>
             {currentItem?.approval_status !== 'approved' ? <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{backgroundColor:'#0066B3'}}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loadingStatus ? 'show-spinner' : ''
@@ -222,7 +225,8 @@ export default function EditSchedule(props) {
               Approve Schedule
             </Button> : null}
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{backgroundColor:'#0066B3'}}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loadingSuspand ? 'show-spinner' : ''

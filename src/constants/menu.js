@@ -488,7 +488,7 @@ const data = [
   },
   {
     id: 'Sample',
-    icon: 'simple-icon-target',
+    icon: 'iconsminds-bag-items',
     label: 'Sample',
     to: `${adminRoot}/Sample/`,
     subs: [
@@ -534,7 +534,7 @@ const data = [
   },
   {
     id: 'Attendance',
-    icon: 'simple-icon-target',
+    icon: 'iconsminds-up',
     label: 'Attendance',
     to: `${adminRoot}/Attendance/ViewAttendance`,
     // subs: [
@@ -562,7 +562,7 @@ const data = [
   },
   {
     id: 'Periority List',
-    icon: 'iconsminds-embassy',
+    icon: 'simple-icon-list',
     label: 'Periority List',
     to: `${adminRoot}/PeriorityList`,
     subs: [

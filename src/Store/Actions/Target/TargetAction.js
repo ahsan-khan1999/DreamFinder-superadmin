@@ -55,7 +55,7 @@ export const CreateTargetAction = (data) => async (dispatch) => {
       });
       dispatch({
         type: CREATE_TARGET_CONSTANT.CREATE_TARGET_SUCCESS,
-        paylaod: false,
+        paylaod: res?.data?.response_data,
       });
       return true;
     } else {
@@ -81,13 +81,7 @@ export const EditTargetAction = (data) => async (dispatch) => {
       payload:true
     })
     let res = await apiServices.updateTarget(data)
-    if(res?.response_code === 401){
-      let res = dispatch(logOutUser());
-    if (res) {
-      logout();
-      // console.log(res);
-      history.push('/user/login');
-    }}
+    
     if(res?.response_code === 200){
       dispatch({
         type:EDIT_TARGET_CONSTANT.EDIT_TARGET_LOADING,
@@ -95,7 +89,7 @@ export const EditTargetAction = (data) => async (dispatch) => {
       })
       dispatch({
         type:EDIT_TARGET_CONSTANT.EDIT_TARGET_SUCCESS,
-        payload:false
+        payload:res?.response_data
       })
       return true
     }else{

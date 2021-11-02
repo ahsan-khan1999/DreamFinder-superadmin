@@ -34,6 +34,7 @@ export default function EditDirector(props) {
   const [thisView, setThisView] = useState(true);
   const currentUser = props?.location?.state;
   let [buttonName, setButtonName] = useState();
+  let [loadingSuspand, setLoadingSuspand] = useState(false);
 
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -57,6 +58,8 @@ export default function EditDirector(props) {
   };
   useEffect(() => {
     // readRoles();
+    dispatch(ViewRoleAction());
+
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -64,10 +67,12 @@ export default function EditDirector(props) {
     }
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
+  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
+
   let options = [];
-  // roles?.filter((item) =>
-  //   options.push({ label: item?.name, value: item?.name, key: item?.uid })
-  // );
+  roles?.filter((item) =>
+    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
   //   const [currentItem, setCurrentItem] = useState('');
   //   roles?.filter((item) => (
 
@@ -83,7 +88,6 @@ export default function EditDirector(props) {
   };
   const editData = async (e) => {
     e.preventDefault();
-    console.log(admin);
     let res = await dispatch(UpdateUserAction(admin));
     if (res) {
       NotificationManager.success('Successful response', 'Success', 5000, '');
@@ -91,6 +95,7 @@ export default function EditDirector(props) {
     }
   };
   const suspandAdmin = async () => {
+    setLoadingSuspand(true);
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
         uid: currentUser?.uid,
@@ -105,6 +110,8 @@ export default function EditDirector(props) {
           null,
           ''
         );
+        setLoadingSuspand(false);
+
         props.history.push('/app/menu/levels/ViewDirector');
       } else {
         NotificationManager.error(
@@ -115,7 +122,10 @@ export default function EditDirector(props) {
           ''
         );
       }
+      setLoadingSuspand(false);
     } else {
+      setLoadingSuspand(true);
+
       let apiData = {
         uid: currentUser?.uid,
       };
@@ -129,6 +139,8 @@ export default function EditDirector(props) {
           null,
           ''
         );
+        setLoadingSuspand(false);
+
         props.history.push('/app/menu/levels/ViewDirector');
       } else {
         NotificationManager.error(
@@ -138,6 +150,7 @@ export default function EditDirector(props) {
           null,
           ''
         );
+        setLoadingSuspand(false);
       }
     }
     //  setStatusUpdate()
@@ -151,7 +164,8 @@ export default function EditDirector(props) {
           <Button
             className="btn-btn-secondary"
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ 'background-color': '#0066B3', marginRight: '10px' }}
+
           >
             Back
           </Button>
@@ -199,6 +213,7 @@ export default function EditDirector(props) {
                   ) : (
                     <Input
                       required
+                      disabled
                       value={admin.email_address}
                       className="form-control"
                       name="email"
@@ -300,6 +315,7 @@ export default function EditDirector(props) {
                     </span>
                   ) : (
                     <Input
+                    disabled
                       required
                       value={admin?.phone_number}
                       type="text"
@@ -357,11 +373,11 @@ export default function EditDirector(props) {
                       className="react-select"
                       classNamePrefix="react-select"
                       name="form-field-name-gender"
-                        defaultValue={{
-                          label:currentUser?.role?.name,
-                          value:currentUser?.role?.name,
-                          id:currentUser?.role?.uid
-                        }}
+                      defaultValue={{
+                        label: currentUser?.role?.name,
+                        value: currentUser?.role?.name,
+                        id: currentUser?.role?.uid,
+                      }}
                       // value={gender}
 
                       onChange={(val) =>
@@ -376,7 +392,8 @@ export default function EditDirector(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
@@ -393,11 +410,11 @@ export default function EditDirector(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
                 // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 size="sm"
                 onClick={editData}
               >
@@ -411,12 +428,12 @@ export default function EditDirector(props) {
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#003766', marginRight: '5px' }}
+                style={{ 'background-color': '#0066B3' }}
+                className={`btn-shadow btn-multiple-state ${
+                  loadingSuspand ? 'show-spinner' : ''
+                }`}
                 // className="btn btn-primary"
                 onClick={suspandAdmin}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />

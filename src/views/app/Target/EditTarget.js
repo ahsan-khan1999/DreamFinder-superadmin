@@ -272,10 +272,8 @@ export default function EditTarget(props) {
   };
   const editData = async () => {
     console.log(currentTarget);
-    setLoadingSuspand(true);
     let medi = currentTarget?.medicines;
     let test = { ...target, medicines: medi };
-    console.log(test);
     let apiData = {
       // ...test,
       uid: currentTarget?.uid,
@@ -300,7 +298,6 @@ export default function EditTarget(props) {
     };
     // console.log(apiData);
     let res = await dispatch(EditTargetAction(apiData));
-    setLoadingSuspand(false);
 
     if (res) {
       NotificationManager.success(
@@ -1649,7 +1646,8 @@ export default function EditTarget(props) {
             {view ? (
               <>
                 <Button
-                  className="btn btn-primary"
+                  // className="btn btn-primary"
+                  style={{backgroundColor:"#0066B3"}}
                   // type="submit"
                   // className={`btn-shadow btn-multiple-state ${
                   //   loading ? 'show-spinner' : ''
@@ -1665,7 +1663,8 @@ export default function EditTarget(props) {
                   Edit Profile
                 </Button>
                 <Button
-                  className="btn btn-primary"
+                  // className="btn btn-primary"
+                  style={{backgroundColor:"#0066B3"}}
                   // type="submit"
                   className={`btn-shadow btn-multiple-state ${
                     loadingSuspand ? 'show-spinner' : ''
@@ -1683,10 +1682,11 @@ export default function EditTarget(props) {
               </>
             ) : (
               <Button
-                className="btn btn-primary"
+                // className="btn btn-primary"
                 // type="submit"
+                style={{backgroundColor:"#0066B3"}}
                 className={`btn-shadow btn-multiple-state ${
-                  loadingSuspand ? 'show-spinner' : ''
+                  loading ? 'show-spinner' : ''
                 }`}
                 size="sm"
                 onClick={editData}

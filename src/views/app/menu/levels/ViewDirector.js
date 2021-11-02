@@ -111,7 +111,7 @@ const ViewDirector = ({ match, history }) => {
           onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#003766',
+            backgroundColor: '#0066B3',
             marginTop: '10px',
           }}
         >
@@ -143,7 +143,7 @@ const ViewDirector = ({ match, history }) => {
                   color="#00BFFF"
                   height={100}
                   width={100}
-                  color="#003766"
+                  color="#0066B3"
                 />
               </div>
             ) : (

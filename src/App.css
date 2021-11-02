@@ -34,7 +34,7 @@
     position: absolute;
     right: 40;
     top: 1px;
-    border: 2px solid #003766;
+    border: 2px solid #0066B3;
     /* width: 40px; */
     width: 220px;
     height: 38px;
@@ -52,7 +52,7 @@
   .header-search input[type="search"]:focus {
     width: 220px;
     padding: 0 45px 0 10px;
-    border-color: #003766
+    border-color: #0066B3
   }
   .header-search input[type="submit"],
   .header-search button[type="submit"] {

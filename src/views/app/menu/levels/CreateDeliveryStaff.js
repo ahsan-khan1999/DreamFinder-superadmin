@@ -44,7 +44,7 @@ const selectGender = [
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
-export default function CreateDeliveryStaff() {
+export default function CreateDeliveryStaff({history}) {
   let [filterLocationIds, setfilterLocationIds] = useState([]);
   // let filterLocationIds =[]
   let [service_location, setService_location] = useState([]);
@@ -70,14 +70,13 @@ export default function CreateDeliveryStaff() {
     manager_uid: '',
   };
   const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
-  const [loading, setLoading] = useState(false);
 
   let option = [];
 
   const getServiceLocationUid = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}&assigned_to_ds=${0}`,
       {
         headers: {
           x_session_key: token.token,
@@ -104,6 +103,8 @@ export default function CreateDeliveryStaff() {
   );
 
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
+  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
+
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
@@ -127,10 +128,7 @@ export default function CreateDeliveryStaff() {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   const onAdminCreate = async () => {
-    setLoading(true)
-    console.log(array);
     let test = { ...deliveryStaff, service_location_uid: array };
-    console.log(test);
     setDeliveryStaff(test);
 
     if (
@@ -153,7 +151,6 @@ export default function CreateDeliveryStaff() {
         null,
         ''
       );
-    setLoading(false)
 
       return;
     } else {
@@ -161,10 +158,9 @@ export default function CreateDeliveryStaff() {
       // console.log(deliveryStaff,"at  else");
 
       // }, 5000);
-    setLoading(true)
 
       let res = await dispatch(CreateAdminAction(test));
-
+      console.log(test);
       if (res) {
         NotificationManager.success(
           'Delivery Staff Added Sucessfully',
@@ -173,7 +169,6 @@ export default function CreateDeliveryStaff() {
           null,
           ''
         );
-    setLoading(false)
 
         history.push('/app/menu/levels/ViewDeliveryStaff');
       } else if (confirmPassword !== deliveryStaff?.password) {
@@ -184,8 +179,6 @@ export default function CreateDeliveryStaff() {
           null,
           ''
         );
-    setLoading(false)
-
       }
     }
   };
@@ -403,42 +396,19 @@ export default function CreateDeliveryStaff() {
                   />
                 </FormGroup>
               </Col>
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Territory" />
-                  </Label>
-
-                  <Select
-                    required
-                    components={{ Input: CustomSelectInput }}
-                    className="react-select"
-                    classNamePrefix="react-select"
-                    name="form-field-name-gender"
-                    // value={gender}
-
-                    onChange={(val) => {
-                      setDeliveryStaff({
-                        ...deliveryStaff,
-                        service_location_uid: [val?.key],
-                      });
-                      // getServiceLocationUid(val?.key);
-                    }}
-                    options={option}
-                  />
-                </FormGroup>
-              </Col> */}
+             
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Select Teritory</h6>
+                  <IntlMessages id="Select Area" />
+
                   </Label>
                   <Select
                     cacheOptions
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     isMulti
-                    value={deliveryStaff?.service_location_uid}
+                    // value={deliveryStaff?.service_location_uid}
                     onChange={(e) => handleChange(e)}
                     options={option}
                   />
@@ -447,7 +417,9 @@ export default function CreateDeliveryStaff() {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{ backgroundColor: '#0066B3' }}
+
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -460,7 +432,7 @@ export default function CreateDeliveryStaff() {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Admin
+              Add Delivery Staff
             </Button>
           </Form>
         </Formik>

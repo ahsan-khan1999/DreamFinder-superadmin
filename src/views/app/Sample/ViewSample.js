@@ -66,7 +66,7 @@ export default function ViewSample(props) {
           onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#003766',
+            backgroundColor: '#0066B3',
             marginTop: '10px',
           }}
         >
@@ -95,10 +95,10 @@ export default function ViewSample(props) {
               >
                 <Loader
                   type="Puff"
-                  color="#00BFFF"
+                  // color="#00BFFF"
                   height={100}
                   width={100}
-                  color="#003766"
+                  color="#0066B3"
                 />
               </div>
             ) : (

@@ -13,6 +13,8 @@ const initial_state = {
   order: [],
   loading: false,
   distributionCenter: [],
+  createTarget:{},
+  updateTarget:{}
 };
 
 export const TargetReducer = (state = initial_state, action) => {
@@ -26,13 +28,13 @@ export const TargetReducer = (state = initial_state, action) => {
     case CREATE_TARGET_CONSTANT.CREATE_TARGET_LOADING:
       return { ...state, loading: action.payload };
     case CREATE_TARGET_CONSTANT.CREATE_TARGET_SUCCESS:
-      return { ...state, loading: action.payload };
+      return { ...state, createTarget: action.payload };
     case CREATE_TARGET_CONSTANT.CREATE_TARGET_ERROR:
       return { ...state, loading: action.payload };
     case EDIT_TARGET_CONSTANT.EDIT_TARGET_LOADING:
       return { ...state, loading: action.payload };
     case EDIT_TARGET_CONSTANT.EDIT_TARGET_SUCCESS:
-      return { ...state, loading: action.payload };
+      return { ...state, updateTarget: action.payload };
     case EDIT_TARGET_CONSTANT.EDIT_TARGET_ERROR:
       return { ...state, loading: action.payload };
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING:

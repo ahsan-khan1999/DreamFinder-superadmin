@@ -16,7 +16,7 @@ import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import Breadcrumb from 'containers/navs/Breadcrumb';
 import { useState } from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { CreateCustomerPeriorityListAction } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import apiServices from 'services/requestHandler';
@@ -25,7 +25,6 @@ import { getToken } from 'Utils/auth.util';
 
 export default function CreatePeriorityList(props) {
   const dispatch = useDispatch()
-  const [loading, setLoading] = useState(false);
   const [customers, setCustomers] = useState([]);
   const [customersID, setCustomersID] = useState('');
 
@@ -42,10 +41,10 @@ export default function CreatePeriorityList(props) {
     );
     setCustomers(res?.data?.response_data);
   };
+  const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
   useEffect(() => {
     readCustomers();
   }, []);
-  console.log(customers);
   let customerOptions = [];
   customers?.map((item) =>
     customerOptions.push({
@@ -55,7 +54,6 @@ export default function CreatePeriorityList(props) {
     })
   );
   const createCustomerPeriorityList = async () => {
-    setLoading(true);
     console.log(customersID);
     let res = await dispatch(
       CreateCustomerPeriorityListAction({ customer_uid: customersID })
@@ -68,11 +66,9 @@ export default function CreatePeriorityList(props) {
         null,
         ''
       );
-      setLoading(false);
 
       props.history.push('/app/PeriorityList/ViewPeriorityList');
     }else{
-      setLoading(false);
 
     }
   };
@@ -116,7 +112,8 @@ export default function CreatePeriorityList(props) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{backgroundColor:"#0066B3"}}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''

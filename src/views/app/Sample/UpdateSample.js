@@ -191,7 +191,9 @@ export default function UpdateSample(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack} style={{ marginTop: '10px' }}>
+        <Button
+        style={{backgroundColor:"#0066B3"}}
+        onClick={handleBack} style={{ marginTop: '10px' }}>
           Back
         </Button>
         <CardTitle>
@@ -371,9 +373,12 @@ export default function UpdateSample(props) {
         </Formik>
 
         {view ? (
-          <Button onClick={editProfile}>Edit Sample</Button>
+          <Button
+          style={{backgroundColor:"#0066B3"}}
+          onClick={editProfile}>Edit Sample</Button>
         ) : (
           <Button
+          style={{backgroundColor:"#0066B3"}}
             className={`btn-shadow btn-multiple-state ${
               loading ? 'show-spinner' : ''
             }`}
@@ -383,6 +388,7 @@ export default function UpdateSample(props) {
           </Button>
         )}
         <Button
+        style={{backgroundColor:"#0066B3"}}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}

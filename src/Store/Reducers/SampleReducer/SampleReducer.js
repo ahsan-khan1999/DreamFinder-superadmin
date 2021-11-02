@@ -13,7 +13,8 @@ import {
 const initial_state = {
   sample: [],
   sampleTransaction: [],
-
+  createSample: {},
+  updateSample: {},
   loading: false,
 };
 export const SampleReducer = (state = initial_state, action) => {
@@ -29,6 +30,18 @@ export const SampleReducer = (state = initial_state, action) => {
     case VIEW_SAMPLE_TRANSACTION_CONSTANT.VIEW_SAMPLE_TRANSACTION_SUCCESS:
       return { ...state, sampleTransaction: action.payload };
     case VIEW_SAMPLE_TRANSACTION_CONSTANT.VIEW_SAMPLE_TRANSACTION_ERROR:
+      return { ...state, loading: action.payload };
+    case CREATE_SAMPLE_CONSTANT.CREATE_SAMPLE_LOADING:
+      return { ...state, loading: action.payload };
+    case CREATE_SAMPLE_CONSTANT.CREATE_SAMPLE_SUCCESS:
+      return { ...state, createSample: action.payload };
+    case CREATE_SAMPLE_CONSTANT.CREATE_SAMPLE_ERROR:
+      return { ...state, loading: action.payload };
+    case UPDATE_SAMPLE_CONSTANT.UPDATE_SAMPLE_LOADING:
+      return { ...state, loading: action.payload };
+    case UPDATE_SAMPLE_CONSTANT.UPDATE_SAMPLE_SUCCESS:
+      return { ...state, updateSample: action.payload };
+    case UPDATE_SAMPLE_CONSTANT.UPDATE_SAMPLE_ERROR:
       return { ...state, loading: action.payload };
 
     default:

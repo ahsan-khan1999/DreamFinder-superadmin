@@ -403,7 +403,9 @@ export default function CreateTarget(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack}>Back</Button>
+        <Button 
+        style={{backgroundColor:"#0066B3"}}
+        onClick={handleBack}>Back</Button>
         <CardTitle>
           <IntlMessages id="Create Target" />
         </CardTitle>
@@ -419,6 +421,7 @@ export default function CreateTarget(props) {
 
                   <Select
                     required
+                    isDisabled={selected === '' ? false : true}
                     components={{ Input: CustomSelectInput }}
                     className="react-select"
                     classNamePrefix="react-select"
@@ -1408,8 +1411,9 @@ export default function CreateTarget(props) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
               // type="submit"
+                        style={{backgroundColor:"#0066B3"}}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}

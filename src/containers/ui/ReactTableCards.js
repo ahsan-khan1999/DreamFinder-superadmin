@@ -1036,9 +1036,6 @@ export const AdminTable = (props) => {
   );
   return (
     <div className="mb-4">
-      <CardTitle>
-        <IntlMessages id="Admin Table" />
-      </CardTitle>
       <Table columns={cols} data={props?.data} />
     </div>
   );
@@ -1105,14 +1102,7 @@ export const TargetTable = (props) => {
     ],
     []
   );
-  return (
-    <div className="mb-4">
-      <CardTitle>
-        <IntlMessages id="Admin Table" />
-      </CardTitle>
-      <Table columns={cols} data={props?.data} />
-    </div>
-  );
+  return <Table columns={cols} data={props?.data} />;
 };
 export const DCPTable = (props) => {
   const { changeRoute, header } = props;
@@ -1321,7 +1311,6 @@ export const ScheduleTabel = (props) => {
   );
 };
 
-
 export const AttendanceTabel = (props) => {
   const { changeRoute, header } = props;
   const cols = React.useMemo(
@@ -1377,7 +1366,9 @@ export const AttendanceTabel = (props) => {
         Header: header[5],
         accessor: 'datetime',
         cellClass: 'list-item-heading w-10',
-        Cell: (props) =><span>{moment.unix(props?.value).format('MMM DD YYYY h:mm:ss')}</span>,
+        Cell: (props) => (
+          <span>{moment.unix(props?.value).format('MMM DD YYYY h:mm:ss')}</span>
+        ),
       },
 
       {
@@ -1419,8 +1410,7 @@ export const ViewCategoryTabel = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
-    
-    
+
       {
         Header: header[2],
         accessor: 'status.name',
@@ -1436,7 +1426,7 @@ export const ViewCategoryTabel = (props) => {
           </span>
         ),
       },
-   
+
       {
         Header: header[3],
         accessor: 'action',
@@ -1488,8 +1478,7 @@ export const ViewCustomerPeriorityTabel = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
-    
-    
+
       {
         Header: header[4],
         accessor: 'status.name',
@@ -1505,7 +1494,7 @@ export const ViewCustomerPeriorityTabel = (props) => {
           </span>
         ),
       },
-   
+
       {
         Header: header[5],
         accessor: 'action',
@@ -1557,8 +1546,7 @@ export const ViewDoctorPeriorityTabel = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
-    
-    
+
       {
         Header: header[4],
         accessor: 'status.name',
@@ -1574,7 +1562,7 @@ export const ViewDoctorPeriorityTabel = (props) => {
           </span>
         ),
       },
-   
+
       {
         Header: header[5],
         accessor: 'action',
@@ -1597,7 +1585,6 @@ export const ViewDoctorPeriorityTabel = (props) => {
     </div>
   );
 };
-
 
 export const SampleTabel = (props) => {
   const { changeRoute, header } = props;
@@ -1627,8 +1614,7 @@ export const SampleTabel = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
-    
-    
+
       {
         Header: header[4],
         accessor: 'status.name',
@@ -1644,7 +1630,7 @@ export const SampleTabel = (props) => {
           </span>
         ),
       },
-   
+
       {
         Header: header[5],
         accessor: 'action',
@@ -1696,8 +1682,7 @@ export const SampleTransactionTabel = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
-    
-    
+
       {
         Header: header[4],
         accessor: 'status.name',
@@ -1713,7 +1698,7 @@ export const SampleTransactionTabel = (props) => {
           </span>
         ),
       },
-   
+
       {
         Header: header[5],
         accessor: 'action',

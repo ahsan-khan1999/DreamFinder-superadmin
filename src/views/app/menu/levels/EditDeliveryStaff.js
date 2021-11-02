@@ -41,8 +41,10 @@ export default function EditDeliveryStaff(props) {
   let [buttonName, setButtonName] = useState();
 
   const currentUser = props?.location?.state;
-  const [confirmPassword, setConfirmPassword] = useState('');
   console.log(currentUser);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  // console.log(currentUser);
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -51,10 +53,10 @@ export default function EditDeliveryStaff(props) {
 
     gender: currentUser?.gender,
     designation: currentUser?.designation,
-    manager_uid: '',
+    manager_uid: currentUser?.field_staff?.manager?.uid,
 
     phone_number: currentUser?.phone_number,
-    service_location_uid: array,
+    service_location_uid: currentUser?.field_staff?.service_location,
 
     role_uid: currentUser?.role?.uid,
   };
@@ -99,6 +101,8 @@ export default function EditDeliveryStaff(props) {
     dispatch(ViewDepoAction());
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
+  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
+
   const depoManager = useSelector(
     (state) => state?.ViewUserReducer?.depoManager
   );
@@ -126,7 +130,7 @@ export default function EditDeliveryStaff(props) {
     setThisView(false);
   };
   const handleChangeToView = () => {
-    props.history.push('/app/menu/levels/viewAdmin');
+    props.history.push('/app/menu/levels/ViewDeliveryStaff');
   };
   const editData = async (e) => {
     let test = { ...admin, service_location_uid: array };
@@ -139,10 +143,15 @@ export default function EditDeliveryStaff(props) {
       props.history.push('/app/menu/levels/ViewDeliveryStaff');
     }
   };
-  let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({label:item?.name,value:item?.name,id:item?.uid})
+  let defaultOptions = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    defaultOptions?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
   );
-  console.log(defaultOptions,"default option");
+  console.log(defaultOptions, 'default option');
   const suspandAdmin = async () => {
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
@@ -169,6 +178,8 @@ export default function EditDeliveryStaff(props) {
         );
       }
     } else {
+      setLoadingSuspand(true);
+
       let apiData = {
         uid: currentUser?.uid,
       };
@@ -182,6 +193,8 @@ export default function EditDeliveryStaff(props) {
           null,
           ''
         );
+        setLoadingSuspand(false);
+
         props.history.push('/app/menu/levels/ViewDeliveryStaff');
       } else {
         NotificationManager.error(
@@ -191,6 +204,7 @@ export default function EditDeliveryStaff(props) {
           null,
           ''
         );
+        setLoadingSuspand(false);
       }
     }
     //  setStatusUpdate()
@@ -202,9 +216,9 @@ export default function EditDeliveryStaff(props) {
       <CardBody>
         <CardTitle>
           <Button
-            className="btn-btn-secondary"
+            // className="btn-btn-secondary"
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', backgroundColor: '#0066B3' }}
           >
             Back
           </Button>
@@ -252,6 +266,7 @@ export default function EditDeliveryStaff(props) {
                   ) : (
                     <Input
                       required
+                      disabled
                       value={admin.email_address}
                       className="form-control"
                       name="email"
@@ -354,6 +369,7 @@ export default function EditDeliveryStaff(props) {
                   ) : (
                     <Input
                       required
+                      disabled
                       value={admin?.phone_number}
                       type="text"
                       className="radio-in"
@@ -462,7 +478,7 @@ export default function EditDeliveryStaff(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Manager" />
+                    <IntlMessages id="Area" />
                   </Label>
 
                   {thisView ? (
@@ -479,8 +495,10 @@ export default function EditDeliveryStaff(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={defaultOptions[0]}
-                      value={admin?.service_location_uid}
+                      defaultValue={[defaultOptions[0]]}
+                      // defaultValue={[defaultOptions[0],defaultOptions[1],defaultOptions[2],defaultOptions[3]]}
+                      // defaultOptions={defaultOptions[0],defaultOptions[1],defaultOptions[2],defaultOptions[3]}
+                      // value={admin?.service_location_uid}
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />
@@ -491,7 +509,8 @@ export default function EditDeliveryStaff(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+                // className="btn btn-primary"
+                style={{ marginRight: '10px', backgroundColor: '#0066B3' }}
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
@@ -508,11 +527,13 @@ export default function EditDeliveryStaff(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                // className="btn btn-primary"
+
+                style={{ marginRight: '0px', backgroundColor: '#0066B3' }}
                 // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 size="sm"
                 onClick={editData}
               >
@@ -526,12 +547,12 @@ export default function EditDeliveryStaff(props) {
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#003766', marginRight: '5px' }}
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
+                className={`btn-shadow btn-multiple-state ${
+                  loadingSuspand ? 'show-spinner' : ''
+                }`}
                 onClick={suspandAdmin}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />
@@ -549,3 +570,7 @@ export default function EditDeliveryStaff(props) {
     </Card>
   );
 }
+
+// label:currentUser?.field_staff?.service_location?.map((item,index) => item[index]?.name),
+//                         value:currentUser?.field_staff?.service_location?.map((item_,index_) => item_[index_]?.name),
+//                         key:currentUser?.field_staff?.service_location?.map((_item_,_index_) => _item_[_index_]?.uid),

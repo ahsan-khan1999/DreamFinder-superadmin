@@ -33,6 +33,8 @@ const selectGender = [
 export default function EditDepoManager(props) {
   const [thisView, setThisView] = useState(true);
   const currentUser = props?.location?.state;
+  const [loadingSuspand, setSoadingSuspand] = useState(false);
+
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [buttonName, setButtonName] = useState('')
@@ -55,7 +57,7 @@ export default function EditDepoManager(props) {
     // dispatch(ViewRoleAction());
   };
   useEffect(() => {
-    // readRoles();
+    readRoles();
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -63,10 +65,11 @@ export default function EditDepoManager(props) {
     }
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
+  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
   let options = [];
-  // roles?.filter((item) =>
-  //   options.push({ label: item?.name, value: item?.name, key: item?.uid })
-  // );
+  roles?.filter((item) =>
+    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+  );
   //   const [currentItem, setCurrentItem] = useState('');
   //   roles?.filter((item) => (
 
@@ -90,6 +93,7 @@ export default function EditDepoManager(props) {
     }
   };
   const suspandAdmin = async () => {
+    setSoadingSuspand(true)
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
         uid: currentUser?.uid,
@@ -104,8 +108,12 @@ export default function EditDepoManager(props) {
           null,
           ''
         );
+    setSoadingSuspand(false)
+
         props.history.push('/app/menu/levels/ViewDepoManager');
       } else {
+    setSoadingSuspand(true)
+
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -113,8 +121,13 @@ export default function EditDepoManager(props) {
           null,
           ''
         );
+    setSoadingSuspand(false)
+
       }
+
     } else {
+    setSoadingSuspand(true)
+
       let apiData = {
         uid: currentUser?.uid,
       };
@@ -128,6 +141,8 @@ export default function EditDepoManager(props) {
           null,
           ''
         );
+    setSoadingSuspand(false)
+
         props.history.push('/app/menu/levels/ViewDepoManager');
       } else {
         NotificationManager.error(
@@ -138,6 +153,8 @@ export default function EditDepoManager(props) {
           ''
         );
       }
+    setSoadingSuspand(false)
+
     }
     //  setStatusUpdate()
 
@@ -150,7 +167,7 @@ export default function EditDepoManager(props) {
           <Button
             className="btn-btn-secondary"
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', 'background-color': '#0066B3' }}
           >
             Back
           </Button>
@@ -197,6 +214,7 @@ export default function EditDepoManager(props) {
                     </span>
                   ) : (
                     <Input
+                    disabled
                       required
                       value={admin.email_address}
                       className="form-control"
@@ -300,6 +318,7 @@ export default function EditDepoManager(props) {
                   ) : (
                     <Input
                       required
+                      disabled
                       value={admin?.phone_number}
                       type="text"
                       className="radio-in"
@@ -376,7 +395,9 @@ export default function EditDepoManager(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+              style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+
+                // className="btn btn-primary"
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
@@ -393,11 +414,12 @@ export default function EditDepoManager(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+
                 // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 size="sm"
                 onClick={editData}
               >
@@ -411,12 +433,13 @@ export default function EditDepoManager(props) {
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#003766', marginRight: '5px' }}
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
+                className={`btn-shadow btn-multiple-state ${
+                  loadingSuspand ? 'show-spinner' : ''
+                }`}
                 onClick={suspandAdmin}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />

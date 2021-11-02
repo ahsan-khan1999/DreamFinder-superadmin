@@ -41,8 +41,11 @@ const initial_state = {
   regionalSalesManager: [],
   mpo: [],
   roles:[],
-  
+  createUser:[],
   loading: false,
+  loadingCreate:false,
+  updateUser:{}
+  // loadingUpdate:false
 };
 
 export const ViewUserReducer = (state = initial_state, action) => {
@@ -96,11 +99,11 @@ export const ViewUserReducer = (state = initial_state, action) => {
     case VIEW_MPO_CONSTANT.VIEW_MPO_ERROR:
       return { ...state, loading: action.payload };
     case CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING:
-      return { ...state, loading: action.payload };
+      return { ...state, loadingCreate: action.payload };
     case CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS:
-      return { ...state, loading: action.payload };
+      return { ...state, createUser: action.payload };
     case CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR:
-      return { ...state, loading: action.payload };
+      return { ...state, loadingCreate: action.payload };
     case CREATE_DIRECTOR_CONSTANT.CREATE_DIRECTOR_LOADING:
       return { ...state, loading: action.payload };
     case CREATE_DIRECTOR_CONSTANT.CREATE_DIRECTOR_SUCCESS:
@@ -144,11 +147,11 @@ export const ViewUserReducer = (state = initial_state, action) => {
     case CREATE_MPO_CONSTANT.CREATE_MPO_ERROR:
       return { ...state, loading: action.payload };
     case UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_LOADING:
-      return { ...state, loading: action.payload };
+      return { ...state, loadingCreate: action.payload };
     case UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_SUCCESS:
-      return { ...state, loading: action.payload };
+      return { ...state, updateUser: action.payload };
     case UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_ERROR:
-      return { ...state, loading: action.payload };
+      return { ...state, loadingCreate: action.payload };
     case UPDATE_DIRECTOR_CONSTANT.UPDATE_DIRECTOR_LOADING:
       return { ...state, loading: action.payload };
     case UPDATE_DIRECTOR_CONSTANT.UPDATE_DIRECTOR_SUCCESS:

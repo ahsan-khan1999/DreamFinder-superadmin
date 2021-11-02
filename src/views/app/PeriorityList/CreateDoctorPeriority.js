@@ -25,9 +25,10 @@ import { getToken } from 'Utils/auth.util';
 
 export default function CreatePeriorityList(props) {
   const dispatch = useDispatch()
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [doctor, setDoctor] = useState([]);
   const [doctorID, setDoctorID] = useState('');
+  const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
 
   const readDoctor = async () => {
     let token = await getToken();
@@ -54,7 +55,6 @@ export default function CreatePeriorityList(props) {
     })
   );
   const createDoctorPeriorityList = async () => {
-    setLoading(true);
     let res = await dispatch(
         CreateDoctorPeriorityListAction({ doctor_uid: doctorID })
     );
@@ -66,11 +66,9 @@ export default function CreatePeriorityList(props) {
         null,
         ''
       );
-      setLoading(false);
 
       props.history.push('/app/PeriorityList/ViewPeriorityList');
     }else{
-      setLoading(false);
 
     }
   };
@@ -114,7 +112,8 @@ export default function CreatePeriorityList(props) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{backgroundColor:"#0066B3"}}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''

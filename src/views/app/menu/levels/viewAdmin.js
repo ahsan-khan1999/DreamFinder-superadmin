@@ -40,7 +40,7 @@ const ViewAdmin = ({ match, history }) => {
   }, []);
   const dispatch = useDispatch();
   const getAdmin = () => {
-    dispatch(ViewAdminAction());
+    dispatch(ViewAdminAction(history));
   };
   const [doc, setDoc] = useState();
   const user = useSelector((state) => state?.ViewUserReducer?.admin);
@@ -136,12 +136,13 @@ const ViewAdmin = ({ match, history }) => {
                   alignItems: 'center',
                 }}
               >
+
                 <Loader
                   type="Puff"
-                  color="#00BFFF"
+                  color="#0066B3"
                   height={100}
                   width={100}
-                  color="#003766"
+                  // color="#003766"
                 />
               </div>
             ) : (

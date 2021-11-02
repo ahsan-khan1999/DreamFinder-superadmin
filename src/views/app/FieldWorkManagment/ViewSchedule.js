@@ -91,10 +91,10 @@ export default function ViewSchedule(props) {
               >
                 <Loader
                   type="Puff"
-                  color="#00BFFF"
+                  // color="#00BFFF"
                   height={100}
                   width={100}
-                  color="#003766"
+                  color="#0066B3"
                 />
               </div>
             ) : (
