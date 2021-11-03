@@ -613,7 +613,7 @@ const ViewCurrentDoctor = ({ match, history }) => {
 
               {/* (
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     type="submit"
                     onClick={onDoctorCreate}
                   >
@@ -642,7 +642,8 @@ const ViewCurrentDoctor = ({ match, history }) => {
           <div style={{ marginBottom: '30px' }}>
             {thisView === true ? (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={editProfile}
                 style={{ marginRight: '5px', 'background-color': '#003766' }}
               >
@@ -650,7 +651,8 @@ const ViewCurrentDoctor = ({ match, history }) => {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 // style={{'background-color': '#003766'}}
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
@@ -690,7 +692,8 @@ const ViewCurrentDoctor = ({ match, history }) => {
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={showModal}
                 style={{ marginLeft: '0px', 'background-color': '#003766' }}
               >

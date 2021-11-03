@@ -280,9 +280,8 @@ export default function ViewCurrentCustomers(props) {
           {thisView ? (
             <>
               <Button
-                className="btn btn-primary"
-                onClick={handleChangeToView}
-                style={{ marginRight: '20px' }}
+               onClick={handleChangeToView}
+                style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
               >
                 Back
               </Button>
@@ -291,9 +290,8 @@ export default function ViewCurrentCustomers(props) {
           ) : (
             <>
               <Button
-                className="btn btn-primary"
                 onClick={editProfile}
-                style={{ marginRight: '20px' }}
+                style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
               >
                 Close Edit
               </Button>
@@ -770,7 +768,7 @@ export default function ViewCurrentCustomers(props) {
               <Col lg={2}>
                 <AvGroup className="error-t-negative" className="my-4">
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     size="sm"
                     onClick={() => {
                       handlespecialdaydate(specialday, specialdate);
@@ -859,7 +857,7 @@ export default function ViewCurrentCustomers(props) {
             </Row>
 
             {/* <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               size="sm"
               // onClick={onSubmit}
               // type="submit"
@@ -875,17 +873,17 @@ export default function ViewCurrentCustomers(props) {
             </Button> */}
 
             {thisView ? (
-              <Button className="btn btn-primary mr-3" onClick={editProfile}>
+               <Button style={{backgroundColor:'#0066b3'}} className="mr-3" onClick={editProfile}>
                 Edit Customer
               </Button>
             ) : (
-              <Button className="btn btn-primary" onClick={editData}>
+               <Button style={{backgroundColor:'#0066b3'}} onClick={editData}>
                 Save
               </Button>
             )}
 
             {thisView ? (
-              <Button className="btn btn-primary" onClick={suspandCustomers}>
+               <Button style={{backgroundColor:'#0066b3'}} onClick={suspandCustomers}>
                 {buttonName}
               </Button>
             ) : (

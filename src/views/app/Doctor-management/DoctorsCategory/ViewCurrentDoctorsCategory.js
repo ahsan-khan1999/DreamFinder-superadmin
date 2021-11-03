@@ -161,9 +161,8 @@ export default function ViewCurrentDoctorsCategory(props) {
         {thisView ? (
             <>
             <Button
-              className="btn btn-primary"
               onClick={handleChangeToView}
-              style={{ marginRight: '20px'}}
+              style={{ marginRight: '20px',backgroundColor:'#0066b3'}}
             >
               Back
             </Button>
@@ -173,9 +172,8 @@ export default function ViewCurrentDoctorsCategory(props) {
               
               <>
               <Button
-                className="btn btn-primary"
                 onClick={editProfile}
-                style={{ marginRight: '20px'}}
+                style={{ marginRight: '20px' , backgroundColor:'#0066b3'}}
               >
                 Close Edit
               </Button>
@@ -286,8 +284,8 @@ export default function ViewCurrentDoctorsCategory(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary mr-3"
-              
+                style={{backgroundColor:'#0066b3'}}
+                className="mr-3"
                 onClick={editProfile}
               >
               
@@ -295,7 +293,8 @@ export default function ViewCurrentDoctorsCategory(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
               
                 onClick={editData}
               >
@@ -315,17 +314,18 @@ export default function ViewCurrentDoctorsCategory(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={suspandDepartmenthead}
               >
                 {loading ? (
                 <div className="d-flex justify-content-center">
                   <Loader height={18} width={18} type="Oval" color="#fff" />
-                  &nbsp; {buttonName}
+                  &nbsp; Suspending
                 </div>
               ) : (
-                'Suspending'
-              )}
+                buttonName
+                )}
                 
               </Button>
 
@@ -336,7 +336,7 @@ export default function ViewCurrentDoctorsCategory(props) {
 
 
             {/* <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               size="sm"
               onClick={onDoctorCategoryCreate}
             >

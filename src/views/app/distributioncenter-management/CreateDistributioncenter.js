@@ -232,7 +232,7 @@ export default function CreateDistributioncenter({ history }) {
         </Col>
          ):(
            
-          <Col lg={6}>
+          <Col lg={12}>
           <FormGroup>
             <Label>
               <span style={{color:'red',fontWeight:'600'}}>No Available Area For This Region All Area's Have Already Been Assigned</span>
@@ -273,7 +273,7 @@ export default function CreateDistributioncenter({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               size="sm"
               onClick={onDepartHeadCreate}
             >

@@ -140,10 +140,11 @@ export default function CreateDoctors({ history }) {
     degree: '',
     designation: '',
     organization: '',
-    speciality: '',
+    doctor_category:'',
     station_type: '',
-    doctor_category_uid: '',
+    speciality_uid: '',
     market_uid: '',
+    other_service:'',
   };
 
   const [doctorCreate, setDoctorCreate] = useState(Doctor_obj);
@@ -188,9 +189,10 @@ export default function CreateDoctors({ history }) {
     degree: doctorCreate?.degree,
     designation: doctorCreate?.designation,
     organization: doctorCreate?.organization,
-    speciality: doctorCreate?.speciality,
+    doctor_category: doctorCreate?.doctor_category,
+    other_service:doctorCreate?.other_service,
     station_type: doctorCreate?.station_type,
-    doctor_category_uid: doctorCreate?.doctor_category_uid,
+    speciality_uid: doctorCreate?.speciality_uid,
     market_uid: doctorCreate?.market_uid,
     special_day: obj,
   };
@@ -202,10 +204,11 @@ export default function CreateDoctors({ history }) {
       doctorCreate?.degree === '' &&
       doctorCreate?.designation === '' &&
       doctorCreate?.organization === '' &&
-      doctorCreate?.speciality === '' &&
+      doctorCreate?.doctor_category === '' &&
       doctorCreate?.station_type === '' &&
-      doctorCreate?.doctor_category_uid === '' &&
-      doctorCreate?.market_uid === ''
+      doctorCreate?.speciality_uid === '' &&
+      doctorCreate?.market_uid === '' &&
+      doctorCreate?.other_service === '' 
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -236,9 +239,9 @@ export default function CreateDoctors({ history }) {
     <Card>
       <CardBody>
         <Button
-          className="btn btn-primary mb-4 "
+          
           onClick={handleChangeToView}
-          style={{ marginRight: '20px' }}
+          style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
         >
           Back
         </Button>
@@ -687,7 +690,7 @@ export default function CreateDoctors({ history }) {
                 <AvGroup className="error-t-negative" className="my-4">
              
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     size="sm"
                     onClick={() => {
                       handlespecialdaydate(specialday, specialdate);
@@ -741,7 +744,7 @@ export default function CreateDoctors({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               size="sm"
               // onClick={onSubmit}
               // type="submit"

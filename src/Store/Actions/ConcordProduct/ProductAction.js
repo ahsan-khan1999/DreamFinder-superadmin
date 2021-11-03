@@ -10,34 +10,40 @@ import {
 
 
 // Products
-export const GetProduct = () => async (dispatch) => {
+export const GetProduct = (category,old_new) => async (dispatch) => {
+    const token = JSON.parse(localStorage.getItem("token"));
     try {
+      const head = { "x-session-key": token.token, "x-session-type": token.type };
       dispatch({
         type: PRODUCT_CONSTANT.PRODUCT_LOADING,
         payload: true,
       });
-  
-      let res = await apiServices.getproducts();
-  
-      if (res?.data?.response_code === 200) {
+      const response = await axios.get(
+        `https://concord-backend-m2.herokuapp.com/api/products/read${category}${old_new}`,
+        { headers: head }
+      );
+      if (response?.data?.response_code === 200) {
         dispatch({
           type: PRODUCT_CONSTANT.PRODUCT_LOADING,
           payload: false,
         });
         dispatch({
           type: PRODUCT_CONSTANT.PRODUCT_SUCESS,
-          payload: res?.data?.response_data,
+          payload: response?.data?.response_data,
         });
-      } else {
+      }
+      else {
         dispatch({
           type: PRODUCT_CONSTANT.PRODUCT_ERROR,
           payload: [],
         });
       }
-    } catch {}
+    } catch (error) {
+      return "Fail";
+    }
   };
-
-
+  
+  
   export const CreateProducts = (data) => async (dispatch) => {
     try {
       dispatch({

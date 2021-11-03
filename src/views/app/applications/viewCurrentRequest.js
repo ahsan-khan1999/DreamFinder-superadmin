@@ -99,10 +99,9 @@ export default function viewCurrentRequest({ history }) {
     <Card>
       <CardBody>
         <CardTitle>
-          <Button
-            className="btn-btn-secondary"
+           <Button
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
           >
             Back
           </Button>
@@ -115,14 +114,16 @@ export default function viewCurrentRequest({ history }) {
           ) : (
             <div>
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={submit}
                 style={{ marginRight: '5px', 'background-color': '#003766' }}
               >
                 Accept
               </Button>
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={rejectRemoval}
                 style={{ marginRight: '5px', 'background-color': '#003766' }}
               >
@@ -132,7 +133,7 @@ export default function viewCurrentRequest({ history }) {
           )}
 
           {/* {thisView ? (
-              <Button className="btn btn-primary" onClick={suspandDoctor}>
+               <Button style={{backgroundColor:'#0066b3'}} onClick={suspandDoctor}>
                 {buttonName}
               </Button>
             ) : (

@@ -169,7 +169,7 @@ export const AppoinmentTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -250,7 +250,7 @@ export const RemovalRequestTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -397,7 +397,7 @@ export const ReactTableWithPaginationCardPatient = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -574,7 +574,7 @@ export const OrderRequestTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -709,7 +709,7 @@ export const DepartmentHeadTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -841,7 +841,7 @@ export const DistributionCenter = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -885,7 +885,7 @@ export const ProductTable = (props) => {
       },
       {
         Header: props?.header[1],
-        accessor: 'category.name',
+        accessor: 'category.category',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -958,7 +958,7 @@ export const ProductTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1003,7 +1003,7 @@ export const StockTable = (props) => {
       },
       {
         Header: props?.header[1],
-        accessor: 'product.category.name',
+        accessor: 'product.category.category',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -1092,7 +1092,7 @@ export const StockTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1182,7 +1182,7 @@ export const ProductCategoryTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1356,7 +1356,7 @@ export const StockTransaction = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1432,7 +1432,7 @@ export const DoctorTable = (props) => {
 
       {
         Header: props?.header[3],
-        accessor: 'doctor_category.name',
+        accessor: 'doctor_category',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -1469,7 +1469,7 @@ export const DoctorTable = (props) => {
 
       {
         Header: props?.header[5],
-        accessor: 'speciality',
+        accessor: 'speciality.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -1546,7 +1546,7 @@ export const DoctorTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1617,7 +1617,7 @@ export const DoctorCategoryTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1754,7 +1754,7 @@ export const CustomersTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1853,7 +1853,7 @@ export const ReactTableWithPaginationCard = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -1947,7 +1947,7 @@ export const ReactTableWithPaginationCardAllUser = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -2014,7 +2014,7 @@ export const ReadTestTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -2060,7 +2060,7 @@ export const ReadCategoryTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -2131,7 +2131,7 @@ export const ReadMedicinesTable = (props) => {
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -2193,7 +2193,7 @@ export const ViewReportTable = (props) => {
         cellClass: 'text-muted  w-10',
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -2264,7 +2264,7 @@ export const ViewPaymentTable = (props) => {
         cellClass: 'text-muted  w-10',
         Cell: (props) => (
           <Button
-            style={{ 'backgroundColor': '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View

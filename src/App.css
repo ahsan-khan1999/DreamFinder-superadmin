@@ -178,3 +178,42 @@
     cursor: pointer;
   }
  
+
+
+  .dashboardBtnList-item {
+    border-radius: 0px;
+    text-decoration: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  .dashboardBtnList-item a {
+    font-weight: 500;
+    text-decoration: none;
+   
+  }
+  .dashboardBtnList-item-active {
+    background: #0066b3 !important;
+    text-decoration: none;
+  
+}
+  .dashboardBtnList-item-active a {
+    color: #fff !important;
+    text-decoration: none;
+
+}
+  .default-color-and-hover {
+    background-color: #dfeffe;
+  }
+  .default-color-and-hover a {
+    color: grey !important;
+    text-decoration: none;
+
+}
+  .default-color-and-hover:hover {
+    background: #0066b3 !important;
+  }
+  .default-color-and-hover:hover a {
+    text-decoration: none;
+
+    color: #fff !important;
+  }

@@ -34,6 +34,22 @@ export default function ViewCurrentDoctors(props) {
 
   console.log(currentDoctor, 'currentDoctor');
 
+
+  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
+
+  let option_static_docCat_Category = [];
+  staticdata?.doctor__doctor_categorys?.filter((item) =>
+  option_static_docCat_Category.push({
+      label: item?.name,
+      value: item?.value,
+      key: item?.id,
+    })
+  );
+
+
+
+
+
   useEffect(() => {
     if (currentDoctor?.status?.name === 'suspended') {
       setButtonName('Active');
@@ -66,7 +82,6 @@ export default function ViewCurrentDoctors(props) {
   useEffect(() => {
     dispatch(StaticDataGet());
   }, []);
-  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
 
   let option_static_stationtype = [];
   staticdata?.doctor__station_type?.filter((item) =>
@@ -167,9 +182,9 @@ export default function ViewCurrentDoctors(props) {
     degree: currentDoctor?.degree,
     designation: currentDoctor?.designation,
     organization: currentDoctor?.organization,
-    speciality: currentDoctor?.speciality,
+    doctor_category: currentDoctor?.doctor_category,
     station_type: currentDoctor?.station_type,
-    doctor_category_uid: currentDoctor?.doctor_category.uid,
+    speciality_uid: currentDoctor?.speciality.uid,
     market_uid: currentDoctor?.market.uid,
     special_day: currentDoctor?.special_day,
     uid: currentDoctor?.uid,
@@ -217,9 +232,9 @@ export default function ViewCurrentDoctors(props) {
     degree: currentDoctor?.degree,
     designation: currentDoctor?.designation,
     organization: currentDoctor?.organization,
-    speciality: currentDoctor?.speciality,
+    doctor_category: currentDoctor?.doctor_category,
     station_type: currentDoctor?.station_type,
-    doctor_category_uid: currentDoctor?.doctor_category?.uid,
+    speciality_uid: currentDoctor?.speciality?.uid,
     market_uid: currentDoctor?.market?.uid,
     special_day: obj,
     uid: currentDoctor?.uid,
@@ -303,10 +318,10 @@ export default function ViewCurrentDoctors(props) {
       <CardTitle>
         {thisView ? (
           <>
-            <Button
-              className="btn btn-primary"
+             <Button
+         
               onClick={handleChangeToView}
-              style={{ marginRight: '20px' }}
+              style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
             >
               Back
             </Button>
@@ -314,10 +329,10 @@ export default function ViewCurrentDoctors(props) {
           </>
         ) : (
           <>
-            <Button
-              className="btn btn-primary"
+             <Button
+                
               onClick={editProfile}
-              style={{ marginRight: '20px' }}
+              style={{ marginRight: '20px',backgroundColor:'#0066b3' }}
             >
               Close Edit
             </Button>
@@ -408,7 +423,7 @@ export default function ViewCurrentDoctors(props) {
                       </Label>
 
                       <span>
-                        <p>{currentDoctor?.speciality.toUpperCase()}</p>
+                        <p>{currentDoctor?.speciality?.name.toUpperCase()}</p>
                       </span>
                     </AvGroup>
                   </Col>
@@ -443,7 +458,7 @@ export default function ViewCurrentDoctors(props) {
                         </h6>
                       </Label>
                       <span>
-                        <p>{currentDoctor?.doctor_category?.name?.toUpperCase()}</p>
+                        <p>{currentDoctor?.doctor_category.toUpperCase()}</p>
                       </span>
                     </AvGroup>
                   </Col>
@@ -662,34 +677,14 @@ export default function ViewCurrentDoctors(props) {
                   <Col lg={6}>
                     <AvGroup
                       className="error-t-negative"
-                      className="error-l-75"
+                      
                     >
-                      <Label>Speciality</Label>
+                      {/* <Label>Doctor Category</Label>
 
                       <AvField
                         className="form-control"
                         name="speciality"
-                        value={currentDoctor?.speciality}
-                        type="text"
-                        validate={{
-                          required: {
-                            value: true,
-                            errorMessage: 'Please enter your Speciality',
-                          },
-                          minLength: {
-                            value: 2,
-                            errorMessage: 'To Short',
-                          },
-                          pattern: {
-                            value: '^[A-Za-z]+$',
-                            errorMessage:
-                              'Your designation must be composed only with letters',
-                          },
-                          maxLength: {
-                            value: 25,
-                            errorMessage: 'To Long',
-                          },
-                        }}
+                        value={currentDoctor?.doctor_category}
                         type="text"
                         onChange={(e) =>
                           setDoctorCreate({
@@ -703,15 +698,9 @@ export default function ViewCurrentDoctors(props) {
                             speciality: e.target.value,
                           })
                         }
-                      />
-                    </AvGroup>
-                  </Col>
-
-                  {/* Doctors Category */}
-                  <Col lg={6}>
-                    <AvGroup className="error-t-negative">
+                      /> */}
                       <Label>
-                        <IntlMessages id="Select Doctors Category" />
+                        <IntlMessages id="Select Doctor Category" />
                       </Label>
 
                       <>
@@ -722,13 +711,42 @@ export default function ViewCurrentDoctors(props) {
                           classNamePrefix="react-select"
                           required
                           defaultValue={{
-                            label:currentDoctor?.doctor_category?.name,
-                            value:currentDoctor?.doctor_category?.uid,
+                            value:currentDoctor?.doctor_category,
                           }}
                           onChange={(e, index) => {
                             setDoctorCreate({
                               ...doctorCreate,
-                              doctor_category_uid: e.value,
+                              speciality_uid: e.value,
+                            });
+                          }}
+                          options={option_static_docCat_Category}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
+
+                  {/* Doctors Category */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Speciality Category" />
+                      </Label>
+
+                      <>
+                        <Select
+                        required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          required
+                          defaultValue={{
+                            label:currentDoctor?.speciality?.name,
+                            value:currentDoctor?.speciality?.uid,
+                          }}
+                          onChange={(e, index) => {
+                            setDoctorCreate({
+                              ...doctorCreate,
+                              speciality_uid: e.value,
                             });
                           }}
                           options={optiongetdoc_category}
@@ -941,7 +959,7 @@ export default function ViewCurrentDoctors(props) {
                   <Col lg={2}>
                     <AvGroup className="error-t-negative" className="my-4">
                       <Button
-                        className="btn btn-primary"
+                       style={{backgroundColor:'#0066b3'}}
                         size="sm"
                         onClick={() => {
                           handlespecialdaydate(specialday, specialdate);
@@ -998,7 +1016,8 @@ export default function ViewCurrentDoctors(props) {
                         </tr>
                       </thead>
                       <tbody>
-                        {array?.map((item, index) => {
+                       
+                        {specialDay_arr?.map((item, index) => {
                           return (
                             <tr>
                               <td>{item?.day}</td>
@@ -1029,7 +1048,7 @@ export default function ViewCurrentDoctors(props) {
             </Row>
 
             {/* <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               size="sm"
               // onClick={onSubmit}
               // type="submit"
@@ -1045,18 +1064,19 @@ export default function ViewCurrentDoctors(props) {
             </Button> */}
 
             {thisView ? (
-              <Button className="btn btn-primary mr-3" onClick={editProfile}>
+               <Button style={{backgroundColor:'#0066b3'}} className="mr-3" onClick={editProfile}>
                 Edit Doctor
               </Button>
             ) : (
-              <Button className="btn btn-primary" onClick={editData}>
+               <Button style={{backgroundColor:'#0066b3'}} onClick={editData}>
                 Save
               </Button>
             )}
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={suspandDepartmenthead}
               >
                 {buttonName}

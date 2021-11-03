@@ -237,9 +237,8 @@ export default function viewCurrentDistributioncenter(props) {
           {thisView ? (
             <>
             <Button
-              className="btn btn-primary"
               onClick={handleChangeToView}
-              style={{ marginRight: '20px'}}
+              style={{ marginRight: '20px',backgroundColor:'#0066b3'}}
             >
               Back
             </Button>
@@ -249,9 +248,8 @@ export default function viewCurrentDistributioncenter(props) {
               
               <>
               <Button
-                className="btn btn-primary"
                 onClick={editProfile}
-                style={{ marginRight: '20px'}}
+                style={{ marginRight: '20px' , backgroundColor:'#0066b3'}}
               >
                 Close Edit
               </Button>
@@ -458,8 +456,8 @@ export default function viewCurrentDistributioncenter(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary mr-3"
-              
+                style={{backgroundColor:'#0066b3'}}
+                className="mr-3"
                 onClick={editProfile}
               >
               
@@ -467,7 +465,8 @@ export default function viewCurrentDistributioncenter(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
               
                 onClick={editData}
               >
@@ -480,7 +479,8 @@ export default function viewCurrentDistributioncenter(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={suspandDepartmenthead}
               >
                 {buttonName}

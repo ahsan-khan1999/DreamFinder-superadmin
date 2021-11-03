@@ -184,10 +184,9 @@ export default function viewCurrentOrderComponent(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <Button
-            className="btn-btn-secondary"
+           <Button
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
           >
             Back
           </Button>
@@ -379,7 +378,7 @@ export default function viewCurrentOrderComponent(props) {
               </Col>
             </Row>
               <Button
-                style={{  'background-color': '#003766',marginRight:"5px" }}
+                style={{  backgroundColor: '#0066b3',marginRight:"5px" }}
                 // className="btn btn-primary"
                 onClick={suspandOrder}
                 // className={`btn-shadow btn-multiple-state ${
@@ -398,7 +397,7 @@ export default function viewCurrentOrderComponent(props) {
               className="mx-2"
               onClick={handleShow}
               style={{
-                'backgroundColor': '#003766',
+                backgroundColor: '#0066b3',
               }}
             >
               Update Status

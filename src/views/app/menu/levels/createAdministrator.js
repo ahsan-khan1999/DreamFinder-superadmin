@@ -654,7 +654,7 @@ const ThirdLevel3 = ({ match, history }) => {
               <div style={{ marginBottom: '30px' }}>
                 {thisView === true ? (
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     onClick={editProfile}
                     style={{ marginRight: '5px','background-color': '#003766' }}
                   >
@@ -662,7 +662,7 @@ const ThirdLevel3 = ({ match, history }) => {
                   </Button>
                 ) : (
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     onClick={confirmEdit}
                     className={`btn-shadow btn-multiple-state ${
                       loading ? 'show-spinner' : ''
@@ -679,7 +679,7 @@ const ThirdLevel3 = ({ match, history }) => {
                 )}
                 {thisView ? (
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     onClick={suspandAdministrator}
                     style={{ marginRight: '5px' ,'background-color': '#003766',marginRight:"5px"}}
                   >
@@ -701,7 +701,7 @@ const ThirdLevel3 = ({ match, history }) => {
                   ''
                 )}
 
-                {/* <Button className="btn btn-primary" onClick={suspandDoctor}>
+                {/*  <Button style={{backgroundColor:'#0066b3'}} onClick={suspandDoctor}>
             Suspend Doctor
           </Button> */}
               </div>

@@ -262,7 +262,7 @@ export default function CreateStock({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               size="sm"
               onClick={onStockCreate}
             >

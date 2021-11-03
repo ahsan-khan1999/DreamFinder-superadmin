@@ -21,15 +21,18 @@ import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
 import Loader from 'react-loader-spinner';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
-import { CreateProducts, getCategory } from 'Store/Actions/ConcordProduct/ProductAction';
+import {
+  CreateProducts,
+  getCategory,
+} from 'Store/Actions/ConcordProduct/ProductAction';
 import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
+import axios from 'axios';
 
 export default function CreateProduct({ history }) {
-
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   let option_static_Category = [];
   staticdata?.product_category__category_list?.filter((item) =>
-  option_static_Category.push({
+    option_static_Category.push({
       label: item?.name,
       value: item?.value,
       key: item?.id,
@@ -37,6 +40,10 @@ export default function CreateProduct({ history }) {
   );
 
   const dispatch = useDispatch();
+
+  const [imageUploadData, setImageUploadData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [loadingFileUpload, setLoadingFileUpload] = useState(false);
 
   useEffect(() => {
     dispatch(StaticDataGet());
@@ -48,26 +55,34 @@ export default function CreateProduct({ history }) {
 
     price: '',
 
+    formula: '',
+
+    product_image: imageUploadData?.product__image__url,
+
+    barcode: '',
+
+    description: '',
   };
 
-  const loading = useSelector((state) => state?.productReducer?.loading);
-  const getProductCategory = useSelector((state) => state?.productReducer?.getProductCategory);
-  
-  
-  
+  // const loading = useSelector((state) => state?.productReducer?.loading);
+  const getProductCategory = useSelector(
+    (state) => state?.productReducer?.getProductCategory
+  );
+
   const [product, setProduct] = useState(product_obj);
   const [selectedCategory, setSelectedCategory] = useState('');
-  
+  const [file, setFile] = useState();
+  console.log(file, 'file');
   let optioncategory = [];
   getProductCategory?.filter((item) =>
-  optioncategory.push({
-    label: item?.name,
-    value: item?.uid,
-    key: item?.uid,
-  })
+    optioncategory.push({
+      label: item?.name,
+      value: item?.uid,
+      key: item?.uid,
+    })
   );
-  console.log(getProductCategory,"getProductCategory")
-  
+  console.log(getProductCategory, 'getProductCategory');
+
   const onDepartHeadCreate = async () => {
     if (
       product?.name === '' &&
@@ -81,10 +96,17 @@ export default function CreateProduct({ history }) {
         null,
         ''
       );
+      setLoading(false)
       return;
     } else {
-      console.log(product);
-      let res = await dispatch(CreateProducts({ ...product }));
+      setLoading(true)
+      let apiData = {
+        ...product,
+        product_image: imageUploadData?.product__image__url,
+      };
+
+      console.log(apiData);
+      let res = await dispatch(CreateProducts(apiData));
 
       if (res) {
         NotificationManager.success(
@@ -103,13 +125,59 @@ export default function CreateProduct({ history }) {
     history.push('/app/stocks-management/viewProduct');
   };
 
+  const uploadFile = async (event) => {
+    event.preventDefault();
+    let formdata = new FormData();
+    const authToken = JSON.parse(localStorage.getItem('token'));
+    if (file === undefined || file === null) {
+      NotificationManager.error('Enter Details', 'Error', 5000, '');
+      setLoading(false);
+      return;
+    } else {
+      formdata.append('file', file[0]);
+      formdata.append('purpose', 'product__image');
+      let res = await axios.post(
+        'https://concord-backend-m2.herokuapp.com/api/media/upload/image',
+        formdata,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'x-session-key': authToken.token,
+            'x-session-type': authToken.type,
+          },
+        }
+      );
+      setLoadingFileUpload(false);
+      setImageUploadData(res?.data?.response_data);
+      if (res?.data?.response_code === 200) {
+        NotificationManager.success(
+          'Successfully Uploaded Image',
+          'Success',
+          5000,
+          ''
+        );
+        // props.history.push('/app/Reports/viewReports');
+        setLoadingFileUpload(false);
+      } else {
+        NotificationManager.error(
+          res?.data?.response_message,
+          'Error',
+          5000,
+          ''
+        );
+        setLoadingFileUpload(false);
+      }
+      setLoadingFileUpload(false);
+    }
+  };
+
   return (
     <Card>
       <CardBody>
         <Button
-          className="btn btn-primary mb-4 "
+          
           onClick={handleChangeToView}
-          style={{ marginRight: '20px' }}
+          style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
         >
           Back
         </Button>
@@ -139,7 +207,6 @@ export default function CreateProduct({ history }) {
                 </FormGroup>
               </Col>
 
-
               <Col lg={6}>
                 <FormGroup>
                   <label>
@@ -154,14 +221,8 @@ export default function CreateProduct({ history }) {
                       classNamePrefix="react-select"
                       onChange={(e) => {
                         dispatch(getCategory(e.value));
-                        setSelectedCategory(e.label)
-                        // setOrderCreate({
-                        //   ...orderCreate,
-
-                        //   payment_type: e?.value,
-                        //   delivery_status: 'pending',
-                        //   payment_status: 'pending',
-                        // });
+                        setSelectedCategory(e.label);
+                       
                       }}
                       required
                       options={option_static_Category}
@@ -170,11 +231,10 @@ export default function CreateProduct({ history }) {
                 </FormGroup>
               </Col>
 
-
               <Col lg={6}>
                 <FormGroup>
                   <label>
-                    <IntlMessages id="Select "/>
+                    <IntlMessages id="Select " />
                     {selectedCategory}
                   </label>
 
@@ -184,22 +244,16 @@ export default function CreateProduct({ history }) {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      // onChange={(e) => {
-                      //   setOrderCreate({
-                      //     ...orderCreate,
+                      onChange={(e) => 
 
-                      //     payment_type: e?.value,
-                      //     delivery_status: 'pending',
-                      //     payment_status: 'pending',
-                      //   });
-                      // }}
+                          setProduct({ ...product, category_uid: e.value })
+                      }
                       required
                       options={optioncategory}
                     />
                   </>
                 </FormGroup>
               </Col>
-
 
               <Col lg={6}>
                 <FormGroup>
@@ -216,15 +270,98 @@ export default function CreateProduct({ history }) {
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
                     onChange={(e) =>
-                      setProduct({ ...product, phone: e.target.value })
+                      setProduct({ ...product, price: Number(e.target.value) })
                     }
                   />
                 </FormGroup>
               </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Formula" />
+                  </Label>
+
+                  <Input
+                    required
+                    // value={product.formula}
+                    className="form-control"
+                    name="formula"
+                    onChange={(e) =>
+                      setProduct({ ...product, formula: e.target.value })
+                    }
+                  />
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Description" />
+                  </Label>
+
+                  <Input
+                    type="textarea"
+                    className="form-control"
+                    name="description"
+                    onChange={(e) =>
+                      setProduct({ ...product, description: e.target.value })
+                    }
+                  />
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="BarCode" />
+                  </Label>
+
+                  <Input
+                    required
+                    className="form-control"
+                    name="formula"
+                    onChange={(e) =>
+                      setProduct({ ...product, barcode: e.target.value })
+                    }
+                  />
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <div className="form-row">
+                  <div className="form-group col-md-9">
+                    <label className="">Select File :</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      name="upload_file"
+                      onChange={async (e) => {
+                        await setFile(e.target.files);
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="form-group col-md-3"
+                    style={{ marginTop: '25px' }}
+                  >
+                    <Button
+                       className={`btn-shadow btn-multiple-state ${
+                        loadingFileUpload ? 'show-spinner' : ''
+                      }`}
+                      size="sm"
+                      onClick={uploadFile}
+                      variant="outlined"
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              </Col>
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               size="sm"
               onClick={onDepartHeadCreate}
             >

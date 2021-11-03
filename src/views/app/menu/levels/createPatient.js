@@ -378,7 +378,7 @@ const Patient = ({ match, history }) => {
               <div style={{ marginBottom: '30px' }}>
                 {thisView === true ? (
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     onClick={editProfile}
                     style={{
                       marginRight: '5px',
@@ -389,7 +389,7 @@ const Patient = ({ match, history }) => {
                   </Button>
                 ) : (
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     // className={`btn-shadow btn-multiple-state ${
                     //   loading ? 'show-spinner' : ''
                     // }`}

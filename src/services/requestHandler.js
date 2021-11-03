@@ -105,10 +105,11 @@ const SERVICE_URLS = {
   suspandstockstransaction: 'stock-transactions/suspend',
 
   //Concord Doctor Categorys
-  getdoctorcategorys: 'doctor-categorys/read',
-  createdoctorcategorys: 'doctor-categorys/create',
-  updatedoctorcategorys: 'doctor-categorys/update',
-  suspanddoctorcategorys: 'doctor-categorys/suspend',
+  
+  getdoctorcategorys: 'doctor-specialitys/read',
+  createdoctorcategorys: 'doctor-specialitys/create',
+  updatedoctorcategorys: 'doctor-specialitys/update',
+  suspanddoctorcategorys: 'doctor-specialitys/suspend',
 
   //Concord Doctors
   getdoctors: 'doctors/read',

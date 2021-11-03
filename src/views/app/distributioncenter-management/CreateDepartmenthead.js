@@ -99,9 +99,9 @@ export default function CreateDepartmenthead({ history }) {
     <Card>
       <CardBody>
         <Button
-          className="btn btn-primary mb-4 "
+          
           onClick={handleChangeToView}
-          style={{ marginRight: '20px' }}
+          style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
         >
           Back
         </Button>
@@ -260,7 +260,8 @@ export default function CreateDepartmenthead({ history }) {
               </Row>
 
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 size="sm"
                 type="submit"
               >

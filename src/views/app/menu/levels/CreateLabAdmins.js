@@ -426,7 +426,7 @@ export default function CreateLabAdmins({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               // type="submit"
               onClick={createLabAdmin}
               className={`btn-shadow btn-multiple-state ${

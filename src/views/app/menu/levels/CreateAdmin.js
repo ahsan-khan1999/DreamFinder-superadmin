@@ -289,7 +289,7 @@ export default function CreateAdmin({history}) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               // type="submit"
               // className={`btn-shadow btn-multiple-state ${
               //   loading ? 'show-spinner' : ''
