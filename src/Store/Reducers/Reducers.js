@@ -64,6 +64,9 @@ import {
 import DepartmentReducer from '../Reducers/Departments/departmentReducer';
 import menu from '../../redux/menu/reducer';
 
+// Concord Order Reducer
+import { OrderRedcuer } from './ConcordOrder/orderReducer';
+
 const reducers = combineReducers({
   menu,
 
@@ -99,6 +102,10 @@ const reducers = combineReducers({
   ViewCurrentDoctorRemovalRequest,
   ViewCurrentOrderRedcuer,
   DepartmentReducer,
+
+ // Ismai Nhi Karne Merge Reducer
+
+
 });
 
 export default reducers;

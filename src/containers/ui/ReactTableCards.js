@@ -38,7 +38,7 @@ function Table({ columns, data, divided = false, defaultPageSize = 50 }) {
     useSortBy,
     usePagination
   );
-
+  
   return (
     <>
       <table
@@ -116,7 +116,7 @@ export const AppoinmentTable = (props) => {
         accessor: 'condition.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
@@ -124,7 +124,7 @@ export const AppoinmentTable = (props) => {
         accessor: 'consultation_type.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
@@ -132,7 +132,7 @@ export const AppoinmentTable = (props) => {
         accessor: 'doctor_details.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
@@ -140,7 +140,7 @@ export const AppoinmentTable = (props) => {
         accessor: 'patient_details.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
 
@@ -153,7 +153,7 @@ export const AppoinmentTable = (props) => {
           <span
             style={{
               color: props?.value === 'booked' || 'cancelled' ? 'red' : 'green',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -161,13 +161,15 @@ export const AppoinmentTable = (props) => {
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[5]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -186,19 +188,23 @@ export const RemovalRequestTable = (props) => {
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[0]}</span>
+        ),
         accessor: 'action',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[1]}</span>
+        ),
         accessor: 'requested_by.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       // {
@@ -208,14 +214,16 @@ export const RemovalRequestTable = (props) => {
       //   Cell: (props) => <>{props?.value}</>,
       // },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[2]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
         accessor: 'status.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
             style={{
               color: props?.value === 'approved' ? 'green' : 'red',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -223,22 +231,26 @@ export const RemovalRequestTable = (props) => {
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[3]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
+        ),
         accessor: 'type',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
 
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[4]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[4]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -300,27 +312,33 @@ export const ReactTableWithPaginationCardPatient = (props) => {
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[0]}</span>
+        ),
         accessor: 'patient_id',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[1]}</span>
+        ),
         accessor: 'name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[2]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
         accessor: 'date_of_birth',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       // {
@@ -334,11 +352,13 @@ export const ReactTableWithPaginationCardPatient = (props) => {
       //   ),
       // },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[3]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
+        ),
         accessor: 'gender.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       // {
@@ -352,14 +372,16 @@ export const ReactTableWithPaginationCardPatient = (props) => {
       //   ),
       // },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[4]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[4]}</span>
+        ),
         accessor: 'state.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <div
             style={{
               color: props?.value === 'active' ? 'green' : 'red',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -367,13 +389,15 @@ export const ReactTableWithPaginationCardPatient = (props) => {
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[5]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -394,27 +418,22 @@ export const OrderRequestTable = (props) => {
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
-        accessor: 'ordered_by.email_address',
+        Header: props?.header[0],
+        accessor: 'order_id',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
         ),
       },
-      // {
-      //   Header: props?.header[1],
-      //   accessor: 'packages.map((item,index) => item[index].name)',
-      //   cellClass: 'text-muted w-10',
-      //   Cell: (props) => <>{props?.value}</>,
-      // },
+      
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
-        accessor: 'paid_status.name',
+        Header: props?.header[1],
+        accessor: 'customer.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
             style={{
-              color: props?.value === 'paid' ? 'green' : 'red',
+             
               fontSize: '0.9rem',
             }}
           >
@@ -424,13 +443,89 @@ export const OrderRequestTable = (props) => {
       },
       {
         Header: props?.header[2],
-        accessor: 'delivery_status.name',
+        accessor: 'customer.market__street_address',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
             style={{
-              color: props?.value === 'delivered' ? 'green' : 'red',
+              
               fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'order_datetime',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {moment.unix(props?.value).format("MMM DD, YYYY")}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'payment_type',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[5],
+        accessor: 'delivery_status',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            
+          style={{
+              color: props?.value === 'delivered' 
+              ||props?.value==='submitted_to_depot'
+              ? 'green'
+               : props?.value === 'pending' ? '#C0B627' 
+              : props?.value === 'returned' 
+              ||props?.value==='cancelled' ? 'red' 
+              : props?.value === 'dispatched' ? 'blue' : '',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+              
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[6],
+        accessor: 'payment_status',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'delivered' 
+              ||props?.value==='received'
+              ? 'green'
+               : props?.value === 'pending' ? '#C0B627' 
+              : props?.value === 'declined' 
+              ||props?.value==='cancelled' ? 'red' 
+              :props?.value === 'unpaid' || props?.value === 'deposited' ? 'blue' : '',
+              fontSize: '0.9rem',
+              fontWeight:'600'
             }}
           >
             {props?.value?.toUpperCase()}
@@ -439,13 +534,47 @@ export const OrderRequestTable = (props) => {
       },
 
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[3]}</span>,
-        accessor: 'title3',
+        Header: props?.header[7],
+        accessor: 'ordered_by.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[8],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[9]}</span>
+        ),
+        accessor: 'title6',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -458,60 +587,1257 @@ export const OrderRequestTable = (props) => {
 
   return <Table columns={cols} data={props?.data} />;
 };
+
+
+
+
+
+
+
+
+
+
+//Department Head Start
+export const DepartmentHeadTable = (props) => {
+  // console.log(props?.doctor);
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[2],
+        accessor: 'email',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'phone',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: props?.header[5],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+     
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[6]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+//Department Head
+
+
+
+
+
+
+//Distribution Center Start
+export const DistributionCenter = (props) => {
+  // console.log(props?.doctor);
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[2],
+        accessor: 'email',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'phone',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+      {
+        Header: props?.header[5],
+        accessor: 'status',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+     
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[6]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+//Distribution Center
+
+
+
+
+
+//Product Table
+export const ProductTable = (props) => {
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'category.category',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+  
+      {
+        Header: props?.header[2],
+        accessor: 'price',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'created_by.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: props?.header[4],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+     
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+
+
+
+
+
+
+
+//Stock Table
+export const StockTable = (props) => {
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'product.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'product.category.category',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+  
+      {
+        Header: props?.header[2],
+        accessor: 'quantity',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'product.formula',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value ? props?.value?.toUpperCase() : 'N/A' }  
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'product.price',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value}
+          </span>
+        ),
+      },
+     
+
+      {
+        Header: props?.header[5],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[6]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+
+
+
+
+
+
+
+
+//Product Category Table
+export const ProductCategoryTable = (props) => {
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'category',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+  
+   
+
+      {
+        Header: props?.header[2],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+
+
+
+
+
+
+
+//Stock Transaction Table
+export const StockTransaction = (props) => {
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value ? props?.value?.toUpperCase() : 'N/A'}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'stock.product.category.category',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value ? props?.value?.toUpperCase() :'N/A'}
+          </span>
+        ),
+      },
+  
+      {
+        Header: props?.header[2],
+        accessor: 'stock.product.category.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+  
+
+      {
+        Header: props?.header[3],
+        accessor: 'date',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {moment.unix(props?.value).format("MMM DD, YYYY")}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: props?.header[4],
+        accessor: 'price',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value}
+          </span>
+        ),
+      },
+      
+
+      {
+        Header: props?.header[5],
+        accessor: 'quantity',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: props?.header[6],
+        accessor: 'transaction_type',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      
+
+      {
+        Header: props?.header[7],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[8]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+
+
+
+
+
+
+//Doctor Table
+export const DoctorTable = (props) => {
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value ? props?.value?.toUpperCase() : 'N/A'}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'designation',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value ? props?.value?.toUpperCase() :'N/A'}
+          </span>
+        ),
+      },
+  
+      {
+        Header: props?.header[2],
+        accessor: 'degree',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+      {
+        Header: props?.header[3],
+        accessor: 'doctor_category',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+  
+
+ 
+
+
+      {
+        Header: props?.header[4],
+        accessor: 'organization',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      
+
+      {
+        Header: props?.header[5],
+        accessor: 'speciality.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: props?.header[6],
+        accessor: 'station_type',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+      {
+        Header: props?.header[7],
+        accessor: 'phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+     
+
+      {
+        Header: props?.header[8],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[9]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+
+
+
+
+
+//Doctor Category Table
+export const DoctorCategoryTable = (props) => {
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value ? props?.value?.toUpperCase() : 'N/A'}
+          </span>
+        ),
+      },
+     
+
+      {
+        Header: props?.header[1],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+
+
+
+
+//Customer Table
+export const CustomersTable = (props) => {
+  const { changeRoute } = props;
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value ? props?.value?.toUpperCase() : 'N/A'}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'client_type',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value ? props?.value?.toUpperCase() :'N/A'}
+          </span>
+        ),
+      },
+  
+      {
+        Header: props?.header[2],
+        accessor: 'email_address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+      {
+        Header: props?.header[3],
+        accessor: 'market__street_address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+  
+
+     {
+        Header: props?.header[4],
+        accessor: 'phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value}
+          </span>
+        ),
+      },
+
+
+
+      
+
+      {
+        Header: props?.header[6],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+      {
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[7]}</span>
+        ),
+        accessor: 'title6',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066b3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+
+
+
+
 export const ReactTableWithPaginationCard = (props) => {
   // console.log(props?.doctor);
   const { changeRoute } = props;
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[0]}</span>
+        ),
         accessor: 'name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[1]}</span>
+        ),
         accessor: 'date_of_birth',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[2]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
         accessor: 'designation',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[3]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
+        ),
         accessor: 'gender',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[4]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[4]}</span>
+        ),
         accessor: 'phone_number',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[5]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
         accessor: 'status.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <div
             style={{
               color: props?.value === 'active' ? 'green' : 'red',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -519,13 +1845,15 @@ export const ReactTableWithPaginationCard = (props) => {
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[6]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[6]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -544,35 +1872,43 @@ export const ReactTableWithPaginationCardAllUser = (props) => {
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[0]}</span>
+        ),
         accessor: 'name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[1]}</span>
+        ),
         accessor: 'date_of_birth',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[2]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
         accessor: 'designation',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[3]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
+        ),
         accessor: 'gender.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
-          <span style={{ fontSize: '0.9rem' }}>{props?.value}</span>
+          <span style={{ 'fontSize': '0.9rem' }}>{props?.value}</span>
         ),
       },
       // {
@@ -586,14 +1922,16 @@ export const ReactTableWithPaginationCardAllUser = (props) => {
       //   ),
       // },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[4]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[4]}</span>
+        ),
         accessor: 'state.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <div
             style={{
               color: props?.value === 'active' ? 'green' : 'red',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -601,13 +1939,15 @@ export const ReactTableWithPaginationCardAllUser = (props) => {
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[5]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -625,32 +1965,40 @@ export const ReadTestTable = (props) => {
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[0]}</span>
+        ),
         accessor: 'name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[1]}</span>
+        ),
         accessor: 'currency.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[2]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
         accessor: 'price',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[3]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
+        ),
         accessor: 'status.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
             style={{
               color: props?.value === 'active' ? 'green' : 'red',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -658,13 +2006,15 @@ export const ReadTestTable = (props) => {
         ),
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[4]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[4]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -685,26 +2035,32 @@ export const ReadCategoryTable = (props) => {
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[0]}</span>
+        ),
         accessor: 'name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[1]}</span>
+        ),
         accessor: 'category_id',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
 
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[2]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -726,44 +2082,56 @@ export const ReadMedicinesTable = (props) => {
   const cols = React.useMemo(
     () => [
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[0]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[0]}</span>
+        ),
         accessor: 'name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[1]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[1]}</span>
+        ),
         accessor: 'formula',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[2]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[2]}</span>
+        ),
         accessor: 'sales_price',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[3]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
+        ),
         accessor: 'purchase_price',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[4]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[4]}</span>
+        ),
         accessor: 'availability.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
 
       {
-        Header: <span style={{ fontSize: '1.0rem' }}>{props?.header[5]}</span>,
+        Header: (
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+        ),
         accessor: 'title3',
         cellClass: 'text-muted w-10',
         // Cell: (props) => {console.log(props?.cell?.row?.original)}
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -811,7 +2179,7 @@ export const ViewReportTable = (props) => {
           <span
             style={{
               color: props?.value === 'report uploaded' ? 'green' : 'red',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -825,7 +2193,7 @@ export const ViewReportTable = (props) => {
         cellClass: 'text-muted  w-10',
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -882,7 +2250,7 @@ export const ViewPaymentTable = (props) => {
           <span
             style={{
               color: props?.value === 'unpaid' ? 'red' : 'green',
-              fontSize: '0.9rem',
+              'fontSize': '0.9rem',
             }}
           >
             {props?.value?.toUpperCase()}
@@ -896,7 +2264,7 @@ export const ViewPaymentTable = (props) => {
         cellClass: 'text-muted  w-10',
         Cell: (props) => (
           <Button
-            style={{ backgroundColor: '#003766' }}
+            style={{ backgroundColor: '#0066b3' }}
             onClick={() => changeRoute(props?.cell?.row?.original)}
           >
             View
@@ -918,39 +2286,26 @@ export const ReactTableDivided = () => {
     () => [
       {
         Header: 'Name',
-        accessor: 'name',
-        cellClass: 'list-item-heading w-10',
+        accessor: 'title',
+        cellClass: 'list-item-heading w-40',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: 'Designation',
-        accessor: 'designation',
-        cellClass: 'list-item-heading w-10',
+        Header: 'Sales',
+        accessor: 'sales',
+        cellClass: 'text-muted  w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: 'Email Address',
-        accessor: 'email_address',
-        cellClass: 'list-item-heading w-10',
+        Header: 'Stock',
+        accessor: 'stock',
+        cellClass: 'text-muted  w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: 'Gender',
-        accessor: 'gender',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => <>{props.value}</>,
-      },
-
-      {
-        Header: 'Phone Number',
-        accessor: 'phone_number',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => <>{props.value}</>,
-      },
-      {
-        Header: 'Status',
-        accessor: 'status.name',
-        cellClass: 'list-item-heading w-10',
+        Header: 'Category',
+        accessor: 'category',
+        cellClass: 'text-muted  w-40',
         Cell: (props) => <>{props.value}</>,
       },
     ],
@@ -959,7 +2314,7 @@ export const ReactTableDivided = () => {
   return (
     <div className="mb-4">
       <CardTitle>
-        <IntlMessages id="Admin Table" />
+        <IntlMessages id="table.divided" />
       </CardTitle>
       <Table columns={cols} data={products} divided />
     </div>

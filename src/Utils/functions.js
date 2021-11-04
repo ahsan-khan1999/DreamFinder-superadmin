@@ -2,11 +2,8 @@
  * Misc. functions
  */
 
-import { getDistance } from "geolib";
-import apiServices from "../services/requestHandler";
-
 // language translation
-
+/* eslint-disable */
 export const setLocalizeContent = (obj, store) => {
   try {
     return obj.en;
@@ -91,3 +88,20 @@ export const checkWhiteSpace = (text) => {
   const _text = text.trim();
   return text === _text;
 };
+
+// Return Object From Array if Condition True
+
+export const CheckConditionArray = (array,condition,key,subkey) => {
+  const obj = array?.filter(item => { 
+    return  item[condition] 
+  })
+  if(subkey)
+  {
+    return obj[0][key][subkey] === undefined ? "N/A" : obj[0][key][subkey];
+  }
+  else
+  {
+
+    return obj[0][key] === undefined ? "N/A" : obj[0][key];
+  }
+}

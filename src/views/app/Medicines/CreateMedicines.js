@@ -284,11 +284,14 @@ export default function CreateMedicines({ history }) {
                       name="form-field-name-slot-duration"
                       // value={medicines?.currency}
                       // defaultValue={medicines?.currency?.name}
-                      onChange={(val) =>
+                      onChange={(val) =>{
+
+                        console.log("ye log value select",val)
                         setMedicines({
                           ...medicines,
                           currency: { id: val?.key, name: val?.value },
                         })
+                      }
                       }
                       options={currencyOption}
                     />
@@ -318,7 +321,8 @@ export default function CreateMedicines({ history }) {
               </Row>
 
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 style={{ 'background-color': '#003766' ,marginRight:'5px'}}
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
@@ -335,7 +339,8 @@ export default function CreateMedicines({ history }) {
                 Add Medicine
               </Button>
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 style={{ 'background-color': '#003766' }}
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${

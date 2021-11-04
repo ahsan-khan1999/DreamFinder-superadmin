@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import {
   Row,
@@ -13,6 +14,7 @@ import {
   CardTitle,
 } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
+import { GetMarketsData } from 'Store/Actions/ConcordDoctor/DoctorAction';
 import { Colxx } from 'components/common/CustomBootstrap';
 import {
   FormikReactSelect,
@@ -57,6 +59,8 @@ const FormikCustomWithTopLabels = () => {
       setSubmitting(false);
     }, 1000);
   };
+  const dispatch = useDispatch();
+
 
   return (
     <div>
@@ -285,14 +289,22 @@ const FormikCustomWithTopLabels = () => {
                         id="state"
                         value={values.state}
                         options={options}
-                        onChange={setFieldValue}
-                        onBlur={setFieldTouched}
+                          onChange={
+                            (value,test)=>{
+                              setFieldValue(value)
+                              console.log(value,"sdasdsad")
+                              console.log(test,"test")
+                              dispatch(GetMarketsData('', 'region'))
+                              // alert(test);
+                            }
+                          }
+                        // onBlur={setFieldTouched}
                       />
-                      {errors.state && touched.state ? (
+                      {/* {errors.state && touched.state ? (
                         <div className="invalid-feedback d-block">
                           {errors.state}
                         </div>
-                      ) : null}
+                      ) : null} */}
                     </FormGroup>
 
                     <Button color="primary" type="submit">

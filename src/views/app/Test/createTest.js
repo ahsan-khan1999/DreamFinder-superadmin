@@ -225,7 +225,7 @@ export default function createTest({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               style={{ 'background-color': '#003766' }}
               // type="submit"
               // className={`btn-shadow btn-multiple-state ${

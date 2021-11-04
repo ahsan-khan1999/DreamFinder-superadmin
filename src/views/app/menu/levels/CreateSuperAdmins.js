@@ -136,6 +136,7 @@ export default function CreateSuperAdmins({ history }) {
   let [superAdmin, setSuperAdmin] = useState(superAdmin_Obj);
   const dispatch = useDispatch();
   const createSuperAdmin = async () => {
+    
     if (
       superAdmin?.email_address === '' &&
       superAdmin?.name === '' &&

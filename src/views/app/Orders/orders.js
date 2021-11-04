@@ -18,45 +18,67 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { UncontrolledDropdown } from 'reactstrap';
 import Loader from 'react-loader-spinner';
 import apiServices from 'services/requestHandler';
-import {
-  ViewCurrentOrderAction,
-  ViewOrderAction,
-} from 'Store/Actions/Orders/ViewOrderAction';
+
 import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
 import { searchArray } from 'Utils/auth.util';
 
+import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
+import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
+
 export default function Orders({ match, history }) {
+
   let dispatch = useDispatch();
+
   const [search, setSearch] = useState('');
+
   useEffect(() => {
+
     getOrders();
+
   }, []);
+    
+
+
   const getOrders = async () => {
-    // alert("in function")
-    // alert('in get Order');
-    let res = await dispatch(ViewOrderAction());
-    // console.log(res);
+
+    let res = await dispatch(OrderAction());
+
+    console.log("res Concord Order",res);
   };
 
-  const orders = useSelector((state) => state?.viewOrderRed?.order);
-  const loading = useSelector((state) => state?.viewOrderRed?.loading);
-  // console.log(orders);
+  const orders = useSelector((state) => state?.orderReducer?.order);
+  const loading = useSelector((state) => state?.orderReducer?.loading);
+  console.log("LoadingOrder")
+  console.log(orders);
+
+
   const changeRoute = async (item) => {
-    let res = await dispatch(ViewCurrentOrderAction(item));
-    item, history.push('/app/Orders/viewCurrentOrder');
+    history.push('/app/Orders/viewCurrentOrder',item);
   };
   const [orderTable, setOrderTable] = useState(orders);
+
+
+  const handleAdd = () => {
+
+    history.push('/app/Orders/AddOrder');
+  };
 
   useEffect(() => {
     setOrderTable(orders);
   }, [orders]);
   const headers = [
-    'Email Address',
-    'Paid Status',
+    'Orders ID',
+    'Customer Name',
+    'Market & Address',
+    'Order Date/Time',
+    'Payment Type',
     'Delivery Status',
+    'Payment Status',
+    'Proceed By',
+    'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
@@ -72,11 +94,24 @@ export default function Orders({ match, history }) {
             <Separator className="mb-5" />
           </Colxx>
         </Row>
+        <Button
+           onClick={handleAdd}
+         
+
+          style={{
+            marginBottom: '15px',
+         backgroundColor:'#0066b3',   
+            marginTop: '10px',
+          }}
+        >
+          Add New Order
+        </Button>
         <Row>
           <Col lg={12}>
             {/* <label htmlFor="search">
               <input id="search" type="text" onChange={handleSearch} />
             </label> */}
+            
             <div className="header-search">
               <form action="#" className="">
                 <i className="fas fa-search search-icon"></i>
@@ -92,6 +127,7 @@ export default function Orders({ match, history }) {
             </div>
           </Col>
         </Row>
+        
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (
@@ -115,7 +151,7 @@ export default function Orders({ match, history }) {
               <OrderRequestTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={orders}
+                data={orderTable}
               />
             )}
           </Colxx>
@@ -125,49 +161,3 @@ export default function Orders({ match, history }) {
   );
 }
 
-// <div className="table-form" style={{width:"100%"}}>
-//                 <Table>
-//                   <thead>
-//                     <tr>
-//                       <th>Email Address</th>
-
-//                       <th>Packages</th>
-
-//                       <th>Paid Status</th>
-
-//                       <th>Tests</th>
-
-//                       <th>Actions</th>
-//                     </tr>
-//                   </thead>
-//                   <tbody>
-//                     {console.log(orders)}
-//                     {orders?.map((item,index = 0) => {
-//                       return (
-//                         <tr>
-
-//                           <td>{item?.ordered_by?.email_address}</td>
-
-//                           {/* item?.packages[0]?.name */}
-//                           <td>{item?.packages?.map((item) => item?.name)}</td>
-
-//                           <td>{item?.paid_status?.name}</td>
-
-//                           <td>{item?.tests.map((item) => item?.test?.name)}</td>
-
-//                           <td>
-//                             <Button
-//                               key={index}
-//                               value={item}
-//                               onClick={(e) => changeRoute(item)}
-//                             >
-//                               View
-//                             </Button>
-
-//                           </td>
-//                         </tr>
-//                       );
-//                     })}
-//                   </tbody>
-//                 </Table>
-//               </div>

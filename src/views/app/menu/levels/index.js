@@ -126,9 +126,6 @@ const ViewPharmacy = React.lazy(() =>
 const CreateSuperAdmin = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-3" */ './createSuperAdmin')
 );
-const ViewCurrentUser = React.lazy(() =>
-  import(/* webpackChunkName: "menu-level-3" */ './ViewCurrentUser')
-);
 const CreateSuperAdmins = React.lazy(() =>
   import(/* webpackChunkName: "menu-level-3" */ './CreateSuperAdmins')
 );

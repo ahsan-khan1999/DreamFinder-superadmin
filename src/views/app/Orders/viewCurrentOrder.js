@@ -6,7 +6,8 @@ import { Formik, useFormik } from 'formik';
 // import leftArrow from '../../../assets/logos/leftArrow.svg';
 
 import IntlMessages from 'helpers/IntlMessages';
-import React, { useEffect } from 'react';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -20,15 +21,15 @@ import {
   Row,
   Table,
 } from 'reactstrap';
+import Loader from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import apiServices from 'services/requestHandler';
 import { updateOrderAction } from 'Store/Actions/Orders/ViewOrderAction';
-export default function viewCurrentOrderComponent({ history, match }) {
-  let view = useSelector((state) => state?.ViewCurrentOrderRedcuer?.view);
-  let currentOrder = useSelector(
-    (state) => state?.ViewCurrentOrderRedcuer?.currentOrder
-  );
-  // console.log(currentOrder);
-  // console.log(currentOrder,view);
+import StatuschangedModal from './StatuschangedModal';
+export default function viewCurrentOrderComponent(props) {
+  // let view = useSelector((state) => state?.ViewCurrentOrderRedcuer?.view);
+  let currentOrder = props?.location?.state;
+  console.log(currentOrder)
   const formikData = useFormik({
     initialValues: {
       //   password: doctor_obj?.password,
@@ -36,79 +37,112 @@ export default function viewCurrentOrderComponent({ history, match }) {
     },
     // validate: validate,
 
-    onSubmit: (values) => {
-      // console.log(values);
-    },
+    onSubmit: (values) => { },
   });
   useEffect(() => {
     if (currentOrder?.length === 0) {
-      history.push('/app/Orders/orders');
+      props.history.push('/app/Orders/orders');
     }
   }, []);
+
+  useEffect(() => {
+    // readRoles();
+    if (currentOrder?.status?.name === 'suspended') {
+      setButtonName('Active Order');
+    } else if (currentOrder?.status?.name === 'active') {
+      setButtonName('Suspend Order');
+    }
+  }, []);
+  const loading = useSelector((state) => state?.orderReducer?.loader);
+
   const handleChangeToView = () => {
-    history.push('/app/Orders/orders');
+    props.history.push('/app/Orders/orders');
   };
   const dispatch = useDispatch();
 
-  const changeStatusToProcessing = () => {
-    const apiData = {
-      order_id: currentOrder?.id,
-      delivery_status: { id: 2, name: 'processing' },
-    };
-    let res = dispatch(updateOrderAction(apiData));
-    if (res) {
-      NotificationManager.success(
-        'Sucessfully Updated',
-        'Sucess',
-        5000,
-        null,
-        ''
-      );
-      history.push('/app/Orders/orders');
+  let [buttonName, setButtonName] = useState();
+  let [suspendloader, setsuspendloader] = useState(false);
+
+  const suspandOrder = async () => {
+    if (currentOrder?.status?.name === 'suspended') {
+      let apiData = {
+        uid: currentOrder?.uid,
+      };
+      setsuspendloader(true);
+      let res = await apiServices.suspandorder(apiData);
+      console.log(res);
+      if (res?.data?.response_code === 200) {
+      setsuspendloader(false);
+        NotificationManager.success(
+          'Sucessfully Activated',
+          'Sucess',
+          5000,
+          null,
+          ''
+        );
+        props.history.push('/app/Orders/orders');
+      } else {
+      setsuspendloader(false);
+        NotificationManager.error(
+          'Error active This Admin',
+          'Error',
+          5000,
+          null,
+          ''
+        );
+      }
+    } else {
+      let apiData = {
+        uid: currentOrder?.uid,
+      };
+      setsuspendloader(true);
+      let res = await apiServices.suspandorder(apiData);
+      console.log(res);
+      if (res?.response_code === 200) {
+      setsuspendloader(false);
+
+        NotificationManager.success(
+          'Sucessfully Suspaned',
+          'Sucess',
+          5000,
+          null,
+          ''
+        );
+        props.history.push('/app/Orders/orders');
+      } else {
+      setsuspendloader(false);
+        NotificationManager.error(
+          res?.response_message,
+          'Error',
+          5000,
+          null,
+          ''
+        );
+      }
     }
   };
-  const changeStatusToDispatched = async () => {
-    const apiData = {
-      order_id: currentOrder?.id,
-      delivery_status: { id: 3, name: 'dispatched' },
-    };
-    let res = dispatch(updateOrderAction(apiData));
-    if (res) {
-      NotificationManager.success(
-        'Sucessfully Updated',
-        'Sucess',
-        5000,
-        null,
-        ''
-      );
-      history.push('/app/Orders/orders');
-    }
+
+
+  const [show, setShow] = useState(false);
+
+  // MODAL CLOSE FUCNTION
+  const handleClose = () => {
+    setShow(!show);
   };
-  const changeStatusToDelivered = async () => {
-    const apiData = {
-      order_id: currentOrder?.id,
-      delivery_status: { id: 4, name: 'delivered' },
-    };
-    let res = dispatch(updateOrderAction(apiData));
-    if (res) {
-      NotificationManager.success(
-        'Sucessfully Updated',
-        'Sucess',
-        5000,
-        null,
-        ''
-      );
-      history.push('/app/Orders/orders');
-    }
-  };
+  // MODAL OPEN FUCNTION
+  const handleShow = () => {
+    setShow(!show);
+};
+
+  
+  
   return (
     <Card>
       <CardBody>
         <CardTitle>
-          <Button
-            className="btn-btn-secondary"
+           <Button
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
           >
             Back
           </Button>
@@ -121,41 +155,7 @@ export default function viewCurrentOrderComponent({ history, match }) {
             display:
               currentOrder?.delivery_status?.name === 'delivered' ? 'none' : '',
           }}
-        >
-          <Button
-            onClick={changeStatusToProcessing}
-            style={{
-              'margin-right': '10px',
-              'background-color': '#003766',
-              display:
-                currentOrder?.delivery_status?.name === 'processing'
-                  ? 'none'
-                  : '',
-            }}
-          >
-            Processing
-          </Button>
-          <Button
-            onClick={changeStatusToDispatched}
-            style={{
-              'margin-right': '10px',
-              'background-color': '#003766',
-              display:
-                currentOrder?.delivery_status?.name === 'dispatched'
-                  ? 'none'
-                  : '',
-            }}
-          >
-            Dispatched
-          </Button>
-
-          <Button
-            onClick={changeStatusToDelivered}
-            style={{ 'background-color': '#003766' }}
-          >
-            Delivered
-          </Button>
-        </div>
+        ></div>
 
         <Formik initialValues={formikData.initialValues}>
           <Form>
@@ -163,259 +163,204 @@ export default function viewCurrentOrderComponent({ history, match }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Delivery Type</h6>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Orders ID</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder?.delivery_type?.name}</p>
+                    <p>{currentOrder.order_id}</p>
                   </span>
                 </FormGroup>
               </Col>
 
-              {/* <Col lg={6}>
+              <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Email Address" />
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Customer Name</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder?.ordered_by?.email_address}</p>
+                    <p>{currentOrder.customer.name.toUpperCase()}</p>
                   </span>
                 </FormGroup>
-              </Col> */}
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Market & Address</h6>
+                  </Label>
+                  <span>
+                    <p>{currentOrder.customer.market__street_address.toUpperCase()}</p>
+                  </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Order Date/Time</h6>
+                  </Label>
+                  <span>
+                    <p>
+                      {moment
+                        .unix(currentOrder.order_datetime)
+                        .format('MMM DD, YYYY')}
+                    </p>
+                  </span>
+                </FormGroup>
+              </Col>
 
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Order By" />
-                  </Label>
-                  <span>
-                    <p>{currentOrder?.ordered_by?.name}</p>
-                  </span>
-                </FormGroup>
-              </Col> */}
-
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <label>
-                    <IntlMessages id="Packages" />
-                  </label>
-                  <span>
-                    <p>{currentOrder?.packages?.map((item) => item?.name)}</p>
-                  </span>
-                </FormGroup>
-              </Col> */}
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Delivery Status</h6>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Delivery Status</h6>
                   </Label>
-                  <span style={{color:currentOrder?.delivery_status?.name === "delivered" ? 'green' : "red"}}>
-                    <p>{currentOrder?.delivery_status?.name?.toUpperCase()}</p>
+                  <span>
+                    <p
+                      style={{
+                        color:
+                          currentOrder.delivery_status === 'delivered' ||
+                            currentOrder.delivery_status === 'submitted_to_depot'
+                            ? 'green'
+                            : currentOrder.delivery_status === 'pending'
+                              ? '#C0B627'
+                              : currentOrder.delivery_status === 'returned' ||
+                                currentOrder.delivery_status === 'cancelled'
+                                ? 'red'
+                                : currentOrder.delivery_status === 'dispatched'
+                                  ? 'blue'
+                                  : '',
+                        fontWeight: '600',
+                        fontSize: '0.9rem',
+                      }}
+                    >
+                      {currentOrder.delivery_status.toUpperCase()}
+                    </p>
                   </span>
                 </FormGroup>
               </Col>
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Paid Status</h6>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Payment Status</h6>
                   </Label>
-                  <span style={{color:currentOrder?.paid_status?.name === "paid" ? 'green' : "red"}}>
-                    <p>{currentOrder?.paid_status?.name?.toUpperCase()}</p>
+                  <span>
+                    <p
+                      style={{
+                        color:
+                          currentOrder.payment_status === 'delivered' ||
+                            currentOrder.payment_status === 'received'
+                            ? 'green'
+                            : currentOrder.payment_status === 'pending'
+                              ? '#C0B627'
+                              : currentOrder.payment_status === 'declined' ||
+                                currentOrder.payment_status === 'cancelled'
+                                ? 'red'
+                                : currentOrder.payment_status === 'unpaid' ||
+                                  currentOrder.payment_status === 'deposited'
+                                  ? 'blue'
+                                  : '',
+                        fontWeight: '600',
+                        fontSize: '0.9rem',
+                      }}
+                    >
+                      {currentOrder.payment_status.toUpperCase()}
+                    </p>
                   </span>
                 </FormGroup>
               </Col>
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Ordered By" />
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Status</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder?.ordered_by?.name}</p>
+                    <p
+                      style={{
+                        color: currentOrder.status.name === 'active'
+                          ? 'green' : 'red',
+                        fontSize: '0.9rem',
+                        fontWeight: '600'
+                      }}
+                    >{currentOrder.status.name.toUpperCase()}</p>
                   </span>
                 </FormGroup>
               </Col>
-              {/* <Col lg={6}>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="Test" />
-                    </Label>
-                    <span>
-                      <p>
-                        {currentOrder?.tests?.map((item) => item?.test?.name)}
-                      </p>
-                    </span>
-                  </FormGroup>
-                </Col> */}
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Total Amount" />
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >Proceed By</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder?.total_amount}</p>
+                    <p>{currentOrder.ordered_by.name.toUpperCase()}</p>
                   </span>
                 </FormGroup>
               </Col>
             </Row>
-            {/* <Row>
-              <div className="table-form-order" style={{ width: '100%' }}>
-                <h3>Order By</h3>
+              <Button
+                style={{backgroundColor:'#0066b3'}}
 
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-
-                      <th>Phone Number</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{currentOrder?.ordered_by?.name}</td>
-
-                      <td>{currentOrder?.ordered_by?.email_address}</td>
-
-                      <td>{currentOrder?.ordered_by?.phone_number}</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </div>
-            </Row> */}
-
-            <Row>
-              <Col lg={12}>
-                <div
-                  className=""
-                  style={{
-                    width: '100%',
-                    display: currentOrder?.tests?.length > 0 ? '' : 'none',
-                  }}
-                >
-                  <h3>Test</h3>
-                  <Table className="">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Report Status</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          {currentOrder?.tests?.map((item) => item?.test?.name)}
-                        </td>
-
-                        <td>
-                          {currentOrder?.tests?.map(
-                            (item) => item?.test?.report?.status?.name
-                          )}
-                        </td>
-                        <td>
-                          {currentOrder?.tests?.map(
-                            (item) => item?.test?.price
-                          )}
-                        </td>
-
-                        <td>
-                          {currentOrder?.tests?.map(
-                            (item) => item?.test?.status?.name
-                          )}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </Table>
+                onClick={suspandOrder}
+              >
+                {suspendloader ? (
+                <div className="d-flex justify-content-center">
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Suspending
                 </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={12}>
-                <div
-                  className="table-form-test table-responsive"
-                  style={{
-                    width: '100%',
-                    display: currentOrder?.packages?.length > 0 ? '' : 'none',
-                  }}
-                >
-                  <h3>Package</h3>
-                  <Table className="">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
+              ) : (
+                buttonName
+                )}
+                
+              </Button>
 
-                        <th>Age Group</th>
-                        <th>Category</th>
-                        <th>Gender</th>
+            <Button
+              className="mx-2"
+              onClick={handleShow}
+              style={{
+                backgroundColor: '#0066b3',
+              }}
+            >
+              Update Status
+            </Button>
 
-                        <th>Price</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentOrder?.packages?.map((item, index) => {
-                        return (
-                          <tr>
-                            <td>{item?.name}</td>
+            <StatuschangedModal show={show} onHide={handleClose} data={currentOrder} {...props} />
 
-                            <td>{item?.age_group?.name}</td>
-                            <td>{item?.category?.name}</td>
-                            <td>{item?.gender?.name}</td>
-                            <td>{item?.price}</td>
-                            <td>{item?.status?.name}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={12}>
-                <div
-                  className="table-form-test table-responsive"
-                  style={{
-                    width: '100%',
-                    display: currentOrder?.medicines?.length > 0 ? '' : 'none',
-                  }}
-                >
-                  <h3>Medicine</h3>
-                  <Table>
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Quantity</th>
-
-                        <th>Medicine Type</th>
-                        <th>Purchase Rate</th>
-                        <th>Avilabilty</th>
-                        <th>Formula</th>
-                        <th>Sale Price</th>
-                        {/* <th>Status</th> */}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentOrder?.medicines?.map((item) => {
-                        return (
-                          <tr>
-                            <td>{item?.medicine?.name}</td>
-                            <td>{item?.medicine?.quantity}</td>
-
-                            <td>{item?.medicine?.medicine_type}</td>
-                            <td>{item?.medicine?.purchase_price}</td>
-                            <td>{item?.medicine?.availability?.name}</td>
-                            <td>{item?.medicine?.formula}</td>
-                            <td>{item?.medicine?.sales_price}</td>
-                            {/* <td>{item?.status?.name}</td> */}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                </div>
-              </Col>
-            </Row>
           </Form>
         </Formik>
       </CardBody>

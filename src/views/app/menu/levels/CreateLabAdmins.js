@@ -32,23 +32,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import Select from 'react-select';
 
 export default function CreateLabAdmins({ history }) {
-  const selectGender = [
-    { label: 'Male', value: 'male', key: 1 },
-    { label: 'Female', value: 'female', key: 2 },
-  ];
-
-  const selectDay = [
-    { label: 'Monday', value: 'monday', key: 1 },
-    { label: 'Tuesday', value: 'tuesday', key: 2 },
-    { label: 'Wednesday', value: 'wednesday', key: 3 },
-    { label: 'Thursday', value: 'thursday', key: 4 },
-    { label: 'Friday', value: 'friday', key: 5 },
-    { label: 'Saturday', value: 'saturday', key: 6 },
-    { label: 'Sunday', value: 'sunday', key: 7 },
-  ];
-  const [selectedOptionsDay, setSelectedOptionsDay] = useState();
-  const [timeFrom, setTimeFrom] = useState();
-  const [timeTo, setTimeTo] = useState();
+ 
   let labAdmin_length = useSelector(
     (state) => state?.ViewLabAdminReducer?.labAdmin
   );
@@ -85,7 +69,6 @@ export default function CreateLabAdmins({ history }) {
   const formikData = useFormik({
     initialValues: {},
     onSubmit: (values) => {
-      // console.log(values);
     },
   });
   let deps = [];
@@ -443,7 +426,7 @@ export default function CreateLabAdmins({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
               // type="submit"
               onClick={createLabAdmin}
               className={`btn-shadow btn-multiple-state ${

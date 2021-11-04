@@ -365,6 +365,11 @@ const data = [
             // icon: 'simple-icon-arrow-right',
             label: 'menu.admin',
             to: `${adminRoot}/menu/levels/viewAdmin`,
+           
+          },
+          {
+            label: 'menu.fieldStaff',
+            to: `${adminRoot}/menu/levels/viewDoctor`,
           },
 
           // {
@@ -411,6 +416,7 @@ const data = [
             // icon: 'simple-icon-arrow-right',
             label: 'menu.rsm',
             to: `${adminRoot}/menu/levels/ViewRsm`,
+
           },
           // {
           //   icon: 'simple-icon-arrow-right',
@@ -471,6 +477,109 @@ const data = [
   //   to: 'https://gogo-react-docs.coloredstrategies.com/',
   //   newWindow: true,
   // },
+  {
+    id: 'order',
+    icon: 'iconsminds-shopping-cart',
+    label: 'menu.orders',
+    to: `${adminRoot}/Orders/orders`,
+    subs: [
+      {
+        icon: 'simple-icon-check',
+
+        label: 'menu.viewOrders',
+        to: `${adminRoot}/Orders/orders`,
+      },
+      
+    ],
+  },
+
+
+  {
+    id: 'Distribution Center',
+    icon: 'iconsminds-management',
+    label: 'menu.distribution-center-management',
+    to: `${adminRoot}/distributioncenter-management`,
+    subs: [
+      {
+        icon: 'iconsminds-management',
+        label: 'menu.distribution-center',
+        to: `${adminRoot}/distributioncenter-management/viewDistributioncenter`,
+      },
+      {
+        icon: 'iconsminds-business-man',
+        label: 'menu.department-head',
+         to: `${adminRoot}/distributioncenter-management/viewDepartmenthead`,
+      },
+    ],
+  },
+
+
+  {
+    id: 'Stocks',
+    icon: 'iconsminds-bag-items',
+    label: 'Stocks',
+    to: `${adminRoot}/stocks-management`,
+    subs: [
+      {
+        icon: 'iconsminds-add-cart',
+        label: 'Product Category',
+        to: `${adminRoot}/stocks-management/viewProductCategory`,
+      },
+      {
+        icon: 'iconsminds-add-basket',
+        label: 'Product',
+         to: `${adminRoot}/stocks-management/viewProduct`,
+      },
+      {
+        icon: 'iconsminds-cart-quantity',
+        label: 'Stock',
+         to: `${adminRoot}/stocks-management/viewStock`,
+      },
+      {
+        icon: 'iconsminds-credit-card',
+        label: 'Stock Transaction',
+         to: `${adminRoot}/stocks-management/ViewStockTransaction`,
+      },
+    ],
+  },
+
+
+  {
+    id: 'Doctors',
+    icon: 'iconsminds-doctor',
+    label: 'Doctors',
+    to: `${adminRoot}/doctor-management`,
+    subs: [
+      {
+        icon: 'iconsminds-doctor',
+        label: 'Doctors Category',
+        to: `${adminRoot}/doctor-management/viewDoctorsCategory`,
+      },
+      {
+        icon: 'iconsminds-doctor',
+        label: 'Doctors ',
+         to: `${adminRoot}/doctor-management/viewDoctors`,
+      },
+    ],
+  },
+
+
+
+  {
+    id: 'Customers',
+    icon: 'iconsminds-business-man',
+    label: 'Customers',
+    to: `${adminRoot}/customer-management`,
+    subs: [
+      {
+        icon: 'iconsminds-business-man',
+        label: 'Customers',
+        to: `${adminRoot}/customer-management/viewCustomers`,
+      },
+     
+    ],
+  },
+
 
   {
     id: 'Target',

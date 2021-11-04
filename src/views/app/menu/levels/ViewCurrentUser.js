@@ -86,10 +86,9 @@ export default function ViewCurrentUser(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <Button
-            className="btn-btn-secondary"
+           <Button
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
           >
             Back
           </Button>
@@ -310,7 +309,8 @@ export default function ViewCurrentUser(props) {
 
             {thisView ? (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
@@ -327,7 +327,8 @@ export default function ViewCurrentUser(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''

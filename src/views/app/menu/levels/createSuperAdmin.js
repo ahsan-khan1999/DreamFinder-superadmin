@@ -640,7 +640,7 @@ const CreateSuperAdmin = ({ match, history }) => {
               <div style={{ marginBottom: '30px' }}>
                 {thisView === true ? (
                   <Button
-                    className="btn btn-primary"
+                    style={{ backgroundColor:'#0066b3' }}
                     onClick={editProfile}
                     style={{
                       marginRight: '5px',
@@ -706,7 +706,7 @@ const CreateSuperAdmin = ({ match, history }) => {
                 ) : (
                   ''
                 )}
-                {/* <Button className="btn btn-primary" onClick={suspandDoctor}>
+                {/*  <Button style={{backgroundColor:'#0066b3'}} onClick={suspandDoctor}>
             Suspend Doctor
           </Button> */}
               </div>

@@ -57,10 +57,9 @@ export default function viewCurrentUpcomingAppointment(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <Button
-            className="btn-btn-secondary"
+           <Button
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
           >
             Back
           </Button>
