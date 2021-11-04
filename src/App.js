@@ -57,32 +57,32 @@ const App = ({ locale }) => {
     }
   }, [direction]);
 
-  useEffect(() => {
-    // dispatch(getUser());
-    if ('serviceWorker' in navigator) {
-      navigator?.serviceWorker
-        .register('/firebase-messaging-sw.js')
-        .then(function (registration) {
-          console.log('Registration successful, scope is:', registration.scope);
-        })
-        .catch(function (err) {
-          console.log('Service worker registration failed, error:', err);
-        });
-    }
-    Notification.requestPermission()
-      .then(async function () {
-        const token = await test?.getToken(messaging);
-        // console.log(token);
-        localStorage.setItem('fcm', token);
-      })
-      .catch(function (err) {
-        console.log('Unable to get permission to notify.', err);
-      });
-    navigator?.serviceWorker.addEventListener('message', (message) =>
-      console.log(message)
-    );
-    window.scrollTo(0, 0);
-  }, []);
+  // useEffect(() => {
+  //   // dispatch(getUser());
+  //   if ('serviceWorker' in navigator) {
+  //     navigator?.serviceWorker
+  //       .register('/firebase-messaging-sw.js')
+  //       .then(function (registration) {
+  //         console.log('Registration successful, scope is:', registration.scope);
+  //       })
+  //       .catch(function (err) {
+  //         console.log('Service worker registration failed, error:', err);
+  //       });
+  //   }
+  //   Notification.requestPermission()
+  //     .then(async function () {
+  //       const token = await test?.getToken(messaging);
+  //       // console.log(token);
+  //       localStorage.setItem('fcm', token);
+  //     })
+  //     .catch(function (err) {
+  //       console.log('Unable to get permission to notify.', err);
+  //     });
+  //   navigator?.serviceWorker.addEventListener('message', (message) =>
+  //     console.log(message)
+  //   );
+  //   window.scrollTo(0, 0);
+  // }, []);
 
   return (
     <div className="h-100">

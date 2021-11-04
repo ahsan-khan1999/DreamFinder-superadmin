@@ -21,11 +21,11 @@ import { SuspandAttendanceAction } from 'Store/Actions/AttendanceActions/Attenda
 
 export default function EditAttendance(props) {
   let currentAttendance = props?.location.state;
-  const loading = useSelector(state => state?.AttendanceReducer?.loading)
-  // const [loading, setLoading] = useState(false);
+  // const loading = useSelector(state => state?.AttendanceReducer?.loading)
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const suspandAttendance = async () => {
-    // setLoading(true);
+    setLoading(true);
     let res = await dispatch(
       SuspandAttendanceAction({ uid: currentAttendance?.uid })
     );
@@ -37,11 +37,13 @@ export default function EditAttendance(props) {
         null,
         ''
       );
-      // setLoading(false);
+      setLoading(false);
 
       props.history.push('/app/Attendance/ViewAttendance');
+    }else{
+      setLoading(false);
+
     }
-    // setLoading(false);
   };
   const handleBack = () => {
     props.history.push('/app/Attendance/ViewAttendance');

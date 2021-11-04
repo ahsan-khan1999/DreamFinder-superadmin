@@ -37,15 +37,22 @@ const selectGender = [
 ];
 export default function EditSm(props) {
   const [buttonName, setButtonName] = useState('');
+  const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
 
   const [thisView, setThisView] = useState(true);
+
   const currentUser = props?.location?.state;
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
   console.log(currentUser);
   let [service_location, setService_location] = useState([]);
   const [array, setArray] = useState(admin?.service_location_uid);
-
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -58,15 +65,17 @@ export default function EditSm(props) {
     phone_number: currentUser?.phone_number,
 
     role_uid: currentUser?.role?.uid,
-    manager_uid: '',
+    manager_uid: currentUser?.field_staff?.manager?.uid,
 
-    service_location_uid: array,
+    service_location_uid: service_location_id,
   };
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
   useEffect(() => {
+    setAdmin(admin_obj);
+
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -75,7 +84,7 @@ export default function EditSm(props) {
     readRoles();
     dispatch(ViewDirectorAction());
   }, []);
-  
+
   //   const [currentItem, setCurrentItem] = useState('');
   //   roles?.filter((item) => (
 
@@ -86,7 +95,6 @@ export default function EditSm(props) {
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(false);
@@ -95,13 +103,59 @@ export default function EditSm(props) {
     props.history.push('/app/menu/levels/ViewSm');
   };
   const editData = async (e) => {
-    let test = { ...admin, service_location_uid: array };
-    e.preventDefault();
-    console.log();
-    let res = await dispatch(UpdateUserAction(test));
-    if (res) {
-      NotificationManager.success('Successful response', 'Success', 5000, '');
-      props.history.push('/app/menu/levels/ViewSm');
+    setLoading(true);
+    if (
+      admin?.name === '' ||
+      admin?.gender === '' ||
+      admin?.designation === '' ||
+      admin.role_uid === '' ||
+      admin.manager_uid === '' ||
+      admin?.service_location_uid === []
+    ) {
+      NotificationManager.error(
+        'Please Enter Details',
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      setLoading(false);
+    } else {
+      setLoading(true);
+
+      let test = { ...admin, service_location_uid: array };
+
+      if (array === undefined) {
+        let res = await dispatch(UpdateUserAction(admin));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          setLoading(false);
+
+          props.history.push('/app/menu/levels/ViewSm');
+        }
+      } else {
+        let res = await dispatch(UpdateUserAction(test));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          setLoading(false);
+
+          props.history.push('/app/menu/levels/ViewSm');
+        }
+        setLoading(false);
+
+      }
+      setLoading(false);
+
     }
   };
   const suspandAdmin = async () => {
@@ -110,7 +164,6 @@ export default function EditSm(props) {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Activated',
@@ -130,11 +183,12 @@ export default function EditSm(props) {
         );
       }
     } else {
+    setLoadingSuspand(true)
+
       let apiData = {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Suspaned',
@@ -143,8 +197,12 @@ export default function EditSm(props) {
           null,
           ''
         );
+    setLoadingSuspand(false)
+
         props.history.push('/app/menu/levels/ViewSm');
       } else {
+    setLoadingSuspand(true)
+
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -152,14 +210,17 @@ export default function EditSm(props) {
           null,
           ''
         );
+    setLoadingSuspand(false)
+
       }
+    setLoadingSuspand(false)
+
     }
     //  setStatusUpdate()
 
     // console.log(doctor?.password);
   };
   let directorFilter = [];
-  console.log(roles,"at user");
   user?.filter((item) =>
     directorFilter?.push({
       label: item?.name,
@@ -178,10 +239,10 @@ export default function EditSm(props) {
     await setArray(value);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
-  const getServiceLocationUid = async () => {
+  const getServiceLocationUid = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read`,
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/region?child_uid=${uid}`,
       {
         headers: {
           x_session_key: token.token,
@@ -195,7 +256,7 @@ export default function EditSm(props) {
     option?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
   let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({label:item?.name,value:item?.name,id:item?.uid})
+    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
   );
   return (
     <Card>
@@ -204,7 +265,7 @@ export default function EditSm(props) {
           <Button
             className="btn-btn-secondary"
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', 'background-color': '##0066B3' }}
           >
             Back
           </Button>
@@ -222,12 +283,12 @@ export default function EditSm(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.name}</p>
+                      <p>{admin?.name}</p>
                     </span>
                   ) : (
                     <Input
                       required
-                      value={admin.name}
+                      value={admin?.name}
                       className="form-control"
                       name="name"
                       // validate={validateEmail}
@@ -247,12 +308,14 @@ export default function EditSm(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.email_address}</p>
+                      <p>{admin?.email_address}</p>
                     </span>
                   ) : (
                     <Input
+                    disabled
+            
                       required
-                      value={admin.email_address}
+                      value={admin?.email_address}
                       className="form-control"
                       name="email"
                       type="email"
@@ -353,6 +416,7 @@ export default function EditSm(props) {
                     </span>
                   ) : (
                     <Input
+                    disabled
                       required
                       value={admin?.phone_number}
                       type="text"
@@ -381,7 +445,7 @@ export default function EditSm(props) {
                   ) : (
                     <Input
                       required={true}
-                      value={admin.designation}
+                      value={admin?.designation}
                       className="form-control"
                       name="designation"
                       type="text"
@@ -454,7 +518,7 @@ export default function EditSm(props) {
                           ...admin,
                           manager_uid: val.key,
                         });
-                        getServiceLocationUid();
+                        getServiceLocationUid(val.key);
                       }}
                       options={directorFilter}
                     />
@@ -478,8 +542,17 @@ export default function EditSm(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={defaultOptions[0]}
-                      value={admin?.service_location_uid}
+                      // defaultValue={defaultOptions[0]}
+                      defaultValue={currentUser?.field_staff?.service_location?.map(
+                        (item) => {
+                          return {
+                            label: item?.name,
+                            value: item?.name,
+                            key: item?.uid,
+                          };
+                        }
+                      )}
+                      // value={admin?.service_location_uid}
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />
@@ -508,10 +581,11 @@ export default function EditSm(props) {
             ) : (
               <Button
                 className="btn btn-primary"
+                style={{ 'background-color': '##0066B3' }}
                 // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 size="sm"
                 onClick={editData}
               >
@@ -525,12 +599,12 @@ export default function EditSm(props) {
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#003766', marginRight: '5px' }}
-                // className="btn btn-primary"
+                style={{ 'background-color': '##0066B3', marginLeft: '5px' }}
+                className={`btn-shadow btn-multiple-state ${
+                  loadingSuspand ? 'show-spinner' : ''
+                }`}
                 onClick={suspandAdmin}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />

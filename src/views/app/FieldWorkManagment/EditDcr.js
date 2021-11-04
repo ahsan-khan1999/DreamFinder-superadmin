@@ -33,6 +33,9 @@ export default function EditDcr(props) {
       setLoading(false);
 
       props.history.push('/app/FieldWorkManagment/ViewDcr');
+    }else{
+      setLoading(false);
+
     }
   };
   const handleBack = () => {

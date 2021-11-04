@@ -54,6 +54,7 @@ export default function CreateAttendance(props) {
   const [director, setDirector] = useState([]);
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false)
   const [loadingFileUpload, setLoadingFileUpload] = useState(false);
 
   const [file, setFile] = useState();
@@ -70,7 +71,7 @@ export default function CreateAttendance(props) {
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
   const am = useSelector((state) => state?.AttendanceReducer?.am);
   const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
-  const loading = useSelector((state) => state?.AttendanceReducer?.loading);
+  // const loading = useSelector((state) => state?.AttendanceReducer?.loading);
 
   const depo = useSelector((state) => state?.ViewUserReducer?.depoManager);
   const directorUser = useSelector((state) => state?.ViewUserReducer?.director);
@@ -192,10 +193,12 @@ export default function CreateAttendance(props) {
   //   console.log(imageUploadData);
   const createAttendance = async () => {
     if (
-      attendance?.datetime === '' &&
-      attendance?.image_url === '' &&
+      
+      attendance?.datetime === '' ||
+      attendance?.image_url === '' ||
       attendance?.user_uid === ''
     ) {
+      setLoading(true)
       NotificationManager.error(
         'Please Enter Details',
         'Error',
@@ -203,9 +206,12 @@ export default function CreateAttendance(props) {
         null,
         ''
       );
+      setLoading(false)
 
       return;
     } else {
+      setLoading(true)
+
       let datetimeFormat = moment(attendance?.datetime).format(
         'YYYY-MM-DD hh:mm:ss'
       );
@@ -214,7 +220,8 @@ export default function CreateAttendance(props) {
         datetime: datetimeFormat,
         image_url: imageUploadData?.attendance__image__url,
       };
-      console.log(apiData);
+      // console.log(apiData);
+
       let res = await dispatch(CreateAttendanceAction(apiData));
       if (res) {
         NotificationManager.success(
@@ -224,8 +231,13 @@ export default function CreateAttendance(props) {
           null,
           ''
         );
+      setLoading(false)
+
 
         props.history.push('/app/Attendance/ViewAttendance');
+      }else{
+      setLoading(false)
+
       }
     }
   };

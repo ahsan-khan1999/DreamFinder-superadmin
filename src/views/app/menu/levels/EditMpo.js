@@ -38,8 +38,16 @@ const selectGender = [
 export default function EditMpo(props) {
   const [thisView, setThisView] = useState(true);
   const [array, setArray] = useState(admin?.service_location_uid);
+  const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
+
   let [service_location, setService_location] = useState([]);
   const currentUser = props?.location?.state;
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
   console.log(currentUser);
@@ -56,14 +64,16 @@ export default function EditMpo(props) {
     phone_number: currentUser?.phone_number,
 
     role_uid: currentUser?.role?.uid,
-    manager_uid: '',
-    service_location_uid: array,
+    manager_uid: currentUser?.field_staff?.manager?.uid,
+    service_location_uid: service_location_id,
   };
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
   useEffect(() => {
+    setAdmin(admin_obj);
+
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -86,7 +96,6 @@ export default function EditMpo(props) {
   );
   
 
-  const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(false);
@@ -95,13 +104,57 @@ export default function EditMpo(props) {
     props.history.push('/app/menu/levels/ViewMpo');
   };
   const editData = async (e) => {
-    let test = { ...admin, service_location_uid: array };
+    setLoading(true);
+    if (
+      admin?.name === '' ||
+      admin?.gender === '' ||
+      admin?.designation === '' ||
+      admin.role_uid === '' ||
+      admin.manager_uid === '' ||
+      admin?.service_location_uid === []
+    ) {
+      NotificationManager.error(
+        'Please Enter Details',
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      setLoading(false);
+    } else {
+      setLoading(true);
 
-    e.preventDefault();
-    let res = await dispatch(UpdateUserAction(test));
-    if (res) {
-      NotificationManager.success('Successful response', 'Success', 5000, '');
-      props.history.push('/app/menu/levels/ViewMpo');
+      let test = { ...admin, service_location_uid: array };
+
+      if (array === undefined) {
+        let res = await dispatch(UpdateUserAction(admin));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          setLoading(false);
+
+          props.history.push('/app/menu/levels/ViewMpo');
+        }
+      } else {
+        let res = await dispatch(UpdateUserAction(test));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          setLoading(false);
+
+          props.history.push('/app/menu/levels/ViewMpo');
+        }
+        setLoading(false);
+      }
+      setLoading(false);
     }
   };
   const suspandAdmin = async () => {
@@ -130,6 +183,7 @@ export default function EditMpo(props) {
         );
       }
     } else {
+      setLoadingSuspand(true)
       let apiData = {
         uid: currentUser?.uid,
       };
@@ -143,8 +197,12 @@ export default function EditMpo(props) {
           null,
           ''
         );
+      setLoadingSuspand(false)
+
         props.history.push('/app/menu/levels/ViewMpo');
       } else {
+      setLoadingSuspand(true)
+
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -152,6 +210,8 @@ export default function EditMpo(props) {
           null,
           ''
         );
+      setLoadingSuspand(false)
+
       }
     }
     //  setStatusUpdate()
@@ -196,7 +256,7 @@ export default function EditMpo(props) {
           <Button
             className="btn-btn-secondary"
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+            style={{ marginRight: '20px', 'background-color': '#0066B3' }}
           >
             Back
           </Button>
@@ -214,12 +274,12 @@ export default function EditMpo(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.name}</p>
+                      <p>{admin?.name}</p>
                     </span>
                   ) : (
                     <Input
                       required
-                      value={admin.name}
+                      value={admin?.name}
                       className="form-control"
                       name="name"
                       // validate={validateEmail}
@@ -239,12 +299,13 @@ export default function EditMpo(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.email_address}</p>
+                      <p>{admin?.email_address}</p>
                     </span>
                   ) : (
                     <Input
                       required
-                      value={admin.email_address}
+                      disabled
+                      value={admin?.email_address}
                       className="form-control"
                       name="email"
                       type="email"
@@ -256,46 +317,7 @@ export default function EditMpo(props) {
                 </FormGroup>
               </Col>
 
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Password" />
-                  </Label>
-                  {thisView ? (
-                    <span>
-                      <p>{admin.password}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      value={admin.password}
-                      className="form-control"
-                      name="password"
-                      type="password"
-                      //   validate={validate}
-                      onChange={(e) =>
-                        setAdmin({ ...admin, password: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Confirm Password" />
-                  </Label>
-                  <Input
-                    required
-                    value={confirmPassword}
-                    className="form-control"
-                    name="confirm password"
-                    type="password"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </FormGroup>
-              </Col> */}
+             
               <Col lg={6}>
                 <FormGroup>
                   <label>
@@ -346,6 +368,8 @@ export default function EditMpo(props) {
                   ) : (
                     <Input
                       required
+
+                      disabled
                       value={admin?.phone_number}
                       type="text"
                       className="radio-in"
@@ -470,8 +494,17 @@ export default function EditMpo(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultOptions={defaultOptions[0]}
-                      value={admin?.service_location_uid}
+                      defaultValue={currentUser?.field_staff?.service_location?.map(
+                        (item) => {
+                          return {
+                            label: item?.name,
+                            value: item?.name,
+                            key: item?.uid,
+                          };
+                        }
+                      )}
+
+
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />
@@ -484,6 +517,8 @@ export default function EditMpo(props) {
               <Button
                 className="btn btn-primary"
                 // type="submit"
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
                 // }`}
@@ -500,10 +535,12 @@ export default function EditMpo(props) {
             ) : (
               <Button
                 className="btn btn-primary"
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+
                 // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 size="sm"
                 onClick={editData}
               >
@@ -517,12 +554,13 @@ export default function EditMpo(props) {
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#003766', marginRight: '5px' }}
+                style={{ 'background-color': '#0066B3'}}
                 // className="btn btn-primary"
+                className={`btn-shadow btn-multiple-state ${
+                  loadingSuspand ? 'show-spinner' : ''
+                }`}
                 onClick={suspandAdmin}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+              
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />

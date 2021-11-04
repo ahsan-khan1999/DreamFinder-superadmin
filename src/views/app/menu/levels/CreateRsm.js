@@ -139,7 +139,7 @@ export default function CreateDirector({ history }) {
         null,
         ''
       );
-      setLoading(true);
+      setLoading(false);
 
       return;
     } else {
@@ -150,7 +150,7 @@ export default function CreateDirector({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'R Sales Manager Added Sucessfully',
           'Success',
           3000,
           null,
@@ -158,7 +158,7 @@ export default function CreateDirector({ history }) {
         );
         setLoading(false);
 
-        history.push('/app/menu/levels/viewRsm');
+        history.push('/app/menu/levels/ViewRsm');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -169,7 +169,11 @@ export default function CreateDirector({ history }) {
         );
         setLoading(false);
       }
+      setLoading(false);
+
     }
+    setLoading(false);
+
   };
   return (
     <Card>
@@ -373,7 +377,8 @@ export default function CreateDirector({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Select Teritory</h6>
+                    <IntlMessages id="Select Area" />
+
                   </Label>
                   <Select
                     cacheOptions
@@ -410,8 +415,10 @@ export default function CreateDirector({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
               // type="submit"
+              style={{ backgroundColor: '#0066B3' }}
+
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
@@ -423,7 +430,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Admin
+              Add RSM
             </Button>
           </Form>
         </Formik>

@@ -50,17 +50,62 @@ import {
 export default function UpdateSample(props) {
   let currentSample = props?.location?.state;
   console.log(currentSample);
+
+  const [stock, setStock] = useState([]);
+  const [sample, setSample] = useState(sampleObj);
+
+  let optionDefault = [];
+  currentSample?.medicines?.map((item) => {
+    optionDefault.push({
+      medicine_quantity: item?.medicine_quantity,
+      stock_uid: item?.stock_uid,
+    });
+  });
+  console.log(optionDefault);
+  const sampleObj = {
+    uid: currentSample?.uid,
+    medicines: optionDefault,
+  };
   const [array, setArray] = useState([]);
+  // console.log(array,"array");
+
+  const [view, setView] = useState(true);
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingSuspand, setLoadingSuspand] = useState(false);
 
-  const [view, setView] = useState(true);
+  const editSample = async () => {
+    setLoading(true);
+    let apiData = {
+      uid: currentSample?.uid,
+      medicines: array?.map((item) => {
+        return {
+          stock_uid: item?.medicine_uid,
+          medicine_quantity: item?.quantity,
+        };
+      }),
+    };
+    console.log(apiData, 'sample');
 
-  const [stock, setStock] = useState([]);
+    let res = await dispatch(UpdateSampleAction(apiData));
+    if (res) {
+      NotificationManager.success(
+        'Successfully Updated',
+        'Success',
+        5000,
+        null,
+        ''
+      );
+      setLoading(false);
 
-  const dispatch = useDispatch();
-  const [sample, setSample] = useState(sampleObj);
+      props.history.push('/app/Sample/ViewSample');
+    } else {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    setSample(sampleObj);
     dispatch(ViewDirectorAction());
   }, []);
   let medicineOptionFromStock = [];
@@ -71,43 +116,6 @@ export default function UpdateSample(props) {
       key: item?.quantity,
     })
   );
-  const getStocksMedicine = async (uid) => {
-    let token = await getToken();
-    const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?child_uid=${uid}`,
-      {
-        headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
-        },
-      }
-    );
-
-    setStock(response?.data?.response_data);
-  };
-  const director = useSelector((state) => state?.ViewUserReducer?.director);
-  let directorOption = [];
-  director?.map((item) =>
-    directorOption?.push({
-      label: item?.name,
-      value: item?.name,
-      key: item?.uid,
-    })
-  );
-  const sm = useSelector((state) => state?.AttendanceReducer?.sm);
-  let salesManagerOption = [];
-  sm?.map((item) =>
-    salesManagerOption?.push({
-      label: item?.name,
-      value: item?.name,
-      key: item?.uid,
-    })
-  );
-  const sampleObj = {
-    uid: currentSample?.uid,
-    assigned_to_uid: '',
-    medicines: [],
-  };
   const provalue = [];
   const handleChangeProduct = async (e, index) => {
     let options = e;
@@ -122,11 +130,10 @@ export default function UpdateSample(props) {
 
     await setArray(provalue);
   };
-
   const QuantityHanle = async (e, index) => {
     const obj = array[index];
-    if (e.target.value <= Number(e.target.max)) {
-      obj.quantity = Number(e.target.value);
+    if (e?.target?.value <= Number(e?.target?.max)) {
+      obj.quantity = Number(e?.target?.value);
     }
     array[index] = obj;
     const testArary = [...array];
@@ -141,29 +148,7 @@ export default function UpdateSample(props) {
       }),
     });
   };
-  const editSample = async () => {
-    setLoading(true);
 
-    let apiData = {
-      uid: currentSample?.uid,
-      ...sample,
-    };
-    let res = await dispatch(UpdateSampleAction(apiData));
-    if (res) {
-      NotificationManager.success(
-        'Successfully Edit',
-        'Success',
-        5000,
-        null,
-        ''
-      );
-      setLoading(false);
-
-      props.history.push('/app/Sample/ViewSample');
-    } else {
-      setLoading(false);
-    }
-  };
   const editProfile = () => {
     setView(false);
   };
@@ -188,12 +173,48 @@ export default function UpdateSample(props) {
       setLoadingSuspand(false);
     }
   };
+
+  const director = useSelector((state) => state?.ViewUserReducer?.director);
+  let directorOption = [];
+  director?.map((item) =>
+    directorOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  const sm = useSelector((state) => state?.AttendanceReducer?.sm);
+  let salesManagerOption = [];
+  sm?.map((item) =>
+    salesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  const getStocksMedicine = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?child_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+
+    setStock(response?.data?.response_data);
+  };
+
   return (
     <Card>
       <CardBody>
         <Button
-        style={{backgroundColor:"#0066B3"}}
-        onClick={handleBack} style={{ marginTop: '10px' }}>
+          style={{ backgroundColor: '#0066B3' }}
+          onClick={handleBack}
+          style={{ marginTop: '10px' }}
+        >
           Back
         </Button>
         <CardTitle>
@@ -290,27 +311,29 @@ export default function UpdateSample(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={{
-                        label: currentSample?.medicines?.map(
-                          (item) => item?.medicine_name
-                        ),
-                        value: currentSample?.medicines?.map(
-                          (item) => item?.medicine_name
-                        ),
-                        key: currentSample?.medicines?.map(
-                          (item) => item?.medicine_quantity
-                        ),
-                      }}
+                      defaultValue={currentSample?.medicines?.map(
+                        (item, index) => {
+                          return {
+                            label: item?.medicine_name,
+                            key: item?.medicine_quantity,
+                            value: item?.stock_uid,
+                          };
+                        }
+                      )}
+                      // defaultValue={{
+                      //   label: currentSample?.medicines?.map(
+                      //     (item) => item?.medicine_name
+                      //   ),
+                      //   value: currentSample?.medicines?.map(
+                      //     (item) => item?.stock_uid
+                      //   ),
+                      //   key: currentSample?.medicines?.map(
+                      //     (item) => item?.medicine_quantity
+                      //   ),
+                      // }}
                       // value={admin?.service_location_uid}
                       onChange={(val, index) => {
                         handleChangeProduct(val, index);
-
-                        //   setSample({
-                        //     ...sample,
-                        //     start_date: moment
-                        //       .unix(targets[0]?.start_date)
-                        //       .format('YYYY-MM-DD h:mm:ss'),
-                        //   });
                       }}
                       options={medicineOptionFromStock}
                     />
@@ -318,6 +341,32 @@ export default function UpdateSample(props) {
                 </FormGroup>
               </Col>
             </Row>
+            {view ? (
+              <Row>
+                <Col lg={12}>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <th>Medicine Products</th>
+                        <th>Medicine Quanity</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {currentSample?.medicines?.map((item) => (
+                        <tr>
+                          <td>{item?.medicine_name}</td>
+                          <td>{item?.medicine_quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            ) : view ? (
+              ''
+            ) : null}
+
             {view ? (
               ''
             ) : (
@@ -335,6 +384,7 @@ export default function UpdateSample(props) {
                         </thead>
                         <tbody>
                           {array?.map((item, index) => {
+                            // console.log(item, 'at item');
                             return (
                               <tr>
                                 <td>{item?.label}</td>
@@ -374,26 +424,39 @@ export default function UpdateSample(props) {
 
         {view ? (
           <Button
-          style={{backgroundColor:"#0066B3"}}
-          onClick={editProfile}>Edit Sample</Button>
+            style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
+            onClick={editProfile}
+          >
+            Edit Sample
+          </Button>
         ) : (
           <Button
-          style={{backgroundColor:"#0066B3"}}
+            style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
             className={`btn-shadow btn-multiple-state ${
               loading ? 'show-spinner' : ''
             }`}
             onClick={editSample}
           >
+            <span className="spinner d-inline-block">
+              <span className="bounce1" />
+              <span className="bounce2" />
+              <span className="bounce3" />
+            </span>
             Save
           </Button>
         )}
         <Button
-        style={{backgroundColor:"#0066B3"}}
+          style={{ backgroundColor: '#0066B3' }}
           className={`btn-shadow btn-multiple-state ${
-            loading ? 'show-spinner' : ''
+            loadingSuspand ? 'show-spinner' : ''
           }`}
           onClick={suspandSample}
         >
+          <span className="spinner d-inline-block">
+            <span className="bounce1" />
+            <span className="bounce2" />
+            <span className="bounce3" />
+          </span>
           Suspand Sample
         </Button>
       </CardBody>

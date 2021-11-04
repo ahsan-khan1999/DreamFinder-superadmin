@@ -116,7 +116,7 @@ export default function EditPeriorityList(props) {
         style={{backgroundColor:"#0066B3"}}
         onClick={handleBack}>Back</Button>
         <CardTitle>
-          <IntlMessages id="View Customer Periority List" />
+          <IntlMessages id="View Customer Priority List" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -215,11 +215,11 @@ export default function EditPeriorityList(props) {
             </Row>
             {view ? (
               <Button 
-              style={{backgroundColor:"#0066B3"}}
+              style={{backgroundColor:"#0066B3",marginRight:"5px"}}
               onClick={editPeriority}>Edit Profile</Button>
             ) : (
               <Button
-              style={{backgroundColor:"#0066B3"}}
+              style={{backgroundColor:"#0066B3",marginRight:"5px"}}
                 className="btn btn-primary"
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${

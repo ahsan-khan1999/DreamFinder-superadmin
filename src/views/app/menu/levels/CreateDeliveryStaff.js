@@ -132,14 +132,14 @@ export default function CreateDeliveryStaff({history}) {
     setDeliveryStaff(test);
 
     if (
-      deliveryStaff?.email_address === '' &&
-      deliveryStaff?.name === '' &&
-      deliveryStaff?.password === '' &&
-      deliveryStaff?.gender === '' &&
-      deliveryStaff?.phone_number === '' &&
-      deliveryStaff?.designation === '' &&
-      deliveryStaff.role_uid === '' &&
-      deliveryStaff.manager_uid === '' &&
+      deliveryStaff?.email_address === '' ||
+      deliveryStaff?.name === '' ||
+      deliveryStaff?.password === '' ||
+      deliveryStaff?.gender === '' ||
+      deliveryStaff?.phone_number === '' ||
+      deliveryStaff?.designation === '' ||
+      deliveryStaff.role_uid === '' ||
+      deliveryStaff.manager_uid === '' ||
       deliveryStaff?.service_location_uid === []
     ) {
       // console.log(deliveryStaff, 'at  if');

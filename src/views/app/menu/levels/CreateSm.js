@@ -49,6 +49,7 @@ export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   let [service_location, setService_location] = useState([]);
   const [array, setArray] = useState(admin?.service_location_uid);
+  const [admin, setAdmin] = useState(admin_obj);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -105,7 +106,6 @@ export default function CreateDirector({ history }) {
     await setArray(value);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
-  const [admin, setAdmin] = useState(admin_obj);
   const [loading, setLoading] = useState(false);
 
   const onAdminCreate = async () => {
@@ -119,8 +119,7 @@ export default function CreateDirector({ history }) {
       admin?.gender === '' &&
       admin?.phone_number === '' &&
       admin?.designation === '' &&
-      admin.role_uid === '' &&
-      admin.service_location === undefined
+      admin.role_uid === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -136,16 +135,16 @@ export default function CreateDirector({ history }) {
       setLoading(true);
 
       let res = await dispatch(CreateSmAction(test));
-
+      // console.log(test);
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'Sales Manager Added Sucessfully',
           'Success',
           3000,
           null,
           ''
         );
-      setLoading(false);
+        setLoading(false);
 
         history.push('/app/menu/levels/viewSm');
       } else if (confirmPassword !== admin?.password) {
@@ -156,15 +155,16 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-      setLoading(false);
-
+        setLoading(false);
+      } else {
+        setLoading(false);
       }
     }
   };
-  const getServiceLocationUid = async () => {
+  const getServiceLocationUid = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read`,
+      `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/region?child_uid=${uid}`,
       {
         headers: {
           x_session_key: token.token,
@@ -195,7 +195,7 @@ export default function CreateDirector({ history }) {
 
                   <Input
                     required
-                    value={admin.name}
+                    value={admin?.name}
                     className="form-control"
                     name="name"
                     // validate={validateEmail}
@@ -214,7 +214,7 @@ export default function CreateDirector({ history }) {
 
                   <Input
                     required
-                    value={admin.email_address}
+                    value={admin?.email_address}
                     className="form-control"
                     name="email"
                     type="email"
@@ -232,7 +232,7 @@ export default function CreateDirector({ history }) {
                   </Label>
                   <Input
                     required
-                    value={admin.password}
+                    value={admin?.password}
                     className="form-control"
                     name="password"
                     type="password"
@@ -319,7 +319,7 @@ export default function CreateDirector({ history }) {
 
                   <Input
                     required={true}
-                    value={admin.designation}
+                    value={admin?.designation}
                     className="form-control"
                     name="designation"
                     type="text"
@@ -371,7 +371,7 @@ export default function CreateDirector({ history }) {
                         ...admin,
                         manager_uid: val.key,
                       });
-                      getServiceLocationUid();
+                      getServiceLocationUid(val.key);
                     }}
                     options={directorFilter}
                   />
@@ -380,7 +380,7 @@ export default function CreateDirector({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Select Teritory</h6>
+                    <IntlMessages id="Select Area" />
                   </Label>
                   <Select
                     cacheOptions
@@ -396,7 +396,8 @@ export default function CreateDirector({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{ backgroundColor: '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -409,7 +410,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Admin
+              Add SM
             </Button>
           </Form>
         </Formik>

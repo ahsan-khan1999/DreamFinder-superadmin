@@ -25,6 +25,8 @@ import { getToken } from 'Utils/auth.util';
 
 export default function CreatePeriorityList(props) {
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false);
+
   const [customers, setCustomers] = useState([]);
   const [customersID, setCustomersID] = useState('');
 
@@ -41,7 +43,7 @@ export default function CreatePeriorityList(props) {
     );
     setCustomers(res?.data?.response_data);
   };
-  const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
+  // const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
   useEffect(() => {
     readCustomers();
   }, []);
@@ -54,7 +56,7 @@ export default function CreatePeriorityList(props) {
     })
   );
   const createCustomerPeriorityList = async () => {
-    console.log(customersID);
+    setLoading(true)
     let res = await dispatch(
       CreateCustomerPeriorityListAction({ customer_uid: customersID })
     );
@@ -66,9 +68,11 @@ export default function CreatePeriorityList(props) {
         null,
         ''
       );
+      setLoading(false)
 
       props.history.push('/app/PeriorityList/ViewPeriorityList');
     }else{
+      setLoading(false)
 
     }
   };
@@ -76,7 +80,7 @@ export default function CreatePeriorityList(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Customer Periority List" />
+          <IntlMessages id="Create Customer Priority List" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>

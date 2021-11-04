@@ -41,9 +41,14 @@ export default function EditDeliveryStaff(props) {
   let [buttonName, setButtonName] = useState();
 
   const currentUser = props?.location?.state;
-  console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
-  // console.log(currentUser);
+  const [admin, setAdmin] = useState(admin_obj);
+
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
+
   const [loadingSuspand, setLoadingSuspand] = useState(false);
   const admin_obj = {
     email_address: currentUser?.email_address,
@@ -56,7 +61,7 @@ export default function EditDeliveryStaff(props) {
     manager_uid: currentUser?.field_staff?.manager?.uid,
 
     phone_number: currentUser?.phone_number,
-    service_location_uid: currentUser?.field_staff?.service_location,
+    service_location_uid: service_location_id,
 
     role_uid: currentUser?.role?.uid,
   };
@@ -92,6 +97,7 @@ export default function EditDeliveryStaff(props) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   useEffect(() => {
+    setAdmin(admin_obj);
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -124,7 +130,6 @@ export default function EditDeliveryStaff(props) {
 
   //   ));
 
-  const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(false);
@@ -133,15 +138,52 @@ export default function EditDeliveryStaff(props) {
     props.history.push('/app/menu/levels/ViewDeliveryStaff');
   };
   const editData = async (e) => {
-    let test = { ...admin, service_location_uid: array };
-
     e.preventDefault();
-    console.log(admin);
-    let res = await dispatch(UpdateUserAction(test));
-    if (res) {
-      NotificationManager.success('Successful response', 'Success', 5000, '');
-      props.history.push('/app/menu/levels/ViewDeliveryStaff');
+
+    if (
+      admin?.name === '' ||
+      admin?.gender === '' ||
+      admin?.designation === '' ||
+      admin.role_uid === '' ||
+      admin.manager_uid === '' ||
+      admin?.service_location_uid === []
+    ) {
+      NotificationManager.error(
+        'Please Enter Details',
+        'Error',
+        5000,
+        null,
+        ''
+      );
+    } else {
+      let test = { ...admin, service_location_uid: array };
+
+      if (array === undefined) {
+        let res = await dispatch(UpdateUserAction(admin));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          props.history.push('/app/menu/levels/ViewDeliveryStaff');
+        }
+      } else {
+        let res = await dispatch(UpdateUserAction(test));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          props.history.push('/app/menu/levels/ViewDeliveryStaff');
+        }
+      }
     }
+
+    // console.log(test);
   };
   let defaultOptions = [];
   currentUser?.field_staff?.service_location?.map((item) =>
@@ -151,7 +193,7 @@ export default function EditDeliveryStaff(props) {
       key: item?.uid,
     })
   );
-  console.log(defaultOptions, 'default option');
+  // console.log(defaultOptions, 'default option');
   const suspandAdmin = async () => {
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
@@ -211,6 +253,7 @@ export default function EditDeliveryStaff(props) {
 
     // console.log(doctor?.password);
   };
+  console.log(currentUser, 'curerntUser');
   return (
     <Card>
       <CardBody>
@@ -236,7 +279,7 @@ export default function EditDeliveryStaff(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.name}</p>
+                      <p>{admin?.name}</p>
                     </span>
                   ) : (
                     <Input
@@ -261,7 +304,7 @@ export default function EditDeliveryStaff(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.email_address}</p>
+                      <p>{admin?.email_address}</p>
                     </span>
                   ) : (
                     <Input
@@ -495,10 +538,27 @@ export default function EditDeliveryStaff(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={[defaultOptions[0]]}
+                      defaultValue={currentUser?.field_staff?.service_location?.map(
+                        (item) => {
+                          return {
+                            label: item?.name,
+                            value: item?.name,
+                            key: item?.uid,
+                          };
+                        }
+                      )}
+                      // defaultValue={[defaultOptions[0]]}
+                      // defaultValue={
+
+                      // }
                       // defaultValue={[defaultOptions[0],defaultOptions[1],defaultOptions[2],defaultOptions[3]]}
                       // defaultOptions={defaultOptions[0],defaultOptions[1],defaultOptions[2],defaultOptions[3]}
                       // value={admin?.service_location_uid}
+
+                      // label:currentUser?.field_staff?.service_location?.map((item,index) => item[index]?.name),
+                      //value:currentUser?.field_staff?.service_location?.map((item_,index_) => item_[index_]?.name),
+                      //key:currentUser?.field_staff?.service_location?.map((_item_,_index_) => _item_[_index_]?.uid),
+
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />
@@ -570,7 +630,3 @@ export default function EditDeliveryStaff(props) {
     </Card>
   );
 }
-
-// label:currentUser?.field_staff?.service_location?.map((item,index) => item[index]?.name),
-//                         value:currentUser?.field_staff?.service_location?.map((item_,index_) => item_[index_]?.name),
-//                         key:currentUser?.field_staff?.service_location?.map((_item_,_index_) => _item_[_index_]?.uid),

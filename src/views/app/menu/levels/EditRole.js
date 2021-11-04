@@ -99,11 +99,11 @@ export default function EditRole(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack} style={{ marginBottom: '10px' }}>
+        <Button className="" onClick={handleBack} style={{ backgroundColor:"0066B3",marginBottom: '10px' }}>
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="Create Role" />
+          <IntlMessages id="View Role" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -206,7 +206,7 @@ export default function EditRole(props) {
                 </FormGroup>
               </Col>
             </Row>
-            {view ? (
+            {/* {view ? (
               <Button onClick={editProfile}>Edit Role</Button>
             ) : (
               <Button
@@ -217,8 +217,8 @@ export default function EditRole(props) {
               >
                 Save
               </Button>
-            )}
-            <Button
+            )} */}
+            {/* <Button
               //   className="btn btn-primary"
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -233,7 +233,7 @@ export default function EditRole(props) {
                 <span className="bounce3" />
               </span>
               Suspand Role
-            </Button>
+            </Button> */}
           </Form>
         </Formik>
       </CardBody>

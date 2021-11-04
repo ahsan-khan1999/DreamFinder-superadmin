@@ -3,9 +3,8 @@
 import { NotificationManager } from 'components/common/react-notifications';
 import React, { useEffect } from 'react';
 import {
-  
-    SuspandDcpAction,
-  SuspandDcpDcrAction
+  SuspandDcpAction,
+  SuspandDcpDcrAction,
 } from 'Store/Actions/FieldWorkManagmentAction/FieldWorkManagmentAction';
 import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
@@ -21,21 +20,34 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function EditDcp(props) {
   let currentItem = props?.location?.state;
   console.log(currentItem);
-  const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
-  const onSuspandUser =async () => {
-    setLoading(true)
-      let res = await dispatch(SuspandDcpAction({uid:currentItem?.uid}))
-      if(res){
-          NotificationManager.success("Successfully Suspanded",'Success',5000,null,'')
-          props.history.push('/app/FieldWorkManagment/ViewDcp')
-      }
-    setLoading(false)
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const onSuspandUser = async () => {
+    setLoading(true);
+    let res = await dispatch(SuspandDcpAction({ uid: currentItem?.uid }));
+    if (res) {
+      NotificationManager.success(
+        'Successfully Suspanded',
+        'Success',
+        5000,
+        null,
+        ''
+      );
+    setLoading(false);
 
+      props.history.push('/app/FieldWorkManagment/ViewDcp');
+    }else{
+      setLoading(false);
+
+    }
+  };
+  const handleBack = () => {
+    props.history.push('/app/FieldWorkManagment/ViewDcp');
   };
   return (
     <Card>
       <CardBody>
+        <Button onClick={handleBack}>Back</Button>
         <CardTitle>
           <IntlMessages id="View DCP" />
         </CardTitle>
@@ -128,13 +140,11 @@ export default function EditDcp(props) {
                   </span>
                 </FormGroup>
               </Col>
-              
             </Row>
-           
-            
+
             <Button
               // className="btn btn-primary"
-              style={{backgroundColor:"#0066B3"}}
+              style={{ backgroundColor: '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''

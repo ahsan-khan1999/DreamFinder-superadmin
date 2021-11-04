@@ -86,12 +86,12 @@ export default function CreateDirector({ history }) {
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
     if (
-      admin?.email_address === '' &&
-      admin?.name === '' &&
-      admin?.password === '' &&
-      admin?.gender === '' &&
-      admin?.phone_number === '' &&
-      admin?.designation === '' &&
+      admin?.email_address === '' ||
+      admin?.name === '' ||
+      admin?.password === '' ||
+      admin?.gender === '' ||
+      admin?.phone_number === '' ||
+      admin?.designation === '' ||
       admin.role_uid === ''
     ) {
       NotificationManager.error(

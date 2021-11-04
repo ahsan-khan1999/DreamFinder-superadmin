@@ -51,6 +51,7 @@ export default function CreateTarget(props) {
   const [array, setArray] = useState([]);
   const [target, setTarget] = useState(target_obj);
   const [loading, setLoading] = useState(false);
+  const [readTarget,setReadTarget]  =useState({})
 
   const [targets, setTargets] = useState([]);
   const [stocks, setStocks] = useState([]);
@@ -98,7 +99,7 @@ export default function CreateTarget(props) {
     })
   );
   // console.log(distributionCenterOption);
-
+  
   const order = useSelector((state) => state?.TargetReducer?.order);
   let directorOption = [];
   director?.map((item) =>
@@ -159,14 +160,14 @@ export default function CreateTarget(props) {
     })
   );
 
-  console.log(targets);
+  // console.log(targets);
   targets?.map(
     (item) =>
-      medicineOption?.push({
-        label: item?.product?.name,
-        value: item?.uid,
-        key: item?.quantity,
-      })
+    medicineOption.push({
+      label: item?.name,
+      value: item?.medicine_uid,
+      key: item?.quantity,
+    })
     // item?.medicines?.map((item_) =>
     //   medicineOption.push({
     //     label: item_?.name,
@@ -202,10 +203,30 @@ export default function CreateTarget(props) {
 
     setStocks(response?.data?.response_data);
   };
+  const getParentTarget = async(uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/targets/read_current_target?assigned_to_uid=${uid}`,
+
+      // /${user}?manager_uid=${uid}
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+
+    setReadTarget(response?.data?.response_data);
+  }
+  // console.log(readTarget,"parent Sm Target");
   const getDirectorTarget = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
+      // `https://concord-backend-m2.herokuapp.com/api/targets/read?manager_uid=${uid}`,
       `https://concord-backend-m2.herokuapp.com/api/targets/read_stocks?child_uid=${uid}`,
+
+      // /${user}?manager_uid=${uid}
       {
         headers: {
           x_session_key: token.token,
@@ -216,6 +237,7 @@ export default function CreateTarget(props) {
 
     setTargets(response?.data?.response_data);
   };
+  // console.log(readTarget,"target");
   const provalue = [];
   const handleChangeProduct = async (e, index) => {
     let options = e;
@@ -248,6 +270,8 @@ export default function CreateTarget(props) {
       }),
     });
   };
+      // console.log(readTarsget,"read");
+
   const onTargetCreate = async () => {
     setLoading(true)
     if (selected?.value === 'Director') {
@@ -276,8 +300,10 @@ export default function CreateTarget(props) {
         props.history.push('/app/Target/ViewTarget');
       }
     } else if (selected?.value === 'SM') {
-      let startDate = moment(target?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment(target?.end_date).format('YYYY-MM-DD h:mm:ss');
+      // console.log(targets);
+      // console.log(targe);
+      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -305,8 +331,8 @@ export default function CreateTarget(props) {
         props.history.push('/app/Target/ViewTarget');
       }
     } else if (selected?.value === 'RSM') {
-      let startDate = moment(target?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment(target?.end_date).format('YYYY-MM-DD h:mm:ss');
+      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -334,8 +360,8 @@ export default function CreateTarget(props) {
         props.history.push('/app/Target/ViewTarget');
       }
     } else if (selected?.value === 'AM') {
-      let startDate = moment(target?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment(target?.end_date).format('YYYY-MM-DD h:mm:ss');
+      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -363,8 +389,8 @@ export default function CreateTarget(props) {
         props.history.push('/app/Target/ViewTarget');
       }
     } else if (selected?.value === 'MPO') {
-      let startDate = moment(target?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment(target?.end_date).format('YYYY-MM-DD h:mm:ss');
+      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -392,6 +418,8 @@ export default function CreateTarget(props) {
         props.history.push('/app/Target/ViewTarget');
       }
     } else {
+    setLoading(false)
+
     }
     // setLoading(false)
 
@@ -466,6 +494,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'sm'));
+                          getParentTarget(val?.key)
 
                         }}
                         options={directorOption}
@@ -487,7 +516,6 @@ export default function CreateTarget(props) {
                         onChange={async (val) => {
                           setTarget({ ...target, assigned_to_uid: val?.key });
                           await getDirectorTarget(val?.key);
-
                           //   setTimeout(async() => {
                           //     await console.log(targets[0]?.start_date);
                           //   }, 3000);
@@ -511,9 +539,9 @@ export default function CreateTarget(props) {
 
                           setTarget({
                             ...target,
-                            start_date: moment
-                              .unix(targets[0]?.start_date)
-                              .format('YYYY-MM-DD h:mm:ss'),
+                            // start_date: moment
+                            //   .unix(targets[0]?.start_date)
+                            //   .format('YYYY-MM-DD h:mm:ss'),
                           });
                         }}
                         options={medicineOption}
@@ -795,6 +823,7 @@ export default function CreateTarget(props) {
                       />
                     </FormGroup>
                   </Col>
+                  
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
@@ -809,7 +838,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'rsm'));
-
+                          getParentTarget(val?.key)
 
                           //   setTimeout(async() => {
                           //     await console.log(targets[0]?.start_date);
@@ -911,12 +940,12 @@ export default function CreateTarget(props) {
                         onChange={(val, index) => {
                           handleChangeProduct(val, index);
 
-                          setTarget({
-                            ...target,
-                            start_date: moment
-                              .unix(targets[0]?.start_date)
-                              .format('YYYY-MM-DD h:mm:ss'),
-                          });
+                          // setTarget({
+                          //   ...target,
+                          //   start_date: moment
+                          //     .unix(targets[0]?.start_date)
+                          //     .format('YYYY-MM-DD h:mm:ss'),
+                          // });
                         }}
                         options={medicineOption}
                       />
@@ -1027,6 +1056,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'am'));
+                          getParentTarget(val?.key)
 
                           // await getDirectorTarget(val?.key);
                         }}
@@ -1243,6 +1273,8 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'mpo'));
+                          getParentTarget(val?.key)
+
                           // await getDirectorTarget(val?.key);
                         }}
                         options={areaManagerOption}
@@ -1281,6 +1313,7 @@ export default function CreateTarget(props) {
                       <Input
                         name="visit"
                         type="number"
+                        min={1}
                         onChange={(e) =>
                           setTarget({
                             ...target,
@@ -1320,10 +1353,7 @@ export default function CreateTarget(props) {
                         onChange={(val, index) => {
                           handleChangeProduct(val, index);
 
-                          setTarget({
-                            ...target,
-                            
-                          });
+                         
                         }}
                         options={medicineOption}
                       />
@@ -1347,8 +1377,15 @@ export default function CreateTarget(props) {
                     <FormGroup>
                       <Label>Enter No Of Prescription</Label>
                       <Input
+                      min={1}
                         value={target?.no_prescriptions}
+                        type="number"
+                        min={1}
                         onChange={(e) => {
+                          let va = 1;
+                          if (e.target?.value <= Number(e.target.max)) {
+                            va = Number(e.target.value);
+                          }
                           setTarget({
                             ...target,
                             no_prescriptions: Number(e.target.value),

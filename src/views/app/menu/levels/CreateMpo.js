@@ -385,7 +385,8 @@ export default function CreateDirector({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Select Teritory</h6>
+                    <IntlMessages id="Select Teritory" />
+
                   </Label>
                   <Select
                     cacheOptions
@@ -422,7 +423,9 @@ export default function CreateDirector({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{ 'background-color': '#0066B3' }}
+
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -435,7 +438,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Admin
+              Add MPO
             </Button>
           </Form>
         </Formik>

@@ -36,7 +36,7 @@ export default function ViewPeriorityListDoctor(props) {
         <Row>
           <Colxx xxs="12">
             {/* <Breadcrumb heading="Doctors" match={match} /> */}
-            <h4>Periority List</h4>
+            <h4>Priority List</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
@@ -68,7 +68,7 @@ export default function ViewPeriorityListDoctor(props) {
             marginTop: '10px',
           }}
         >
-          Add Periority List
+          Add Priority List
         </Button>
         {/* <Button
             onClick={handleAddStaff}

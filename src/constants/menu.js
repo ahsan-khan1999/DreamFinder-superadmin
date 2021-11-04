@@ -379,7 +379,7 @@ const data = [
           },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.depo',
+            label: 'Depot Manager',
             to: `${adminRoot}/menu/levels/viewDepoManager`,
           },
           // {
@@ -424,12 +424,12 @@ const data = [
           },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'menu.mpo',
+            label: 'Medicine Promotion Officer',
             to: `${adminRoot}/menu/levels/ViewMpo`,
           },
           {
             // icon: 'simple-icon-arrow-right',
-            label: 'View Role',
+            label: 'Role',
             to: `${adminRoot}/menu/levels/ViewRole`,
           },
         ],

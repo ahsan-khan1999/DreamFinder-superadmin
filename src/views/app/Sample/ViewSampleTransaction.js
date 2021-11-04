@@ -38,7 +38,7 @@ export default function ViewSampleTransaction(props) {
         <Row>
           <Colxx xxs="12">
             {/* <Breadcrumb heading="Doctors" match={match} /> */}
-            <h4>Sample</h4>
+            <h4>View Sample Transaction</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>

@@ -73,8 +73,6 @@ export default function CreateSampleTransaction(props) {
 
   let medicineOptionFromSample = [];
 
-  
- 
   const getStocksMedicine = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
@@ -89,6 +87,7 @@ export default function CreateSampleTransaction(props) {
 
     setStock(response?.data?.response_data);
   };
+  console.log(stock,"stock is here");
   const director = useSelector((state) => state?.ViewUserReducer?.director);
   let directorOption = [];
   director?.map((item) =>
@@ -146,9 +145,6 @@ export default function CreateSampleTransaction(props) {
     });
   };
   const AddSampleTransaction = async () => {
-  
-
-
     let res = await dispatch(CreateSampleTransactionAction(sampleTransaction));
     if (res) {
       NotificationManager.success(
@@ -162,18 +158,29 @@ export default function CreateSampleTransaction(props) {
       props.history.push('/app/Sample/ViewSampleTransaction');
     } else {
     }
-
   };
+
   let [option, setOption] = useState('');
   const getSample = (uid) => {
-    sample.map((item) =>
-      item?.uid === uid
-        ? // option?.push({item})
-          setOption(item)
-        : // console.log(item)
-          []
+    sample.map(
+      (item) => (
+        getStocksMedicine(item?.assigned_to?.uid),
+        item?.uid === uid
+          ? // option?.push({item})
+            setOption(item)
+          : // console.log(item)
+            []
+      )
     );
   };
+  let medicineOptionsFromStock = []
+  stock?.map((item) => (
+    medicineOptionsFromStock.push({
+      label:item?.product?.name,
+      value:item?.uid,
+      key:item?.quantity
+    })
+  ))
   console.log(option, 'option');
   let filterOption = [];
 
@@ -258,14 +265,9 @@ export default function CreateSampleTransaction(props) {
                     onChange={(val, index) => {
                       handleChangeProduct(val, index);
 
-                      //   setSample({
-                      //     ...sample,
-                      //     start_date: moment
-                      //       .unix(targets[0]?.start_date)
-                      //       .format('YYYY-MM-DD h:mm:ss'),
-                      //   });
+                    
                     }}
-                    options={medicineOptionFromSample}
+                    options={medicineOptionsFromStock}
                   />
                 </FormGroup>
               </Col>
@@ -320,7 +322,7 @@ export default function CreateSampleTransaction(props) {
           </Form>
         </Formik>
         <Button
-        style={{backgroundColor:"#0066B3"}}
+          style={{ backgroundColor: '#0066B3' }}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}

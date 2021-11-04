@@ -209,7 +209,7 @@ export default function EditSchedule(props) {
             </Row>
             {currentItem?.approval_status !== 'approved' ? <Button
               // className="btn btn-primary"
-              style={{backgroundColor:'#0066B3'}}
+              style={{backgroundColor:'#0066B3',marginRight:"5px"}}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loadingStatus ? 'show-spinner' : ''

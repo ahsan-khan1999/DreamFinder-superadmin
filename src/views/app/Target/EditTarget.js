@@ -54,14 +54,16 @@ const delaultOptions = [
 export default function EditTarget(props) {
   let currentTarget = props?.location?.state;
   console.log(currentTarget);
-
-  const [array, setArray] = useState([]);
+  const [array, setArray] = useState();
   const [loadingSuspand, setLoadingSuspand] = useState(false);
   const [target, setTarget] = useState(target_obj);
+  // console.log(target, 'targte');
   const [view, setView] = useState(true);
   const [stocks, setStocks] = useState([]);
 
   const [targets, setTargets] = useState([]);
+  const [currentTargets, setCurrentTargets] = useState([]);
+  // console.log(currentTargets,"currentTarget");
   const [selected, setSelected] = useState({
     label: 'Director',
     value: 'Director',
@@ -75,6 +77,7 @@ export default function EditTarget(props) {
 
     dispatch(ViewDirectorAction());
     dispatch(OrderRead());
+    setTarget(target_obj);
     // dispatch(ViewAreaManagerAction());
     // dispatch(ViewSalesManagerManagerAction());
     // dispatch(ViewRegionalSalesManagerManagerAction());
@@ -111,7 +114,7 @@ export default function EditTarget(props) {
     })
   );
   let medicineOptionFromStock = [];
-  console.log(stocks);
+  // console.log(stocks,"stocks");
   stocks?.map((item) =>
     medicineOptionFromStock?.push({
       label: item?.product?.name,
@@ -171,15 +174,22 @@ export default function EditTarget(props) {
     })
   );
   //   console.log(medicineOptionFromOrder);
-  targets?.map((item) =>
-    item?.medicines?.map((item_) =>
-      medicineOption.push({
-        label: item_?.name,
-        value: item_?.medicine_uid,
-        key: item_?.quantity,
-      })
-    )
-  );
+  // targets?.map((item) =>
+  //   item?.medicines?.map((item_) =>
+  //     medicineOption.push({
+  //       label: item_?.name,
+  //       value: item_?.medicine_uid,
+  //       key: item_?.quantity,
+  //     })
+  //   )
+  // );
+  targets?.map((item) => {
+    medicineOption.push({
+      label: item?.name,
+      value: item?.medicine_uid,
+      key: item?.quantity,
+    });
+  });
   const target_obj = {
     uid: currentTarget?.uid,
     amount: currentTarget?.amount?.amount,
@@ -187,8 +197,10 @@ export default function EditTarget(props) {
     no_orders: currentTarget?.no_orders?.no_orders,
     no_prescriptions: currentTarget?.no_prescriptions?.no_prescriptions,
     start_date: currentTarget?.start_date,
-    by_customer_visits: currentTarget?.by_customer_visits?.by_customer_visits,
-    by_doctor_visits: currentTarget?.by_doctor_visits?.by_doctor_visits,
+    by_customer_visits: Number(
+      currentTarget?.by_customer_visits?.by_customer_visits
+    ),
+    by_doctor_visits: Number(currentTarget?.by_doctor_visits?.by_doctor_visits),
     end_date: currentTarget?.end_date,
   };
   const getStocks = async (uid) => {
@@ -208,7 +220,7 @@ export default function EditTarget(props) {
   const getDirectorTarget = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/targets/read_stocks?assigned_to_uid=${uid}`,
+      `https://concord-backend-m2.herokuapp.com/api/targets/read_stocks?child_uid=${uid}`,
       {
         headers: {
           x_session_key: token.token,
@@ -270,53 +282,105 @@ export default function EditTarget(props) {
       props.history.push('/app/Target/ViewTarget');
     }
   };
-  const editData = async () => {
-    console.log(currentTarget);
-    let medi = currentTarget?.medicines;
-    let test = { ...target, medicines: medi };
-    let apiData = {
-      // ...test,
-      uid: currentTarget?.uid,
-      start_date: moment
-        .unix(currentTarget?.start_date)
-        .format('YYYY-MM-DD h:mm:ss'),
-      end_date: moment
-        .unix(currentTarget?.end_date)
-        .format('YYYY-MM-DD h:mm:ss'),
-      no_prescriptions: currentTarget?.no_prescriptions?.no_prescriptions,
-      by_customer_visits: currentTarget?.by_customer_visits?.by_customer_visits,
-      by_doctor_visits: currentTarget?.by_doctor_visits?.by_doctor_visits,
-      amount: currentTarget?.amount?.amount,
-      no_orders: currentTarget?.no_orders?.no_orders,
-      // medicines:currentTarget?.medicines,
-      medicines: array?.map((item) => {
-        return {
-          medicine_uid: item?.medicine_uid,
-          quantity: item?.quantity,
-        };
-      }),
-    };
-    // console.log(apiData);
-    let res = await dispatch(EditTargetAction(apiData));
+  const readCurentTarget = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/targets/read_current_target?assigned_to_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
 
-    if (res) {
-      NotificationManager.success(
-        'Successfully Updated',
-        'Success',
-        5000,
-        null,
-        ''
-      );
-      // props?.history.push('/app/Target/ViewTarget');
+    setCurrentTargets(response?.data?.response_data);
+  };
+  let medicineOptionsForChilds = [];
+  currentTargets?.medicines?.map((item) =>
+    medicineOptionsForChilds.push({
+      label: item?.name,
+      value: item?.medicine_uid,
+      key: item?.quantity,
+    })
+  );
+  // console.log(medicineOptionsForChilds, 'curent Tragte');
+  const editData = async () => {
+    // console.log(array,"arrayu tyest");
+    if (array === undefined) {
+      let apiData = {
+        ...target,
+        start_date: moment
+          .unix(currentTarget?.start_date)
+          .format('YYYY-MM-DD h:mm:ss'),
+        end_date: moment
+          .unix(currentTarget?.end_date)
+          .format('YYYY-MM-DD h:mm:ss'),
+      };
+      let res = await dispatch(EditTargetAction(apiData));
+
+      if (res) {
+        NotificationManager.success(
+          'Successfully Updated',
+          'Success',
+          5000,
+          null,
+          ''
+        );
+        props?.history.push('/app/Target/ViewTarget');
+      }
+    } else {
+      // console.log(currentTarget);
+      let medi = currentTarget?.medicines;
+      let test = { ...target, medicines: medi };
+      let apiData = {
+        // ...test,
+        uid: currentTarget?.uid,
+        start_date: moment
+          .unix(currentTarget?.start_date)
+          .format('YYYY-MM-DD h:mm:ss'),
+        end_date: moment
+          .unix(currentTarget?.end_date)
+          .format('YYYY-MM-DD h:mm:ss'),
+        no_prescriptions: target?.no_prescriptions,
+        by_customer_visits: target?.by_customer_visits,
+        by_doctor_visits: target?.by_doctor_visits,
+        amount: target?.amount,
+        no_orders: target?.no_orders,
+        // medicines:currentTarget?.medicines,
+        medicines: array?.map((item) => {
+          return {
+            medicine_uid: item?.medicine_uid,
+            quantity: item?.quantity,
+          };
+        }),
+      };
+
+      // console.log(apiData);
+      let res = await dispatch(EditTargetAction(apiData));
+
+      if (res) {
+        NotificationManager.success(
+          'Successfully Updated',
+          'Success',
+          5000,
+          null,
+          ''
+        );
+        props?.history.push('/app/Target/ViewTarget');
+      }
     }
   };
   const handleBack = () => {
     props.history.push('/app/Target/ViewTarget');
   };
+
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack}>Back</Button>
+        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="View Target" />
         </CardTitle>
@@ -379,7 +443,47 @@ export default function EditTarget(props) {
                       )}
                     </FormGroup>
                   </Col>
-
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Director" />
+                      </Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Select
+                          disabled
+                          required
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager.uid,
+                          }}
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'sm'));
+                            readCurentTarget(val?.key);
+                          }}
+                          options={directorOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
@@ -402,6 +506,8 @@ export default function EditTarget(props) {
                             key: currentTarget?.assigned_to?.uid,
                           }}
                           onChange={async (val) => {
+                            getDirectorTarget(val?.key);
+
                             setTarget({ ...target, assigned_to_uid: val?.key });
                             // await getDirectorTarget(val?.key);
 
@@ -415,7 +521,7 @@ export default function EditTarget(props) {
                     </FormGroup>
                   </Col>
 
-                  <Col lg={6}>
+                  {/* <Col lg={6}>
                     <FormGroup>
                       <Label>
                         <IntlMessages id="Select Distribtion Center" />
@@ -440,7 +546,39 @@ export default function EditTarget(props) {
                         />
                       )}
                     </FormGroup>
-                  </Col>
+                  </Col> */}
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>Start Date</Label>
+
+                        <span>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.start_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
+                        </span>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>Start Date</Label>
+
+                        <span>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.end_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
+                        </span>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
@@ -455,30 +593,82 @@ export default function EditTarget(props) {
                           cacheOptions
                           closeMenuOnSelect={false}
                           components={animatedComponents}
-                          defaultValue={{
-                            label: currentTarget?.medicines?.map(
-                              (item, index) => item?.name
-                            ),
-                            value: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            key: currentTarget?.medicines?.map(
-                              (item) => item?.medicine_uid
-                            ),
-                          }}
+                          defaultValue={currentTarget?.medicines?.map(
+                            (item) => {
+                              return {
+                                label: item?.name,
+                                value: item?.medicine_uid,
+                                key: item?.quantity,
+                              };
+                            }
+                          )}
                           isMulti
                           // value={admin?.service_location_uid}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
-
+                            // getDirectorTarget(val?.key);
+                            // setTarget({
+                            //   ...target,
+                            //   start_date: moment
+                            //     .unix(targets[0]?.start_date)
+                            //     .format('YYYY-MM-DD h:mm:ss'),
+                            // });
+                          }}
+                          options={medicineOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>By Customer Visit</Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.by_customer_visits
+                                ?.by_customer_visits
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Input
+                          value={target?.by_customer_visits}
+                          defaultValue={
+                            currentTarget?.by_customer_visits
+                              ?.by_customer_visits
+                          }
+                          onChange={(e) => {
                             setTarget({
                               ...target,
-                              start_date: moment
-                                .unix(targets[0]?.start_date)
-                                .format('YYYY-MM-DD h:mm:ss'),
+                              by_customer_visits: Number(e.target.value),
                             });
                           }}
-                          options={medicineOptionFromStock}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>By Doctor Visit</Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {currentTarget?.by_doctor_visits?.by_doctor_visits}
+                          </p>
+                        </span>
+                      ) : (
+                        <Input
+                          value={target?.by_doctor_visits}
+                          defaultValue={
+                            currentTarget?.by_doctor_visits?.by_doctor_visits
+                          }
+                          onChange={(e) => {
+                            setTarget({
+                              ...target,
+                              by_doctor_visits: Number(e.target.value),
+                            });
+                          }}
                         />
                       )}
                     </FormGroup>
@@ -589,28 +779,31 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Distribtion Center" />
-                      </Label>
                       {view ? (
-                        <span>
-                          <p>{}</p>
-                        </span>
+                        // <span>
+                        //   <p>{}</p>
+                        // </span>
+                        <></>
                       ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{}}
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            // setTarget({ ...target, assigned_to_uid: val?.key });
-                            // console.log(val);
-                            getStocks(val?.key);
-                          }}
-                          options={distributionCenterOption}
-                        />
+                        <>
+                          <Label>
+                            <IntlMessages id="Select Distribtion Center" />
+                          </Label>
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            defaultValue={{}}
+                            name="form-field-name-gender"
+                            onChange={async (val) => {
+                              // setTarget({ ...target, assigned_to_uid: val?.key });
+                              // console.log(val);
+                              getStocks(val?.key);
+                            }}
+                            options={distributionCenterOption}
+                          />
+                        </>
                       )}
                     </FormGroup>
                   </Col>
@@ -630,17 +823,15 @@ export default function EditTarget(props) {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          defaultValue={{
-                            label: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            value: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            key: currentTarget?.medicines?.map(
-                              (item) => item?.medicine_uid
-                            ),
-                          }}
+                          defaultValue={currentTarget?.medicines?.map(
+                            (item) => {
+                              return {
+                                label: item?.name,
+                                value: item?.medicine_uid,
+                                key: item?.quantity,
+                              };
+                            }
+                          )}
                           // value={admin?.service_location_uid}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
@@ -650,10 +841,12 @@ export default function EditTarget(props) {
                       )}
                     </FormGroup>
                   </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Start Date</Label>
-                      {view ? (
+
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>Start Date</Label>
+
                         <span>
                           <p>
                             {moment
@@ -661,27 +854,15 @@ export default function EditTarget(props) {
                               .format('YYYY-MM-DD h:mm:ss')}
                           </p>
                         </span>
-                      ) : (
-                        <Input
-                          type="datetime-local"
-                          value={target?.start_date}
-                          defaultValue={moment
-                            .unix(currentTarget?.start_date)
-                            .format('YYYY-MM-DD h:mm:ss')}
-                          onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              start_date: e.target.value,
-                            });
-                          }}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>End Date</Label>
-                      {view ? (
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>Start Date</Label>
+
                         <span>
                           <p>
                             {moment
@@ -689,23 +870,9 @@ export default function EditTarget(props) {
                               .format('YYYY-MM-DD h:mm:ss')}
                           </p>
                         </span>
-                      ) : (
-                        <Input
-                          type="datetime-local"
-                          value={target?.end_date}
-                          defaultValue={moment
-                            .unix(currentTarget?.end_date)
-                            .format('YYYY-MM-DD h:mm:ss')}
-                          onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              end_date: e.target.value,
-                            });
-                          }}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
                   <Col lg={6}>
                     <FormGroup>
                       <Label>By Customer Visit</Label>
@@ -721,7 +888,6 @@ export default function EditTarget(props) {
                       ) : (
                         <Input
                           type="number"
-                          disabled
                           value={target?.by_customer_visits}
                           defaultValue={
                             currentTarget?.by_customer_visits
@@ -749,7 +915,6 @@ export default function EditTarget(props) {
                       ) : (
                         <Input
                           type="number"
-                          disabled
                           value={target?.by_doctor_visits}
                           defaultValue={
                             currentTarget?.by_doctor_visits?.by_doctor_visits
@@ -836,6 +1001,91 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
+                        <IntlMessages id="Select Director" />
+                      </Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.name
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Select
+                          disabled
+                          required
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager?.field_staff?.manager?.uid,
+                          }}
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'sm'));
+                          }}
+                          options={directorOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Sales Manager" />
+                      </Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Select
+                          required
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager.uid,
+                          }}
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
+                            // getParentTarget(val?.key)
+                            readCurentTarget(val?.key);
+
+                            //   setTimeout(async() => {
+                            //     await console.log(targets[0]?.start_date);
+                            //   }, 3000);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
                         <IntlMessages id="Select Regional Sales Manager" />
                       </Label>
                       {view ? (
@@ -856,69 +1106,42 @@ export default function EditTarget(props) {
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
+                            await getDirectorTarget(val?.key);
                           }}
                           options={regionalSalesManagerOption}
                         />
                       )}
                     </FormGroup>
                   </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Sales Manager" />
-                      </Label>
-                      {view ? (
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>Start Date</Label>
                         <span>
-                          <p>{currentTarget?.assigned_to?.name}</p>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.start_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
                         </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          defaultValue={{
-                            label: currentTarget?.assigned_to?.name,
-                            value: currentTarget?.assigned_to?.name,
-                            key: currentTarget?.assigned_to?.uid,
-                          }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            // setTarget({ ...target, assigned_to_uid: val?.key });
-                            await getDirectorTarget(val?.key);
-                          }}
-                          options={salesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Distribtion Center" />
-                      </Label>
-                      {view ? (
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>End Date</Label>
                         <span>
-                          <p>{}</p>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.end_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
                         </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            // setTarget({ ...target, assigned_to_uid: val?.key });
-                            // console.log(val);
-                            getStocks(val?.key);
-                          }}
-                          options={distributionCenterOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
@@ -932,31 +1155,80 @@ export default function EditTarget(props) {
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
-                          defaultValue={{
-                            label: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            value: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            key: currentTarget?.medicines?.map(
-                              (item) => item?.medicine_uid
-                            ),
-                          }}
+                          defaultValue={currentTarget?.medicines?.map(
+                            (item) => {
+                              return {
+                                label: item?.name,
+                                value: item?.medicine_uid,
+                                key: item?.quantity,
+                              };
+                            }
+                          )}
                           components={animatedComponents}
                           isMulti
                           // value={admin?.service_location_uid}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
 
-                            setTarget({
-                              ...target,
-                              start_date: moment
-                                .unix(targets[0]?.start_date)
-                                .format('YYYY-MM-DD h:mm:ss'),
-                            });
+                           
                           }}
                           options={medicineOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>By Customer Visit</Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.by_customer_visits
+                                ?.by_customer_visits
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Input
+                          type="number"
+                          value={target?.by_customer_visits}
+                          defaultValue={
+                            currentTarget?.by_customer_visits
+                              ?.by_customer_visits
+                          }
+                          onChange={(e) => {
+                            setTarget({
+                              ...target,
+                              by_customer_visits: Number(e.target.value),
+                            });
+                          }}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>By Doctor Visit</Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {currentTarget?.by_doctor_visits?.by_doctor_visits}
+                          </p>
+                        </span>
+                      ) : (
+                        <Input
+                          type="number"
+                          value={target?.by_doctor_visits}
+                          defaultValue={
+                            currentTarget?.by_doctor_visits?.by_doctor_visits
+                          }
+                          onChange={(e) => {
+                            setTarget({
+                              ...target,
+                              by_doctor_visits: Number(e.target.value),
+                            });
+                          }}
                         />
                       )}
                     </FormGroup>
@@ -1034,6 +1306,223 @@ export default function EditTarget(props) {
                       )}
                     </FormGroup>
                   </Col>
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>Start Date</Label>
+                        <span>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.start_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
+                        </span>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>End Date</Label>
+                        <span>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.end_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
+                        </span>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>By Customer Visit</Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.by_customer_visits
+                                ?.by_customer_visits
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Input
+                          type="number"
+                          value={target?.by_customer_visits}
+                          defaultValue={
+                            currentTarget?.by_customer_visits
+                              ?.by_customer_visits
+                          }
+                          onChange={(e) => {
+                            setTarget({
+                              ...target,
+                              by_customer_visits: e.target.value,
+                            });
+                          }}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>By Doctor Visit</Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {currentTarget?.by_doctor_visits?.by_doctor_visits}
+                          </p>
+                        </span>
+                      ) : (
+                        <Input
+                          type="number"
+                          value={target?.by_doctor_visits}
+                          defaultValue={
+                            currentTarget?.by_doctor_visits?.by_doctor_visits
+                          }
+                          onChange={(e) => {
+                            setTarget({
+                              ...target,
+                              by_doctor_visits: e.target.value,
+                            });
+                          }}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Director" />
+                      </Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.name
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Select
+                          disabled
+                          required
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager?.field_staff?.manager?.field_staff
+                              ?.manager?.uid,
+                          }}
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'sm'));
+                          }}
+                          options={directorOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Sales Manager" />
+                      </Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager.name
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Select
+                          required
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager.name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager.name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager?.field_staff?.manager.uid,
+                          }}
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
+                            // getParentTarget(val?.key)
+                            // readCurentTarget(val?.key);
+
+                            //   setTimeout(async() => {
+                            //     await console.log(targets[0]?.start_date);
+                            //   }, 3000);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Regional Sales Manager" />
+                      </Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name
+                            }
+                          </p>
+                        </span>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                .name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager.uid,
+                          }}
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
+
+                            readCurentTarget(val?.key);
+
+                            // await getDirectorTarget(val?.key);
+                          }}
+                          options={regionalSalesManagerOption}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
@@ -1057,124 +1546,13 @@ export default function EditTarget(props) {
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
-                          }}
-                          options={areaManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-
-                  {/* <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Director" />
-                      </Label>
-                      {view ? (
-                        <span>
-                          <p>{}</p>
-                        </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'sm'));
-                          }}
-                          options={directorOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col> */}
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Sales Manager" />
-                      </Label>
-                      {view ? (
-                        <span>
-                          <p>{currentTarget?.assigned_to?.field_staff?.manager?.name}</p>
-                        </span>
-                      ) : (
-                        <Select
-                          required
-                          disabled
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          defaultValue={{
-                            label:currentTarget?.assigned_to?.field_staff?.manager?.name,
-                            value:currentTarget?.assigned_to?.field_staff?.manager?.name,
-                            key:currentTarget?.assigned_to?.field_staff?.manager?.uid
-                          }}
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'rsm'));
-
-                            //   setTimeout(async() => {
-                            //     await console.log(targets[0]?.start_date);
-                            //   }, 3000);
-                          }}
-                          options={salesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  {/* <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
-                      </Label>
-                      {view ? (
-                        <span>
-                          <p>{}</p>
-                        </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'am'));
                             await getDirectorTarget(val?.key);
-
-                            // await getDirectorTarget(val?.key);
-                          }}
-                          options={regionalSalesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col> */}
-                  {/* <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Area Manager" />
-                      </Label>
-                      {view ? (
-                        <span>
-                          <p>{}</p>
-                        </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
                           }}
                           options={areaManagerOption}
                         />
                       )}
                     </FormGroup>
-                  </Col> */}
+                  </Col>
 
                   <Col lg={6}>
                     <FormGroup>
@@ -1189,29 +1567,27 @@ export default function EditTarget(props) {
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
-                          defaultValue={{
-                            label: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            value: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            key: currentTarget?.medicines?.map(
-                              (item) => item?.medicine_uid
-                            ),
-                          }}
+                          defaultValue={currentTarget?.medicines?.map(
+                            (item) => {
+                              return {
+                                label: item?.name,
+                                value: item?.medicine_uid,
+                                key: item?.quantity,
+                              };
+                            }
+                          )}
                           components={animatedComponents}
                           isMulti
                           // value={admin?.service_location_uid}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
 
-                            setTarget({
-                              ...target,
-                              start_date: moment
-                                .unix(targets[0]?.start_date)
-                                .format('YYYY-MM-DD h:mm:ss'),
-                            });
+                            // setTarget({
+                            //   ...target,
+                            //   start_date: moment
+                            //     .unix(targets[0]?.start_date)
+                            //     .format('YYYY-MM-DD h:mm:ss'),
+                            // });
                           }}
                           options={medicineOption}
                         />
@@ -1291,32 +1667,88 @@ export default function EditTarget(props) {
                       )}
                     </FormGroup>
                   </Col>
-                  {/* <Col lg={6}>
+
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>Start Date</Label>
+                        <span>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.start_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
+                        </span>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+                  {view ? (
+                    <Col lg={6}>
+                      <FormGroup>
+                        <Label>End Date</Label>
+                        <span>
+                          <p>
+                            {moment
+                              .unix(currentTarget?.end_date)
+                              .format('YYYY-MM-DD h:mm:ss')}
+                          </p>
+                        </span>
+                      </FormGroup>
+                    </Col>
+                  ) : null}
+
+                  <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select MPO" />
-                      </Label>
+                      <Label>By Customer Visit</Label>
                       {view ? (
                         <span>
-                          <p>{currentTarget?.assigned_to?.name}</p>
+                          <p>
+                            {
+                              currentTarget?.by_customer_visits
+                                ?.by_customer_visits
+                            }
+                          </p>
                         </span>
                       ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          defaultValue={{
-                            label: currentTarget?.assigned_to?.name,
-                            value: currentTarget?.assigned_to?.name,
-                            key: currentTarget?.assigned_to?.uid,
+                        <Input
+                          type="number"
+                          value={target?.by_customer_visits}
+                          defaultValue={
+                            currentTarget?.by_customer_visits
+                              ?.by_customer_visits
+                          }
+                          onChange={(e) => {
+                            setTarget({
+                              ...target,
+                              by_customer_visits: e.target.value,
+                            });
                           }}
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>By Doctor Visit</Label>
+                      {view ? (
+                        <span>
+                          <p>
+                            {currentTarget?.by_doctor_visits?.by_doctor_visits}
+                          </p>
+                        </span>
+                      ) : (
+                        <Input
+                          type="number"
+                          value={target?.by_doctor_visits}
+                          defaultValue={
+                            currentTarget?.by_doctor_visits?.by_doctor_visits
+                          }
+                          onChange={(e) => {
+                            setTarget({
+                              ...target,
+                              by_doctor_visits: e.target.value,
+                            });
                           }}
-                          options={mpoOption}
                         />
                       )}
                     </FormGroup>
@@ -1324,52 +1756,37 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Area Manager" />
-                      </Label>
-                      {view ? (
-                        <span>
-                          <p>{currentTarget?.assigned_to?.name}</p>
-                        </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          defaultValue={{
-                            label: currentTarget?.assigned_to?.name,
-                            value: currentTarget?.assigned_to?.name,
-                            key: currentTarget?.assigned_to?.uid,
-                          }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            // setTarget({ ...target, assigned_to_uid: val?.key });
-                            await getDirectorTarget(val?.key);
-                          }}
-                          options={areaManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col> */}
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>
                         <IntlMessages id="Select Director" />
                       </Label>
                       {view ? (
                         <span>
-                          <p>{currentTarget?.assigned_to?.name}</p>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.field_staff?.manager?.name
+                            }
+                          </p>
                         </span>
                       ) : (
                         <Select
+                          disabled
                           required
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.field_staff?.manager?.name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.field_staff?.manager?.name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager?.field_staff?.manager?.field_staff
+                              ?.manager?.field_staff?.manager?.uid,
+                          }}
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
-                          defaultValue={{
-                            label: currentTarget?.assigned_to?.name,
-                            value: currentTarget?.assigned_to?.name,
-                            key: currentTarget?.assigned_to?.uid,
-                          }}
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
                           onChange={async (val) => {
@@ -1387,22 +1804,38 @@ export default function EditTarget(props) {
                       </Label>
                       {view ? (
                         <span>
-                          <p>{currentTarget?.assigned_to?.name}</p>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.name
+                            }
+                          </p>
                         </span>
                       ) : (
                         <Select
                           required
+                          defaultValue={{
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.field_staff?.manager
+                                ?.name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager?.field_staff?.manager?.field_staff
+                              ?.manager?.uid,
+                          }}
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
-                          defaultValue={{
-                            label: currentTarget?.assigned_to?.name,
-                            value: currentTarget?.assigned_to?.name,
-                            key: currentTarget?.assigned_to?.uid,
-                          }}
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             dispatch(getUsers(val.key, 'rsm'));
+                            // getParentTarget(val?.key)
+                            // readCurentTarget(val?.key);
 
                             //   setTimeout(async() => {
                             //     await console.log(targets[0]?.start_date);
@@ -1420,7 +1853,12 @@ export default function EditTarget(props) {
                       </Label>
                       {view ? (
                         <span>
-                          <p>{currentTarget?.assigned_to?.name}</p>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.name
+                            }
+                          </p>
                         </span>
                       ) : (
                         <Select
@@ -1428,15 +1866,19 @@ export default function EditTarget(props) {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           defaultValue={{
-                            label: currentTarget?.assigned_to?.name,
-                            value: currentTarget?.assigned_to?.name,
-                            key: currentTarget?.assigned_to?.uid,
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.field_staff?.manager?.name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager?.field_staff?.manager?.uid,
                           }}
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             dispatch(getUsers(val.key, 'am'));
-                            await getDirectorTarget(val?.key);
 
                             // await getDirectorTarget(val?.key);
                           }}
@@ -1452,23 +1894,35 @@ export default function EditTarget(props) {
                       </Label>
                       {view ? (
                         <span>
-                          <p>{currentTarget?.assigned_to?.name}</p>
+                          <p>
+                            {
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.name
+                            }
+                          </p>
                         </span>
                       ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
-                          classNamePrefix="react-select"
                           defaultValue={{
-                            label: currentTarget?.assigned_to?.name,
-                            value: currentTarget?.assigned_to?.name,
-                            key: currentTarget?.assigned_to?.uid,
+                            label:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.name,
+                            value:
+                              currentTarget?.assigned_to?.field_staff?.manager
+                                ?.name,
+                            key: currentTarget?.assigned_to?.field_staff
+                              ?.manager?.uid,
                           }}
+                          classNamePrefix="react-select"
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             dispatch(getUsers(val.key, 'mpo'));
-                            await getDirectorTarget(val?.key);
+
+                            readCurentTarget(val?.key);
+
                             // await getDirectorTarget(val?.key);
                           }}
                           options={areaManagerOption}
@@ -1492,9 +1946,14 @@ export default function EditTarget(props) {
                           className="react-select"
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
+                          defaultValue={{
+                            label: currentTarget?.assigned_to?.name,
+                            value: currentTarget?.assigned_to?.name,
+                            key: currentTarget?.assigned_to?.uid,
+                          }}
                           onChange={async (val) => {
                             setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
+                            await getDirectorTarget(val?.key);
                           }}
                           options={mpoOption}
                         />
@@ -1515,29 +1974,27 @@ export default function EditTarget(props) {
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
-                          defaultValue={{
-                            label: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            value: currentTarget?.medicines?.map(
-                              (item) => item?.name
-                            ),
-                            key: currentTarget?.medicines?.map(
-                              (item) => item?.medicine_uid
-                            ),
-                          }}
+                          defaultValue={currentTarget?.medicines?.map(
+                            (item) => {
+                              return {
+                                label: item?.name,
+                                value: item?.medicine_uid,
+                                key: item?.quantity,
+                              };
+                            }
+                          )}
                           components={animatedComponents}
                           isMulti
                           // value={admin?.service_location_uid}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
 
-                            setTarget({
-                              ...target,
-                              start_date: moment
-                                .unix(targets[0]?.start_date)
-                                .format('YYYY-MM-DD h:mm:ss'),
-                            });
+                            // setTarget({
+                            //   ...target,
+                            //   start_date: moment
+                            //     .unix(targets[0]?.start_date)
+                            //     .format('YYYY-MM-DD h:mm:ss'),
+                            // });
                           }}
                           options={medicineOption}
                         />
@@ -1595,59 +2052,89 @@ export default function EditTarget(props) {
                 <p></p>
               )}
             </Row>
-            <Row>
-              <Col xl={12}>
-                <FormGroup>
-                  <div className="table-form">
-                    <Table>
-                      <thead>
-                        <tr>
-                          <th>Medicine Products</th>
-                          <th>Available Quantity</th>
-                          <th>Add Quantity</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {array?.map((item, index) => {
-                          return (
-                            <tr>
-                              <td>{item?.label}</td>
+            {array === undefined ? (
+              <Row>
+                <Col xl={12}>
+                  <FormGroup>
+                    <div className="table-form">
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>Medicine Products</th>
+                            <th>Available Quantity</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentTarget?.medicines?.map((item, index) => {
+                            return (
+                              <tr>
+                                <td>{item?.name}</td>
 
-                              <td>{item?.availalbequantity}</td>
-                              <td>
-                                <Col lg={12}>
-                                  <FormGroup>
-                                    <Input
-                                      required
-                                      className="form-control"
-                                      name="name"
-                                      type="number"
-                                      max={item?.availalbequantity}
-                                      min={0}
-                                      value={item?.quantity}
-                                      className="radio-in"
-                                      onChange={(e) => {
-                                        QuantityHanle(e, index);
-                                      }}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </div>
-                </FormGroup>
-              </Col>
-            </Row>
+                                <td>{item?.quantity}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </Table>
+                    </div>
+                  </FormGroup>
+                </Col>
+              </Row>
+            ) : !view ? (
+              <Row>
+                <Col xl={12}>
+                  <FormGroup>
+                    <div className="table-form">
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>Medicine Products</th>
+                            <th>Available Quantity</th>
+                            <th>Add Quantity</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {array?.map((item, index) => {
+                            return (
+                              <tr>
+                                <td>{item?.label}</td>
+
+                                <td>{item?.availalbequantity}</td>
+                                <td>
+                                  <Col lg={12}>
+                                    <FormGroup>
+                                      <Input
+                                        required
+                                        className="form-control"
+                                        name="name"
+                                        type="number"
+                                        max={item?.availalbequantity}
+                                        min={0}
+                                        value={item?.quantity}
+                                        className="radio-in"
+                                        onChange={(e) => {
+                                          QuantityHanle(e, index);
+                                        }}
+                                      />
+                                    </FormGroup>
+                                  </Col>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </Table>
+                    </div>
+                  </FormGroup>
+                </Col>
+              </Row>
+            ) : null}
 
             {view ? (
               <>
                 <Button
                   // className="btn btn-primary"
-                  style={{backgroundColor:"#0066B3"}}
+                  style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
                   // type="submit"
                   // className={`btn-shadow btn-multiple-state ${
                   //   loading ? 'show-spinner' : ''
@@ -1660,11 +2147,11 @@ export default function EditTarget(props) {
                     <span className="bounce2" />
                     <span className="bounce3" />
                   </span>
-                  Edit Profile
+                  Edit Target
                 </Button>
                 <Button
                   // className="btn btn-primary"
-                  style={{backgroundColor:"#0066B3"}}
+                  style={{ backgroundColor: '#0066B3' }}
                   // type="submit"
                   className={`btn-shadow btn-multiple-state ${
                     loadingSuspand ? 'show-spinner' : ''
@@ -1684,7 +2171,7 @@ export default function EditTarget(props) {
               <Button
                 // className="btn btn-primary"
                 // type="submit"
-                style={{backgroundColor:"#0066B3"}}
+                style={{ backgroundColor: '#0066B3' }}
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
                 }`}

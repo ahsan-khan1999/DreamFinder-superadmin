@@ -49,6 +49,9 @@ const selectGender = [
 ];
 export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const [admin, setAdmin] = useState(admin_obj);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [array, setArray] = useState(admin?.service_location_uid);
   let [service_location, setService_location] = useState([]);
@@ -57,7 +60,6 @@ export default function CreateDirector({ history }) {
     email_address: '',
 
     name: '',
-    // password: "alpha",
     password: '',
 
     gender: '',
@@ -100,11 +102,9 @@ export default function CreateDirector({ history }) {
   // sm?.filter((item) =>
   //   smOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   // );
-  const [loading, setLoading] = useState(false);
 
-  const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
-    setLoading(true)
+    setLoading(true);
     let test = { ...admin, service_location_uid: array };
 
     // let test=
@@ -115,7 +115,8 @@ export default function CreateDirector({ history }) {
       admin?.gender === '' &&
       admin?.phone_number === '' &&
       admin?.designation === '' &&
-      admin.role_uid === ''
+      admin?.role_uid === '' &&
+      admin?.manager_uid === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -124,7 +125,7 @@ export default function CreateDirector({ history }) {
         null,
         ''
       );
-    setLoading(false)
+      setLoading(false);
 
       return;
     } else {
@@ -139,7 +140,7 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-    setLoading(false)
+        setLoading(false);
 
         history.push('/app/menu/levels/viewAm');
       } else if (confirmPassword !== admin?.password) {
@@ -150,10 +151,13 @@ export default function CreateDirector({ history }) {
           null,
           ''
         );
-    setLoading(false)
-
+        setLoading(false);
       }
+      setLoading(false);
+
     }
+    setLoading(false);
+
   };
   const getServiceLocationUid = async (uid) => {
     let token = await getToken();
@@ -200,7 +204,7 @@ export default function CreateDirector({ history }) {
 
                   <Input
                     required
-                    value={admin.name}
+                    value={admin?.name}
                     className="form-control"
                     name="name"
                     // validate={validateEmail}
@@ -219,7 +223,7 @@ export default function CreateDirector({ history }) {
 
                   <Input
                     required
-                    value={admin.email_address}
+                    value={admin?.email_address}
                     className="form-control"
                     name="email"
                     type="email"
@@ -237,7 +241,7 @@ export default function CreateDirector({ history }) {
                   </Label>
                   <Input
                     required
-                    value={admin.password}
+                    value={admin?.password}
                     className="form-control"
                     name="password"
                     type="password"
@@ -324,7 +328,7 @@ export default function CreateDirector({ history }) {
 
                   <Input
                     required={true}
-                    value={admin.designation}
+                    value={admin?.designation}
                     className="form-control"
                     name="designation"
                     type="text"
@@ -410,7 +414,8 @@ export default function CreateDirector({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Select Teritory</h6>
+                    <IntlMessages id="Select Area" />
+
                   </Label>
                   <Select
                     cacheOptions
@@ -447,7 +452,8 @@ export default function CreateDirector({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              // className="btn btn-primary"
+              style={{ 'background-color': '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -460,7 +466,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Admin
+              Add Area Manager
             </Button>
           </Form>
         </Formik>

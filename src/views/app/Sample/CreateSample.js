@@ -44,7 +44,7 @@ import { CreateSampleAction } from 'Store/Actions/SampleAction/SampleAction';
 
 export default function CreateSample(props) {
   const [array, setArray] = useState([]);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [stock, setStock] = useState([]);
 
@@ -53,7 +53,7 @@ export default function CreateSample(props) {
   useEffect(() => {
     dispatch(ViewDirectorAction());
   }, []);
-  const loading = useSelector(state => state?.SampleReducer?.loading)
+  // const loading = useSelector(state => state?.SampleReducer?.loading)
   let medicineOptionFromStock = [];
   stock?.map((item) =>
     medicineOptionFromStock?.push({
@@ -132,7 +132,8 @@ export default function CreateSample(props) {
     });
   };
   const AddSample = async () => {
-    console.log(sample);
+    // console.log(sample);
+    setLoading(true);
     let res = await dispatch(CreateSampleAction(sample));
     if (res) {
       NotificationManager.success(
@@ -142,9 +143,11 @@ export default function CreateSample(props) {
         null,
         ''
       );
+      setLoading(false);
 
       props.history.push('/app/Sample/ViewSample');
     } else {
+      setLoading(false);
     }
   };
   return (
@@ -276,12 +279,17 @@ export default function CreateSample(props) {
           </Form>
         </Formik>
         <Button
-        style={{backgroundColor:"#0066B3"}}
+          style={{ backgroundColor: '#0066B3' }}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}
           onClick={AddSample}
         >
+           <span className="spinner d-inline-block">
+                <span className="bounce1" />
+                <span className="bounce2" />
+                <span className="bounce3" />
+              </span>
           Add Sample
         </Button>
       </CardBody>

@@ -38,10 +38,17 @@ export default function EditRsm(props) {
   const [buttonName, setButtonName] = useState('');
   let [service_location, setService_location] = useState([]);
   const [array, setArray] = useState(admin?.service_location_uid);
+  const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+  const [suspandLoading, setSuspandLoading] = useState(false);
 
   const [thisView, setThisView] = useState(true);
   const currentUser = props?.location?.state;
   //   console.log(currentUser);
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
     email_address: currentUser?.email_address,
@@ -55,8 +62,8 @@ export default function EditRsm(props) {
     phone_number: currentUser?.phone_number,
 
     role_uid: currentUser?.role?.uid,
-    manager_uid: '',
-    service_location_uid: array,
+    manager_uid: currentUser?.field_staff?.manager?.uid,
+    service_location_uid: service_location_id,
   };
   const dispatch = useDispatch();
   const readRoles = () => {
@@ -64,6 +71,8 @@ export default function EditRsm(props) {
     dispatch(ViewSalesManagerManagerAction());
   };
   useEffect(() => {
+    setAdmin(admin_obj);
+
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -100,7 +109,6 @@ export default function EditRsm(props) {
     option?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
 
-  const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(false);
@@ -108,7 +116,7 @@ export default function EditRsm(props) {
   const handleChangeToView = () => {
     props.history.push('/app/menu/levels/ViewRsm');
   };
-  let value =[]
+  let value = [];
   const handleChange = async (e) => {
     let options = e;
     options?.map((item, index) => {
@@ -118,16 +126,60 @@ export default function EditRsm(props) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   const editData = async (e) => {
-    let test = { ...admin, service_location_uid: array };
+    setLoading(true);
+    if (
+      admin?.name === '' ||
+      admin?.gender === '' ||
+      admin?.designation === '' ||
+      admin.role_uid === '' ||
+      admin.manager_uid === '' ||
+      admin?.service_location_uid === []
+    ) {
+      NotificationManager.error(
+        'Please Enter Details',
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      setLoading(false);
+    } else {
+      setLoading(true);
 
-    e.preventDefault();
-    console.log(admin);
-    let res = await dispatch(UpdateUserAction(test));
-    if (res) {
-      NotificationManager.success('Successful response', 'Success', 5000, '');
-      props.history.push('/app/menu/levels/ViewRsm');
+      let test = { ...admin, service_location_uid: array };
+
+      if (array === undefined) {
+        let res = await dispatch(UpdateUserAction(admin));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          setLoading(false);
+
+          props.history.push('/app/menu/levels/ViewRsm');
+        }
+      } else {
+        let res = await dispatch(UpdateUserAction(test));
+        if (res) {
+          NotificationManager.success(
+            'Successful response',
+            'Success',
+            5000,
+            ''
+          );
+          setLoading(false);
+
+          props.history.push('/app/menu/levels/ViewRsm');
+        }
+        setLoading(false);
+      }
+      setLoading(false);
     }
   };
+
   const suspandAdmin = async () => {
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
@@ -154,6 +206,7 @@ export default function EditRsm(props) {
         );
       }
     } else {
+      setSuspandLoading(true)
       let apiData = {
         uid: currentUser?.uid,
       };
@@ -167,8 +220,12 @@ export default function EditRsm(props) {
           null,
           ''
         );
+      setSuspandLoading(false)
+
         props.history.push('/app/menu/levels/ViewRsm');
       } else {
+      setSuspandLoading(true)
+
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -176,6 +233,8 @@ export default function EditRsm(props) {
           null,
           ''
         );
+      setSuspandLoading(false)
+
       }
     }
     //  setStatusUpdate()
@@ -183,7 +242,7 @@ export default function EditRsm(props) {
     // console.log(doctor?.password);
   };
   let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({label:item?.name,value:item?.name,id:item?.uid})
+    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
   );
   return (
     <Card>
@@ -192,7 +251,8 @@ export default function EditRsm(props) {
           <Button
             className="btn-btn-secondary"
             onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#003766' }}
+
+            style={{ marginRight: '20px', 'background-color': '#0066B3' }}
           >
             Back
           </Button>
@@ -210,12 +270,12 @@ export default function EditRsm(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.name}</p>
+                      <p>{admin?.name}</p>
                     </span>
                   ) : (
                     <Input
                       required
-                      value={admin.name}
+                      value={admin?.name}
                       className="form-control"
                       name="name"
                       // validate={validateEmail}
@@ -235,12 +295,13 @@ export default function EditRsm(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin.email_address}</p>
+                      <p>{admin?.email_address}</p>
                     </span>
                   ) : (
                     <Input
                       required
-                      value={admin.email_address}
+                      disabled
+                      value={admin?.email_address}
                       className="form-control"
                       name="email"
                       type="email"
@@ -343,6 +404,7 @@ export default function EditRsm(props) {
                     <Input
                       required
                       value={admin?.phone_number}
+                      disabled
                       type="text"
                       className="radio-in"
                       name="phone_number"
@@ -451,7 +513,8 @@ export default function EditRsm(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Select Teritory</h6>
+                    <IntlMessages id="Select Area" />
+
                   </Label>
                   {thisView ? (
                     currentUser?.field_staff?.service_location?.map((item) => (
@@ -465,8 +528,17 @@ export default function EditRsm(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={defaultOptions[0]}
-                      value={admin?.service_location_uid}
+                      // defaultValue={defaultOptions[0]}
+                      defaultValue={currentUser?.field_staff?.service_location?.map(
+                        (item) => {
+                          return {
+                            label: item?.name,
+                            value: item?.name,
+                            key: item?.uid,
+                          };
+                        }
+                      )}
+                      // value={admin?.service_location_uid}
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />
@@ -478,6 +550,7 @@ export default function EditRsm(props) {
             {thisView ? (
               <Button
                 className="btn btn-primary"
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
@@ -495,10 +568,11 @@ export default function EditRsm(props) {
             ) : (
               <Button
                 className="btn btn-primary"
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+                className={`btn-shadow btn-multiple-state ${
+                  loading ? 'show-spinner' : ''
+                }`}
                 size="sm"
                 onClick={editData}
               >
@@ -512,13 +586,16 @@ export default function EditRsm(props) {
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#003766', marginRight: '5px' }}
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
+                className={`btn-shadow btn-multiple-state ${
+                  suspandLoading ? 'show-spinner' : ''
+                }`}
+                size="sm"
                 onClick={suspandAdmin}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
+
               >
+                
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />
                   <span className="bounce2" />

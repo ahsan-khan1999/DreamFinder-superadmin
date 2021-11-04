@@ -25,10 +25,10 @@ import { getToken } from 'Utils/auth.util';
 
 export default function CreatePeriorityList(props) {
   const dispatch = useDispatch()
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [doctor, setDoctor] = useState([]);
   const [doctorID, setDoctorID] = useState('');
-  const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
+  // const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
 
   const readDoctor = async () => {
     let token = await getToken();
@@ -55,6 +55,7 @@ export default function CreatePeriorityList(props) {
     })
   );
   const createDoctorPeriorityList = async () => {
+    setLoading(true)
     let res = await dispatch(
         CreateDoctorPeriorityListAction({ doctor_uid: doctorID })
     );
@@ -66,9 +67,11 @@ export default function CreatePeriorityList(props) {
         null,
         ''
       );
+      setLoading(false)
 
-      props.history.push('/app/PeriorityList/ViewPeriorityList');
+      props.history.push('/app/PeriorityList/ViewPeriorityListDoctor');
     }else{
+      setLoading(false)
 
     }
   };
@@ -76,7 +79,7 @@ export default function CreatePeriorityList(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Doctor Periority List" />
+          <IntlMessages id="Create Doctor Priority List" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
