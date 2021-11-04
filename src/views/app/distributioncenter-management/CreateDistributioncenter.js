@@ -78,33 +78,36 @@ export default function CreateDistributioncenter({ history }) {
 
 
 
+  const [assigned,setAssigned] = useState()
+
 
   let AllDepoManagers = [];
   depoManager?.map((item) =>
   AllDepoManagers?.push({
       label: item?.name,
       value: item?.uid,
-      key: item?.uid,
+      key: item?.is_primary,
     })
   );
   
   
 
-  const distributioncenter_obj = {
+  let distributioncenter_obj = {
     depot_managers_uid: depoarray,
 
     areas_uid:  array,
-    
+  
   };
+
   
   const loading = useSelector(
-    (state) => state?.departmentHeadReducer?.loader
+    (state) => state?.distributionCenterReducer?.loader
     );
     
     const onDepartHeadCreate = async () => {
       if (
-        distributioncenter_obj?.depot_managers_uid === '' &&
-        distributioncenter_obj?.areas_uid === '' 
+        distributioncenter_obj?.depot_managers_uid.length === 0 &&
+        distributioncenter_obj?.areas_uid.length === 0
         ) {
           NotificationManager.error(
             'Please Enter Required Field',
@@ -126,18 +129,22 @@ export default function CreateDistributioncenter({ history }) {
           null,
           ''
         );
-        history.push('/app/distributioncenter-management/viewDepartmenthead');
+        history.push('/app/distributioncenter-management/viewDistributioncenter');
       }
     }
   };
   
   const handleChangeToView = () => {
-    history.push('/app/distributioncenter-management/viewDepartmenthead');
+    history.push('/app/distributioncenter-management/viewDistributioncenter');
   };
   
+
+  
+
+
   const regionareavalue = [];
   const handleChangeRegion = async (e, index) => {
-    // console.log(e);
+  
     let options = e;
     options?.map((item, index) => {
       regionareavalue.push(item?.value);
@@ -153,12 +160,28 @@ export default function CreateDistributioncenter({ history }) {
   const handleChangeDepoManagers = async (e, index) => {
     let options = e;
     options?.map((item, index) => {
+      if(item?.key === true)
+    {
+      setAssigned("True")
+    }
+    else{
+      setAssigned("False")
+    }
       depovalue.push(item?.value);
     }); 
     await setDepoarray(depovalue);
   };
 
+  const customStyles = {
+    
+    option: (provided, state) => 
+    ({
+      ...provided,
+      color: state.data.key ? 'green !important' :  'red !important' ,
+      padding: 10,
+    })
 
+  }
   return (
     <Card>
       <CardBody>
@@ -192,12 +215,12 @@ export default function CreateDistributioncenter({ history }) {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
-                      required
                       onChange={(e, index) => {
                         dispatch(getAreas(e.value));
                         
                       }}
                       options={distributionRegions}
+
                     />
                   </>
                 </FormGroup>
@@ -248,6 +271,7 @@ export default function CreateDistributioncenter({ history }) {
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select Depot Managers" />
+                    <div>Status : <span style={{color: assigned=== "True" ? 'green' : 'red'}}>{assigned}</span></div>
                   </Label>
 
                   <>
@@ -258,9 +282,9 @@ export default function CreateDistributioncenter({ history }) {
                       classNamePrefix="react-select"
                       isMulti
                       required
+                      styles={customStyles}
                       onChange={(e, index) => {
                         handleChangeDepoManagers(e, index);
-                        
                       }}
                       options={AllDepoManagers}
                     />
@@ -280,7 +304,7 @@ export default function CreateDistributioncenter({ history }) {
               {loading ? (
                 <div className="d-flex justify-content-center">
                   <Loader height={18} width={18} type="Oval" color="#fff" />
-                  Creating
+                  &nbsp;Creating
                 </div> 
               ) : (
                 'Add DistributionCenter'

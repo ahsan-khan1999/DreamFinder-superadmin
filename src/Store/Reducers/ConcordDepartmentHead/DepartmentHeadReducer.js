@@ -8,6 +8,7 @@ import { DEPARTMENT_HEAD_CONSTANT } from '../../Constant/Constants';
 
 const initialState = {
   loading: false,
+  updatedepartmentheadloader: false,
   loader: false,
   departmenthead: [],
   createdepartmenthead: [],
@@ -35,7 +36,7 @@ export const DepartmentHeadReducer = (state = initialState, { type, payload }) =
 
 
     case DEPARTMENT_HEAD_CONSTANT.UPDATE_DEPARTMENT_HEAD_LOADING:
-      return { ...state, updatedepartmenthead: true }
+      return { ...state, updatedepartmentheadloader: payload }
 
     case DEPARTMENT_HEAD_CONSTANT.UPDATE_DEPARTMENT_HEAD_SUCCESS:
       return { ...state, updatedepartmenthead: payload }

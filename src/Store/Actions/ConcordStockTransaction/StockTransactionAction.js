@@ -45,11 +45,11 @@ export const GetStocksTransaction = () => async (dispatch) => {
         payload: true,
       });
       
-      let res = await apiServices.createstockstransaction(data);
       dispatch({
-        type: STOCKS_TRANSACTION_CONSTANT.CREATE_STOCKS_TRANSACTION_LOADING,
+        type: STOCKS_TRANSACTION_CONSTANT.STOCKS_TRANSACTION_LOADING,
         payload: true
       })
+      let res = await apiServices.createstockstransaction(data);
   
       if (res?.data?.response_code === 200) {
         dispatch({
@@ -57,7 +57,7 @@ export const GetStocksTransaction = () => async (dispatch) => {
           payload: res
         })
         dispatch({
-          type: STOCKS_TRANSACTION_CONSTANT.STOCKS_TRANSACTION_LOADING_All,
+          type: STOCKS_TRANSACTION_CONSTANT.STOCKS_TRANSACTION_LOADING,
           payload: false,
         });    
         return true
@@ -66,9 +66,11 @@ export const GetStocksTransaction = () => async (dispatch) => {
           type: STOCKS_TRANSACTION_CONSTANT.CREATE_STOCKS_TRANSACTION_ERROR,
           payload: res?.data?.response_code
         })
+        
+        
         NotificationManager.error(res?.data?.response_message, "error", 5000, null, '');
         dispatch({
-          type: STOCKS_TRANSACTION_CONSTANT.STOCKS_TRANSACTION_LOADING_All,
+          type: STOCKS_TRANSACTION_CONSTANT.STOCKS_TRANSACTION_LOADING,
           payload: false,
         });    
         return false

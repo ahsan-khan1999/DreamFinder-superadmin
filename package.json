@@ -4,6 +4,7 @@
   "description": "DMFR - Super Admin",
   "private": true,
   "dependencies": {
+    "@availity/reactstrap-validation-select": "^9.0.1",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@glidejs/glide": "^3.4.1",

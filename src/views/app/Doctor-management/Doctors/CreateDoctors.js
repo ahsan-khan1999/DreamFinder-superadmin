@@ -61,6 +61,23 @@ export default function CreateDoctors({ history }) {
     })
   );
 
+  let option_static_docCat_Category = [];
+  staticdata?.doctor__doctor_categorys?.filter((item) =>
+  option_static_docCat_Category.push({
+      label: item?.name,
+      value: item?.value,
+      key: item?.id,
+    })
+  );
+  let option_static_otherServices_Category = [];
+  staticdata?.doctor__other_services?.filter((item) =>
+  option_static_otherServices_Category.push({
+      label: item?.name,
+      value: item?.value,
+      key: item?.id,
+    })
+  );
+
   const doctorcategory = useSelector(
     (state) => state?.doctorCategoryReducer?.doctorcategory
   );
@@ -235,6 +252,18 @@ export default function CreateDoctors({ history }) {
     }
   };
 
+
+
+
+  const values = {
+    speciality_uid: undefined
+  };
+  
+  const onChange = value => {
+    values.speciality_uid = value;
+  };
+
+
   return (
     <Card>
       <CardBody>
@@ -271,10 +300,7 @@ export default function CreateDoctors({ history }) {
                         value: true,
                         errorMessage: 'Please enter your name',
                       },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your name must be composed only with letters',
-                      },
+                    
                       minLength: {
                         value: 2,
                         errorMessage: 'To Short',
@@ -433,53 +459,37 @@ export default function CreateDoctors({ history }) {
                 </AvGroup>
               </Col>
 
-              {/* Speciality */}
+          
+
+              {/*Speciality Category */}
               <Col lg={6}>
-                <AvGroup className="error-t-negative" className="error-l-75">
-                  <Label>Speciality</Label>
+                <AvGroup className="error-t-negative">
+                  <Label>
+                    <IntlMessages id="Select Speciality Category" />
+                  </Label>
 
-                  <AvField
-                    className="form-control"
-                    name="speciality"
-                    type="text"
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter your Speciality',
-                      },
-                      minLength: {
-                        value: 2,
-                        errorMessage: 'To Short',
-                      },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your designation must be composed only with letters',
-                      },
-                      maxLength: {
-                        value: 25,
-                        errorMessage: 'To Long',
-                      },
-                    }}
-                    type="text"
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        organization: e.target.value,
-                      })
-                    }
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      required
+                      onChange={(e, index) => {
+                        setDoctorCreate({
+                          ...doctorCreate,
+                          speciality_uid: e.value,
+                        });
+                      }}
+                      options={optiongetdoc_category}
+                    />
 
-                    onChange={(e) =>
-                      setDoctorCreate({
-                        ...doctorCreate,
-                        speciality: e.target.value,
-                      })
-                    }
-                  />
-
+                  </>
                 </AvGroup>
               </Col>
 
-              {/* Doctors Category */}
+
+              {/*Doctors Category */}
               <Col lg={6}>
                 <AvGroup className="error-t-negative">
                   <Label>
@@ -496,10 +506,37 @@ export default function CreateDoctors({ history }) {
                       onChange={(e, index) => {
                         setDoctorCreate({
                           ...doctorCreate,
-                          doctor_category_uid: e.value,
+                          doctor_category: e.value,
                         });
                       }}
-                      options={optiongetdoc_category}
+                      options={option_static_docCat_Category}
+                    />
+                  </>
+                </AvGroup>
+              </Col>
+
+
+              {/*Other Services*/}
+              <Col lg={6}>
+                <AvGroup className="error-t-negative">
+                  <Label>
+                    <IntlMessages id="Select Other Services" />
+                  </Label>
+
+                  <>
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      required
+                      onChange={(e, index) => {
+                        setDoctorCreate({
+                          ...doctorCreate,
+                          other_service: e.value,
+                        });
+                      }}
+                      options={option_static_otherServices_Category}
                     />
                   </>
                 </AvGroup>
@@ -672,7 +709,7 @@ export default function CreateDoctors({ history }) {
               </Col>
 
 
-              <Col lg={10}>
+              <Col lg={4}>
                 <AvGroup className="error-t-negative">
                 <Label>
                     <IntlMessages id="Select Special Day Date" />
@@ -751,7 +788,7 @@ export default function CreateDoctors({ history }) {
             >
               {loading ? (
                 <div className="d-flex justify-content-center">
-                  <Loader height={16} width={18} type="Bars" color="#fff" />
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
                   &nbsp; Creating
                 </div>
               ) : (

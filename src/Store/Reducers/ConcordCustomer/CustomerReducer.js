@@ -12,6 +12,7 @@ const initialState = {
   customer: [],
   createcustomer: [],
   updatecustomer: [],
+  updatecustomerloader:false
 };
 export const CustomerReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -35,7 +36,7 @@ export const CustomerReducer = (state = initialState, { type, payload }) => {
 
 
     case CUSTOMER_CONSTANT.UPDATE_CUSTOMER_LOADING:
-      return { ...state, updatecustomer: true }
+      return { ...state, updatecustomerloader:payload }
 
     case CUSTOMER_CONSTANT.UPDATE_CUSTOMER_SUCCESS:
       return { ...state, updatecustomer: payload }

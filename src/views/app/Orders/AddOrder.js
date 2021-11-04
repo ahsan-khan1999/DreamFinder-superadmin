@@ -223,7 +223,7 @@ export default function AddOrder(props) {
       medicines: array?.map(item => {
         return {
           medicine_uid: item?.medicine_uid,
-          quantity: item?.quantity
+          quantity: item?.quantity 
         }
       }),
     })
@@ -499,11 +499,7 @@ export default function AddOrder(props) {
             >
               {loading ?
                 <div className="d-flex justify-content-center">
-                  <Loader
-                    height={16} width={18}
-                    type="Bars"
-                    color="#fff"
-                  />
+                 <Loader height={18} width={18} type="Oval" color="#fff" />
                   &nbsp; Creating Order
                 </div> : "Add Order"
               }

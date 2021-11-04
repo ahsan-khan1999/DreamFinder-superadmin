@@ -9,6 +9,7 @@ import { PRODUCT_CONSTANT } from '../../Constant/Constants';
 const initialState = {
   loading: false,
   loader: false,
+  updateproductloading: false,
   product: [],
   createproduct: [],
   updateproduct: [],
@@ -36,7 +37,7 @@ export const ProductReducer = (state = initialState, { type, payload }) => {
 
 
     case PRODUCT_CONSTANT.UPDATE_PRODUCT_LOADING:
-      return { ...state, updateproduct: true }
+      return { ...state, updateproductloading: payload }
 
     case PRODUCT_CONSTANT.UPDATE_PRODUCT_SUCCESS:
       return { ...state, updateproduct: payload }

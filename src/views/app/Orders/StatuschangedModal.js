@@ -26,9 +26,7 @@ import CustomSelectInput from 'components/common/CustomSelectInput';
 
 const StatuschangedModal = (props) => {
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
-  const loading = useSelector(
-    (state) => state?.orderReducer?.loader
-  );
+  const loading = useSelector((state) => state?.orderReducer?.loader);
   let option_static_DeliveryStatus = [];
   staticdata?.list_order__delivery_statuses?.filter((item) =>
     option_static_DeliveryStatus.push({
@@ -55,23 +53,36 @@ const StatuschangedModal = (props) => {
 
   const dispatch = useDispatch();
 
-  const [dropdown1, setDropdown1] = useState();
-  const [dropdown2, setDropdown2] = useState();
-
-  console.log('dropdown1', dropdown1);
-  console.log('dropdown2', dropdown2);
   
+  useEffect(() => {
+    setupdateStatus({ ...updateStatus, 
+      delivery_status: currentData?.delivery_status,
+      payment_status: currentData?.payment_status
+    ,uid: currentData?.uid
+    })
+  }, []);
+
+
+  const apiData = {
+    delivery_status: currentData?.delivery_status,
+    payment_status: currentData?.payment_status,
+    uid: currentData?.uid,
+  };
+  
+  const [updateStatus, setupdateStatus] = useState(apiData);
+
+
   const currentData = props?.data;
-  console.log('currentData.uid', currentData);
+  console.log('currentData', updateStatus);
 
   const onSubmit = async () => {
-      
-    const apiData = {
-      delivery_status: dropdown1,
-      payment_status: dropdown2,
-      uid: currentData?.uid,
-    };
-    let res = await dispatch(statusChange(apiData));
+    
+    // const apiDataall = {
+    //   ...updateStatus,
+    //   uid: currentData?.uid,
+    // };
+    console.log(updateStatus)
+    let res = await dispatch(statusChange(updateStatus));
     if (res) {
         NotificationManager.success(
           'Status Updated Sucessfully',
@@ -128,8 +139,12 @@ const StatuschangedModal = (props) => {
                               className="react-select"
                               classNamePrefix="react-select"
                               required
+                              defaultValue={{
+                                label:currentData?.delivery_status,
+                                value:currentData?.delivery_status
+                              }}
                               onChange={(e) => {
-                                setDropdown1(e.value);
+                                setupdateStatus({ ...updateStatus, delivery_status: e.value })
                               }}
                               options={option_static_DeliveryStatus}
                             />
@@ -150,8 +165,12 @@ const StatuschangedModal = (props) => {
                               className="react-select"
                               classNamePrefix="react-select"
                               required
+                              defaultValue={{
+                                label:currentData?.payment_status,
+                                value:currentData?.payment_status
+                              }}
                               onChange={(e) => {
-                                setDropdown2(e.value);
+                                setupdateStatus({ ...updateStatus, payment_status: e.value })
                               }}
                               options={option_static_PaymentStatus}
                             />
@@ -167,12 +186,8 @@ const StatuschangedModal = (props) => {
                       >
                          {loading ?
                 <div className="d-flex justify-content-center">
-                  <Loader
-                    height={20} width={20}
-                    type="Oval"
-                    color="#fff"
-                  />
-                  
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Updating
                 </div> : "Change Status"
               }
                       </Button>

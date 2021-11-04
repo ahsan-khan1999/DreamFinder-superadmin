@@ -64,7 +64,7 @@ export default function CreateStockTransaction({ history }) {
   );
 
   const loading = useSelector(
-    (state) => state?.stockTransactionReducer?.loader
+    (state) => state?.stockTransactionReducer?.loading
   );
   const getstock_uid = useSelector(
     (state) =>
@@ -228,6 +228,7 @@ export default function CreateStockTransaction({ history }) {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
+                      isClearable={false}
                       onChange={(e) => {
                         setSelectedCategory(e.label);
                         dispatch(
@@ -256,6 +257,7 @@ export default function CreateStockTransaction({ history }) {
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
+                      isClearable
                       onChange={(e) => {
                         setStocktransaction({
                           ...stocktransaction,
@@ -306,6 +308,7 @@ export default function CreateStockTransaction({ history }) {
                     className="radio-in"
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
+                    
                     onChange={(e) =>
                       setStocktransaction({
                         ...stocktransaction,

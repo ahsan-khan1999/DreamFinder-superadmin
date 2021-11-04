@@ -96,6 +96,7 @@ export default function ViewCurrentDoctorsCategory(props) {
     props.history.push('/app/doctor-management/viewDoctorsCategory');
   };
 
+  let [suspendloader, setsuspendloader] = useState(false);
 
  
   const suspandDepartmenthead = async () => {
@@ -104,9 +105,11 @@ export default function ViewCurrentDoctorsCategory(props) {
         uid: CurrentDoctorCategory?.uid,
       };
       console.log(apiData);
+      setsuspendloader(true);
       let res = await apiServices.suspanddoctorcategorys(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -116,6 +119,7 @@ export default function ViewCurrentDoctorsCategory(props) {
         );
         props.history.push('/app/doctor-management/viewDoctorsCategory');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -128,9 +132,11 @@ export default function ViewCurrentDoctorsCategory(props) {
       let apiData = {
         uid: CurrentDoctorCategory?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspanddoctorcategorys(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -140,6 +146,7 @@ export default function ViewCurrentDoctorsCategory(props) {
         );
         props.history.push('/app/doctor-management/viewDoctorsCategory');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -318,7 +325,7 @@ export default function ViewCurrentDoctorsCategory(props) {
 
                 onClick={suspandDepartmenthead}
               >
-                {loading ? (
+                {suspendloader ? (
                 <div className="d-flex justify-content-center">
                   <Loader height={18} width={18} type="Oval" color="#fff" />
                   &nbsp; Suspending

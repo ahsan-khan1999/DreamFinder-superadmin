@@ -64,7 +64,7 @@ export default function ViewCurrentProductCategory(props) {
     uid : CurrentProductCategory.uid,
   };
 
-  const loading = useSelector((state) => state?.productCategoryReducer?.loader);
+  const loading = useSelector((state) => state?.productCategoryReducer?.updateproductcategoryloader);
   const [productcategory, setProductcategory] = useState(productcategory_obj);
 
 
@@ -98,15 +98,20 @@ export default function ViewCurrentProductCategory(props) {
 
   console.log(CurrentProductCategory,"CurrentProductCategory")
 
+  let [suspendloader, setsuspendloader] = useState(false);
+
+
   const suspandDepartmenthead = async () => {
     if (CurrentProductCategory?.status?.name === 'suspended') {
       let apiData = {
         uid: CurrentProductCategory?.uid,
       };
       console.log(apiData);
+      setsuspendloader(true);
       let res = await apiServices.suspandproductcategory(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -116,6 +121,8 @@ export default function ViewCurrentProductCategory(props) {
         );
         props.history.push('/app/stocks-management/viewProductCategory');
       } else {
+        setsuspendloader(false);
+
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -128,9 +135,11 @@ export default function ViewCurrentProductCategory(props) {
       let apiData = {
         uid: CurrentProductCategory?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspandproductcategory(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -140,6 +149,7 @@ export default function ViewCurrentProductCategory(props) {
         );
         props.history.push('/app/stocks-management/viewProductCategory');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -306,7 +316,14 @@ export default function ViewCurrentProductCategory(props) {
                 onClick={editData}
               >
               
-                Save
+              {loading ? (
+                <div className="d-flex justify-content-center">
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Updating
+                </div> 
+              ) : (
+                'Save'
+              )}
               </Button>
             )}
 
@@ -318,7 +335,14 @@ export default function ViewCurrentProductCategory(props) {
 
                 onClick={suspandDepartmenthead}
               >
-                {buttonName}
+                 {suspendloader ? (
+              <div className="d-flex justify-content-center">
+                <Loader height={18} width={18} type="Oval" color="#fff" />
+                &nbsp; Suspending
+              </div>
+            ) : (
+              buttonName
+              )}
               </Button>
 
             ) : (

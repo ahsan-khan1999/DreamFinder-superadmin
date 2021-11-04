@@ -12,6 +12,7 @@ const initialState = {
   doctor: [],
   createdoctor: [],
   updatedoctor: [],
+  updatedoctorloading:false,
   hierarchy_region: [],
   hierarchy_area: [],
   hierarchy_thana: [],
@@ -40,7 +41,7 @@ export const DoctorReducer = (state = initialState, { type, payload }) => {
 
 
     case DOCTOR_CONSTANT.UPDATE_DOCTOR_LOADING:
-      return { ...state, updatedoctor: true }
+      return { ...state, updatedoctorloading: payload }
 
     case DOCTOR_CONSTANT.UPDATE_DOCTOR_SUCCESS:
       return { ...state, updatedoctor: payload }

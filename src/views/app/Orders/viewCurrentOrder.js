@@ -21,6 +21,8 @@ import {
   Row,
   Table,
 } from 'reactstrap';
+import Loader from 'react-loader-spinner';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import apiServices from 'services/requestHandler';
 import { updateOrderAction } from 'Store/Actions/Orders/ViewOrderAction';
 import StatuschangedModal from './StatuschangedModal';
@@ -51,6 +53,7 @@ export default function viewCurrentOrderComponent(props) {
       setButtonName('Suspend Order');
     }
   }, []);
+  const loading = useSelector((state) => state?.orderReducer?.loader);
 
   const handleChangeToView = () => {
     props.history.push('/app/Orders/orders');
@@ -58,15 +61,18 @@ export default function viewCurrentOrderComponent(props) {
   const dispatch = useDispatch();
 
   let [buttonName, setButtonName] = useState();
+  let [suspendloader, setsuspendloader] = useState(false);
 
   const suspandOrder = async () => {
     if (currentOrder?.status?.name === 'suspended') {
       let apiData = {
         uid: currentOrder?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspandorder(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+      setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -76,6 +82,7 @@ export default function viewCurrentOrderComponent(props) {
         );
         props.history.push('/app/Orders/orders');
       } else {
+      setsuspendloader(false);
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -88,9 +95,12 @@ export default function viewCurrentOrderComponent(props) {
       let apiData = {
         uid: currentOrder?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspandorder(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+      setsuspendloader(false);
+
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -100,6 +110,7 @@ export default function viewCurrentOrderComponent(props) {
         );
         props.history.push('/app/Orders/orders');
       } else {
+      setsuspendloader(false);
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -124,62 +135,7 @@ export default function viewCurrentOrderComponent(props) {
 };
 
   
-  // const changeStatusToProcessing = () => {
-  //   const apiData = {
-  //     order_id: currentOrder?.id,
-  //     delivery_status: { id: 2, name: 'processing' },
-  //   };
-  //   let res = dispatch(updateOrderAction(apiData));
-  //   if (res) {
-  //     NotificationManager.success(
-  //       'Sucessfully Updated',
-  //       'Sucess',
-  //       5000,
-  //       null,
-  //       ''
-  //     );
-  //     history.push('/app/Orders/orders');
-  //   }
-  // };
-  // const changeStatusToDispatched = async () => {
-  //   const apiData = {
-  //     order_id: currentOrder?.id,
-  //     delivery_status: { id: 3, name: 'dispatched' },
-  //   };
-  //   let res = dispatch(updateOrderAction(apiData));
-  //   if (res) {
-  //     NotificationManager.success(
-  //       'Sucessfully Updated',
-  //       'Sucess',
-  //       5000,
-  //       null,
-  //       ''
-  //     );
-  //     history.push('/app/Orders/orders');
-  //   }
-  // };
-  // const changeStatusToDelivered = async () => {
-  //   const apiData = {
-  //     order_id: currentOrder?.id,
-  //     delivery_status: { id: 4, name: 'delivered' },
-  //   };
-  //   let res = dispatch(updateOrderAction(apiData));
-  //   if (res) {
-  //     NotificationManager.success(
-  //       'Sucessfully Updated',
-  //       'Sucess',
-  //       5000,
-  //       null,
-  //       ''
-  //     );
-  //     history.push('/app/Orders/orders');
-  //   }
-  // };
-
-  const handleAdd = () => {
-
-    history.push('/app/menu/levels/CreateOrders');
-  };
+  
   return (
     <Card>
       <CardBody>
@@ -378,21 +334,21 @@ export default function viewCurrentOrderComponent(props) {
               </Col>
             </Row>
               <Button
-                style={{  backgroundColor: '#0066b3',marginRight:"5px" }}
-                // className="btn btn-primary"
+                style={{backgroundColor:'#0066b3'}}
+
                 onClick={suspandOrder}
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
               >
-                <span className="spinner d-inline-block">
-                  <span className="bounce1" />
-                  <span className="bounce2" />
-                  <span className="bounce3" />
-                </span>
-                {buttonName}
+                {suspendloader ? (
+                <div className="d-flex justify-content-center">
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Suspending
+                </div>
+              ) : (
+                buttonName
+                )}
+                
               </Button>
-         
+
             <Button
               className="mx-2"
               onClick={handleShow}

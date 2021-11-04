@@ -91,7 +91,7 @@ export default function ViewCurrentStock(props) {
     uid: CurrentStocks.uid,
   };
 
-  const loading = useSelector((state) => state?.stockReducer?.loader);
+  const loading = useSelector((state) => state?.stockReducer?.updatestockloading);
   const [stocksall, setStocksall] = useState(stock_obj);
 
   const handleChangeToView = () => {
@@ -110,12 +110,17 @@ export default function ViewCurrentStock(props) {
         'Successful response',
         'Success',
         5000,
-        null,
+     
+     
+        
         ''
       );
       props.history.push('/app/stocks-management/viewStock');
     }
   };
+
+  let [suspendloader, setsuspendloader] = useState(false);
+
 
   const suspandDepartmenthead = async () => {
     if (CurrentStocks?.status?.name === 'suspended') {
@@ -123,9 +128,11 @@ export default function ViewCurrentStock(props) {
         uid: CurrentStocks?.uid,
       };
       console.log(apiData);
+      setsuspendloader(true);
       let res = await apiServices.suspandstocks(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+      setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -135,6 +142,7 @@ export default function ViewCurrentStock(props) {
         );
         props.history.push('/app/stocks-management/viewStock');
       } else {
+      setsuspendloader(false);
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -147,9 +155,11 @@ export default function ViewCurrentStock(props) {
       let apiData = {
         uid: CurrentStocks?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspandstocks(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+      setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -159,6 +169,7 @@ export default function ViewCurrentStock(props) {
         );
         props.history.push('/app/stocks-management/viewStock');
       } else {
+      setsuspendloader(false);
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -479,7 +490,14 @@ export default function ViewCurrentStock(props) {
                 onClick={editData}
               >
               
-                Save
+              {loading ? (
+                <div className="d-flex justify-content-center">
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Updating
+                </div> 
+              ) : (
+                'Save'
+              )}
               </Button>
             )}
 
@@ -491,7 +509,16 @@ export default function ViewCurrentStock(props) {
 
                 onClick={suspandDepartmenthead}
               >
-                {buttonName}
+
+            {suspendloader ? (
+              <div className="d-flex justify-content-center">
+                <Loader height={18} width={18} type="Oval" color="#fff" />
+                &nbsp; Suspending
+              </div>
+            ) : (
+              buttonName
+              )}
+
               </Button>
 
             ) : (

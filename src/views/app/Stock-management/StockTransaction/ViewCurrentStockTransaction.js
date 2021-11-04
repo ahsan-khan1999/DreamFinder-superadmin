@@ -118,6 +118,7 @@ export default function ViewCurrentStockTransaction(props) {
       props.history.push('/app/stocks-management/ViewStockTransaction');
     }
   };
+  let [suspendloader, setsuspendloader] = useState(false);
 
   const suspandDepartmenthead = async () => {
     if (CurrentStocks?.status?.name === 'suspended') {
@@ -125,9 +126,11 @@ export default function ViewCurrentStockTransaction(props) {
         uid: CurrentStocks?.uid,
       };
       console.log(apiData);
+      setsuspendloader(true)
       let res = await apiServices.suspandstockstransaction(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+        setsuspendloader(false)
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -137,6 +140,7 @@ export default function ViewCurrentStockTransaction(props) {
         );
         props.history.push('/app/stocks-management/ViewStockTransaction');
       } else {
+        setsuspendloader(false)
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -149,10 +153,11 @@ export default function ViewCurrentStockTransaction(props) {
       let apiData = {
         uid: CurrentStocks?.uid,
       };
-      
+      setsuspendloader(true)
       let res = await apiServices.suspandstockstransaction(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+        setsuspendloader(false)
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -162,6 +167,7 @@ export default function ViewCurrentStockTransaction(props) {
         );
         props.history.push('/app/stocks-management/ViewStockTransaction');
       } else {
+        setsuspendloader(false)
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -361,7 +367,14 @@ export default function ViewCurrentStockTransaction(props) {
 
                 onClick={suspandDepartmenthead}
               >
-                {buttonName}
+                  {suspendloader ? (
+              <div className="d-flex justify-content-center">
+                <Loader height={18} width={18} type="Oval" color="#fff" />
+                &nbsp; Suspending
+              </div>
+            ) : (
+              buttonName
+              )}
               </Button>
 
             ) : (

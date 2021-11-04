@@ -612,7 +612,7 @@ export default function CreateCustomers({ history }) {
             >
               {loading ? (
                 <div className="d-flex justify-content-center">
-                  <Loader height={16} width={18} type="Bars" color="#fff" />
+                  <Loader height={16} width={18} type="Oval" color="#fff" />
                   &nbsp; Creating
                 </div>
               ) : (

@@ -107,6 +107,10 @@ export const GetDoctor = () => async (dispatch) => {
           type: DOCTOR_CONSTANT.UPDATE_DOCTOR_ERROR,
           payload: true,
         });
+        dispatch({
+          type: DOCTOR_CONSTANT.UPDATE_DOCTOR_LOADING,
+          payload: false,
+        });
         NotificationManager.error(res?.response_message, 'Error', 5000, '');
         return false;
       }

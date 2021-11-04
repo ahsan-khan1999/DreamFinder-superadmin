@@ -106,6 +106,10 @@ export const GetCustomer = () => async (dispatch) => {
           type: CUSTOMER_CONSTANT.UPDATE_CUSTOMER_ERROR,
           payload: true,
         });
+        dispatch({
+          type: CUSTOMER_CONSTANT.UPDATE_CUSTOMER_LOADING,
+          payload: false,
+        });
         NotificationManager.error(res?.response_message, 'Error', 5000, '');
         return false;
       }

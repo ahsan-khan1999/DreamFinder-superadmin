@@ -174,6 +174,7 @@ export default function viewCurrentDistributioncenter(props) {
       }); 
       await setDepoarray(depovalue);
     };
+  let [suspendloader, setsuspendloader] = useState(false);
   
 
     const suspandDepartmenthead = async () => {
@@ -181,10 +182,10 @@ export default function viewCurrentDistributioncenter(props) {
           let apiData = {
             uid: currentDistribution?.uid,
           };
-          console.log(apiData);
+          setsuspendloader(true);
           let res = await apiServices.suspanddistributionCentres(apiData);
-          console.log(res);
           if (res?.data?.response_code === 200) {
+            setsuspendloader(false);
             NotificationManager.success(
               'Sucessfully Activated',
               'Sucess',
@@ -194,6 +195,7 @@ export default function viewCurrentDistributioncenter(props) {
             );
             props.history.push('/app/distributioncenter-management/viewDistributioncenter');
           } else {
+            setsuspendloader(false);
             NotificationManager.error(
               'Error active This Admin',
               'Error',
@@ -206,9 +208,12 @@ export default function viewCurrentDistributioncenter(props) {
           let apiData = {
             uid: currentDistribution?.uid,
           };
+          setsuspendloader(true);
           let res = await apiServices.suspanddistributionCentres(apiData);
           console.log(res);
-          if (res?.response_code === 200) {
+          if (res?.response_code === 200) 
+          {
+            setsuspendloader(false);
             NotificationManager.success(
               'Sucessfully Suspaned',
               'Sucess',
@@ -218,6 +223,7 @@ export default function viewCurrentDistributioncenter(props) {
             );
             props.history.push('/app/distributioncenter-management/viewDistributioncenter');
           } else {
+            setsuspendloader(false);
             NotificationManager.error(
               res?.response_message,
               'Error',
@@ -479,12 +485,20 @@ export default function viewCurrentDistributioncenter(props) {
 
             {thisView ? (
               <Button
-                style={{backgroundColor:'#0066b3'}}
+              style={{backgroundColor:'#0066b3'}}
 
-                onClick={suspandDepartmenthead}
-              >
-                {buttonName}
-              </Button>
+              onClick={suspandDepartmenthead}
+            >
+              {suspendloader ? (
+              <div className="d-flex justify-content-center">
+                <Loader height={18} width={18} type="Oval" color="#fff" />
+                &nbsp; Suspending
+              </div>
+            ) : (
+              buttonName
+              )}
+              
+            </Button>
 
             ) : (
                 ""

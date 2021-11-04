@@ -96,7 +96,7 @@ export default function ViewCurrentDoctors(props) {
     (state) => state?.doctorCategoryReducer?.doctorcategory
   );
 
-  const loading = useSelector((state) => state?.doctorsReducer?.loader);
+  const loading = useSelector((state) => state?.doctorsReducer?.updatedoctorloading);
 
   const hierarchy_region = useSelector(
     (state) => state?.doctorsReducer?.hierarchy_region
@@ -226,7 +226,7 @@ export default function ViewCurrentDoctors(props) {
       );
     }
   };
-  const apiData = {
+  let apiData = {
     name: currentDoctor?.name,
     phone_number: currentDoctor?.phone_number,
     degree: currentDoctor?.degree,
@@ -247,6 +247,9 @@ export default function ViewCurrentDoctors(props) {
 
   const editData = async () => {
     console.log(apiData);
+    apiData = {
+      ...doctorCreate,
+    }
     let res = await dispatch(UpdateDoctor(apiData));
     if (res) {
       NotificationManager.success(
@@ -259,15 +262,21 @@ export default function ViewCurrentDoctors(props) {
       props.history.push('/app/doctor-management/viewDoctors');
     }
   };
+
+  let [suspendloader, setsuspendloader] = useState(false);
+
+
   const suspandDepartmenthead = async () => {
     if (currentDoctor?.status?.name === 'suspended') {
       let apiData = {
         uid: currentDoctor?.uid,
       };
       console.log(apiData);
+      setsuspendloader(true);
       let res = await apiServices.suspanddoctors(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -277,6 +286,7 @@ export default function ViewCurrentDoctors(props) {
         );
         props.history.push('/app/doctor-management/viewDoctors');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -289,9 +299,11 @@ export default function ViewCurrentDoctors(props) {
       let apiData = {
         uid: currentDoctor?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspanddoctors(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -301,6 +313,7 @@ export default function ViewCurrentDoctors(props) {
         );
         props.history.push('/app/doctor-management/viewDoctors');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -711,6 +724,7 @@ export default function ViewCurrentDoctors(props) {
                           classNamePrefix="react-select"
                           required
                           defaultValue={{
+                            label:currentDoctor?.doctor_category,
                             value:currentDoctor?.doctor_category,
                           }}
                           onChange={(e, index) => {
@@ -1069,7 +1083,15 @@ export default function ViewCurrentDoctors(props) {
               </Button>
             ) : (
                <Button style={{backgroundColor:'#0066b3'}} onClick={editData}>
-                Save
+                
+                {loading ? (
+                <div className="d-flex justify-content-center">
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Updating
+                </div> 
+              ) : (
+                'Save'
+              )}
               </Button>
             )}
 
@@ -1079,7 +1101,15 @@ export default function ViewCurrentDoctors(props) {
 
                 onClick={suspandDepartmenthead}
               >
-                {buttonName}
+             {suspendloader ? (
+              <div className="d-flex justify-content-center">
+                <Loader height={18} width={18} type="Oval" color="#fff" />
+                &nbsp; Suspending
+              </div>
+            ) : (
+              buttonName
+              )}
+
               </Button>
             ) : (
               ''

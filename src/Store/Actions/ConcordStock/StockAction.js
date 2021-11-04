@@ -107,10 +107,19 @@ export const GetStocks = () => async (dispatch) => {
           type: STOCKS_CONSTANT.UPDATE_STOCKS_ERROR,
           payload: true,
         });
+        dispatch({
+          type: STOCKS_CONSTANT.UPDATE_STOCKS_LOADING,
+          payload: false,
+        });
         NotificationManager.error(res?.response_message, 'Error', 5000, '');
         return false;
       }
-    } catch {}
+    } catch {
+      dispatch({
+        type: STOCKS_CONSTANT.UPDATE_STOCKS_LOADING,
+        payload: false,
+      });
+    }
   };
 
 

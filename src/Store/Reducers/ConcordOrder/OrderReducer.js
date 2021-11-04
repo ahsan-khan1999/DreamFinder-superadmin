@@ -3,6 +3,8 @@ import { ORDER_CONSTANTS } from '../../Constant/Constants';
 
 const initialState = {
   loading: false,
+  updatingloader: false,
+
   loader: false,
   order: [],
   usersm: [],
@@ -25,9 +27,7 @@ export const OrderReducer = (state = initialState, { type, payload }) => {
     case ORDER_CONSTANTS.ORDER_ERROR:
       return { ...state, order: payload };
 
-    case ORDER_CONSTANTS.ORDER_ERROR:
-      return { ...state, order: payload };
-
+ 
     case ORDER_CONSTANTS.ORDER_GET_USER:
       return { ...state, usersm: payload };
 

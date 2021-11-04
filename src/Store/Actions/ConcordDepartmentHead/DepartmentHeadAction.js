@@ -107,9 +107,13 @@ export const GetDepartmentHead = () => async (dispatch) => {
           type: DEPARTMENT_HEAD_CONSTANT.UPDATE_DEPARTMENT_HEAD_ERROR,
           payload: true,
         });
+        dispatch({
+          type: DEPARTMENT_HEAD_CONSTANT.UPDATE_DEPARTMENT_HEAD_LOADING,
+          payload: true,
+        });
         NotificationManager.error(res?.response_message, 'Error', 5000, '');
         return false;
       }
     } catch {}
-  };
+};
   

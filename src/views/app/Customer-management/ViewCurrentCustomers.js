@@ -77,7 +77,7 @@ export default function ViewCurrentCustomers(props) {
     })
   );
 
-  const loading = useSelector((state) => state?.customerReducer?.loader);
+  const loading = useSelector((state) => state?.customerReducer?.updatecustomerloader);
 
   const hierarchy_region = useSelector(
     (state) => state?.doctorsReducer?.hierarchy_region
@@ -155,12 +155,23 @@ export default function ViewCurrentCustomers(props) {
     uid: currentCustomer?.uid,
   };
 
+  
+
   const [CustomerCreate, setCustomerCreate] = useState(Customer_obj);
   const [specialday, setSpecialday] = useState();
   const [specialdate, setSpecialdate] = useState('');
   const [array, setArray] = useState([]);
   const [obj, setObj] = useState();
 
+  
+  var specialDay_arr = []; 
+  for(var i = 0; i < Object.keys(currentCustomer?.special_day).length; i++) {
+    var objectspecialday = {}; 
+    objectspecialday['day'] = Object.keys(currentCustomer?.special_day)[i];
+    objectspecialday['date'] = Object.values(currentCustomer?.special_day)[i];
+    specialDay_arr.push(objectspecialday);
+    }
+  
   const handleChangeToView = () => {
     props.history.push('/app/customer-management/viewCustomers');
   };
@@ -190,7 +201,7 @@ export default function ViewCurrentCustomers(props) {
       );
     }
   };
-  const apiData = {
+  let apiData = {
     name: currentCustomer?.name,
     phone_number: currentCustomer?.phone_number,
     email_address: currentCustomer?.email_address,
@@ -207,7 +218,12 @@ export default function ViewCurrentCustomers(props) {
   };
 
   const editData = async () => {
-    console.log(apiData);
+    
+    apiData = {
+      ...CustomerCreate,
+    }
+    
+
     let res = await dispatch(UpdateCustomer(apiData));
     if (res) {
       NotificationManager.success(
@@ -220,15 +236,19 @@ export default function ViewCurrentCustomers(props) {
       props.history.push('/app/customer-management/viewCustomers');
     }
   };
+  let [suspendloader, setsuspendloader] = useState(false);
+
   const suspandCustomers = async () => {
     if (currentCustomer?.status?.name === 'suspended') {
       let apiData = {
         uid: currentCustomer?.uid,
       };
       console.log(apiData);
+      setsuspendloader(true);
       let res = await apiServices.suspandcustomers(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -238,6 +258,7 @@ export default function ViewCurrentCustomers(props) {
         );
         props.history.push('/app/customer-management/viewCustomers');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -250,9 +271,11 @@ export default function ViewCurrentCustomers(props) {
       let apiData = {
         uid: currentCustomer?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspandcustomers(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -262,6 +285,7 @@ export default function ViewCurrentCustomers(props) {
         );
         props.history.push('/app/customer-management/viewCustomers');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -826,7 +850,7 @@ export default function ViewCurrentCustomers(props) {
                             </tr>
                           </thead>
                           <tbody>
-                            {array?.map((item, index) => {
+                            {specialDay_arr?.map((item, index) => {
                               return (
                                 <tr>
                                   <td>{item?.day}</td>
@@ -878,13 +902,27 @@ export default function ViewCurrentCustomers(props) {
               </Button>
             ) : (
                <Button style={{backgroundColor:'#0066b3'}} onClick={editData}>
-                Save
+              {loading ? (
+                <div className="d-flex justify-content-center">
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Updating
+                </div> 
+              ) : (
+                'Save'
+              )}
               </Button>
             )}
 
             {thisView ? (
                <Button style={{backgroundColor:'#0066b3'}} onClick={suspandCustomers}>
-                {buttonName}
+              {suspendloader ? (
+              <div className="d-flex justify-content-center">
+                <Loader height={18} width={18} type="Oval" color="#fff" />
+                &nbsp; Suspending
+              </div>
+            ) : (
+              buttonName
+              )}
               </Button>
             ) : (
               ''

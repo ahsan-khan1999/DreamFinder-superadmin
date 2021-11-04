@@ -107,6 +107,10 @@ export const GetProductCategory = () => async (dispatch) => {
           type: PRODUCT_CATEGORY_CONSTANT.UPDATE_PRODUCT_CATEGORY_ERROR,
           payload: true,
         });
+        dispatch({
+          type: PRODUCT_CATEGORY_CONSTANT.UPDATE_PRODUCT_CATEGORY_LOADING,
+          payload: false,
+        });
         NotificationManager.error(res?.response_message, 'Error', 5000, '');
         return false;
       }

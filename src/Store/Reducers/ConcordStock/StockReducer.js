@@ -9,6 +9,7 @@ import { STOCKS_CONSTANT } from '../../Constant/Constants';
 const initialState = {
   loading: false,
   loader: false,
+  updatestockloading: false,
   stock: [],
   createstock: [],
   updatestock: [],
@@ -36,7 +37,7 @@ export const StockReducer = (state = initialState, { type, payload }) => {
 
 
     case STOCKS_CONSTANT.UPDATE_STOCKS_LOADING:
-      return { ...state, updatestock: true }
+      return { ...state, updatestockloading: payload }
 
     case STOCKS_CONSTANT.UPDATE_STOCKS_SUCCESS:
       return { ...state, updatestock: payload }

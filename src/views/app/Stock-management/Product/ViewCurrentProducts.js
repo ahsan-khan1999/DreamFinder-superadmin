@@ -83,7 +83,7 @@ export default function ViewCurrentProduct(props) {
     uid: CurrentProduct?.uid
   };
 
-  const loading = useSelector((state) => state?.productReducer?.loading);
+  const loading = useSelector((state) => state?.productReducer?.updateproductloading);
   const getProductCategory = useSelector((state) => state?.productReducer?.getProductCategory);
   
   
@@ -134,6 +134,7 @@ export default function ViewCurrentProduct(props) {
   };
 
 
+  let [suspendloader, setsuspendloader] = useState(false);
 
   const suspandDepartmenthead = async () => {
     if (CurrentProduct?.status?.name === 'suspended') {
@@ -141,9 +142,11 @@ export default function ViewCurrentProduct(props) {
         uid: CurrentProduct?.uid,
       };
       console.log(apiData);
+      setsuspendloader(true);
       let res = await apiServices.suspandproducts(apiData);
       console.log(res);
       if (res?.data?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
           'Sucess',
@@ -153,6 +156,7 @@ export default function ViewCurrentProduct(props) {
         );
         props.history.push('/app/stocks-management/viewProduct');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           'Error active This Admin',
           'Error',
@@ -165,9 +169,11 @@ export default function ViewCurrentProduct(props) {
       let apiData = {
         uid: CurrentProduct?.uid,
       };
+      setsuspendloader(true);
       let res = await apiServices.suspandproducts(apiData);
       console.log(res);
       if (res?.response_code === 200) {
+        setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Suspaned',
           'Sucess',
@@ -177,6 +183,7 @@ export default function ViewCurrentProduct(props) {
         );
         props.history.push('/app/stocks-management/viewProduct');
       } else {
+        setsuspendloader(false);
         NotificationManager.error(
           res?.response_message,
           'Error',
@@ -639,8 +646,14 @@ export default function ViewCurrentProduct(props) {
               
                 onClick={editData}
               >
-              
-                Save
+               {loading ? (
+                <div className="d-flex justify-content-center">
+                  <Loader height={18} width={18} type="Oval" color="#fff" />
+                  &nbsp; Updating
+                </div> 
+              ) : (
+                'Save'
+              )}
               </Button>
             )}
 
@@ -652,7 +665,14 @@ export default function ViewCurrentProduct(props) {
 
                 onClick={suspandDepartmenthead}
               >
-                {buttonName}
+                 {suspendloader ? (
+              <div className="d-flex justify-content-center">
+                <Loader height={18} width={18} type="Oval" color="#fff" />
+                &nbsp; Suspending
+              </div>
+            ) : (
+              buttonName
+              )}
               </Button>
 
             ) : (

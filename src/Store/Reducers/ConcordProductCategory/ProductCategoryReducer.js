@@ -12,6 +12,7 @@ const initialState = {
   productcategory: [],
   createproductcategory: [],
   updateproductcategory: [],
+  updateproductcategoryloader:false,
 };
 export const ProductCategoryReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -35,7 +36,7 @@ export const ProductCategoryReducer = (state = initialState, { type, payload }) 
 
 
     case PRODUCT_CATEGORY_CONSTANT.UPDATE_PRODUCT_CATEGORY_LOADING:
-      return { ...state, updateproductcategory: true }
+      return { ...state, updateproductcategoryloader: payload }
 
     case PRODUCT_CATEGORY_CONSTANT.UPDATE_PRODUCT_CATEGORY_SUCCESS:
       return { ...state, updateproductcategory: payload }
