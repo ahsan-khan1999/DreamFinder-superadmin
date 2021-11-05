@@ -34,6 +34,21 @@ import moment from 'moment';
 
 export default function CreateOrders(props) {
 
+  const CreateOrder_obj = {
+    on_behalf_of_uid: '',
+    customer_uid: '',
+    medicines: array?.map(item => {
+      return {
+        medicine_uid: item?.medicine_uid,
+        quantity: item?.quantity
+      }
+    }),
+    payment_type: '',
+    delivery_status: 'pending',
+    payment_status: 'pending',
+    order_datetime: '',
+  };
+
 
   const [assignto, setAssginto] = useState();
   const [mpouid, setMpouid] = useState();
@@ -51,20 +66,6 @@ export default function CreateOrders(props) {
   const [array1, setArray1] = useState();
 
   
-  const CreateOrder_obj = {
-    on_behalf_of_uid: '',
-    customer_uid: '',
-    medicines: array?.map(item => {
-      return {
-        medicine_uid: item?.medicine_uid,
-        quantity: item?.quantity
-      }
-    }),
-    payment_type: '',
-    delivery_status: 'pending',
-    payment_status: 'pending',
-    order_datetime: '',
-  };
 
   
   const [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
