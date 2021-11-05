@@ -137,7 +137,7 @@ export default function CreateDirector({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -422,7 +422,6 @@ export default function CreateDirector({ history }) {
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     isMulti
-                    value={admin?.service_location_uid}
                     onChange={(e) => handleChange(e)}
                     options={option}
                   />
@@ -470,7 +469,7 @@ export default function CreateDirector({ history }) {
               </span>
 
               <span className="label">
-                <p>Add AM</p>
+                Add AM
               </span>
             </Button>
           </Form>

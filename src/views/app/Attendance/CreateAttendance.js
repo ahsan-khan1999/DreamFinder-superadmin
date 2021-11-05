@@ -49,14 +49,15 @@ const delaultOptions = [
 ];
 
 export default function CreateAttendance(props) {
+  const [imageUploadData, setImageUploadData] = useState({});
+
   const attendance_obj = {
     user_uid: '',
-    image_url: imageUploadData?.imattendance__image__url,
+    image_url: imageUploadData?.attendance__image__url,
     datetime: '',
   };
   const [attendance, setAttendance] = useState(attendance_obj);
-  const [imageUploadData, setImageUploadData] = useState({});
-  console.log(imageUploadData?.imattendance__image__url, 'test');
+  console.log(imageUploadData, 'test');
   const [director, setDirector] = useState([]);
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
@@ -194,9 +195,10 @@ export default function CreateAttendance(props) {
   };
   //   console.log(imageUploadData);
   const createAttendance = async () => {
+    console.log(attendance,"attendance");
     if (
       attendance?.datetime === '' ||
-      imageUploadData?.imattendance__image__url === undefined ||
+      imageUploadData?.attendance__image__url === undefined ||
       attendance?.user_uid === ''
     ) {
       setLoading(true);

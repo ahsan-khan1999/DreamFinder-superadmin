@@ -159,7 +159,7 @@ export default function CreateDeliveryStaff({ history }) {
       let res = await dispatch(CreateAdminAction(deliveryStaff));
       if (res) {
         NotificationManager.success(
-          'Delivery Staff Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,

@@ -67,7 +67,7 @@ export default function CreateDirector({ history }) {
     phone_number: '',
 
     role_uid: '',
-    service_location_uid: array,
+    service_location_uid: [],
   };
   const [admin, setAdmin] = useState(admin_obj);
   const [loading, setLoading] = useState(false);
@@ -123,6 +123,8 @@ export default function CreateDirector({ history }) {
       value.push(item?.key);
     });
     await setArray(value);
+    let test = { ...admin, service_location_uid: value };
+    setAdmin(test)
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
 
@@ -133,7 +135,7 @@ export default function CreateDirector({ history }) {
 
   const onAdminCreate = async () => {
     setLoading(true);
-    let test = { ...admin, service_location_uid: array };
+    // let test = { ...admin, service_location_uid: array };
 
     if (
       admin?.email_address === '' &&
@@ -157,12 +159,12 @@ export default function CreateDirector({ history }) {
     } else {
       setLoading(true);
 
-      let res = await dispatch(CreateMpoAction(test));
+      let res = await dispatch(CreateMpoAction(admin));
       // console.log(res, 'admin create res');
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -393,7 +395,6 @@ export default function CreateDirector({ history }) {
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     isMulti
-                    value={admin?.service_location_uid}
                     onChange={(e) => handleChange(e)}
                     options={option}
                   />

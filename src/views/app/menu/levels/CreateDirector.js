@@ -108,7 +108,7 @@ export default function CreateDirector({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,

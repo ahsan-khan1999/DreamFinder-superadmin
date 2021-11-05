@@ -261,7 +261,7 @@ export default function EditSampleTransaction(props) {
             <span className="bounce3" />
           </span>
           <span className="label">
-            Suspand Sample Transaction
+            Suspend Sample Transaction
           </span>
         </Button>
       </CardBody>
