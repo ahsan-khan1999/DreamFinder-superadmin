@@ -12,12 +12,7 @@ const Dashboards = React.lazy(() =>
 const Pages = React.lazy(() =>
   import(/* webpackChunkName: "pages" */ './pages')
 );
-const Orders = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Orders/orders')
-);
-const AddOrder = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Orders/AddOrder')
-);
+
   
 
 const Test = React.lazy(() =>
@@ -139,11 +134,7 @@ const ViewCurrentMedicines = React.lazy(() =>
     /* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines'
   )
 );
-const ViewCurrentOrder = React.lazy(() =>
-  import(
-    /* webpackChunkName: "components-badges" */ './Orders/viewCurrentOrder'
-  )
-);
+
 const ViewSample = React.lazy(() =>
   import(/* webpackChunkName: "components-badges" */ './Sample/ViewSample')
 );
@@ -169,6 +160,17 @@ const EditSampleTranscation = React.lazy(() =>
   )
 );
 
+const Orders = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Orders/orders')
+);
+const AddOrder = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Orders/CreateOrder')
+);
+const ViewCurrentOrder = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Orders/viewCurrentOrder'
+  )
+);
 
 // Distribution Concord --------------------------------------
 const ViewCurrentDepartmenthead = React.lazy(() =>
@@ -498,16 +500,18 @@ const App = ({ match }) => {
               path={`${match.url}/FieldWorkManagment/EditSchedule`}
               render={(props) => <EditSchedule {...props} />}
             />
-            <Route
+            {/* <Route
               path={`${match.url}/orders`}
               render={(props) => <Orders {...props} />}
-            />
+            /> */}
             <Route
               path={`${match.url}/Orders/orders`}
               render={(props) => <Orders {...props} />}
             />
+            
+            
             <Route
-              path={`${match.url}/Orders/AddOrder`}
+              path={`${match.url}/Orders/CreateOrder`}
               render={(props) => <AddOrder {...props} />}
             />
            
