@@ -63,7 +63,7 @@ export default function CreateDeliveryStaff({ history }) {
     designation: '',
 
     phone_number: '',
-    service_location_uid: array,
+    service_location_uid: [],
 
     role_uid: '',
     manager_uid: '',
@@ -125,13 +125,12 @@ export default function CreateDeliveryStaff({ history }) {
     options?.map((item, index) => {
       value.push(item?.key);
     });
-    await setArray(value);
-    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+    // await setArray(value);
+    let test = { ...deliveryStaff, service_location_uid: value };
+    await setDeliveryStaff(test);
   };
   const onAdminCreate = async () => {
-    let test = { ...deliveryStaff, service_location_uid: array };
-    setDeliveryStaff(test);
-
+  
     if (
       deliveryStaff?.email_address === '' ||
       deliveryStaff?.name === '' ||
@@ -143,8 +142,6 @@ export default function CreateDeliveryStaff({ history }) {
       deliveryStaff.manager_uid === '' ||
       deliveryStaff?.service_location_uid === []
     ) {
-      // console.log(deliveryStaff, 'at  if');
-
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
@@ -156,11 +153,10 @@ export default function CreateDeliveryStaff({ history }) {
       return;
     } else {
       // setTimeout(() => {
-      // console.log(deliveryStaff,"at  else");
 
       // }, 5000);
 
-      let res = await dispatch(CreateAdminAction(test));
+      let res = await dispatch(CreateAdminAction(deliveryStaff));
       if (res) {
         NotificationManager.success(
           'Delivery Staff Added Sucessfully',

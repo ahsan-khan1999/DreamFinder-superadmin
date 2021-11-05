@@ -64,7 +64,7 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
     manager_uid: '',
-    service_location_uid: array,
+    service_location_uid: [],
   };
   const [admin, setAdmin] = useState(admin_obj);
   const [array, setArray] = useState(admin?.service_location_uid);
@@ -103,14 +103,14 @@ export default function CreateDirector({ history }) {
     options?.map((item, index) => {
       value.push(item?.key);
     });
-    await setArray(value);
-    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+    let test = { ...admin, service_location_uid: value };
+    setAdmin(test)
   };
   const [loading, setLoading] = useState(false);
 
   const onAdminCreate = async () => {
     setLoading(true);
-    let test = { ...admin, service_location_uid: array };
+    // let test = { ...admin, service_location_uid: array };
 
     if (
       admin?.email_address === '' ||
@@ -135,7 +135,7 @@ export default function CreateDirector({ history }) {
     } else {
       setLoading(true);
 
-      let res = await dispatch(CreateSmAction(test));
+      let res = await dispatch(CreateSmAction(admin));
       // console.log(test);
       if (res) {
         NotificationManager.success(
