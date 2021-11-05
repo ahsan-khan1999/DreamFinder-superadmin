@@ -49,6 +49,11 @@ const delaultOptions = [
 ];
 
 export default function CreateAttendance(props) {
+  const attendance_obj = {
+    user_uid: '',
+    image_url: imageUploadData?.imattendance__image__url,
+    datetime: '',
+  };
   const [attendance, setAttendance] = useState(attendance_obj);
   const [imageUploadData, setImageUploadData] = useState({});
   console.log(imageUploadData?.imattendance__image__url, 'test');
@@ -137,11 +142,7 @@ export default function CreateAttendance(props) {
   //       key: item?.uid,
   //     });
   //   });
-  const attendance_obj = {
-    user_uid: '',
-    image_url: imageUploadData?.imattendance__image__url,
-    datetime: '',
-  };
+ 
   const uploadFile = async (event) => {
     setLoadingFileUpload(true);
     event.preventDefault();

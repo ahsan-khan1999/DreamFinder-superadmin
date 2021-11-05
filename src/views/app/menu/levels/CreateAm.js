@@ -52,7 +52,6 @@ export default function CreateDirector({ history }) {
   const [loading, setLoading] = useState(false);
 
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [array, setArray] = useState(admin?.service_location_uid);
   let [service_location, setService_location] = useState([]);
 
   const admin_obj = {
@@ -70,11 +69,13 @@ export default function CreateDirector({ history }) {
     manager_uid: '',
     service_location_uid: array,
   };
+  const [admin, setAdmin] = useState(admin_obj);
+
+  const [array, setArray] = useState(admin?.service_location_uid);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
-  const [admin, setAdmin] = useState(admin_obj);
 
   const readUser = () => {
     dispatch(ViewRegionalSalesManagerManagerAction());

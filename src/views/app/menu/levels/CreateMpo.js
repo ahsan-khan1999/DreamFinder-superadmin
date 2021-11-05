@@ -52,7 +52,6 @@ export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   let [service_location, setService_location] = useState([]);
 
-  const [array, setArray] = useState(admin?.service_location_uid);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -70,6 +69,9 @@ export default function CreateDirector({ history }) {
     role_uid: '',
     service_location_uid: array,
   };
+  const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+  const [array, setArray] = useState(admin?.service_location_uid);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -127,8 +129,7 @@ export default function CreateDirector({ history }) {
   am?.filter((item) =>
     amOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  const [admin, setAdmin] = useState(admin_obj);
-  const [loading, setLoading] = useState(false);
+  
 
   const onAdminCreate = async () => {
     setLoading(true);

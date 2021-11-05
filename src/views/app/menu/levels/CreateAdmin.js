@@ -59,6 +59,7 @@ export default function CreateAdmin({ history }) {
 
     role_uid: '',
   };
+  const [admin, setAdmin] = useState(admin_obj);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -85,7 +86,6 @@ export default function CreateAdmin({ history }) {
   // ))
   // const [loading, setLoading] = useState(false);
 
-  const [admin, setAdmin] = useState(admin_obj);
 
   useEffect(() => {
     // setAdmin({...admin,role_uid:user_id[0]?.key})

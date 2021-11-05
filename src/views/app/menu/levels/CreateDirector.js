@@ -57,6 +57,7 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
   };
+  const [admin, setAdmin] = useState(admin_obj);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -82,7 +83,6 @@ export default function CreateDirector({ history }) {
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
 
-  const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
     if (
       admin?.email_address === '' ||

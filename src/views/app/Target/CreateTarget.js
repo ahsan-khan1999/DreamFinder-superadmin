@@ -49,13 +49,25 @@ const delaultOptions = [
 ];
 export default function CreateTarget(props) {
   const [array, setArray] = useState([]);
-  const [target, setTarget] = useState(target_obj);
   const [loading, setLoading] = useState(false);
   const [readTarget, setReadTarget] = useState({});
 
   const [targets, setTargets] = useState([]);
   const [stocks, setStocks] = useState([]);
   const [selected, setSelected] = useState('');
+  const target_obj = {
+    assigned_to_uid: selected,
+
+    amount: '',
+    medicines: '',
+    no_orders: '',
+    no_prescriptions: '',
+    start_date: '',
+    by_customer_visits: '',
+    by_doctor_visits: '',
+    end_date: '',
+  };
+  const [target, setTarget] = useState(target_obj);
 
   const [selectedMedicine, setSelectedMedicine] = useState('');
   const sm = useSelector((state) => state?.AttendanceReducer?.sm);
@@ -188,18 +200,7 @@ export default function CreateTarget(props) {
     by_doctor_visits: '',
     end_date: '',
   };
-  const target_obj = {
-    assigned_to_uid: selected,
-
-    amount: '',
-    medicines: '',
-    no_orders: '',
-    no_prescriptions: '',
-    start_date: '',
-    by_customer_visits: '',
-    by_doctor_visits: '',
-    end_date: '',
-  };
+  
   //   console.log(target);
   const getStocks = async (uid) => {
     let token = await getToken();

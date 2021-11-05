@@ -48,7 +48,6 @@ const selectGender = [
 export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   let [service_location, setService_location] = useState([]);
-  const [array, setArray] = useState(admin?.service_location_uid);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -68,6 +67,7 @@ export default function CreateDirector({ history }) {
     service_location_uid: array,
   };
   const [admin, setAdmin] = useState(admin_obj);
+  const [array, setArray] = useState(admin?.service_location_uid);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());

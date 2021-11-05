@@ -51,7 +51,6 @@ export default function CreateDirector({ history }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   let [service_location, setService_location] = useState([]);
 
-  const [array, setArray] = useState(admin?.service_location_uid);
   const [loading, setLoading] = useState(false);
 
   const admin_obj = {
@@ -70,6 +69,9 @@ export default function CreateDirector({ history }) {
     manager_uid: '',
     service_location_uid: array,
   };
+  const [admin, setAdmin] = useState(admin_obj);
+  const [array, setArray] = useState(admin?.service_location_uid);
+
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -118,7 +120,6 @@ export default function CreateDirector({ history }) {
   service_location?.filter((item) =>
     option?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
     setLoading(true);
     let test = { ...admin, service_location_uid: array };

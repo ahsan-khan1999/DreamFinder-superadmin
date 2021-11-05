@@ -52,7 +52,6 @@ export default function CreateDeliveryStaff({ history }) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [array, setArray] = useState(deliveryStaff?.service_location_uid);
 
   const deliveryStaff_obj = {
     email_address: '',
@@ -70,6 +69,8 @@ export default function CreateDeliveryStaff({ history }) {
     manager_uid: '',
   };
   const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
+  const [array, setArray] = useState(deliveryStaff?.service_location_uid);
+
 
   let option = [];
 
@@ -160,7 +161,6 @@ export default function CreateDeliveryStaff({ history }) {
       // }, 5000);
 
       let res = await dispatch(CreateAdminAction(test));
-      console.log(test);
       if (res) {
         NotificationManager.success(
           'Delivery Staff Added Sucessfully',

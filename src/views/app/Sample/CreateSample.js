@@ -47,7 +47,10 @@ export default function CreateSample(props) {
   const [loading, setLoading] = useState(false);
 
   const [stock, setStock] = useState([]);
-
+  const sampleObj = {
+    assigned_to_uid: '',
+    medicines: [],
+  };
   const dispatch = useDispatch();
   const [sample, setSample] = useState(sampleObj);
   useEffect(() => {
@@ -94,10 +97,7 @@ export default function CreateSample(props) {
       key: item?.uid,
     })
   );
-  const sampleObj = {
-    assigned_to_uid: '',
-    medicines: [],
-  };
+ 
   const provalue = [];
   const handleChangeProduct = async (e, index) => {
     let options = e;

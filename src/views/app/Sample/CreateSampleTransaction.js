@@ -60,7 +60,10 @@ export default function CreateSampleTransaction(props) {
 
   const [stock, setStock] = useState([]);
   const [parentStock, setParentStock] = useState([]);
-
+  const sampleObj = {
+    assigned_to_uid: '',
+    medicines: [],
+  };
   const dispatch = useDispatch();
   const [sampleTransaction, setSampleTransaction] = useState(sampleObj);
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
@@ -171,10 +174,7 @@ export default function CreateSampleTransaction(props) {
     })
   );
   console.log(salesManagerOption);
-  const sampleObj = {
-    assigned_to_uid: '',
-    medicines: [],
-  };
+  
 
   const provalue = [];
   const handleChangeProduct = async (e, index) => {
