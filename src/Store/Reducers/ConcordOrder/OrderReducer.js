@@ -15,6 +15,11 @@ const initialState = {
   stockproductmedicine: [],
   staticdata: [],
   createorder: [],
+  getCustomerOrderloader:false,
+  usersmloader:false,
+  userrsmloader:false,
+  useramloader:false,
+  usermpoloader:false,
 };
 export const OrderReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -30,19 +35,38 @@ export const OrderReducer = (state = initialState, { type, payload }) => {
  
     case ORDER_CONSTANTS.ORDER_GET_USER:
       return { ...state, usersm: payload };
+      
+    case ORDER_CONSTANTS.ORDER_GET_USER_LOADER:
+      return { ...state, usersmloader: payload };
 
     case ORDER_CONSTANTS.ORDER_GET_USER_RSM:
       return { ...state, userrsm: payload };
+   
+    case ORDER_CONSTANTS.ORDER_GET_USER_RSM_LOADER:
+      return { ...state, userrsmloader: payload };
 
     case ORDER_CONSTANTS.ORDER_GET_USER_AM:
       return { ...state, useram: payload };
+    
+    case ORDER_CONSTANTS.ORDER_GET_USER_AM_LOADER:
+      return { ...state, useramloader: payload };
 
     case ORDER_CONSTANTS.ORDER_GET_USER_MPO:
       return { ...state, usermpo: payload };
 
+    case ORDER_CONSTANTS.ORDER_GET_USER_MPO_LOADER:
+      return { ...state, usermpoloader: payload };
+
+
+
     case ORDER_CONSTANTS.ORDER_GET_CUSTOMER:
       return { ...state, getCustomerOrder: payload };
 
+    case ORDER_CONSTANTS.ORDER_GET_CUSTOMER_LOADER:
+      return { ...state, getCustomerOrderloader: payload };
+
+    
+    
     case ORDER_CONSTANTS.ORDER_GET_STOCK_MEDICINE:
       return { ...state, stockproductmedicine: payload };
 

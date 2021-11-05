@@ -90,6 +90,21 @@ export default function CreateOrders(props) {
   const loading = useSelector(
     (state) => state?.orderReducer?.loader
   );
+  const getCustomerOrderloader = useSelector(
+    (state) => state?.orderReducer?.getCustomerOrderloader
+  );
+  const usersmloader = useSelector(
+    (state) => state?.orderReducer?.usersmloader
+  );
+  const userrsmloader = useSelector(
+    (state) => state?.orderReducer?.userrsmloader
+  );
+  const useramloader = useSelector(
+    (state) => state?.orderReducer?.useramloader
+  );
+  const usermpoloader = useSelector(
+    (state) => state?.orderReducer?.usermpoloader
+  );
   // const loading = true;
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   useEffect(() => {
@@ -258,6 +273,7 @@ export default function CreateOrders(props) {
                   </label>
 
                   <>
+                  
                     <Select
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
@@ -279,6 +295,11 @@ export default function CreateOrders(props) {
                   </label>
 
                   <>
+                  {userrsmloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -292,6 +313,7 @@ export default function CreateOrders(props) {
                       }}
                       options={optionrsm}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>
@@ -302,6 +324,11 @@ export default function CreateOrders(props) {
                   </label>
 
                   <>
+                  {useramloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp; 
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -314,6 +341,7 @@ export default function CreateOrders(props) {
                       }}
                       options={optionam}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>
@@ -324,6 +352,11 @@ export default function CreateOrders(props) {
                   </label>
 
                   <>
+                  {usermpoloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -343,6 +376,7 @@ export default function CreateOrders(props) {
                       }}
                       options={optionmpo}
                     />
+                    } 
                   </>
                 </FormGroup>
               </Col>
@@ -353,7 +387,11 @@ export default function CreateOrders(props) {
                   </label>
 
                   <>
-                    <Select
+                  {getCustomerOrderloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :  <Select
                       required
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
@@ -371,6 +409,9 @@ export default function CreateOrders(props) {
                       }}
                       options={optiongetcustomer}
                     />
+                 }
+                  
+                   
                   </>
                 </FormGroup>
               </Col>

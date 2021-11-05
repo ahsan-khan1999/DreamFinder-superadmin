@@ -433,10 +433,15 @@ export default function viewCurrentDistributioncenter(props) {
                       className="react-select"
                       classNamePrefix="react-select"
                       isMulti
-                      defaultValue={{
-                        label:currentDistribution.depo_name,
-                        value:currentDistribution.depo_uid
-                      }}
+                      defaultValue={currentDistribution.depomanagersSelect.map(
+                        (item) => {
+                          return {
+                            label: item?.name,
+                            value: item?.name,
+                            key: item?.uid,
+                          };
+                        }
+                      )}
                       required
                       onChange={(e, index) => {
                         handleChangeDepoManagers(e, index);

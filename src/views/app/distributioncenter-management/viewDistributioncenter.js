@@ -95,6 +95,8 @@ export default function viewDistributioncenter({ match, history }) {
        
       ),
       uid: item?.uid,
+
+      depomanagersSelect: item?.depot_managers,
     })
   );
 

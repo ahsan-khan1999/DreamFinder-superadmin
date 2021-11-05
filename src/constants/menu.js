@@ -478,14 +478,7 @@ const data = [
     icon: 'iconsminds-shopping-cart',
     label: 'menu.orders',
     to: `${adminRoot}/Orders/orders`,
-    subs: [
-      {
-        icon: 'simple-icon-check',
-         label: 'menu.viewOrders',
-        to: `${adminRoot}/Orders/orders`,
-      },
-      
-    ],
+   
   },
 
 
@@ -564,15 +557,8 @@ const data = [
     id: 'Customers',
     icon: 'iconsminds-business-man',
     label: 'Customers',
-    to: `${adminRoot}/customer-management`,
-    subs: [
-      {
-        icon: 'iconsminds-business-man',
-        label: 'Customers',
-        to: `${adminRoot}/customer-management/viewCustomers`,
-      },
-     
-    ],
+    to: `${adminRoot}/customer-management/viewCustomers`,
+    
   },
 
 

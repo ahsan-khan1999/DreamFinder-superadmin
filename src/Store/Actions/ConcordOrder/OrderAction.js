@@ -39,6 +39,31 @@ export const getUsers = (uid,user) => async (dispatch) => {
   const token = JSON.parse(localStorage.getItem("token"));
   try {
     const head = { "x-session-key": token.token, "x-session-type": token.type };
+   
+    if (user === "sm") {
+      dispatch({
+        type: ORDER_CONSTANTS.ORDER_GET_USER_LOADER,
+        payload: true,
+      });
+    }
+    else if (user === "rsm") {
+      dispatch({
+        type: ORDER_CONSTANTS.ORDER_GET_USER_RSM_LOADER,
+        payload: true,
+      });
+    }
+    else if (user === "am"){
+      dispatch({
+        type: ORDER_CONSTANTS.ORDER_GET_USER_AM_LOADER,
+        payload: true,
+      });
+    }
+    else if (user === "mpo"){
+      dispatch({
+        type: ORDER_CONSTANTS.ORDER_GET_USER_MPO_LOADER,
+        payload: true,
+      });
+    }
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/users/read/${user}?manager_uid=${uid}`,
       { headers: head }
@@ -49,12 +74,19 @@ export const getUsers = (uid,user) => async (dispatch) => {
           type: ORDER_CONSTANTS.ORDER_GET_USER,
           payload: response?.data?.response_data,
         });
-
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_LOADER,
+          payload: false,
+        });
       }
       else if (user === "rsm") {
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER_RSM,
           payload: response?.data?.response_data,
+        });
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_RSM_LOADER,
+          payload: false,
         });
       }
       else if (user === "am"){
@@ -62,11 +94,20 @@ export const getUsers = (uid,user) => async (dispatch) => {
           type: ORDER_CONSTANTS.ORDER_GET_USER_AM,
           payload: response?.data?.response_data,
         });
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_AM_LOADER,
+          payload: false,
+        });
       }
       else if (user === "mpo"){
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER_MPO,
           payload: response?.data?.response_data,
+        });
+        
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_MPO_LOADER,
+          payload: false,
         });
       }
       
@@ -74,6 +115,10 @@ export const getUsers = (uid,user) => async (dispatch) => {
         dispatch({
           type: ORDER_CONSTANTS.ORDER_GET_USER,
           payload: response?.data?.response_data,
+        });
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_USER_LOADER,
+          payload: false,
         });
       }
 
@@ -89,6 +134,10 @@ export const getCustomer = (uid) => async (dispatch) => {
   const token = JSON.parse(localStorage.getItem("token"));
   try {
     const head = { "x-session-key": token.token, "x-session-type": token.type };
+    dispatch({
+      type: ORDER_CONSTANTS.ORDER_GET_CUSTOMER_LOADER,
+      payload: true,
+    });
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/customers/read?child_uid=${uid}`,
       { headers: head }
@@ -98,8 +147,16 @@ export const getCustomer = (uid) => async (dispatch) => {
           type: ORDER_CONSTANTS.ORDER_GET_CUSTOMER,
           payload: response?.data?.response_data,
         });
+        dispatch({
+          type: ORDER_CONSTANTS.ORDER_GET_CUSTOMER_LOADER,
+          payload: false,
+        });
     }
   } catch (error) {
+    dispatch({
+      type: ORDER_CONSTANTS.ORDER_GET_CUSTOMER_LOADER,
+      payload: false,
+    });
     return "Fail";
   }
 };

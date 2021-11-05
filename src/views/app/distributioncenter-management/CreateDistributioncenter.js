@@ -106,7 +106,7 @@ export default function CreateDistributioncenter({ history }) {
     
     const onDepartHeadCreate = async () => {
       if (
-        distributioncenter_obj?.depot_managers_uid.length === 0 &&
+        distributioncenter_obj?.depot_managers_uid.length === 0 ||
         distributioncenter_obj?.areas_uid.length === 0
         ) {
           NotificationManager.error(
