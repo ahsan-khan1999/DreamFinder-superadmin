@@ -112,9 +112,9 @@ export default function EditPeriorityList(props) {
   return (
     <Card>
       <CardBody>
-        <Button 
-        style={{backgroundColor:"#0066B3"}}
-        onClick={handleBack}>Back</Button>
+        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="View Customer Priority List" />
         </CardTitle>
@@ -158,7 +158,7 @@ export default function EditPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>Customer Email Addres</Label>
-                  
+
                   <span>
                     <p>{currentList?.customer?.email_address}</p>
                   </span>
@@ -199,7 +199,14 @@ export default function EditPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>Customer Status</Label>
-                  <span style={{color:currentList?.status?.name === 'active' ? 'green' : 'red'}}>
+                  <span
+                    style={{
+                      color:
+                        currentList?.status?.name === 'active'
+                          ? 'green'
+                          : 'red',
+                    }}
+                  >
                     <p>{currentList?.customer?.status?.name?.toUpperCase()}</p>
                   </span>
                 </FormGroup>
@@ -207,20 +214,31 @@ export default function EditPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>Customer Periority List Status</Label>
-                  <span style={{color:currentList?.status?.name === 'active' ? 'green' : 'red'}}>
+                  <span
+                    style={{
+                      color:
+                        currentList?.status?.name === 'active'
+                          ? 'green'
+                          : 'red',
+                    }}
+                  >
                     <p>{currentList?.status?.name?.toUpperCase()}</p>
                   </span>
                 </FormGroup>
               </Col>
             </Row>
             {view ? (
-              <Button 
-              style={{backgroundColor:"#0066B3",marginRight:"5px"}}
-              onClick={editPeriority}>Edit Profile</Button>
+              <Button
+                style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
+                onClick={editPeriority}
+              >
+                Edit Profile
+              </Button>
             ) : (
               <Button
-              style={{backgroundColor:"#0066B3",marginRight:"5px"}}
-                className="btn btn-primary"
+                style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
+                // className="btn btn-primary"
+                disabled={loading ? true : false}
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
@@ -233,12 +251,15 @@ export default function EditPeriorityList(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                Edit
+                <span className="label">
+                  <IntlMessages id="Edit" />
+                </span>
               </Button>
             )}
             <Button
-            style={{backgroundColor:"#0066B3"}}
-              className="btn btn-primary"
+              style={{ backgroundColor: '#0066B3' }}
+              // className="btn btn-primary"
+              disabled={suspandLoading ? true : false}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 suspandLoading ? 'show-spinner' : ''
@@ -251,7 +272,9 @@ export default function EditPeriorityList(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Suspand
+              <span className="label">
+                <IntlMessages id="Suspand" />
+              </span>
             </Button>
           </Form>
         </Formik>

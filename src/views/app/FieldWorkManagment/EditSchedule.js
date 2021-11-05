@@ -209,6 +209,8 @@ export default function EditSchedule(props) {
             </Row>
             {currentItem?.approval_status !== 'approved' ? <Button
               // className="btn btn-primary"
+              disabled={loadingStatus ? true : false}
+
               style={{backgroundColor:'#0066B3',marginRight:"5px"}}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -222,11 +224,15 @@ export default function EditSchedule(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Approve Schedule
+              <span className="label">
+                <IntlMessages id="Approve Schedule" />
+              </span>
             </Button> : null}
             <Button
               // className="btn btn-primary"
               style={{backgroundColor:'#0066B3'}}
+              disabled={loadingSuspand ? true : false}
+
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loadingSuspand ? 'show-spinner' : ''
@@ -239,7 +245,9 @@ export default function EditSchedule(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Suspand Schedule
+              <span className="label">
+                <IntlMessages id="Suspand Schedule" />
+              </span>
             </Button>
           </Form>
         </Formik>

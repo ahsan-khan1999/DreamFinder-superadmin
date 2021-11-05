@@ -82,7 +82,6 @@ export default function CreateDirector({ history }) {
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
 
-
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
     if (
@@ -104,7 +103,6 @@ export default function CreateDirector({ history }) {
 
       return;
     } else {
-
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
 
@@ -292,6 +290,15 @@ export default function CreateDirector({ history }) {
                     required
                     components={{ Input: CustomSelectInput }}
                     className="react-select"
+                    defaultValue={options?.map((item) => {
+                      if (item?.value === 'admin') {
+                        return {
+                          label: item?.value,
+                          value: item?.value,
+                          key: item?.key,
+                        };
+                      }
+                    })}
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
@@ -327,9 +334,9 @@ export default function CreateDirector({ history }) {
             </Row>
 
             <Button
-              className="btn btn-primary"
-              style={{ backgroundColor: '#0066B3' }}
+              disabled={loading ? true : false}
 
+              style={{ backgroundColor: '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -342,7 +349,11 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Director
+              <span className="label">
+                <IntlMessages
+                  id="Add Director"
+                />
+              </span>
             </Button>
           </Form>
         </Formik>

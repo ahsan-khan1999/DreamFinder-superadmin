@@ -33,12 +33,11 @@ export default function EditDcp(props) {
         null,
         ''
       );
-    setLoading(false);
-
-      props.history.push('/app/FieldWorkManagment/ViewDcp');
-    }else{
       setLoading(false);
 
+      props.history.push('/app/FieldWorkManagment/ViewDcp');
+    } else {
+      setLoading(false);
     }
   };
   const handleBack = () => {
@@ -47,9 +46,15 @@ export default function EditDcp(props) {
   return (
     <Card>
       <CardBody>
-        <Button onClick={handleBack}>Back</Button>
+        <Button
+          className="btn btn-primary"
+          style={{ backgroundColor: '#0066B3' }}
+          onClick={handleBack}
+        >
+          Back
+        </Button>
         <CardTitle>
-          <IntlMessages id="View DCP" />
+          <IntlMessages id="View Daily Call Plan" />
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -146,6 +151,7 @@ export default function EditDcp(props) {
               // className="btn btn-primary"
               style={{ backgroundColor: '#0066B3' }}
               // type="submit"
+              disabled={loading ? true : false}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
@@ -157,11 +163,12 @@ export default function EditDcp(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Suspand Dcr
+              <span className="label">
+                <IntlMessages id="Suspand Dcp" />
+              </span>
             </Button>
           </Form>
         </Formik>
-        <div style={{ marginTop: '30px' }} />
       </CardBody>
     </Card>
   );

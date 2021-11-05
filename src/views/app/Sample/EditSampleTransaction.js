@@ -50,26 +50,35 @@ import { SampleReducer } from 'Store/Reducers/SampleReducer/SampleReducer';
 export default function EditSampleTransaction(props) {
   let currentTransaction = props.location.state;
   // const [loading, setLoading] = useState(false)
-  const loading = useSelector(state => state?.SampleReducer?.loading)
-  const dispatch = useDispatch()
-  
+  const loading = useSelector((state) => state?.SampleReducer?.loading);
+  const dispatch = useDispatch();
+
   const handleBack = () => {
     props.history.push('/app/Sample/ViewSampleTransaction');
   };
-  const suspandSample=async ()=>{
-      // setLoading(true)
-      let res = await dispatch(SuspandSampleTransactionAction({uid:currentTransaction?.uid}))
-      if(res){
-          NotificationManager.success("Successfully Suspanded","Success",5000,null,'')
-          props.history.push('/app/Sample/ViewSampleTransaction')
-      }else{
-
-      }
-  }
+  const suspandSample = async () => {
+    // setLoading(true)
+    let res = await dispatch(
+      SuspandSampleTransactionAction({ uid: currentTransaction?.uid })
+    );
+    if (res) {
+      NotificationManager.success(
+        'Successfully Suspanded',
+        'Success',
+        5000,
+        null,
+        ''
+      );
+      props.history.push('/app/Sample/ViewSampleTransaction');
+    } else {
+    }
+  };
   return (
     <Card>
       <CardBody>
-        <Button style={{backgroundColor:"#0066B3"}} onClick={handleBack}>Back</Button>
+        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="View Sample Transaction" />
         </CardTitle>
@@ -228,7 +237,6 @@ export default function EditSampleTransaction(props) {
                           <tr>
                             <td>{item?.medicine_name}</td>
                             <td>{item?.medicine_quantity}</td>
-
                           </tr>
                         ))}
                       </tbody>
@@ -240,13 +248,21 @@ export default function EditSampleTransaction(props) {
           </Form>
         </Formik>
         <Button
-        style={{backgroundColor:"#0066B3"}}
+          style={{ backgroundColor: '#0066B3' }}
+          disabled={loading ? true : false}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}
           onClick={suspandSample}
         >
-          Suspand Sample
+          <span className="spinner d-inline-block">
+            <span className="bounce1" />
+            <span className="bounce2" />
+            <span className="bounce3" />
+          </span>
+          <span className="label">
+            <IntlMessages id="Suspand Sample Transaction" />
+          </span>
         </Button>
       </CardBody>
     </Card>

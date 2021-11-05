@@ -31,6 +31,7 @@ import {
   VIEW_CATEGORY_CONSTANT,
   CREATE_CATEGORY__CONSTANT,
   UPDATE_CATEGORY__CONSTANT,
+  VIEW_STATIC_CONSTANT
 } from 'Store/Constant/Constants';
 import { Check_Authentication, logout } from 'Utils/auth.util';
 import { logOutUser } from '../Auth/Actions';
@@ -265,6 +266,32 @@ export const ViewRoleAction = () => async (dispatch) => {
       dispatch({
         type: VIEW_ROLE_CONSTANT.VIEW_ROLE_ERROR,
         payload: true,
+      });
+    }
+  } catch {}
+};
+
+export const ViewStaticDataAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: VIEW_STATIC_CONSTANT.VIEW_STATIC_LOADING,
+      payload: true,
+    });
+
+    let response = await apiServices.ReadStatic();
+    if (response?.data?.response_code === 200) {
+      dispatch({
+        type: VIEW_STATIC_CONSTANT.VIEW_STATIC_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: VIEW_STATIC_CONSTANT.VIEW_STATIC_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+    } else {
+      dispatch({
+        type: VIEW_STATIC_CONSTANT.VIEW_STATIC_ERROR,
+        payload: false,
       });
     }
   } catch {}

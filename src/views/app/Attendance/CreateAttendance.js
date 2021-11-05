@@ -51,10 +51,11 @@ const delaultOptions = [
 export default function CreateAttendance(props) {
   const [attendance, setAttendance] = useState(attendance_obj);
   const [imageUploadData, setImageUploadData] = useState({});
+  console.log(imageUploadData?.imattendance__image__url, 'test');
   const [director, setDirector] = useState([]);
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [loadingFileUpload, setLoadingFileUpload] = useState(false);
 
   const [file, setFile] = useState();
@@ -148,7 +149,7 @@ export default function CreateAttendance(props) {
     const authToken = JSON.parse(localStorage.getItem('token'));
 
     if (file === undefined || file === null) {
-      NotificationManager.error('Enter Details', 'Error', 5000, '');
+      NotificationManager.error('Select File', 'Error', 5000, '');
       setLoading(false);
 
       return;
@@ -193,12 +194,11 @@ export default function CreateAttendance(props) {
   //   console.log(imageUploadData);
   const createAttendance = async () => {
     if (
-      
       attendance?.datetime === '' ||
-      attendance?.image_url === '' ||
+      imageUploadData?.imattendance__image__url === undefined ||
       attendance?.user_uid === ''
     ) {
-      setLoading(true)
+      setLoading(true);
       NotificationManager.error(
         'Please Enter Details',
         'Error',
@@ -206,11 +206,11 @@ export default function CreateAttendance(props) {
         null,
         ''
       );
-      setLoading(false)
+      setLoading(false);
 
       return;
     } else {
-      setLoading(true)
+      setLoading(true);
 
       let datetimeFormat = moment(attendance?.datetime).format(
         'YYYY-MM-DD hh:mm:ss'
@@ -231,13 +231,11 @@ export default function CreateAttendance(props) {
           null,
           ''
         );
-      setLoading(false)
-
+        setLoading(false);
 
         props.history.push('/app/Attendance/ViewAttendance');
-      }else{
-      setLoading(false)
-
+      } else {
+        setLoading(false);
       }
     }
   };
@@ -865,6 +863,8 @@ export default function CreateAttendance(props) {
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
+              disabled={loading ? true : false}
+
               onClick={createAttendance}
             >
               <span className="spinner d-inline-block">
@@ -872,7 +872,9 @@ export default function CreateAttendance(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Attendance
+              <span className="label">
+                <IntlMessages id="Add Attendance" />
+              </span>
             </Buttin>
           </Form>
         </Formik>

@@ -28,7 +28,8 @@ import {
   VIEW_ROLE_CONSTANT,
   VIEW_CATEGORY_CONSTANT,
   CREATE_CATEGORY__CONSTANT,
-  UPDATE_CATEGORY__CONSTANT
+  UPDATE_CATEGORY__CONSTANT,
+  VIEW_STATIC_CONSTANT,
 } from 'Store/Constant/Constants';
 
 const initial_state = {
@@ -40,11 +41,12 @@ const initial_state = {
   areaManager: [],
   regionalSalesManager: [],
   mpo: [],
-  roles:[],
-  createUser:[],
+  roles: [],
+  createUser: [],
   loading: false,
-  loadingCreate:false,
-  updateUser:{}
+  loadingCreate: false,
+  updateUser: {},
+  staticData: {},
   // loadingUpdate:false
 };
 
@@ -199,6 +201,12 @@ export const ViewUserReducer = (state = initial_state, action) => {
     case VIEW_ROLE_CONSTANT.VIEW_ROLE_SUCCESS:
       return { ...state, roles: action.payload };
     case VIEW_ROLE_CONSTANT.VIEW_ROLE_ERROR:
+      return { ...state, loading: action.payload };
+    case VIEW_STATIC_CONSTANT.VIEW_STATIC_LOADING:
+      return { ...state, loading: action.payload };
+    case VIEW_STATIC_CONSTANT.VIEW_STATIC_SUCCESS:
+      return { ...state, staticData: action.payload };
+    case VIEW_STATIC_CONSTANT.VIEW_STATIC_ERROR:
       return { ...state, loading: action.payload };
     default:
       return { ...state };

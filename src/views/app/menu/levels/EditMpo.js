@@ -536,6 +536,7 @@ export default function EditMpo(props) {
               <Button
                 className="btn btn-primary"
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+                disabled={loading ? true : false}
 
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
@@ -549,13 +550,17 @@ export default function EditMpo(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                Save
+                <span className="label">
+                  <IntlMessages id="Save" />
+                </span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '#0066B3'}}
                 // className="btn btn-primary"
+                disabled={loading ? true : false}
+
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
@@ -567,7 +572,9 @@ export default function EditMpo(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                {buttonName}
+                <span className="label">
+                  <IntlMessages id={buttonName} />
+                </span>
               </Button>
             ) : (
               ''

@@ -165,7 +165,6 @@ export default function EditDirector(props) {
             className="btn-btn-secondary"
             onClick={handleChangeToView}
             style={{ 'background-color': '#0066B3', marginRight: '10px' }}
-
           >
             Back
           </Button>
@@ -315,7 +314,7 @@ export default function EditDirector(props) {
                     </span>
                   ) : (
                     <Input
-                    disabled
+                      disabled
                       required
                       value={admin?.phone_number}
                       type="text"
@@ -393,7 +392,6 @@ export default function EditDirector(props) {
             {thisView ? (
               <Button
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
-
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
@@ -411,6 +409,7 @@ export default function EditDirector(props) {
             ) : (
               <Button
                 // type="submit"
+                disabled={loading ? true : false}
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
@@ -423,12 +422,18 @@ export default function EditDirector(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                Save
+                <span className="label">
+                  <IntlMessages
+                    id="Save
+"
+                  />
+                </span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '#0066B3' }}
+                disabled={loading ? true : false}
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
@@ -440,7 +445,9 @@ export default function EditDirector(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                {buttonName}
+                <span className="label">
+                  <IntlMessages id={buttonName} />
+                </span>
               </Button>
             ) : (
               ''

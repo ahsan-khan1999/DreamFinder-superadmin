@@ -2172,6 +2172,8 @@ export default function EditTarget(props) {
                 // className="btn btn-primary"
                 // type="submit"
                 style={{ backgroundColor: '#0066B3' }}
+              disabled={loading ? true : false}
+
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
                 }`}
@@ -2183,7 +2185,10 @@ export default function EditTarget(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                save
+                <span className="label">
+                <IntlMessages id="Save" />
+              </span>
+                
               </Button>
             )}
           </Form>

@@ -49,7 +49,6 @@ export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   let [service_location, setService_location] = useState([]);
   const [array, setArray] = useState(admin?.service_location_uid);
-  const [admin, setAdmin] = useState(admin_obj);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -68,6 +67,7 @@ export default function CreateDirector({ history }) {
     manager_uid: '',
     service_location_uid: array,
   };
+  const [admin, setAdmin] = useState(admin_obj);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -113,13 +113,14 @@ export default function CreateDirector({ history }) {
     let test = { ...admin, service_location_uid: array };
 
     if (
-      admin?.email_address === '' &&
-      admin?.name === '' &&
-      admin?.password === '' &&
-      admin?.gender === '' &&
-      admin?.phone_number === '' &&
-      admin?.designation === '' &&
-      admin.role_uid === ''
+      admin?.email_address === '' ||
+      admin?.name === '' ||
+      admin?.password === '' ||
+      admin?.gender === '' ||
+      admin?.phone_number === '' ||
+      admin?.designation === '' ||
+      admin.role_uid === '' ||
+      admin?.service_location_uid === []
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -397,6 +398,8 @@ export default function CreateDirector({ history }) {
 
             <Button
               // className="btn btn-primary"
+              disabled={loading ? true : false}
+
               style={{ backgroundColor: '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -410,7 +413,9 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add SM
+              <span className="label">
+                <IntlMessages id="Add SM" />
+              </span>
             </Button>
           </Form>
         </Formik>

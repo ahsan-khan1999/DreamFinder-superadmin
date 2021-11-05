@@ -567,7 +567,9 @@ export default function EditRsm(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                // className="btn btn-primary"
+                disabled={loading ? true : false}
+
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
@@ -581,13 +583,17 @@ export default function EditRsm(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                Save
+                <span className="label">
+                  <IntlMessages id="Save" />
+                </span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
+                disabled={loading ? true : false}
+
                 className={`btn-shadow btn-multiple-state ${
                   suspandLoading ? 'show-spinner' : ''
                 }`}
@@ -601,7 +607,9 @@ export default function EditRsm(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                {buttonName}
+                <span className="label">
+                  <IntlMessages id={buttonName} />
+                </span>
               </Button>
             ) : (
               ''

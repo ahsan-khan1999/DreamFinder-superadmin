@@ -515,7 +515,7 @@ const data = [
       {
         icon: 'simple-icon-check',
 
-        label: 'View Dcp',
+        label: 'View Daily Call Plan',
         to: `${adminRoot}/FieldWorkManagment/ViewDcp`,
       },
       {
@@ -527,7 +527,7 @@ const data = [
       {
         icon: 'simple-icon-check',
 
-        label: 'View Dcr',
+        label: 'View Daily Call Record',
         to: `${adminRoot}/FieldWorkManagment/ViewDcr`,
       },
     ],
@@ -563,7 +563,7 @@ const data = [
   {
     id: 'Periority List',
     icon: 'simple-icon-list',
-    label: 'Periority List',
+    label: 'Priority List',
     to: `${adminRoot}/PeriorityList`,
     subs: [
       {

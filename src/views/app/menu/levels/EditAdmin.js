@@ -124,10 +124,9 @@ export default function EditAdmin(props) {
           ''
         );
         setLoadingSuspand(false);
-
       }
     } else {
-    setLoadingSuspand(true);
+      setLoadingSuspand(true);
 
       let apiData = {
         uid: currentUser?.uid,
@@ -141,7 +140,7 @@ export default function EditAdmin(props) {
           null,
           ''
         );
-    setLoadingSuspand(false);
+        setLoadingSuspand(false);
 
         props.history.push('/app/menu/levels/viewAdmin');
       } else {
@@ -152,8 +151,7 @@ export default function EditAdmin(props) {
           null,
           ''
         );
-    setLoadingSuspand(false);
-
+        setLoadingSuspand(false);
       }
     }
 
@@ -415,7 +413,8 @@ export default function EditAdmin(props) {
               </Button>
             ) : (
               <Button
-                className="btn btn-primary"
+                // className="btn btn-primary"
+                disabled={loading ? true : false}
                 style={{ backgroundColor: '#0066B3' }}
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
@@ -429,12 +428,18 @@ export default function EditAdmin(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                Save
+                <span>
+
+                <IntlMessages
+                  id="Save"
+                />
+                </span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '#0066B3', marginLeft: '5px' }}
+                disabled={loading ? true : false}
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
                 }`}
@@ -446,7 +451,9 @@ export default function EditAdmin(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                {buttonName}
+                <span>
+                  <IntlMessages id={buttonName} />
+                </span>
               </Button>
             ) : (
               ''

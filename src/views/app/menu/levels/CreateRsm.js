@@ -417,6 +417,8 @@ export default function CreateDirector({ history }) {
             <Button
               // className="btn btn-primary"
               // type="submit"
+              disabled={loading ? true : false}
+
               style={{ backgroundColor: '#0066B3' }}
 
               className={`btn-shadow btn-multiple-state ${
@@ -430,7 +432,12 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add RSM
+              
+
+              <span className="label">
+                <IntlMessages id="Add RSM" />
+              </span>
+              
             </Button>
           </Form>
         </Formik>

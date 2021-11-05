@@ -280,17 +280,24 @@ export default function CreateSample(props) {
         </Formik>
         <Button
           style={{ backgroundColor: '#0066B3' }}
+          disabled={loading ? true : false}
+
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}
           onClick={AddSample}
         >
-           <span className="spinner d-inline-block">
-                <span className="bounce1" />
-                <span className="bounce2" />
-                <span className="bounce3" />
-              </span>
-          Add Sample
+          <span className="spinner d-inline-block">
+            <span className="bounce1" />
+            <span className="bounce2" />
+            <span className="bounce3" />
+          </span>
+          <span className="label">
+            <IntlMessages
+              id="Add Sample
+"
+            />
+          </span>
         </Button>
       </CardBody>
     </Card>

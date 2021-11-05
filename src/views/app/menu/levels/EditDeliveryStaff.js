@@ -591,6 +591,8 @@ export default function EditDeliveryStaff(props) {
 
                 style={{ marginRight: '0px', backgroundColor: '#0066B3' }}
                 // type="submit"
+                disabled={loading ? true : false}
+
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
                 }`}
@@ -602,13 +604,17 @@ export default function EditDeliveryStaff(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                Save
+                <span className="label">
+                  <IntlMessages id="Save" />
+                </span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
+                disabled={loading ? true : false}
+
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
@@ -619,7 +625,9 @@ export default function EditDeliveryStaff(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                {buttonName}
+                <span className="label">
+                  <IntlMessages id={buttonName} />
+                </span>
               </Button>
             ) : (
               ''

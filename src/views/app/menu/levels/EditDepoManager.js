@@ -37,7 +37,7 @@ export default function EditDepoManager(props) {
 
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [buttonName, setButtonName] = useState('')
+  const [buttonName, setButtonName] = useState('');
   console.log(currentUser);
   const admin_obj = {
     email_address: currentUser?.email_address,
@@ -93,7 +93,7 @@ export default function EditDepoManager(props) {
     }
   };
   const suspandAdmin = async () => {
-    setSoadingSuspand(true)
+    setSoadingSuspand(true);
     if (currentUser?.status?.name === 'suspended') {
       let apiData = {
         uid: currentUser?.uid,
@@ -108,11 +108,11 @@ export default function EditDepoManager(props) {
           null,
           ''
         );
-    setSoadingSuspand(false)
+        setSoadingSuspand(false);
 
         props.history.push('/app/menu/levels/ViewDepoManager');
       } else {
-    setSoadingSuspand(true)
+        setSoadingSuspand(true);
 
         NotificationManager.error(
           'Error active This Admin',
@@ -121,12 +121,10 @@ export default function EditDepoManager(props) {
           null,
           ''
         );
-    setSoadingSuspand(false)
-
+        setSoadingSuspand(false);
       }
-
     } else {
-    setSoadingSuspand(true)
+      setSoadingSuspand(true);
 
       let apiData = {
         uid: currentUser?.uid,
@@ -141,7 +139,7 @@ export default function EditDepoManager(props) {
           null,
           ''
         );
-    setSoadingSuspand(false)
+        setSoadingSuspand(false);
 
         props.history.push('/app/menu/levels/ViewDepoManager');
       } else {
@@ -153,8 +151,7 @@ export default function EditDepoManager(props) {
           ''
         );
       }
-    setSoadingSuspand(false)
-
+      setSoadingSuspand(false);
     }
     //  setStatusUpdate()
 
@@ -214,7 +211,7 @@ export default function EditDepoManager(props) {
                     </span>
                   ) : (
                     <Input
-                    disabled
+                      disabled
                       required
                       value={admin.email_address}
                       className="form-control"
@@ -377,9 +374,9 @@ export default function EditDepoManager(props) {
                       name="form-field-name-gender"
                       //   defaultValue={}
                       defaultValue={{
-                        label:currentUser?.role?.name,
-                        value:currentUser?.role?.name,
-                        id:currentUser?.role?.uid
+                        label: currentUser?.role?.name,
+                        value: currentUser?.role?.name,
+                        id: currentUser?.role?.uid,
                       }}
                       // value={gender}
 
@@ -395,8 +392,7 @@ export default function EditDepoManager(props) {
 
             {thisView ? (
               <Button
-              style={{ 'background-color': '#0066B3', marginRight: '5px' }}
-
+                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
                 // type="submit"
                 // className={`btn-shadow btn-multiple-state ${
@@ -415,7 +411,7 @@ export default function EditDepoManager(props) {
             ) : (
               <Button
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
-
+                disabled={loading ? true : false}
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
@@ -428,25 +424,30 @@ export default function EditDepoManager(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                Save
+                <span className="label">
+                  <IntlMessages id="Save" />
+                </span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
+                disabled={loading ? true : false}
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
                 onClick={suspandAdmin}
-                
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                {buttonName}
+                <span className="label">
+                  <IntlMessages id={buttonName} />
+                </span>
+                {/* {buttonName} */}
               </Button>
             ) : (
               ''

@@ -45,21 +45,34 @@ import {
   ViewSampleAction,
 } from 'Store/Actions/SampleAction/SampleAction';
 import { SampleReducer } from 'Store/Reducers/SampleReducer/SampleReducer';
+const delaultOptions = [
+  { label: 'Director', value: 'Director', key: 1 },
+  { label: 'SM', value: 'SM', key: 2 },
+  { label: 'RSM', value: 'RSM', key: 3 },
 
+  { label: 'AM', value: 'AM', key: 4 },
+  { label: 'MPO', value: 'MPO', key: 5 },
+];
 export default function CreateSampleTransaction(props) {
   const [array, setArray] = useState([]);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState('');
 
   const [stock, setStock] = useState([]);
+  const [parentStock, setParentStock] = useState([]);
 
   const dispatch = useDispatch();
   const [sampleTransaction, setSampleTransaction] = useState(sampleObj);
+  const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
+  const am = useSelector((state) => state?.AttendanceReducer?.am);
+  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
   useEffect(() => {
     dispatch(ViewDirectorAction());
     dispatch(ViewSampleAction());
+    dispatch(ViewSalesManagerManagerAction());
   }, []);
   const sample = useSelector((state) => state?.SampleReducer?.sample);
-  const loading = useSelector((state) => state?.SampleReducer?.loading);
+  // const loading = useSelector((state) => state?.SampleReducer?.loading);
 
   // console.log(sample);
   let sampleOptions = [];
@@ -87,7 +100,59 @@ export default function CreateSampleTransaction(props) {
 
     setStock(response?.data?.response_data);
   };
-  console.log(stock,"stock is here");
+
+  const getStockFromParent = async (uid) => {
+    let token = await getToken();
+    const response = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/samples/read?assigned_to_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+
+    setParentStock(response?.data?.response_data);
+  };
+  console.log(parentStock,"parent stock");
+let medicineOptionFromParentSample = []
+parentStock?.map((item)=>{
+  item?.medicines?.map((item_) => {
+    medicineOptionFromParentSample.push({
+      label:item_?.medicine_name,
+      value:item_?.stock_uid,
+      key:item_?.medicine_quantity
+    })
+  })
+  
+})
+console.log(medicineOptionFromParentSample,"options");
+  let areaManagerOption = [];
+  am?.map((item) =>
+    areaManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  let regionalSalesManagerOption = [];
+  rsm?.map((item) =>
+    regionalSalesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  let mpoOption = [];
+  mpo?.map((item) =>
+    mpoOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  console.log(parentStock, 'stock is here');
   const director = useSelector((state) => state?.ViewUserReducer?.director);
   let directorOption = [];
   director?.map((item) =>
@@ -97,7 +162,7 @@ export default function CreateSampleTransaction(props) {
       key: item?.uid,
     })
   );
-  const sm = useSelector((state) => state?.AttendanceReducer?.sm);
+  const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
   let salesManagerOption = [];
   sm?.map((item) =>
     salesManagerOption?.push({
@@ -106,8 +171,9 @@ export default function CreateSampleTransaction(props) {
       key: item?.uid,
     })
   );
+  console.log(salesManagerOption);
   const sampleObj = {
-    sample_uid: '',
+    assigned_to_uid: '',
     medicines: [],
   };
 
@@ -145,20 +211,56 @@ export default function CreateSampleTransaction(props) {
     });
   };
   const AddSampleTransaction = async () => {
-    let res = await dispatch(CreateSampleTransactionAction(sampleTransaction));
-    if (res) {
-      NotificationManager.success(
-        'Successfully Created',
-        'Success',
+    console.log(sampleTransaction, 'sample');
+    if (sampleTransaction === undefined || !('medicines' in sampleTransaction)) {
+      setLoading(true);
+      NotificationManager.error(
+        'Please Enter Details',
+        'Error',
         5000,
         null,
         ''
       );
+      setLoading(false);
 
-      props.history.push('/app/Sample/ViewSampleTransaction');
+      return;
     } else {
+      if (sampleTransaction?.medicines?.length !== 0) {
+        setLoading(true);
+
+        let res = await dispatch(
+          CreateSampleTransactionAction(sampleTransaction)
+        );
+        if (res) {
+          NotificationManager.success(
+            'Successfully Created',
+            'Success',
+            5000,
+            null,
+            ''
+          );
+          setLoading(false);
+
+          props.history.push('/app/Sample/ViewSampleTransaction');
+        } else {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+
+        NotificationManager.error('Enter Details ', 'ERROR', 5000, null, '');
+      }
     }
   };
+
+  const test = () =>{
+    console.log(sampleTransaction,"sa,mple");
+    if('medicines' in sampleTransaction){
+      alert("test if")
+    }else{
+      alert("else")
+    }
+  }
 
   let [option, setOption] = useState('');
   const getSample = (uid) => {
@@ -173,14 +275,14 @@ export default function CreateSampleTransaction(props) {
       )
     );
   };
-  let medicineOptionsFromStock = []
-  stock?.map((item) => (
+  let medicineOptionsFromStock = [];
+  stock?.map((item) =>
     medicineOptionsFromStock.push({
-      label:item?.product?.name,
-      value:item?.uid,
-      key:item?.quantity
+      label: item?.product?.name,
+      value: item?.uid,
+      key: item?.quantity,
     })
-  ))
+  );
   console.log(option, 'option');
   let filterOption = [];
 
@@ -205,72 +307,370 @@ export default function CreateSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Sample TO create Transaction" />
+                    <IntlMessages id="Select to Whom You Want to Assign" />
                   </Label>
 
                   <Select
                     required
+                    isDisabled={selected === '' ? false : true}
                     components={{ Input: CustomSelectInput }}
                     className="react-select"
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
-                    onChange={async (val) => {
-                      setSampleTransaction({
-                        // ...sampleTransaction,
-                        sample_uid: val.key,
-                      });
-
-                      getSample(val.key);
+                    onChange={(val) => {
+                      setSelected(val);
                     }}
-                    options={sampleOptions}
+                    options={delaultOptions}
                   />
                 </FormGroup>
               </Col>
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Sales Manager" />
-                  </Label>
+              {selected?.value === 'SM' ? (
+                <>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Sales Manager" />
+                      </Label>
 
-                  <Select
-                    required
-                    components={{ Input: CustomSelectInput }}
-                    className="react-select"
-                    classNamePrefix="react-select"
-                    name="form-field-name-gender"
-                    onChange={async (val) => {
-                      setSampleTransaction({
-                        ...sample,
-                        assigned_to_uid: val?.key,
-                      });
-                      getStocksMedicine(val.key);
-                      //   setTimeout(async() => {
-                      //     await console.log(targets[0]?.start_date);
-                      //   }, 3000);
-                    }}
-                    options={salesManagerOption}
-                  />
-                </FormGroup>
-              </Col> */}
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        onChange={async (val) => {
+                          // getSample(val.key);
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>Select Medicine</Label>
-                  <Select
-                    cacheOptions
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                    isMulti
-                    // value={admin?.service_location_uid}
-                    onChange={(val, index) => {
-                      handleChangeProduct(val, index);
+                          setSampleTransaction({
+                            ...sampleTransaction,
+                            assigned_to_uid: val?.key,
+                          });
+                          getStocksMedicine(val.key);
+                          //   setTimeout(async() => {
+                          //     await console.log(targets[0]?.start_date);
+                          //   }, 3000);
+                        }}
+                        options={salesManagerOption}
+                      />
+                    </FormGroup>
+                  </Col>
 
-                    
-                    }}
-                    options={medicineOptionsFromStock}
-                  />
-                </FormGroup>
-              </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Select Medicine</Label>
+                      <Select
+                        cacheOptions
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        isMulti
+                        // value={admin?.service_location_uid}
+                        onChange={(val, index) => {
+                          handleChangeProduct(val, index);
+                        }}
+                        options={medicineOptionsFromStock}
+                      />
+                    </FormGroup>
+                  </Col>
+                </>
+              ) : selected?.value === 'RSM' ? (
+                <>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Sales Manager" />
+                      </Label>
+
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        onChange={async (val) => {
+                          // getSample(val.key);
+                          dispatch(getUsers(val.key, 'rsm'));
+
+                          getStockFromParent(val?.key);
+                          //   setTimeout(async() => {
+                          //     await console.log(targets[0]?.start_date);
+                          //   }, 3000);
+                        }}
+                        options={salesManagerOption}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Regional Sales Manager" />
+                      </Label>
+
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        onChange={async (val) => {
+                          setSampleTransaction({
+                            ...sampleTransaction,
+                            assigned_to_uid: val?.key,
+                          });
+                          // getSample(val.key);
+                          // dispatch(getUsers(val.key, 'sm'));
+
+                          // getStockFromParent(val?.key)
+                          //   setTimeout(async() => {
+                          //     await console.log(targets[0]?.start_date);
+                          //   }, 3000);
+                        }}
+                        options={regionalSalesManagerOption}
+                      />
+                    </FormGroup>
+                  </Col>
+
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Select Medicine</Label>
+                      <Select
+                        cacheOptions
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        isMulti
+                        // value={admin?.service_location_uid}
+                        onChange={(val, index) => {
+                          handleChangeProduct(val, index);
+                        }}
+                        options={medicineOptionFromParentSample}
+                      />
+                    </FormGroup>
+                  </Col>
+                </>
+              ) : selected?.value === 'AM' ? (
+                <>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Sales Manager" />
+                      </Label>
+
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        onChange={async (val) => {
+                          // getSample(val.key);
+                          dispatch(getUsers(val.key, 'rsm'));
+
+                          //   setTimeout(async() => {
+                          //     await console.log(targets[0]?.start_date);
+                          //   }, 3000);
+                        }}
+                        options={salesManagerOption}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Regional Sales Manager" />
+                      </Label>
+
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        onChange={async (val) => {
+                          
+                          // getSample(val.key);
+                          dispatch(getUsers(val.key, 'am'));
+                          getStockFromParent(val?.key);
+
+                          // getStockFromParent(val?.key)
+                          //   setTimeout(async() => {
+                          //     await console.log(targets[0]?.start_date);
+                          //   }, 3000);
+                        }}
+                        options={regionalSalesManagerOption}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Area Manager" />
+                      </Label>
+
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        onChange={async (val) => {
+                          setSampleTransaction({
+                            ...sampleTransaction,
+                            assigned_to_uid: val?.key,
+                          });
+                          // getSample(val.key);
+                          // dispatch(getUsers(val.key, 'sm'));
+
+                          // getStockFromParent(val?.key)
+                          //   setTimeout(async() => {
+                          //     await console.log(targets[0]?.start_date);
+                          //   }, 3000);
+                        }}
+                        options={areaManagerOption}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Select Medicine</Label>
+                      <Select
+                        cacheOptions
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        isMulti
+                        // value={admin?.service_location_uid}
+                        onChange={(val, index) => {
+                          handleChangeProduct(val, index);
+                        }}
+                        options={medicineOptionFromParentSample}
+                      />
+                    </FormGroup>
+                  </Col>
+                </>
+              ) : selected?.value === 'MPO' ? (
+                <>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Select Sales Manager" />
+                    </Label>
+
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        // getSample(val.key);
+                        dispatch(getUsers(val.key, 'rsm'));
+
+                        //   setTimeout(async() => {
+                        //     await console.log(targets[0]?.start_date);
+                        //   }, 3000);
+                      }}
+                      options={salesManagerOption}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Select Regional Sales Manager" />
+                    </Label>
+
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        
+                        // getSample(val.key);
+                        dispatch(getUsers(val.key, 'am'));
+
+                        // getStockFromParent(val?.key)
+                        //   setTimeout(async() => {
+                        //     await console.log(targets[0]?.start_date);
+                        //   }, 3000);
+                      }}
+                      options={regionalSalesManagerOption}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Select Area Manager" />
+                    </Label>
+
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        
+                        // getSample(val.key);
+                        dispatch(getUsers(val.key, 'mpo'));
+                        getStockFromParent(val?.key);
+
+                        // getStockFromParent(val?.key)
+                        //   setTimeout(async() => {
+                        //     await console.log(targets[0]?.start_date);
+                        //   }, 3000);
+                      }}
+                      options={areaManagerOption}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Select MPO" />
+                    </Label>
+
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        setSampleTransaction({
+                          ...sampleTransaction,
+                          assigned_to_uid: val?.key,
+                        });
+                        // getSample(val.key);
+                        // dispatch(getUsers(val.key, 'sm'));
+
+                        // getStockFromParent(val?.key)
+                        //   setTimeout(async() => {
+                        //     await console.log(targets[0]?.start_date);
+                        //   }, 3000);
+                      }}
+                      options={mpoOption}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>Select Medicine</Label>
+                    <Select
+                      cacheOptions
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      // value={admin?.service_location_uid}
+                      onChange={(val, index) => {
+                        handleChangeProduct(val, index);
+                      }}
+                      options={medicineOptionFromParentSample}
+                    />
+                  </FormGroup>
+                </Col>
+              </>
+              ) : null}
             </Row>
             <Row>
               <Col xl={12}>
@@ -323,12 +723,23 @@ export default function CreateSampleTransaction(props) {
         </Formik>
         <Button
           style={{ backgroundColor: '#0066B3' }}
+          disabled={loading ? true : false}
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}
           onClick={AddSampleTransaction}
         >
-          Add Sample
+          <span className="spinner d-inline-block">
+            <span className="bounce1" />
+            <span className="bounce2" />
+            <span className="bounce3" />
+          </span>
+          <span className="label">
+            <IntlMessages
+              id="Add Sample Transaction
+"
+            />
+          </span>
         </Button>
       </CardBody>
     </Card>

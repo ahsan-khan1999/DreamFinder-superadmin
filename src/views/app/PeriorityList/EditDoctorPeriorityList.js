@@ -108,15 +108,15 @@ export default function EditDoctorPeriorityList(props) {
       setsuspandLoading(false);
     }
   };
-  const handleBack = () =>{
-      props.history.push('/app/PeriorityList/ViewPeriorityListDoctor')
-  }
+  const handleBack = () => {
+    props.history.push('/app/PeriorityList/ViewPeriorityListDoctor');
+  };
   return (
     <Card>
       <CardBody>
-          <Button 
-          style={{backgroundColor:"#0066B3"}}
-          onClick={handleBack}>Back</Button>
+        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="View Doctor Priority List" />
         </CardTitle>
@@ -160,7 +160,7 @@ export default function EditDoctorPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>Doctor Category</Label>
-                  
+
                   <span>
                     <p>{currentList?.doctor?.doctor_category?.name}</p>
                   </span>
@@ -201,7 +201,14 @@ export default function EditDoctorPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>Doctor Status</Label>
-                  <span style={{color:currentList?.doctor?.status?.name === 'active' ? 'green' : 'red'}}>
+                  <span
+                    style={{
+                      color:
+                        currentList?.doctor?.status?.name === 'active'
+                          ? 'green'
+                          : 'red',
+                    }}
+                  >
                     <p>{currentList?.doctor?.status?.name?.toUpperCase()}</p>
                   </span>
                 </FormGroup>
@@ -209,23 +216,33 @@ export default function EditDoctorPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>Doctor Periority List Status</Label>
-                  <span style={{color:currentList?.status?.name === 'active' ? 'green' : 'red'}}>
+                  <span
+                    style={{
+                      color:
+                        currentList?.status?.name === 'active'
+                          ? 'green'
+                          : 'red',
+                    }}
+                  >
                     <p>{currentList?.status?.name?.toUpperCase()}</p>
                   </span>
                 </FormGroup>
               </Col>
             </Row>
             {view ? (
-              
               <Button
-              style={{backgroundColor:"#0066B3",marginRight:"5px"}}
-               onClick={editPeriority}>Edit Profile</Button>
+                style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
+                onClick={editPeriority}
+              >
+                Edit Profile
+              </Button>
             ) : (
               <>
                 <Button
                   // className="btn btn-primary"
-                  style={{backgroundColor:"#0066B3",marginRight:"5px"}}
+                  style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
                   // type="submit"
+                  disabled={loading ? true : false}
                   className={`btn-shadow btn-multiple-state ${
                     loading ? 'show-spinner' : ''
                   }`}
@@ -237,28 +254,32 @@ export default function EditDoctorPeriorityList(props) {
                     <span className="bounce2" />
                     <span className="bounce3" />
                   </span>
-                  Edit
+                  <span className="label">
+                    <IntlMessages id="Edit" />
+                  </span>
                 </Button>
-                
               </>
             )}
             <Button
-                  // className="btn btn-primary"
-                  style={{backgroundColor:"#0066B3"}}
-                  // type="submit"
-                  className={`btn-shadow btn-multiple-state ${
-                    suspandloading ? 'show-spinner' : ''
-                  }`}
-                  size="sm"
-                  onClick={suspand}
-                >
-                  <span className="spinner d-inline-block">
-                    <span className="bounce1" />
-                    <span className="bounce2" />
-                    <span className="bounce3" />
-                  </span>
-                  Suspand
-                </Button>
+              // className="btn btn-primary"
+              disabled={suspandloading ? true : false}
+              style={{ backgroundColor: '#0066B3' }}
+              // type="submit"
+              className={`btn-shadow btn-multiple-state ${
+                suspandloading ? 'show-spinner' : ''
+              }`}
+              size="sm"
+              onClick={suspand}
+            >
+              <span className="spinner d-inline-block">
+                <span className="bounce1" />
+                <span className="bounce2" />
+                <span className="bounce3" />
+              </span>
+              <span className="label">
+                <IntlMessages id="Suspand" />
+              </span>
+            </Button>
           </Form>
         </Formik>
       </CardBody>

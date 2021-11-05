@@ -447,6 +447,8 @@ export default function UpdateSample(props) {
         )}
         <Button
           style={{ backgroundColor: '#0066B3' }}
+          disabled={loadingSuspand ? true : false}
+
           className={`btn-shadow btn-multiple-state ${
             loadingSuspand ? 'show-spinner' : ''
           }`}
@@ -457,7 +459,9 @@ export default function UpdateSample(props) {
             <span className="bounce2" />
             <span className="bounce3" />
           </span>
-          Suspand Sample
+          <span className="label">
+            <IntlMessages id="Suspand Sample" />
+          </span>
         </Button>
       </CardBody>
     </Card>

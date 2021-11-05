@@ -45,12 +45,13 @@ export default function EditDcr(props) {
     <Card>
       <CardBody>
         <Button
+        className="btn btn-primary"
         style={{backgroundColor:"#0066B3"}}
         onClick={handleBack} style={{ marginBottom: '10px' }}>
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View User" />
+          <IntlMessages id="Daily Call Record" />
         </CardTitle>
 
         <div style={{ marginBottom: '15px' }}></div>
@@ -233,6 +234,8 @@ export default function EditDcr(props) {
             <Button
             style={{backgroundColor:"#0066B3"}}
               // className="btn btn-primary"
+              disabled={loading ? true : false}
+
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -245,7 +248,9 @@ export default function EditDcr(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Suspand Dcr
+              <span className="label">
+                <IntlMessages id="Suspand Dcr" />
+              </span>
             </Button>
           </Form>
         </Formik>

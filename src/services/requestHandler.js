@@ -111,9 +111,11 @@ const SERVICE_URLS = {
   suspandSampleTransaction: 'sample_transactions/suspend',
   updateRegion:'region-classifications/suspend',
   addregion:'region-classifications/create',
-  editRegion:'region-classifications/update'
+  editRegion:'region-classifications/update',
+  readStatic:'static-data'
 };
-
+const ReadStatic = () =>
+  get(SERVICE_URLS.readStatic, {}, { feature: featureConstants.static });
 const CreateSample = (data) =>
   post(SERVICE_URLS.createSample, data, { feature: featureConstants.static });
 const UpdateSample = (data) =>
@@ -699,6 +701,7 @@ const apiServices = {
   SuapandSample,
   CreateSampleTransaction,
   ReadSampleTransaction,
-  SuspandSampleTransaction
+  SuspandSampleTransaction,
+  ReadStatic
 };
 export default apiServices;

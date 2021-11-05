@@ -51,7 +51,6 @@ export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  const [admin, setAdmin] = useState(admin_obj);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [array, setArray] = useState(admin?.service_location_uid);
   let [service_location, setService_location] = useState([]);
@@ -75,6 +74,8 @@ export default function CreateDirector({ history }) {
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
+  const [admin, setAdmin] = useState(admin_obj);
+
   const readUser = () => {
     dispatch(ViewRegionalSalesManagerManagerAction());
     // dispatch(ViewSalesManagerManagerAction());
@@ -109,14 +110,15 @@ export default function CreateDirector({ history }) {
 
     // let test=
     if (
-      admin?.email_address === '' &&
-      admin?.name === '' &&
-      admin?.password === '' &&
-      admin?.gender === '' &&
-      admin?.phone_number === '' &&
-      admin?.designation === '' &&
-      admin?.role_uid === '' &&
-      admin?.manager_uid === ''
+      admin?.email_address === '' ||
+      admin?.name === '' ||
+      admin?.password === '' ||
+      admin?.gender === '' ||
+      admin?.phone_number === '' ||
+      admin?.designation === '' ||
+      admin?.role_uid === '' ||
+      admin?.manager_uid === '' ||
+      admin?.service_location_uid === []
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -154,10 +156,8 @@ export default function CreateDirector({ history }) {
         setLoading(false);
       }
       setLoading(false);
-
     }
     setLoading(false);
-
   };
   const getServiceLocationUid = async (uid) => {
     let token = await getToken();
@@ -415,7 +415,6 @@ export default function CreateDirector({ history }) {
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select Area" />
-
                   </Label>
                   <Select
                     cacheOptions
@@ -453,6 +452,8 @@ export default function CreateDirector({ history }) {
 
             <Button
               // className="btn btn-primary"
+              disabled={loading ? true : false}
+
               style={{ 'background-color': '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -466,7 +467,10 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Area Manager
+
+              <span className="label">
+                <IntlMessages id="Add AM" />
+              </span>
             </Button>
           </Form>
         </Formik>

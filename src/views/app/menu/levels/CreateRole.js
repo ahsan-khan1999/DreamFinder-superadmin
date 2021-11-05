@@ -7,6 +7,7 @@ import {
   CreateRoleAction,
   ViewAdminAction,
   ViewRoleAction,
+  ViewStaticDataAction,
 } from 'Store/Actions/User/UserActions';
 import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
@@ -39,46 +40,50 @@ import { objectOf } from 'prop-types';
 export default function CreateRole(props) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const [selectedRole, setSelectedRole] = useState('');
   const [role, setRole] = useState(role_obj);
   const [name, setName] = useState('');
   const [user_role_id, setUser_role_id] = useState('');
   const [nameTitle, setNameTitle] = useState('');
   const [title, setTitle] = useState('');
+  const getStaticData = async () => {
+    let res = await dispatch(ViewStaticDataAction());
+  };
 
+  useEffect(() => {
+    getStaticData();
+  }, []);
 
-
+  const user_role = useSelector((state) => state.ViewUserReducer?.staticData);
+  let categoryOption = [];
+  console.log(user_role?.user_roles_and_rights);
+  user_role?.user_roles_and_rights?.map((item) =>
+    categoryOption.push({
+      label: item?.name,
+      value: item,
+      key: item?.user_role_id,
+    })
+  );
   const role_obj = {
     name: '',
-    category: {
-      user_role_id: 0,
-      name: '',
-      title: '',
-      right: [],
-    },
+    category: selectedRole,
   };
   const onRoleCreate = async () => {
     setLoading(true);
-    if (
-      role?.name === '' &&
-      role?.category?.user_role_id === 0 &&
-      role?.category?.title === '' &&
-      role?.category?.name === ''
-    ) {
+    if (role?.name === '') {
       NotificationManager.error('Enter valid Details', 'Error', 5000, null, '');
       setLoading(false);
 
       return;
     } else {
+      setLoading(true);
+
       let apiData = {
         name: name,
-        category: {
-          user_role_id: Number(user_role_id),
-          name: nameTitle,
-          title: title,
-          rights: [],
-        },
+        category: selectedRole,
       };
-        let res = await dispatch(CreateRoleAction(apiData));
+      console.log(apiData);
+      let res = await dispatch(CreateRoleAction(apiData));
       if (res) {
         NotificationManager.success(
           'Successfully Created',
@@ -89,7 +94,7 @@ export default function CreateRole(props) {
         );
         setLoading(false);
 
-        // props.history.push('/app/menu/levels/ViewRole');
+        props.history.push('/app/menu/levels/ViewRole');
       }
       setLoading(false);
     }
@@ -129,54 +134,27 @@ export default function CreateRole(props) {
                     <IntlMessages id="User Role ID" />
                   </Label>
 
-                  <Input
+                  <Select
                     required
-                    value={user_role_id}
-                    className="form-control"
-                    name="id"
-                    type="number"
-                    onChange={(e) => setUser_role_id(e.target.value)}
-                  />
-                </FormGroup>
-              </Col>
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name-gender"
+                    // value={gender}
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Role Name" />
-                  </Label>
-                  <Input
-                    required
-                    value={nameTitle}
-                    className="form-control"
-                    name="password"
-                    type="text"
-                    //   validate={validate}
-                    onChange={(e) => setNameTitle(e.target.value)}
-                  />
-                </FormGroup>
-              </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Role Title" />
-                  </Label>
-                  <Input
-                    required
-                    value={title}
-                    className="form-control"
-                    name="password"
-                    type="text"
-                    //   validate={validate}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(val) => {
+                      setSelectedRole(val?.value);
+                    }}
+                    options={categoryOption}
                   />
                 </FormGroup>
               </Col>
             </Row>
 
             <Button
-              className="btn btn-primary"
+              style={{ backgroundColor: '#0066B3' }}
               // type="submit"
+              disabled={loading ? true : false}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
@@ -188,7 +166,9 @@ export default function CreateRole(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Role
+              <span className="label">
+                <IntlMessages id="Add Role" />
+              </span>
             </Button>
           </Form>
         </Formik>

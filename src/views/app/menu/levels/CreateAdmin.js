@@ -42,6 +42,8 @@ const selectGender = [
 ];
 export default function CreateAdmin({ history }) {
   const dispatch = useDispatch();
+    
+
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
     email_address: '',
@@ -68,18 +70,26 @@ export default function CreateAdmin({ history }) {
     readRoles();
     // readUser();
   }, []);
+  
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   const user = useSelector((state) => state?.ViewUserReducer?.admin);
   const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
-
+  
   let options = [];
   roles?.filter((item) =>
     options.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
 
+  // let user_id =options?.filter((item) => (
+  //   item?.value === 'admin' ? item?.key : ''
+  // ))
   // const [loading, setLoading] = useState(false);
 
   const [admin, setAdmin] = useState(admin_obj);
+
+  useEffect(() => {
+    // setAdmin({...admin,role_uid:user_id[0]?.key})
+  }, [])
   const onAdminCreate = async () => {
     if (
       admin?.email_address === '' &&
@@ -90,7 +100,6 @@ export default function CreateAdmin({ history }) {
       admin?.designation === '' &&
       admin.role_uid === ''
     ) {
-
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
@@ -101,7 +110,9 @@ export default function CreateAdmin({ history }) {
 
       return;
     } else {
-
+      // console.log(id, 'user uid');
+      // setAdmin({ ...admin, role_uid: id });
+      // console.log(admin, 'admin');
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
 
@@ -114,7 +125,7 @@ export default function CreateAdmin({ history }) {
           ''
         );
 
-        history.push('/app/menu/levels/viewAdmin');
+        // history.push('/app/menu/levels/viewAdmin');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -289,19 +300,31 @@ export default function CreateAdmin({ history }) {
                     required
                     components={{ Input: CustomSelectInput }}
                     className="react-select"
+                    // defaultValue={options?.map((item) => {
+                    //   if (item?.value === 'admin') {
+                    //     console.log(item?.key);
+                    //     return {
+                    //       label: item?.value,
+                    //       value: item?.value,
+                    //       key: item?.key,
+                    //     };
+                    //   }
+                    // })}
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-
+                    
                     onChange={(val) =>
                       setAdmin({ ...admin, role_uid: val?.key })
                     }
+                   
                     options={options}
                   />
                 </FormGroup>
               </Col>
             </Row>
             <Button
+              disabled={loading ? true : false}
               style={{ backgroundColor: '#0066B3' }}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -314,7 +337,10 @@ export default function CreateAdmin({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Admin
+              <span className="label">
+                <IntlMessages id="Add Admin" />
+              </span>
+              
             </Button>
           </Form>
         </Formik>

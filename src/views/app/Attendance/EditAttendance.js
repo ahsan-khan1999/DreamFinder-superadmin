@@ -145,9 +145,14 @@ export default function EditAttendance(props) {
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
+              disabled={loading ? true : false}
+
               onClick={suspandAttendance}
             >
-              Suspand Attendance
+              <span className="label">
+                <IntlMessages id="Suspand Attendance" />
+              </span>
+              
             </Button>
           </Form>
         </Formik>

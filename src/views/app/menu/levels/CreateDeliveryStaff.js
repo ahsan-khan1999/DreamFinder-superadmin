@@ -418,6 +418,8 @@ export default function CreateDeliveryStaff({history}) {
 
             <Button
               // className="btn btn-primary"
+              disabled={loading ? true : false}
+
               style={{ backgroundColor: '#0066B3' }}
 
               // type="submit"
@@ -432,7 +434,12 @@ export default function CreateDeliveryStaff({history}) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Delivery Staff
+              <span className="label">
+                <IntlMessages
+                  id="Add Delivery Staff"
+                />
+              </span>
+              
             </Button>
           </Form>
         </Formik>

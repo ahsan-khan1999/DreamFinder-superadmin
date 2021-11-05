@@ -51,27 +51,27 @@ export default function CreateTarget(props) {
   const [array, setArray] = useState([]);
   const [target, setTarget] = useState(target_obj);
   const [loading, setLoading] = useState(false);
-  const [readTarget,setReadTarget]  =useState({})
+  const [readTarget, setReadTarget] = useState({});
 
   const [targets, setTargets] = useState([]);
   const [stocks, setStocks] = useState([]);
   const [selected, setSelected] = useState('');
+
   const [selectedMedicine, setSelectedMedicine] = useState('');
   const sm = useSelector((state) => state?.AttendanceReducer?.sm);
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
   const am = useSelector((state) => state?.AttendanceReducer?.am);
-  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);  
+  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+
+  const clearState = () => {
+    setTarget(target_obj_initial);
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetDistributionCenter());
 
     dispatch(ViewDirectorAction());
-    // dispatch(OrderRead());
-    // dispatch(ViewAreaManagerAction());
-    // dispatch(ViewSalesManagerManagerAction());
-    // dispatch(ViewRegionalSalesManagerManagerAction());
-    // dispatch(ViewMPOManagerAction());
   }, []);
 
   const director = useSelector((state) => state?.ViewUserReducer?.director);
@@ -99,7 +99,7 @@ export default function CreateTarget(props) {
     })
   );
   // console.log(distributionCenterOption);
-  
+
   const order = useSelector((state) => state?.TargetReducer?.order);
   let directorOption = [];
   director?.map((item) =>
@@ -163,11 +163,11 @@ export default function CreateTarget(props) {
   // console.log(targets);
   targets?.map(
     (item) =>
-    medicineOption.push({
-      label: item?.name,
-      value: item?.medicine_uid,
-      key: item?.quantity,
-    })
+      medicineOption.push({
+        label: item?.name,
+        value: item?.medicine_uid,
+        key: item?.quantity,
+      })
     // item?.medicines?.map((item_) =>
     //   medicineOption.push({
     //     label: item_?.name,
@@ -176,11 +176,23 @@ export default function CreateTarget(props) {
     //   })
     // )
   );
-  const target_obj = {
+  const target_obj_initial = {
     assigned_to_uid: selected,
 
     amount: '',
     medicines: [],
+    no_orders: '',
+    no_prescriptions: '',
+    start_date: '',
+    by_customer_visits: '',
+    by_doctor_visits: '',
+    end_date: '',
+  };
+  const target_obj = {
+    assigned_to_uid: selected,
+
+    amount: '',
+    medicines: '',
     no_orders: '',
     no_prescriptions: '',
     start_date: '',
@@ -203,7 +215,7 @@ export default function CreateTarget(props) {
 
     setStocks(response?.data?.response_data);
   };
-  const getParentTarget = async(uid) => {
+  const getParentTarget = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/targets/read_current_target?assigned_to_uid=${uid}`,
@@ -218,7 +230,7 @@ export default function CreateTarget(props) {
     );
 
     setReadTarget(response?.data?.response_data);
-  }
+  };
   // console.log(readTarget,"parent Sm Target");
   const getDirectorTarget = async (uid) => {
     let token = await getToken();
@@ -270,10 +282,10 @@ export default function CreateTarget(props) {
       }),
     });
   };
-      // console.log(readTarsget,"read");
+  // console.log(readTarsget,"read");
 
   const onTargetCreate = async () => {
-    setLoading(true)
+    setLoading(true);
     if (selected?.value === 'Director') {
       let startDate = moment(target?.start_date).format('YYYY-MM-DD h:mm:ss');
       let endDate = moment(target?.end_date).format('YYYY-MM-DD h:mm:ss');
@@ -281,29 +293,50 @@ export default function CreateTarget(props) {
         ...target,
         start_date: startDate,
         end_date: endDate,
-        //   end_date: moment.unix(target?.end_date).format('YYYY-MM-DD h:mm:ss'),
-        //   by_customer_visits: targets[0]?.by_customer_visits,
-        //   by_doctor_visits: targets[0]?.by_doctor_visits,
+        medicines: array?.map((item) => {
+          return {
+            medicine_uid: item?.medicine_uid,
+            quantity: item?.quantity,
+          };
+        }),
+        no_orders: target?.no_orders,
+        no_prescriptions: target?.no_prescriptions,
+        by_customer_visits: Number(target?.by_customer_visits),
+        by_doctor_visits: Number(target?.by_doctor_visits),
       };
+      if (
+        target?.by_customer_visits === undefined ||
+        target?.by_doctor_visits === undefined ||
+        target?.no_orders === undefined ||
+        target?.no_prescriptions === undefined ||
+        target?.medicines === [] ||
+        target?.medicines?.length === 0
+      ) {
+        NotificationManager.error('Enter Details', 'Error', 5000, null, '');
+      } else {
+        let res = await dispatch(CreateTargetAction(apiData));
+        if (res) {
+          NotificationManager.success(
+            'Successfully Created',
+            'Success',
+            5000,
+            null,
+            ''
+          );
+          setLoading(false);
 
-      let res = await dispatch(CreateTargetAction(apiData));
-      if (res) {
-        NotificationManager.success(
-          'Successfully Created',
-          'Success',
-          5000,
-          null,
-          ''
-        );
-      setLoading(false)
-
-        props.history.push('/app/Target/ViewTarget');
+          props.history.push('/app/Target/ViewTarget');
+        }
       }
     } else if (selected?.value === 'SM') {
       // console.log(targets);
       // console.log(targe);
-      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
+      let startDate = moment
+        .unix(readTarget?.start_date)
+        .format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment
+        .unix(readTarget?.end_date)
+        .format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -316,23 +349,42 @@ export default function CreateTarget(props) {
             quantity: item?.quantity,
           };
         }),
+        no_orders: target?.no_orders,
+        no_prescriptions: target?.no_prescriptions,
+        by_customer_visits: Number(target?.by_customer_visits),
+        by_doctor_visits: Number(target?.by_doctor_visits),
       };
-      let res = await dispatch(CreateTargetAction(apiData));
-      if (res) {
-        NotificationManager.success(
-          'Successfully Created',
-          'Success',
-          5000,
-          null,
-          ''
-        );
-      setLoading(false)
+      if (
+        target?.by_customer_visits === undefined ||
+        target?.by_doctor_visits === undefined ||
+        target?.no_orders === undefined ||
+        target?.no_prescriptions === undefined ||
+        target?.medicines === [] ||
+        target?.medicines?.length === 0
+      ) {
+        NotificationManager.error('Enter Details', 'Error', 5000, null, '');
+      } else {
+        let res = await dispatch(CreateTargetAction(apiData));
+        if (res) {
+          NotificationManager.success(
+            'Successfully Created',
+            'Success',
+            5000,
+            null,
+            ''
+          );
+          setLoading(false);
 
-        props.history.push('/app/Target/ViewTarget');
+          props.history.push('/app/Target/ViewTarget');
+        }
       }
     } else if (selected?.value === 'RSM') {
-      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
+      let startDate = moment
+        .unix(readTarget?.start_date)
+        .format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment
+        .unix(readTarget?.end_date)
+        .format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -343,25 +395,46 @@ export default function CreateTarget(props) {
             quantity: item?.quantity,
           };
         }),
+        no_orders: target?.no_orders,
+        no_prescriptions: target?.no_prescriptions,
+        by_customer_visits: Number(target?.by_customer_visits),
+        by_doctor_visits: Number(target?.by_doctor_visits),
         // by_customer_visits: targets[0]?.by_customer_visits,
         // by_doctor_visits: targets[0]?.by_doctor_visits,
       };
-      let res = await dispatch(CreateTargetAction(apiData));
-      if (res) {
-        NotificationManager.success(
-          'Successfully Created',
-          'Success',
-          5000,
-          null,
-          ''
-        );
-      setLoading(false)
+      console.log(apiData, 'data');
+      if (
+        target?.by_customer_visits === undefined ||
+        target?.by_doctor_visits === undefined ||
+        target?.no_orders === undefined ||
+        target?.no_prescriptions === undefined ||
+        target?.medicines === [] ||
+        target?.medicines?.length === 0 ||
+        target?.medicines === ''
+      ) {
+        NotificationManager.error('Enter Details', 'Error', 5000, null, '');
+      } else {
+        let res = await dispatch(CreateTargetAction(apiData));
+        if (res) {
+          NotificationManager.success(
+            'Successfully Created',
+            'Success',
+            5000,
+            null,
+            ''
+          );
+          setLoading(false);
 
-        props.history.push('/app/Target/ViewTarget');
+          props.history.push('/app/Target/ViewTarget');
+        }
       }
     } else if (selected?.value === 'AM') {
-      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
+      let startDate = moment
+        .unix(readTarget?.start_date)
+        .format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment
+        .unix(readTarget?.end_date)
+        .format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -372,25 +445,42 @@ export default function CreateTarget(props) {
             quantity: item?.quantity,
           };
         }),
-        // by_customer_visits: targets[0]?.by_customer_visits,
-        // by_doctor_visits: targets[0]?.by_doctor_visits,
+        no_orders: target?.no_orders,
+        no_prescriptions: target?.no_prescriptions,
+        by_customer_visits: Number(target?.by_customer_visits),
+        by_doctor_visits: Number(target?.by_doctor_visits),
       };
-      let res = await dispatch(CreateTargetAction(apiData));
-      if (res) {
-        NotificationManager.success(
-          'Successfully Created',
-          'Success',
-          5000,
-          null,
-          ''
-        );
-      setLoading(false)
+      if (
+        target?.by_customer_visits === undefined ||
+        target?.by_doctor_visits === undefined ||
+        target?.no_orders === undefined ||
+        target?.no_prescriptions === undefined ||
+        target?.medicines === [] ||
+        target?.medicines?.length === 0
+      ) {
+        NotificationManager.error('Enter Details', 'Error', 5000, null, '');
+      } else {
+        let res = await dispatch(CreateTargetAction(apiData));
+        if (res) {
+          NotificationManager.success(
+            'Successfully Created',
+            'Success',
+            5000,
+            null,
+            ''
+          );
+          setLoading(false);
 
-        props.history.push('/app/Target/ViewTarget');
+          props.history.push('/app/Target/ViewTarget');
+        }
       }
     } else if (selected?.value === 'MPO') {
-      let startDate = moment.unix(readTarget?.start_date).format('YYYY-MM-DD h:mm:ss');
-      let endDate = moment.unix(readTarget?.end_date).format('YYYY-MM-DD h:mm:ss');
+      let startDate = moment
+        .unix(readTarget?.start_date)
+        .format('YYYY-MM-DD h:mm:ss');
+      let endDate = moment
+        .unix(readTarget?.end_date)
+        .format('YYYY-MM-DD h:mm:ss');
       let apiData = {
         ...target,
         start_date: startDate,
@@ -398,42 +488,65 @@ export default function CreateTarget(props) {
         medicines: array?.map((item) => {
           return {
             medicine_uid: item?.medicine_uid,
-            quantity: item?.quantity,
+            quantity:
+              item?.quantity === undefined
+                ? NotificationManager.error(
+                    'Enter Quantity',
+                    'Error',
+                    5000,
+                    null,
+                    ''
+                  )
+                : item?.quantity,
           };
         }),
-        // by_customer_visits: targets[0]?.by_customer_visits,
-        // by_doctor_visits: targets[0]?.by_doctor_visits,
+        no_orders: target?.no_orders,
+        no_prescriptions: target?.no_prescriptions,
+        by_customer_visits: Number(target?.by_customer_visits),
+        by_doctor_visits: Number(target?.by_doctor_visits),
       };
-      let res = await dispatch(CreateTargetAction(apiData));
-      if (res) {
-        NotificationManager.success(
-          'Successfully Created',
-          'Success',
-          5000,
-          null,
-          ''
-        );
-      setLoading(false)
+      if (
+        target?.by_customer_visits === undefined ||
+        target?.by_doctor_visits === undefined ||
+        target?.no_orders === undefined ||
+        target?.no_prescriptions === undefined ||
+        target?.medicines?.map((item) => item?.quantity === 0) ||
+        target?.medicines === [] ||
+        target?.medicines?.length === 0
+      ) {
+        alert('at if mpo');
+        NotificationManager.error('Enter Details', 'Error', 5000, null, '');
+        return;
+      } else {
+        let res = await dispatch(CreateTargetAction(apiData));
+        if (res) {
+          NotificationManager.success(
+            'Successfully Created',
+            'Success',
+            5000,
+            null,
+            ''
+          );
+          setLoading(false);
 
-        props.history.push('/app/Target/ViewTarget');
+          props.history.push('/app/Target/ViewTarget');
+        }
       }
     } else {
-    setLoading(false)
-
+      setLoading(false);
     }
-    // setLoading(false)
-
+    setLoading(false);
   };
   // console.log(targets[0]?.by_customer_visits?.by_customer_visits);
   const handleBack = () => {
-    props.history.push('/app/Target/ViewTarget')
-  }
+    props.history.push('/app/Target/ViewTarget');
+  };
   return (
     <Card>
       <CardBody>
-        <Button 
-        style={{backgroundColor:"#0066B3"}}
-        onClick={handleBack}>Back</Button>
+        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="Create Target" />
         </CardTitle>
@@ -454,7 +567,9 @@ export default function CreateTarget(props) {
                     className="react-select"
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
-                    onChange={(val) => setSelected(val)}
+                    onChange={(val) => {
+                      setSelected(val);
+                    }}
                     options={delaultOptions}
                   />
                 </FormGroup>
@@ -494,8 +609,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'sm'));
-                          getParentTarget(val?.key)
-
+                          getParentTarget(val?.key);
                         }}
                         options={directorOption}
                       />
@@ -567,7 +681,7 @@ export default function CreateTarget(props) {
                           }
                           setTarget({
                             ...target,
-                            by_customer_visits: va,
+                            by_customer_visits: Number(va),
                           });
                         }}
                       />
@@ -823,7 +937,7 @@ export default function CreateTarget(props) {
                       />
                     </FormGroup>
                   </Col>
-                  
+
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
@@ -838,7 +952,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'rsm'));
-                          getParentTarget(val?.key)
+                          getParentTarget(val?.key);
 
                           //   setTimeout(async() => {
                           //     await console.log(targets[0]?.start_date);
@@ -864,7 +978,6 @@ export default function CreateTarget(props) {
                           setTarget({ ...target, assigned_to_uid: val?.key });
                           // await getDirectorTarget(val?.key);
                           await getDirectorTarget(val?.key);
-
                         }}
                         options={regionalSalesManagerOption}
                       />
@@ -1056,7 +1169,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'am'));
-                          getParentTarget(val?.key)
+                          getParentTarget(val?.key);
 
                           // await getDirectorTarget(val?.key);
                         }}
@@ -1080,7 +1193,6 @@ export default function CreateTarget(props) {
                           setTarget({ ...target, assigned_to_uid: val?.key });
                           // await getDirectorTarget(val?.key);
                           await getDirectorTarget(val?.key);
-
                         }}
                         options={areaManagerOption}
                       />
@@ -1273,7 +1385,7 @@ export default function CreateTarget(props) {
                         name="form-field-name-gender"
                         onChange={async (val) => {
                           dispatch(getUsers(val.key, 'mpo'));
-                          getParentTarget(val?.key)
+                          getParentTarget(val?.key);
 
                           // await getDirectorTarget(val?.key);
                         }}
@@ -1297,7 +1409,6 @@ export default function CreateTarget(props) {
                           setTarget({ ...target, assigned_to_uid: val?.key });
                           // await getDirectorTarget(val?.key);
                           await getDirectorTarget(val?.key);
-
                         }}
                         options={mpoOption}
                       />
@@ -1352,8 +1463,6 @@ export default function CreateTarget(props) {
                         // value={admin?.service_location_uid}
                         onChange={(val, index) => {
                           handleChangeProduct(val, index);
-
-                         
                         }}
                         options={medicineOption}
                       />
@@ -1377,7 +1486,7 @@ export default function CreateTarget(props) {
                     <FormGroup>
                       <Label>Enter No Of Prescription</Label>
                       <Input
-                      min={1}
+                        min={1}
                         value={target?.no_prescriptions}
                         type="number"
                         min={1}
@@ -1450,7 +1559,8 @@ export default function CreateTarget(props) {
             <Button
               // className="btn btn-primary"
               // type="submit"
-                        style={{backgroundColor:"#0066B3"}}
+              style={{ backgroundColor: '#0066B3' }}
+              disabled={loading ? true : false}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
@@ -1462,7 +1572,9 @@ export default function CreateTarget(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Target
+              <span className="label">
+                <IntlMessages id="Add Target" />
+              </span>
             </Button>
           </Form>
         </Formik>

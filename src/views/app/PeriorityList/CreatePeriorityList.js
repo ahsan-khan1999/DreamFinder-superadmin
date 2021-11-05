@@ -118,6 +118,8 @@ export default function CreatePeriorityList(props) {
             <Button
               // className="btn btn-primary"
               style={{backgroundColor:"#0066B3"}}
+              disabled={loading ? true : false}
+
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -130,7 +132,9 @@ export default function CreatePeriorityList(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add
+              <span className="label">
+                <IntlMessages id="Add" />
+              </span>
             </Button>
           </Form>
         </Formik>

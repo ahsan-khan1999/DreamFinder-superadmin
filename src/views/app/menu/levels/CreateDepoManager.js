@@ -39,9 +39,8 @@ const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
-
 ];
-export default function CreateDepoManager({history}) {
+export default function CreateDepoManager({ history }) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -53,9 +52,9 @@ export default function CreateDepoManager({history}) {
 
     gender: '',
     designation: '',
-    is_primary:true,
+    is_primary: true,
     phone_number: '',
-    
+
     role_uid: '',
   };
 
@@ -82,7 +81,6 @@ export default function CreateDepoManager({history}) {
   //   user?.filter((item) => (
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
-  
 
   const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
@@ -91,8 +89,9 @@ export default function CreateDepoManager({history}) {
       admin?.name === '' &&
       admin?.password === '' &&
       admin?.gender === '' &&
-      admin?.phone_number === ''
-      && admin?.designation === '' && admin.role_uid === ''
+      admin?.phone_number === '' &&
+      admin?.designation === '' &&
+      admin.role_uid === ''
     ) {
       NotificationManager.error(
         'Please Enter Required Field',
@@ -104,7 +103,6 @@ export default function CreateDepoManager({history}) {
 
       return;
     } else {
-
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
 
@@ -117,7 +115,7 @@ export default function CreateDepoManager({history}) {
           ''
         );
 
-        history.push('/app/menu/levels/ViewDepotManager');
+        history.push('/app/menu/levels/ViewDepoManager');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -233,7 +231,7 @@ export default function CreateDepoManager({history}) {
                       onChange={(val) =>
                         setAdmin({
                           ...admin,
-                          gender:  val?.value,
+                          gender: val?.value,
                         })
                       }
                       options={selectGender}
@@ -295,7 +293,7 @@ export default function CreateDepoManager({history}) {
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-                    
+
                     onChange={(val) =>
                       setAdmin({ ...admin, role_uid: val?.key })
                     }
@@ -327,7 +325,8 @@ export default function CreateDepoManager({history}) {
             </Row>
 
             <Button
-              className="btn btn-primary"
+              style={{ backgroundColor: '#0066B3' }}
+              disabled={loading ? true : false}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -340,7 +339,9 @@ export default function CreateDepoManager({history}) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Add Depo Manager
+              <span className="label">
+                <IntlMessages id=" Add Depo Manager" />
+              </span>
             </Button>
           </Form>
         </Formik>
