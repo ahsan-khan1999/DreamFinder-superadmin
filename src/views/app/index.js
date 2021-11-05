@@ -95,20 +95,7 @@ const EditDoctorPeriority = React.lazy(() =>
 const EditDcr = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditDcr')
 );
-<<<<<<< HEAD
-=======
-const ViewCurrentPayment = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Payment/viewCurrentPayment')
-);
-const UploadReport = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Reports/uploadReport')
-);
-const ViewCurrentMedicines = React.lazy(() =>
-  import(
-    /* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines'
-  )
-);
->>>>>>> 5553a697b87eb0d3623aa4030e8a4a2f709e5ab6
+
 
 const ViewSample = React.lazy(() =>
   import(/* webpackChunkName: "components-badges" */ './Sample/ViewSample')
