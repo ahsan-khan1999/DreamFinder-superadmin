@@ -46,10 +46,29 @@ export default function CreateOrders(props) {
   const [medproductquantity, setMedproductquantity] = useState();
   const [date, setDate] = useState();
   const [time, setTime] = useState();
+  
+  
   const [array, setArray] = useState([]);
-  const [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
   const [quantity, setQuantity] = useState(0);
   const [array1, setArray1] = useState();
+
+  
+  
+  const CreateOrder_obj = {
+    on_behalf_of_uid: '',
+    customer_uid: '',
+    medicines: array?.map(item => {
+      return {
+        medicine_uid: item?.medicine_uid,
+        quantity: item?.quantity
+      }
+    }),
+    payment_type: '',
+    delivery_status: 'pending',
+    payment_status: 'pending',
+    order_datetime: '',
+  };
+  const [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
 
   // console.log("assignto",assignto);
   // console.log("mpouid",mpouid);
@@ -79,20 +98,7 @@ export default function CreateOrders(props) {
     dispatch(StaticDataGet());
   }, []);
 
-  const CreateOrder_obj = {
-    on_behalf_of_uid: '',
-    customer_uid: '',
-    medicines: array?.map(item => {
-      return {
-        medicine_uid: item?.medicine_uid,
-        quantity: item?.quantity
-      }
-    }),
-    payment_type: '',
-    delivery_status: 'pending',
-    payment_status: 'pending',
-    order_datetime: '',
-  };
+  
 
   let option_static_PaymentType = [];
   staticdata?.list_order__payment_types?.filter((item) =>
