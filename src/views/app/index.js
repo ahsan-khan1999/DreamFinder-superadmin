@@ -449,6 +449,10 @@ const App = ({ match }) => {
               path={`${match.url}/Orders/orders`}
               render={(props) => <Orders {...props} />}
             />
+            <Route
+              path={`${match.url}/Orders/viewCurrentOrder`}
+              render={(props) => <ViewCurrentOrder {...props} />}
+            />
             
             
             <Route
