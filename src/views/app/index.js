@@ -12,12 +12,7 @@ const Dashboards = React.lazy(() =>
 const Pages = React.lazy(() =>
   import(/* webpackChunkName: "pages" */ './pages')
 );
-const Orders = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Orders/orders')
-);
-const AddOrder = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Orders/AddOrder')
-);
+
   
 
 
@@ -100,6 +95,20 @@ const EditDoctorPeriority = React.lazy(() =>
 const EditDcr = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditDcr')
 );
+<<<<<<< HEAD
+=======
+const ViewCurrentPayment = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Payment/viewCurrentPayment')
+);
+const UploadReport = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Reports/uploadReport')
+);
+const ViewCurrentMedicines = React.lazy(() =>
+  import(
+    /* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines'
+  )
+);
+>>>>>>> 5553a697b87eb0d3623aa4030e8a4a2f709e5ab6
 
 const ViewSample = React.lazy(() =>
   import(/* webpackChunkName: "components-badges" */ './Sample/ViewSample')
@@ -126,6 +135,17 @@ const EditSampleTranscation = React.lazy(() =>
   )
 );
 
+const Orders = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Orders/orders')
+);
+const AddOrder = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Orders/CreateOrder')
+);
+const ViewCurrentOrder = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Orders/viewCurrentOrder'
+  )
+);
 
 // Distribution Concord --------------------------------------
 const ViewCurrentDepartmenthead = React.lazy(() =>
@@ -434,16 +454,18 @@ const App = ({ match }) => {
               path={`${match.url}/FieldWorkManagment/EditSchedule`}
               render={(props) => <EditSchedule {...props} />}
             />
-            <Route
+            {/* <Route
               path={`${match.url}/orders`}
               render={(props) => <Orders {...props} />}
-            />
+            /> */}
             <Route
               path={`${match.url}/Orders/orders`}
               render={(props) => <Orders {...props} />}
             />
+            
+            
             <Route
-              path={`${match.url}/Orders/AddOrder`}
+              path={`${match.url}/Orders/CreateOrder`}
               render={(props) => <AddOrder {...props} />}
             />
            

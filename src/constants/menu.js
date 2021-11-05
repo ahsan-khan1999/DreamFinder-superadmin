@@ -481,8 +481,7 @@ const data = [
     subs: [
       {
         icon: 'simple-icon-check',
-
-        label: 'menu.viewOrders',
+         label: 'menu.viewOrders',
         to: `${adminRoot}/Orders/orders`,
       },
       

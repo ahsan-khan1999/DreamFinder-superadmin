@@ -3,7 +3,7 @@
   "version": "5.3.1",
   "description": "DMFR - Super Admin",
   "private": true,
-    "dependencies": {
+  "dependencies": {
     "@availity/reactstrap-validation-select": "^9.0.1",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -71,7 +71,6 @@
     "web-vitals": "^2.0.1",
     "yup": "^0.32.9"
   },
-
   "scripts": {
     "start": "serve -s build",
     "dev": "react-scripts start",
@@ -82,9 +81,9 @@
     "lint:fix": "eslint . --fix",
     "precommit": "lint-staged"
   },
-  "engines":{
+  "engines": {
     "node": "14.17.5",
-    "npm":"6.14.14"
+    "npm": "6.14.14"
   },
   "husky": {
     "hooks": {

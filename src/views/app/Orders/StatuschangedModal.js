@@ -15,102 +15,107 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Loader from 'react-loader-spinner';
 
 // import {
-//   statusChange,
-// } from "../../../../Store/Actions/deportmanagerActions";
-
-import { useDispatch, useSelector } from 'react-redux';
-import { StaticDataGet, statusChange } from 'Store/Actions/ConcordOrder/OrderAction';
-import IntlMessages from 'helpers/IntlMessages';
-import Select, { components } from 'react-select';
-import CustomSelectInput from 'components/common/CustomSelectInput';
-
-const StatuschangedModal = (props) => {
-  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
-  const loading = useSelector((state) => state?.orderReducer?.loader);
-  const apiData = {
-    delivery_status: currentData?.delivery_status,
-    payment_status: currentData?.payment_status,
-    uid: currentData?.uid,
-  };
+  //   statusChange,
+  // } from "../../../../Store/Actions/deportmanagerActions";
   
-  const [updateStatus, setupdateStatus] = useState(apiData);
-
-
+  import { useDispatch, useSelector } from 'react-redux';
+  import { StaticDataGet, statusChange } from 'Store/Actions/ConcordOrder/OrderAction';
+  import IntlMessages from 'helpers/IntlMessages';
+  import Select, { components } from 'react-select';
+  import CustomSelectInput from 'components/common/CustomSelectInput';
+  
+  const StatuschangedModal = (props) => {
+    
+    const currentData = props?.data;
+    
+    
+    const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
+    const loading = useSelector((state) => state?.orderReducer?.loader);
+    const apiData = {
+      delivery_status: currentData?.delivery_status,
+      payment_status: currentData?.payment_status,
+      uid: currentData?.uid,
+    };
+  
+  
+  
+    useEffect(() => {
+      dispatch(StaticDataGet());
+    }, []);
+    
+    const dispatch = useDispatch();
+    
+    
+    useEffect(() => {
+      setupdateStatus({ ...updateStatus, 
+        delivery_status: currentData?.delivery_status,
+        payment_status: currentData?.payment_status
+        ,uid: currentData?.uid
+      })
+    }, []);
+    
+    
+  
+  
+    const [updateStatus, setupdateStatus] = useState(apiData);
+    
+    
+  
   let option_static_DeliveryStatus = [];
   staticdata?.list_order__delivery_statuses?.filter((item) =>
-    option_static_DeliveryStatus.push({
-      label: item?.name,
-      value: item?.value,
-      key: item?.id,
-    })
+  option_static_DeliveryStatus.push({
+    label: item?.name,
+    value: item?.value,
+    key: item?.id,
+  })
   );
   let option_static_PaymentStatus = [];
   staticdata?.list_order__payment_statuses?.filter((item) =>
-    option_static_PaymentStatus.push({
-      label: item?.name,
-      value: item?.value,
-      key: item?.id,
-    })
+  option_static_PaymentStatus.push({
+    label: item?.name,
+    value: item?.value,
+    key: item?.id,
+  })
   );
-
-  console.log('option_static_DeliveryStatus', option_static_DeliveryStatus);
-  console.log('option_static_PaymentStatus', option_static_PaymentStatus);
-
-  useEffect(() => {
-    dispatch(StaticDataGet());
-  }, []);
-
-  const dispatch = useDispatch();
-
   
-  useEffect(() => {
-    setupdateStatus({ ...updateStatus, 
-      delivery_status: currentData?.delivery_status,
-      payment_status: currentData?.payment_status
-    ,uid: currentData?.uid
-    })
-  }, []);
-
-
-
-
-  const currentData = props?.data;
-  console.log('currentData', updateStatus);
-
+  
+  
+  
+  
   const onSubmit = async () => {
     
     // const apiDataall = {
-    //   ...updateStatus,
-    //   uid: currentData?.uid,
-    // };
-    console.log(updateStatus)
-    let res = await dispatch(statusChange(updateStatus));
-    if (res) {
+      //   ...updateStatus,
+      //   uid: currentData?.uid,
+      // };
+      console.log(updateStatus)
+      let res = await dispatch(statusChange(updateStatus));
+      if (res) {
         NotificationManager.success(
           'Status Updated Sucessfully',
           'Sucess',
           3000,
           null,
           ''
-        );
-        props.history.push('/app/Orders/orders');
-      }
-    props.onHide();
-  };
-  return (
-    <>
+          );
+          props.history.push('/app/Orders/orders');
+        }
+        props.onHide();
+      };
+      return (
+        <>
       <Modal
         isOpen={props.show}
         isClose={props.onHide}
         centered
         size="sm"
         style={{ boxShadow: 'none' }}
-      >
+        >
         <ModalHeader toggle={props.onHide} style={{ padding: '15px 20px' }}>
           <span
             className=""
             style={{ fontWeight: '600', fontSize: '22px', color: '#0066b3' }}
-          >
+            >
             {' '}
             Status{' '}
           </span>
