@@ -35,21 +35,6 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditDeliveryStaff(props) {
-  const [thisView, setThisView] = useState(true);
-  const [array, setArray] = useState(admin?.service_location_uid);
-  let [service_location, setService_location] = useState();
-  let [buttonName, setButtonName] = useState();
-
-  const currentUser = props?.location?.state;
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [admin, setAdmin] = useState(admin_obj);
-
-  let service_location_id = [];
-  currentUser?.field_staff?.service_location?.map((item) =>
-    service_location_id?.push(item?.uid)
-  );
-
-  const [loadingSuspand, setLoadingSuspand] = useState(false);
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -65,6 +50,22 @@ export default function EditDeliveryStaff(props) {
 
     role_uid: currentUser?.role?.uid,
   };
+  const [thisView, setThisView] = useState(true);
+  let [service_location, setService_location] = useState();
+  let [buttonName, setButtonName] = useState();
+
+  const currentUser = props?.location?.state;
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [admin, setAdmin] = useState(admin_obj);
+  const [array, setArray] = useState(admin?.service_location_uid);
+
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
+
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
+  
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());

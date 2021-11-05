@@ -36,6 +36,22 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditSm(props) {
+  const admin_obj = {
+    email_address: currentUser?.email_address,
+    uid: currentUser?.uid,
+    name: currentUser?.name,
+    // password: "alpha",
+
+    gender: currentUser?.gender,
+    designation: currentUser?.designation,
+
+    phone_number: currentUser?.phone_number,
+
+    role_uid: currentUser?.role?.uid,
+    manager_uid: currentUser?.field_staff?.manager?.uid,
+
+    service_location_uid: service_location_id,
+  };
   const [buttonName, setButtonName] = useState('');
   const [admin, setAdmin] = useState(admin_obj);
   const [loading, setLoading] = useState(false);
@@ -53,22 +69,7 @@ export default function EditSm(props) {
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)
   );
-  const admin_obj = {
-    email_address: currentUser?.email_address,
-    uid: currentUser?.uid,
-    name: currentUser?.name,
-    // password: "alpha",
-
-    gender: currentUser?.gender,
-    designation: currentUser?.designation,
-
-    phone_number: currentUser?.phone_number,
-
-    role_uid: currentUser?.role?.uid,
-    manager_uid: currentUser?.field_staff?.manager?.uid,
-
-    service_location_uid: service_location_id,
-  };
+ 
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());

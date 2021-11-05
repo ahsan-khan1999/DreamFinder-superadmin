@@ -49,14 +49,6 @@ import {
 
 export default function UpdateSample(props) {
   let currentSample = props?.location?.state;
-
-  const [stock, setStock] = useState([]);
-  const sampleObj = {
-    uid: currentSample?.uid,
-    medicines: optionDefault,
-  };
-  const [sample, setSample] = useState(sampleObj);
-
   let optionDefault = [];
   currentSample?.medicines?.map((item) => {
     optionDefault.push({
@@ -64,7 +56,14 @@ export default function UpdateSample(props) {
       stock_uid: item?.stock_uid,
     });
   });
-  console.log(optionDefault);
+  const [stock, setStock] = useState([]);
+  const sampleObj = {
+    uid: currentSample?.uid,
+    medicines: optionDefault,
+  };
+  const [sample, setSample] = useState(sampleObj);
+
+  
   
   const [array, setArray] = useState([]);
   // console.log(array,"array");

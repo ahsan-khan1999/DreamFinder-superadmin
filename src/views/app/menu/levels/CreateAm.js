@@ -67,7 +67,7 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
     manager_uid: '',
-    service_location_uid: array,
+    service_location_uid: [],
   };
   const [admin, setAdmin] = useState(admin_obj);
 
@@ -132,7 +132,7 @@ export default function CreateDirector({ history }) {
 
       return;
     } else {
-      let res = await dispatch(CreateAmAction(test));
+      let res = await dispatch(CreateAmAction(admin));
       // console.log(test, 'admin create res');
 
       if (res) {
@@ -184,7 +184,8 @@ export default function CreateDirector({ history }) {
     options?.map((item, index) => {
       value.push(item?.key);
     });
-    await setArray(value);
+    let test = { ...admin, service_location_uid: value };
+    setAdmin(test);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   return (
@@ -453,7 +454,6 @@ export default function CreateDirector({ history }) {
             <Button
               // className="btn btn-primary"
               disabled={loading ? true : false}
-
               style={{ 'background-color': '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -468,9 +468,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce3" />
               </span>
 
-              <span className="label">
-                Add AM
-              </span>
+              <span className="label">Add AM</span>
             </Button>
           </Form>
         </Formik>

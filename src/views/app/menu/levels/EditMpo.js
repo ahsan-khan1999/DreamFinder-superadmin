@@ -36,22 +36,6 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditMpo(props) {
-  const [thisView, setThisView] = useState(true);
-  const [array, setArray] = useState(admin?.service_location_uid);
-  const [admin, setAdmin] = useState(admin_obj);
-  const [loading, setLoading] = useState(false);
-  const [loadingSuspand, setLoadingSuspand] = useState(false);
-
-  let [service_location, setService_location] = useState([]);
-  const currentUser = props?.location?.state;
-  let service_location_id = [];
-  currentUser?.field_staff?.service_location?.map((item) =>
-    service_location_id?.push(item?.uid)
-  );
-  //   console.log(currentUser);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  console.log(currentUser);
-  const [buttonName, setButtonName] = useState('');
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -67,6 +51,23 @@ export default function EditMpo(props) {
     manager_uid: currentUser?.field_staff?.manager?.uid,
     service_location_uid: service_location_id,
   };
+  const [thisView, setThisView] = useState(true);
+  const [admin, setAdmin] = useState(admin_obj);
+  const [array, setArray] = useState(admin?.service_location_uid);
+
+  const [loading, setLoading] = useState(false);
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
+
+  let [service_location, setService_location] = useState([]);
+  const currentUser = props?.location?.state;
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
+  //   console.log(currentUser);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [buttonName, setButtonName] = useState('');
+ 
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
