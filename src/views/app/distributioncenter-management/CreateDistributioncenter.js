@@ -39,6 +39,15 @@ export default function CreateDistributioncenter({ history }) {
   const distributionRegionAreas = useSelector(
     (state) => state?.distributionCenterReducer?.distributionRegionAreas
   );
+  const distributionRegionAreasloader = useSelector(
+    (state) => state?.distributionCenterReducer?.distributionRegionAreasloader
+  );
+  const distributioncenterregionsloader = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenterregionsloader
+  );
+  const depoManagerloader = useSelector(
+    (state) => state?.distributionCenterReducer?.depoManagerloader
+  );
 
   // const regionareavalue = [];
    //==============Areas
@@ -210,6 +219,11 @@ export default function CreateDistributioncenter({ history }) {
                   </Label>
 
                   <>
+                  {distributioncenterregionsloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -222,6 +236,7 @@ export default function CreateDistributioncenter({ history }) {
                       options={distributionRegions}
 
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>
@@ -237,6 +252,11 @@ export default function CreateDistributioncenter({ history }) {
             </Label>
 
             <>
+            {distributionRegionAreasloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
               <Select
                 required
                 components={{ Input: CustomSelectInput }}
@@ -250,6 +270,7 @@ export default function CreateDistributioncenter({ history }) {
                 }}
                 options={distributionRegionsArea}
               />
+              }
             </>
           </FormGroup>
         </Col>
@@ -275,6 +296,11 @@ export default function CreateDistributioncenter({ history }) {
                   </Label>
 
                   <>
+                  {depoManagerloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -288,6 +314,7 @@ export default function CreateDistributioncenter({ history }) {
                       }}
                       options={AllDepoManagers}
                     />
+                    }
                   </>
 
                 </FormGroup>
