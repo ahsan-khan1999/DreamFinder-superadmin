@@ -27,7 +27,7 @@ export default function AddRegionForm() {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Test" />
+          Create Test
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik

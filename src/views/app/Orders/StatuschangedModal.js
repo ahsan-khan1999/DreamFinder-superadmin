@@ -27,6 +27,15 @@ import CustomSelectInput from 'components/common/CustomSelectInput';
 const StatuschangedModal = (props) => {
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   const loading = useSelector((state) => state?.orderReducer?.loader);
+  const apiData = {
+    delivery_status: currentData?.delivery_status,
+    payment_status: currentData?.payment_status,
+    uid: currentData?.uid,
+  };
+  
+  const [updateStatus, setupdateStatus] = useState(apiData);
+
+
   let option_static_DeliveryStatus = [];
   staticdata?.list_order__delivery_statuses?.filter((item) =>
     option_static_DeliveryStatus.push({
@@ -63,13 +72,6 @@ const StatuschangedModal = (props) => {
   }, []);
 
 
-  const apiData = {
-    delivery_status: currentData?.delivery_status,
-    payment_status: currentData?.payment_status,
-    uid: currentData?.uid,
-  };
-  
-  const [updateStatus, setupdateStatus] = useState(apiData);
 
 
   const currentData = props?.data;

@@ -44,7 +44,7 @@ const selectGender = [
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
-export default function CreateDeliveryStaff({history}) {
+export default function CreateDeliveryStaff({ history }) {
   let [filterLocationIds, setfilterLocationIds] = useState([]);
   // let filterLocationIds =[]
   let [service_location, setService_location] = useState([]);
@@ -396,12 +396,11 @@ export default function CreateDeliveryStaff({history}) {
                   />
                 </FormGroup>
               </Col>
-             
+
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                  <IntlMessages id="Select Area" />
-
+                    <IntlMessages id="Select Area" />
                   </Label>
                   <Select
                     cacheOptions
@@ -419,9 +418,7 @@ export default function CreateDeliveryStaff({history}) {
             <Button
               // className="btn btn-primary"
               disabled={loading ? true : false}
-
               style={{ backgroundColor: '#0066B3' }}
-
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -434,12 +431,7 @@ export default function CreateDeliveryStaff({history}) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages
-                  id="Add Delivery Staff"
-                />
-              </span>
-              
+              <span className="label">Add Delivery Staff</span>
             </Button>
           </Form>
         </Formik>

@@ -335,7 +335,6 @@ export default function CreateDirector({ history }) {
 
             <Button
               disabled={loading ? true : false}
-
               style={{ backgroundColor: '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -349,11 +348,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages
-                  id="Add Director"
-                />
-              </span>
+              <span className="label">Add Director</span>
             </Button>
           </Form>
         </Formik>

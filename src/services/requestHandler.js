@@ -192,6 +192,10 @@ const CreateSampleTransaction = (data) =>
   post(SERVICE_URLS.createSampleTransaction, data, {
     feature: featureConstants.static,
   });
+  const CreateUsers = (data) =>
+  post(SERVICE_URLS.createUsers, data, {
+    feature: featureConstants.static,
+  });
 const ReadSampleTransaction = (data) =>
   get(SERVICE_URLS.readSampleTransaction, data, {
     feature: featureConstants.static,
@@ -921,7 +925,7 @@ const apiServices = {
   updatePayment,
   readArea,
   readThana,
-  //CreateUsers,
+  CreateUsers,
   readRoles,
   //updateUser,
   getDirector,

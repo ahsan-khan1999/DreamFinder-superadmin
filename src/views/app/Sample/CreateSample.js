@@ -153,18 +153,14 @@ export default function CreateSample(props) {
   return (
     <Card>
       <CardBody>
-        <CardTitle>
-          <IntlMessages id="Create Sample" />
-        </CardTitle>
+        <CardTitle>Create Sample</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
               <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Director" />
-                  </Label>
+                  <Label>Select Director</Label>
 
                   <Select
                     required
@@ -183,9 +179,7 @@ export default function CreateSample(props) {
               </Col>
               <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Sales Manager" />
-                  </Label>
+                  <Label>Select Sales Manager</Label>
 
                   <Select
                     required
@@ -281,7 +275,6 @@ export default function CreateSample(props) {
         <Button
           style={{ backgroundColor: '#0066B3' }}
           disabled={loading ? true : false}
-
           className={`btn-shadow btn-multiple-state ${
             loading ? 'show-spinner' : ''
           }`}
@@ -292,12 +285,7 @@ export default function CreateSample(props) {
             <span className="bounce2" />
             <span className="bounce3" />
           </span>
-          <span className="label">
-            <IntlMessages
-              id="Add Sample
-"
-            />
-          </span>
+          <span className="label">Add Sample</span>
         </Button>
       </CardBody>
     </Card>

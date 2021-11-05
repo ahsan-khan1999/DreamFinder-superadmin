@@ -422,12 +422,7 @@ export default function EditDirector(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  <IntlMessages
-                    id="Save
-"
-                  />
-                </span>
+                <span className="label">Save</span>
               </Button>
             )}
             {thisView ? (
@@ -445,9 +440,7 @@ export default function EditDirector(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  <IntlMessages id={buttonName} />
-                </span>
+                <span className="label">{buttonName}</span>
               </Button>
             ) : (
               ''

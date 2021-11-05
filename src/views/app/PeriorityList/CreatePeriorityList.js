@@ -80,7 +80,7 @@ export default function CreatePeriorityList(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Customer Priority List" />
+          Create Customer Priority List
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -89,7 +89,7 @@ export default function CreatePeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <label>
-                    <IntlMessages id="Select Customer" />
+                    Select Customer
                   </label>
 
                   <>
@@ -133,7 +133,7 @@ export default function CreatePeriorityList(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Add" />
+                Add
               </span>
             </Button>
           </Form>

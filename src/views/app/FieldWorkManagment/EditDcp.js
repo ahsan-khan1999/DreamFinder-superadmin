@@ -54,7 +54,8 @@ export default function EditDcp(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View Daily Call Plan" />
+          View Daily Call Plan
+
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -63,7 +64,7 @@ export default function EditDcp(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assigne To Name" />
+                    Assigne To Name
                   </Label>
                   <span>
                     <p>{currentItem?.assigned_to?.name}</p>
@@ -74,7 +75,7 @@ export default function EditDcp(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Manager" />
+                    Assign to Manager
                   </Label>
                   <span>
                     <p>
@@ -87,7 +88,7 @@ export default function EditDcp(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Manager Role" />
+                    Assign to Manager Role
                   </Label>
                   <span>
                     <p>
@@ -103,7 +104,7 @@ export default function EditDcp(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Manager Service Location" />
+                    Assign to Manager Service Location
                   </Label>
                   {currentItem?.assigned_to?.field_staff?.service_location?.map(
                     (item) => (
@@ -117,7 +118,7 @@ export default function EditDcp(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Doctor Name" />
+                    Assign to Doctor Name
                   </Label>
                   <span>
                     <p>{currentItem?.doctor?.name}</p>
@@ -128,7 +129,7 @@ export default function EditDcp(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Doctor Market" />
+                    Assign to Doctor Market
                   </Label>
                   <span>
                     <p>{currentItem?.doctor?.market?.name}</p>
@@ -138,7 +139,7 @@ export default function EditDcp(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Doctor Category" />
+                    Assign to Doctor Category
                   </Label>
                   <span>
                     <p>{currentItem?.doctor?.doctor_category?.name}</p>
@@ -164,7 +165,7 @@ export default function EditDcp(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Suspand Dcp" />
+                Suspand Dcp
               </span>
             </Button>
           </Form>

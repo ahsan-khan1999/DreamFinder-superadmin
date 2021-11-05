@@ -116,7 +116,7 @@ export default function EditPeriorityList(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View Customer Priority List" />
+          View Customer Priority List
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -125,7 +125,7 @@ export default function EditPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <label>
-                    <IntlMessages id="Select Customer" />
+                    Select Customer
                   </label>
                   {view ? (
                     <span>
@@ -252,7 +252,7 @@ export default function EditPeriorityList(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                  <IntlMessages id="Edit" />
+                  Edit
                 </span>
               </Button>
             )}
@@ -273,7 +273,7 @@ export default function EditPeriorityList(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Suspand" />
+                Suspand
               </span>
             </Button>
           </Form>

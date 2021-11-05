@@ -437,12 +437,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages
-                  id="Add MPO
-"
-                />
-              </span>
+              <span className="label">Add MPO</span>
             </Button>
           </Form>
         </Formik>

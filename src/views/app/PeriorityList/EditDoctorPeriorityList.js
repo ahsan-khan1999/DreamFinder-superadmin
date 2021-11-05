@@ -118,7 +118,7 @@ export default function EditDoctorPeriorityList(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View Doctor Priority List" />
+          View Doctor Priority List
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -127,7 +127,7 @@ export default function EditDoctorPeriorityList(props) {
               <Col lg={6}>
                 <FormGroup>
                   <label>
-                    <IntlMessages id="Select Doctor" />
+                    Select Doctor
                   </label>
                   {view ? (
                     <span>
@@ -255,7 +255,7 @@ export default function EditDoctorPeriorityList(props) {
                     <span className="bounce3" />
                   </span>
                   <span className="label">
-                    <IntlMessages id="Edit" />
+                    Edit
                   </span>
                 </Button>
               </>
@@ -277,7 +277,7 @@ export default function EditDoctorPeriorityList(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Suspand" />
+                Suspand
               </span>
             </Button>
           </Form>

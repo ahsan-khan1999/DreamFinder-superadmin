@@ -243,7 +243,7 @@ export default function CreateAttendance(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Create Attendance" />
+          Create Attendance
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -873,7 +873,7 @@ export default function CreateAttendance(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Add Attendance" />
+                Add Attendance
               </span>
             </Buttin>
           </Form>

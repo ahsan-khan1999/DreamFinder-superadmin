@@ -55,7 +55,7 @@ export default function EditAttendance(props) {
         style={{backgroundColor:"#0066B3"}}
         onClick={handleBack}>Back</Button>
         <CardTitle>
-          <IntlMessages id="View Attendance" />
+          View Attendance
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -150,7 +150,7 @@ export default function EditAttendance(props) {
               onClick={suspandAttendance}
             >
               <span className="label">
-                <IntlMessages id="Suspand Attendance" />
+                Suspand Attendance
               </span>
               
             </Button>

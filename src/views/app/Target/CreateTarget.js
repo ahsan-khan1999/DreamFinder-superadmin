@@ -548,7 +548,7 @@ export default function CreateTarget(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="Create Target" />
+          Create Target
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -557,7 +557,7 @@ export default function CreateTarget(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select to Whom You Want to Assign" />
+                    Select to Whom You Want to Assign
                   </Label>
 
                   <Select
@@ -580,7 +580,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
 
                       <Input
@@ -598,7 +598,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
 
                       <Select
@@ -618,7 +618,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
 
                       <Select
@@ -665,7 +665,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_customer_visits" />
+                        Enter By Customer Visits
                       </Label>
 
                       <Input
@@ -690,7 +690,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_doctor_visits" />
+                        Enter By Doctor Visits
                       </Label>
 
                       <Input
@@ -739,7 +739,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
 
                       <Input
@@ -757,7 +757,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
 
                       <Select
@@ -776,7 +776,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Distribtion Center" />
+                        Select Distribtion Center
                       </Label>
 
                       <Select
@@ -903,7 +903,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
 
                       <Input
@@ -921,7 +921,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
 
                       <Select
@@ -941,7 +941,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
 
                       <Select
@@ -965,7 +965,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
+                        Select Regional Sales Manager
                       </Label>
 
                       <Select
@@ -1008,7 +1008,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_customer_visits" />
+                        Enter By Customer Visits
                       </Label>
 
                       <Input
@@ -1026,7 +1026,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_doctor_visits" />
+                        Enter By Doctor Visits
                       </Label>
 
                       <Input
@@ -1098,7 +1098,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
 
                       <Input
@@ -1116,7 +1116,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
 
                       <Select
@@ -1135,7 +1135,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
 
                       <Select
@@ -1158,7 +1158,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
+                        Select Regional Sales Manager
                       </Label>
 
                       <Select
@@ -1180,7 +1180,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Area Manager" />
+                        Select Area Manager
                       </Label>
 
                       <Select
@@ -1202,7 +1202,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_customer_visits" />
+                        Enter By Customer Visits
                       </Label>
 
                       <Input
@@ -1220,7 +1220,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_doctor_visits" />
+                        Enter By Doctor Visits
                       </Label>
 
                       <Input
@@ -1292,7 +1292,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
 
                       <Input
@@ -1310,7 +1310,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
 
                       <Select
@@ -1329,7 +1329,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
 
                       <Select
@@ -1352,7 +1352,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
+                        Select Regional Sales Manager
                       </Label>
 
                       <Select
@@ -1374,7 +1374,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Area Manager" />
+                        Select Area Manager
                       </Label>
 
                       <Select
@@ -1396,7 +1396,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select MPO" />
+                        Select MPO
                       </Label>
 
                       <Select
@@ -1418,7 +1418,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_customer_visits" />
+                        Enter By Customer Visits
                       </Label>
 
                       <Input
@@ -1437,7 +1437,7 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter by_doctor_visits" />
+                        Enter By Doctor Visits
                       </Label>
 
                       <Input
@@ -1572,9 +1572,7 @@ export default function CreateTarget(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages id="Add Target" />
-              </span>
+              <span className="label">Add Target</span>
             </Button>
           </Form>
         </Formik>

@@ -551,7 +551,7 @@ export default function EditMpo(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                  <IntlMessages id="Save" />
+                  Save
                 </span>
               </Button>
             )}
@@ -573,7 +573,7 @@ export default function EditMpo(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                  <IntlMessages id={buttonName} />
+                  {buttonName}
                 </span>
               </Button>
             ) : (

@@ -152,10 +152,8 @@ export default function EditSm(props) {
           props.history.push('/app/menu/levels/ViewSm');
         }
         setLoading(false);
-
       }
       setLoading(false);
-
     }
   };
   const suspandAdmin = async () => {
@@ -183,7 +181,7 @@ export default function EditSm(props) {
         );
       }
     } else {
-    setLoadingSuspand(true)
+      setLoadingSuspand(true);
 
       let apiData = {
         uid: currentUser?.uid,
@@ -197,11 +195,11 @@ export default function EditSm(props) {
           null,
           ''
         );
-    setLoadingSuspand(false)
+        setLoadingSuspand(false);
 
         props.history.push('/app/menu/levels/ViewSm');
       } else {
-    setLoadingSuspand(true)
+        setLoadingSuspand(true);
 
         NotificationManager.error(
           res?.response_message,
@@ -210,11 +208,9 @@ export default function EditSm(props) {
           null,
           ''
         );
-    setLoadingSuspand(false)
-
+        setLoadingSuspand(false);
       }
-    setLoadingSuspand(false)
-
+      setLoadingSuspand(false);
     }
     //  setStatusUpdate()
 
@@ -312,8 +308,7 @@ export default function EditSm(props) {
                     </span>
                   ) : (
                     <Input
-                    disabled
-            
+                      disabled
                       required
                       value={admin?.email_address}
                       className="form-control"
@@ -416,7 +411,7 @@ export default function EditSm(props) {
                     </span>
                   ) : (
                     <Input
-                    disabled
+                      disabled
                       required
                       value={admin?.phone_number}
                       type="text"
@@ -582,7 +577,6 @@ export default function EditSm(props) {
               <Button
                 // className="btn btn-primary"
                 disabled={loading ? true : false}
-
                 style={{ 'background-color': '##0066B3' }}
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
@@ -596,30 +590,24 @@ export default function EditSm(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  <IntlMessages id="Save" />
-                </span>
+                <span className="label">Save</span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '##0066B3', marginLeft: '5px' }}
                 disabled={loading ? true : false}
-
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
                 onClick={suspandAdmin}
-                
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  <IntlMessages id={buttonName} />
-                </span>
+                <span className="label">{buttonName}</span>
               </Button>
             ) : (
               ''

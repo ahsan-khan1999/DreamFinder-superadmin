@@ -340,7 +340,7 @@ export default function CreateDepoManager({ history }) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id=" Add Depo Manager" />
+                Add Depo Manager
               </span>
             </Button>
           </Form>

@@ -382,7 +382,7 @@ export default function EditTarget(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View Target" />
+          View Target
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -422,7 +422,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
                       {view ? (
                         <span>
@@ -446,7 +446,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
                       {view ? (
                         <span>
@@ -487,7 +487,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
                       {view ? (
                         <span>
@@ -726,7 +726,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
                       {view ? (
                         <span>
@@ -750,7 +750,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
                       {view ? (
                         <span>
@@ -787,7 +787,7 @@ export default function EditTarget(props) {
                       ) : (
                         <>
                           <Label>
-                            <IntlMessages id="Select Distribtion Center" />
+                            Select Distribtion Center
                           </Label>
                           <Select
                             required
@@ -977,7 +977,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
                       {view ? (
                         <span>
@@ -1001,7 +1001,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
                       {view ? (
                         <span>
@@ -1041,7 +1041,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1086,7 +1086,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
+                        Select Regional Sales Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1285,7 +1285,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
                       {view ? (
                         <span>
@@ -1394,7 +1394,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
                       {view ? (
                         <span>
@@ -1438,7 +1438,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1483,7 +1483,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
+                        Select Regional Sales Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1526,7 +1526,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Area Manager" />
+                        Select Area Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1646,7 +1646,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Enter Amount" />
+                        Enter Amount
                       </Label>
                       {view ? (
                         <span>
@@ -1756,7 +1756,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Director" />
+                        Select Director
                       </Label>
                       {view ? (
                         <span>
@@ -1800,7 +1800,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Sales Manager" />
+                        Select Sales Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1849,7 +1849,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
+                        Select Regional Sales Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1890,7 +1890,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select Area Manager" />
+                        Select Area Manager
                       </Label>
                       {view ? (
                         <span>
@@ -1933,7 +1933,7 @@ export default function EditTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Select MPO" />
+                        Select MPO
                       </Label>
                       {view ? (
                         <span>
@@ -2186,7 +2186,7 @@ export default function EditTarget(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                <IntlMessages id="Save" />
+                Save
               </span>
                 
               </Button>

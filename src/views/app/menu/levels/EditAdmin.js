@@ -428,12 +428,7 @@ export default function EditAdmin(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span>
-
-                <IntlMessages
-                  id="Save"
-                />
-                </span>
+                <span>Save</span>
               </Button>
             )}
             {thisView ? (
@@ -451,9 +446,7 @@ export default function EditAdmin(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span>
-                  <IntlMessages id={buttonName} />
-                </span>
+                <span>{buttonName}</span>
               </Button>
             ) : (
               ''

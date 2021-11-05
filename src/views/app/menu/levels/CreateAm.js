@@ -469,12 +469,11 @@ export default function CreateDirector({ history }) {
               </span>
 
               <span className="label">
-                <IntlMessages id="Add AM" />
+                <p>Add AM</p>
               </span>
             </Button>
           </Form>
         </Formik>
-        <div style={{ marginTop: '30px' }} />
       </CardBody>
     </Card>
   );

@@ -218,7 +218,8 @@ export default function UpdateSample(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View Sample" />
+          View Sample
+
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -227,7 +228,7 @@ export default function UpdateSample(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Manager Name" />
+                    Manager Name
                   </Label>
                   {view ? (
                     <span>
@@ -265,7 +266,7 @@ export default function UpdateSample(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assigned To Name" />
+                    Assigned To Name
                   </Label>
                   {view ? (
                     <span>
@@ -460,7 +461,7 @@ export default function UpdateSample(props) {
             <span className="bounce3" />
           </span>
           <span className="label">
-            <IntlMessages id="Suspand Sample" />
+            Suspand Sample
           </span>
         </Button>
       </CardBody>
