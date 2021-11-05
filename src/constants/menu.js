@@ -367,10 +367,6 @@ const data = [
             to: `${adminRoot}/menu/levels/viewAdmin`,
            
           },
-          {
-            label: 'menu.fieldStaff',
-            to: `${adminRoot}/menu/levels/viewDoctor`,
-          },
 
           // {
           //   icon: 'simple-icon-arrow-right',

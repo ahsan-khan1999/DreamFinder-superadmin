@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import ViewCurrentUser from './ViewCurrentUser';
 // import ViewAdministrator from './third-level-4';
 
 const CreateViewDoctor = React.lazy(() =>
