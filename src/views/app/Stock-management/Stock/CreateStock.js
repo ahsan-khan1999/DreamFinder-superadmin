@@ -113,7 +113,7 @@ export default function CreateStock({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Department Head Added Sucessfully',
+          'Stocks Added Sucessfully',
           'Success',
           3000,
           null,
