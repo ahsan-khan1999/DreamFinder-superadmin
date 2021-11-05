@@ -30,12 +30,20 @@ import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 const animatedComponents = makeAnimated();
 import { getToken } from 'Utils/auth.util';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditMpo(props) {
+  const currentUser = props?.location?.state;
+  let [loadingLocation, setLoadingLocation] = useState(false);
+
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -59,15 +67,11 @@ export default function EditMpo(props) {
   const [loadingSuspand, setLoadingSuspand] = useState(false);
 
   let [service_location, setService_location] = useState([]);
-  const currentUser = props?.location?.state;
-  let service_location_id = [];
-  currentUser?.field_staff?.service_location?.map((item) =>
-    service_location_id?.push(item?.uid)
-  );
+
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [buttonName, setButtonName] = useState('');
- 
+
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -95,7 +99,6 @@ export default function EditMpo(props) {
   user?.filter((item) =>
     amOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  
 
   const editProfile = (e) => {
     e.preventDefault();
@@ -184,7 +187,7 @@ export default function EditMpo(props) {
         );
       }
     } else {
-      setLoadingSuspand(true)
+      setLoadingSuspand(true);
       let apiData = {
         uid: currentUser?.uid,
       };
@@ -198,11 +201,11 @@ export default function EditMpo(props) {
           null,
           ''
         );
-      setLoadingSuspand(false)
+        setLoadingSuspand(false);
 
         props.history.push('/app/menu/levels/ViewMpo');
       } else {
-      setLoadingSuspand(true)
+        setLoadingSuspand(true);
 
         NotificationManager.error(
           res?.response_message,
@@ -211,8 +214,7 @@ export default function EditMpo(props) {
           null,
           ''
         );
-      setLoadingSuspand(false)
-
+        setLoadingSuspand(false);
       }
     }
     //  setStatusUpdate()
@@ -220,6 +222,7 @@ export default function EditMpo(props) {
     // console.log(doctor?.password);
   };
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true);
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
@@ -230,6 +233,7 @@ export default function EditMpo(props) {
         },
       }
     );
+    setLoadingLocation(false);
 
     setService_location(response?.data?.response_data);
   };
@@ -247,7 +251,7 @@ export default function EditMpo(props) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({label:item?.name,value:item?.name,id:item?.uid})
+    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
   );
   console.log(defaultOptions);
   return (
@@ -318,7 +322,6 @@ export default function EditMpo(props) {
                 </FormGroup>
               </Col>
 
-             
               <Col lg={6}>
                 <FormGroup>
                   <label>
@@ -369,7 +372,6 @@ export default function EditMpo(props) {
                   ) : (
                     <Input
                       required
-
                       disabled
                       value={admin?.phone_number}
                       type="text"
@@ -489,6 +491,16 @@ export default function EditMpo(props) {
                         <p>{item?.name}</p>
                       </span>
                     ))
+                  ) : loadingLocation ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
                   ) : (
                     <Select
                       cacheOptions
@@ -504,8 +516,6 @@ export default function EditMpo(props) {
                           };
                         }
                       )}
-
-
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />
@@ -519,7 +529,6 @@ export default function EditMpo(props) {
                 className="btn btn-primary"
                 // type="submit"
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
-
                 // className={`btn-shadow btn-multiple-state ${
                 //   loading ? 'show-spinner' : ''
                 // }`}
@@ -538,7 +547,6 @@ export default function EditMpo(props) {
                 className="btn btn-primary"
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 disabled={loading ? true : false}
-
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
@@ -551,31 +559,25 @@ export default function EditMpo(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  Save
-                </span>
+                <span className="label">Save</span>
               </Button>
             )}
             {thisView ? (
               <Button
-                style={{ 'background-color': '#0066B3'}}
+                style={{ 'background-color': '#0066B3' }}
                 // className="btn btn-primary"
                 disabled={loading ? true : false}
-
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
                 onClick={suspandAdmin}
-              
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  {buttonName}
-                </span>
+                <span className="label">{buttonName}</span>
               </Button>
             ) : (
               ''

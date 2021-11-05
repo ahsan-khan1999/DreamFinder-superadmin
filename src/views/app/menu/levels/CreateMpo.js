@@ -40,6 +40,7 @@ import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
 import axios from 'axios';
 import makeAnimated from 'react-select/animated';
+import Loader from 'react-loader-spinner';
 
 const animatedComponents = makeAnimated();
 
@@ -52,6 +53,7 @@ export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   let [service_location, setService_location] = useState([]);
 
+  let [loadingLocation, setLoadingLocation] = useState(false);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -93,6 +95,7 @@ export default function CreateDirector({ history }) {
 
   const am = useSelector((state) => state?.ViewUserReducer?.areaManager);
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
@@ -103,6 +106,7 @@ export default function CreateDirector({ history }) {
         },
       }
     );
+    setLoadingLocation(false)
 
     setService_location(response?.data?.response_data);
   };
@@ -390,14 +394,23 @@ export default function CreateDirector({ history }) {
                   <Label>
                     <IntlMessages id="Select Teritory" />
                   </Label>
-                  <Select
+                  {loadingLocation ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : <Select
                     cacheOptions
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     isMulti
                     onChange={(e) => handleChange(e)}
                     options={option}
-                  />
+                  />}
+                  
                 </FormGroup>
               </Col>
               {/* <Col lg={6}>
