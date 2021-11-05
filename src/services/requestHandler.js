@@ -109,10 +109,10 @@ const SERVICE_URLS = {
   createSampleTransaction: 'sample_transactions/create',
   readSampleTransaction: 'sample_transactions/read',
   suspandSampleTransaction: 'sample_transactions/suspend',
-  updateRegion:'region-classifications/suspend',
-  addregion:'region-classifications/create',
-  editRegion:'region-classifications/update',
-  readStatic:'static-data',
+  updateRegion: 'region-classifications/suspend',
+  addregion: 'region-classifications/create',
+  editRegion: 'region-classifications/update',
+  readStatic: 'static-data',
 
   //Concord Orders
   getorder: 'orders/read',
@@ -160,7 +160,7 @@ const SERVICE_URLS = {
   suspandstockstransaction: 'stock-transactions/suspend',
 
   //Concord Doctor Categorys
-  
+
   getdoctorcategorys: 'doctor-specialitys/read',
   createdoctorcategorys: 'doctor-specialitys/create',
   updatedoctorcategorys: 'doctor-specialitys/update',
@@ -192,7 +192,7 @@ const CreateSampleTransaction = (data) =>
   post(SERVICE_URLS.createSampleTransaction, data, {
     feature: featureConstants.static,
   });
-  const CreateUsers = (data) =>
+const CreateUsers = (data) =>
   post(SERVICE_URLS.createUsers, data, {
     feature: featureConstants.static,
   });
@@ -204,7 +204,8 @@ const SuspandSampleTransaction = (data) =>
   patch(SERVICE_URLS.suspandSampleTransaction, data, {
     feature: featureConstants.static,
   });
-
+const updateUser = (data) =>
+  put(SERVICE_URLS.updateUsers, data, { feature: featureConstants.static });
 const requestApproval = (data) =>
   put(SERVICE_URLS.reqApproval, data, { feature: featureConstants.static });
 const updateTest = (data) =>
@@ -344,14 +345,14 @@ const changeDeliveryStatus = (data) =>
     feature: featureConstants.static,
   });
 
-const getAdmin = () => 
+const getAdmin = () =>
   get(
     SERVICE_URLS.getAdmin,
     {},
     {
       feature: featureConstants.static,
     }
-);
+  );
 const getUsers = () =>
   get(
     SERVICE_URLS.getAdmin,
@@ -849,19 +850,19 @@ const suspandRoles = async (data) =>
   patch(SERVICE_URLS.suspandRole, data, {
     feature: featureConstants.static,
   });
-  const deleteRegion = (data) =>
+const deleteRegion = (data) =>
   patch(SERVICE_URLS.updateRegion, data, {
     feature: featureConstants.static,
   });
-  const addRegion = (data) =>
+const addRegion = (data) =>
   post(SERVICE_URLS.addregion, data, {
     feature: featureConstants.static,
   });
-  const EditRegion = (data) =>
+const EditRegion = (data) =>
   put(SERVICE_URLS.editRegion, data, {
     feature: featureConstants.static,
   });
-  
+
 // post g
 
 const apiServices = {
@@ -927,7 +928,7 @@ const apiServices = {
   readThana,
   CreateUsers,
   readRoles,
-  //updateUser,
+  updateUser,
   getDirector,
   getDepo,
   getDeliveryUser,

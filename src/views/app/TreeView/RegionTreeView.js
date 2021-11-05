@@ -55,7 +55,6 @@ export default function RegionTreeView({ history }) {
   const regions = useSelector((state) => state?.CreateRegionReducer?.region);
   const loading = useSelector((state) => state?.CreateRegionReducer?.loading);
   // console.log(regions, 'tree view');
-  console.log(regions,"data");
   // const [newData, setnewData] = useState([]);
   let newdata = [];
   const [data, setData] = useState(regions);

@@ -139,7 +139,7 @@ export default function CreateDirector({ history }) {
       // console.log(test);
       if (res) {
         NotificationManager.success(
-          'Sales Manager Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -388,7 +388,7 @@ export default function CreateDirector({ history }) {
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     isMulti
-                    value={admin?.service_location_uid}
+                    // value={admin?.service_location_uid}
                     onChange={(e) => handleChange(e)}
                     options={option}
                   />
