@@ -54,6 +54,9 @@ export default function CreateStockTransaction({ history }) {
   const distributioncenter = useSelector(
     (state) => state?.distributionCenterReducer?.distributioncenter
   );
+  const distributioncenterloader = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenterloader
+  );
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
@@ -70,6 +73,11 @@ export default function CreateStockTransaction({ history }) {
     (state) =>
       state?.stockTransactionReducer
         ?.get_stock_transaction_distribution_category
+  );
+  const getstock_loader = useSelector(
+    (state) =>
+      state?.stockTransactionReducer
+        ?.get_stock_transaction_distribution_category_loader
   );
 
   let optioncategory = [];
@@ -201,6 +209,11 @@ export default function CreateStockTransaction({ history }) {
                   </label>
 
                   <>
+                  {distributioncenterloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -212,6 +225,7 @@ export default function CreateStockTransaction({ history }) {
                       required
                       options={distributioncenterData}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>
@@ -241,6 +255,7 @@ export default function CreateStockTransaction({ history }) {
                       required
                       options={option_static_Category}
                     />
+                    
                   </>
                 </FormGroup>
               </Col>
@@ -253,6 +268,11 @@ export default function CreateStockTransaction({ history }) {
                   </label>
 
                   <>
+                  {getstock_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
@@ -270,6 +290,7 @@ export default function CreateStockTransaction({ history }) {
                       required
                       options={optioncategory}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>

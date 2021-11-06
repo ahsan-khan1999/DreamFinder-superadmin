@@ -34,7 +34,9 @@ export default function viewCurrentDistributioncenter(props) {
     let [buttonName, setButtonName] = useState();
     const [thisView, setThisView] = useState(true);
     const dispatch = useDispatch();
+  const currentDistribution = props?.location?.state;
     
+
     useEffect(() => {
     
       if (currentDistribution?.status === 'suspended') {
@@ -58,13 +60,17 @@ export default function viewCurrentDistributioncenter(props) {
     };
     
     
-    let options = [];
+
     
     
     
     const [array, setArray] = useState([]);
     const [depoarray, setDepoarray] = useState([]);
     
+
+    console.log(array,"CurrentCheck")
+    console.log(depoarray,"CurrentCheckDepoArray")
+
   
     const distributioncenterregions = useSelector(
       (state) => state?.distributionCenterReducer?.distributioncenterregions
@@ -121,7 +127,6 @@ export default function viewCurrentDistributioncenter(props) {
     );
     
     
-  const currentDistribution = props?.location?.state;
     
 
     const distributioncenter_obj = {
