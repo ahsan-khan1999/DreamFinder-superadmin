@@ -110,7 +110,7 @@ export default function CreateProduct({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Department Head Added Sucessfully',
+          'Products Added Sucessfully',
           'Success',
           3000,
           null,
