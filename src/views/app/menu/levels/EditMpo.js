@@ -36,6 +36,8 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditMpo(props) {
+  const currentUser = props?.location?.state;
+
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -59,7 +61,6 @@ export default function EditMpo(props) {
   const [loadingSuspand, setLoadingSuspand] = useState(false);
 
   let [service_location, setService_location] = useState([]);
-  const currentUser = props?.location?.state;
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)

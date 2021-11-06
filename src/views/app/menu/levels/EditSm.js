@@ -36,6 +36,8 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditSm(props) {
+  const currentUser = props?.location?.state;
+
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -59,10 +61,8 @@ export default function EditSm(props) {
 
   const [thisView, setThisView] = useState(true);
 
-  const currentUser = props?.location?.state;
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
-  console.log(currentUser);
   let [service_location, setService_location] = useState([]);
   const [array, setArray] = useState(admin?.service_location_uid);
   let service_location_id = [];

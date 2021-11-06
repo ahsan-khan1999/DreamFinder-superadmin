@@ -35,6 +35,8 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditRsm(props) {
+  const currentUser = props?.location?.state;
+
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -59,7 +61,6 @@ export default function EditRsm(props) {
   const [suspandLoading, setSuspandLoading] = useState(false);
 
   const [thisView, setThisView] = useState(true);
-  const currentUser = props?.location?.state;
   //   console.log(currentUser);
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>

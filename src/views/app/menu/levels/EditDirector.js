@@ -38,7 +38,6 @@ export default function EditDirector(props) {
 
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
-  console.log(currentUser);
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
