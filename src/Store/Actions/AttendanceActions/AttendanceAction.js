@@ -7,7 +7,8 @@ import {
   VIEW_ATTENDANCE_CONSTANT,
   CREATE_ATTENDANCE_CONSTANT,
   SUSPAND_ATTENDANCE_CONSTANT,
-  VIEW_USER_CONSTANT
+  VIEW_USER_CONSTANT,
+  LOADER_CONSTANT,
 } from 'Store/Constant/Constants';
 
 export const ViewAttendanceAction = () => async (dispatch) => {
@@ -106,6 +107,28 @@ export const CreateAttendanceAction = (data) => async (dispatch) => {
 export const getUsers = (uid, user) => async (dispatch) => {
   const token = JSON.parse(localStorage.getItem('token'));
   try {
+    if (user == 'sm') {
+      dispatch({
+        type: LOADER_CONSTANT.SM_LOADING,
+        payload: true,
+      });
+    } else if (user == 'rsm') {
+      dispatch({
+        type: LOADER_CONSTANT.RSM_LOADING,
+        payload: true,
+      });
+    } else if (user == 'am') {
+      dispatch({
+        type: LOADER_CONSTANT.AM_LOADING,
+        payload: true,
+      });
+    } else if (user == 'mpo') {
+      dispatch({
+        type: LOADER_CONSTANT.MPO_LOADING,
+        payload: true,
+      });
+    }
+
     const head = { 'x-session-key': token.token, 'x-session-type': token.type };
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/users/read/${user}?manager_uid=${uid}`,
@@ -114,25 +137,43 @@ export const getUsers = (uid, user) => async (dispatch) => {
     if (response?.data?.response_code === 200) {
       if (user === 'sm') {
         dispatch({
+          type: LOADER_CONSTANT.SM_LOADING,
+          payload: false,
+        });
+
+        dispatch({
           type: VIEW_USER_CONSTANT.GET_SM,
           payload: response?.data?.response_data,
         });
       } else if (user === 'rsm') {
+        dispatch({
+          type: LOADER_CONSTANT.RSM_LOADING,
+          payload: false,
+        });
         dispatch({
           type: VIEW_USER_CONSTANT.GET_RSM,
           payload: response?.data?.response_data,
         });
       } else if (user === 'am') {
         dispatch({
+          type: LOADER_CONSTANT.AM_LOADING,
+          payload: false,
+        });
+        dispatch({
           type: VIEW_USER_CONSTANT.GET_AM,
           payload: response?.data?.response_data,
         });
       } else if (user === 'mpo') {
         dispatch({
+          type: LOADER_CONSTANT.MPO_LOADING,
+          payload: false,
+        });
+        dispatch({
           type: VIEW_USER_CONSTANT.GET_MPO,
           payload: response?.data?.response_data,
         });
       } else {
+        
         // dispatch({
         //   type: ORDER_CONSTANTS.ORDER_GET_USER,
         //   payload: response?.data?.response_data,

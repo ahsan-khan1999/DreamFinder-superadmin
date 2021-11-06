@@ -30,6 +30,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import { getToken } from 'Utils/auth.util';
 import axios from 'axios';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
@@ -37,6 +38,8 @@ const selectGender = [
 ];
 export default function EditSm(props) {
   const currentUser = props?.location?.state;
+  let [loadingLocation, setLoadingLocation] = useState(false);
+
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)
@@ -237,6 +240,8 @@ export default function EditSm(props) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/region?child_uid=${uid}`,
@@ -247,6 +252,8 @@ export default function EditSm(props) {
         },
       }
     );
+    setLoadingLocation(false)
+
     setService_location(response?.data?.response_data);
   };
   service_location?.filter((item) =>
@@ -532,7 +539,23 @@ export default function EditSm(props) {
                         <p>{item?.name}</p>
                       </span>
                     ))
-                  ) : (
+                  ) : loadingLocation ?  <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> : loadingLocation ? <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> : (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}

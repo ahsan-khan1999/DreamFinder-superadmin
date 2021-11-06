@@ -40,6 +40,7 @@ import {
 import { NotificationManager } from 'components/common/react-notifications';
 import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
 import { currentUser } from 'constants/defaultValues';
+import Loader from 'react-loader-spinner';
 
 const animatedComponents = makeAnimated();
 const delaultOptions = [
@@ -58,7 +59,8 @@ export default function EditTarget(props) {
   // console.log(target, 'targte');
   const [view, setView] = useState(true);
   const [stocks, setStocks] = useState([]);
-
+  let [loadingMedicine, setLoadingMedicine] = useState(false);
+  let [loadingStocks, setLoadingStocks] = useState(false);
   const [targets, setTargets] = useState([]);
   const [currentTargets, setCurrentTargets] = useState([]);
   // console.log(currentTargets,"currentTarget")
@@ -104,6 +106,14 @@ export default function EditTarget(props) {
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
   const am = useSelector((state) => state?.AttendanceReducer?.am);
   const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+  const loadingSM = useSelector((state) => state?.AttendanceReducer?.loadingSm);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
   const salesManager = useSelector(
     (state) => state?.ViewUserReducer?.salesManager
   );
@@ -205,6 +215,8 @@ export default function EditTarget(props) {
   });
 
   const getStocks = async (uid) => {
+    setLoadingStocks(true);
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?distribution_centre_uid=${uid}`,
@@ -215,10 +227,13 @@ export default function EditTarget(props) {
         },
       }
     );
+    setLoadingStocks(false);
 
     setStocks(response?.data?.response_data);
   };
   const getDirectorTarget = async (uid) => {
+    setLoadingMedicine(true);
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/targets/read_stocks?child_uid=${uid}`,
@@ -229,6 +244,7 @@ export default function EditTarget(props) {
         },
       }
     );
+    setLoadingMedicine(false);
 
     setTargets(response?.data?.response_data);
   };
@@ -486,6 +502,16 @@ export default function EditTarget(props) {
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
+                      ) : loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
                       ) : (
                         <Select
                           required
@@ -514,32 +540,7 @@ export default function EditTarget(props) {
                     </FormGroup>
                   </Col>
 
-                  {/* <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Distribtion Center" />
-                      </Label>
-                      {view ? (
-                        <span>
-                          <p>{}</p>
-                        </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            // setTarget({ ...target, assigned_to_uid: val?.key });
-                            // console.log(val);
-                            getStocks(val?.key);
-                          }}
-                          options={distributionCenterOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col> */}
+                
                   {view ? (
                     <Col lg={6}>
                       <FormGroup>
@@ -581,7 +582,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingMedicine ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -804,7 +813,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingStocks ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> :(
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -1033,7 +1050,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           defaultValue={{
@@ -1071,7 +1096,15 @@ export default function EditTarget(props) {
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : (
+                      ) : loadingRSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1130,7 +1163,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingMedicine ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -1420,7 +1461,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           defaultValue={{
@@ -1463,7 +1512,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingRSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1499,7 +1556,15 @@ export default function EditTarget(props) {
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : (
+                      ) :loadingAM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1530,7 +1595,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) :loadingMedicine  ?<div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -1773,7 +1846,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           defaultValue={{
@@ -1819,7 +1900,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingRSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1858,7 +1947,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingAM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1894,7 +1991,15 @@ export default function EditTarget(props) {
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : (
+                      ) : loadingMPO ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1925,7 +2030,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingMedicine  ?<div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> :  (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}

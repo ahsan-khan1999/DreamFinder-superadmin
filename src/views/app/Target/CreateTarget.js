@@ -2,7 +2,7 @@
 
 import { Formik } from 'formik';
 import IntlMessages from 'helpers/IntlMessages';
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useRef } from 'react';
 import {
   Button,
   Card,
@@ -27,7 +27,7 @@ import {
   ViewRegionalSalesManagerManagerAction,
   ViewSalesManagerManagerAction,
 } from 'Store/Actions/User/UserActions';
-import { getToken } from 'Utils/auth.util';
+import { getToken, getUser } from 'Utils/auth.util';
 import axios from 'axios';
 import moment from 'moment';
 import {
@@ -37,6 +37,7 @@ import {
 } from 'Store/Actions/Target/TargetAction';
 import { NotificationManager } from 'components/common/react-notifications';
 import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
+import Loader from 'react-loader-spinner';
 
 const animatedComponents = makeAnimated();
 const delaultOptions = [
@@ -48,10 +49,13 @@ const delaultOptions = [
   { label: 'MPO', value: 'MPO', key: 5 },
 ];
 export default function CreateTarget(props) {
+  const selectInputRef = useRef();
   const [array, setArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const [readTarget, setReadTarget] = useState({});
-
+  const onClear = () => {
+    selectInputRef.current.setValue([], '');
+  };
   const [targets, setTargets] = useState([]);
   const [stocks, setStocks] = useState([]);
   const [selected, setSelected] = useState('');
@@ -70,12 +74,23 @@ export default function CreateTarget(props) {
   const [target, setTarget] = useState(target_obj);
 
   const [selectedMedicine, setSelectedMedicine] = useState('');
+  const loadingSM = useSelector((state) => state?.AttendanceReducer?.loadingSm);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
   const sm = useSelector((state) => state?.AttendanceReducer?.sm);
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
   const am = useSelector((state) => state?.AttendanceReducer?.am);
   const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+  let [loadingMedicine, setLoadingMedicine] = useState(false);
+  let [loadingStocks, setLoadingStocks] = useState(false);
 
   const clearState = () => {
+    // onClear()
     setTarget(target_obj_initial);
   };
 
@@ -87,17 +102,7 @@ export default function CreateTarget(props) {
   }, []);
 
   const director = useSelector((state) => state?.ViewUserReducer?.director);
-  const salesManager = useSelector(
-    (state) => state?.ViewUserReducer?.salesManager
-  );
-  const regionalSalesManager = useSelector(
-    (state) => state?.ViewUserReducer?.regionalSalesManager
-  );
-  const Mpo = useSelector((state) => state?.ViewUserReducer?.mpo);
-
-  const areaManager = useSelector(
-    (state) => state?.ViewUserReducer?.areaManager
-  );
+  
   const distributionCenter = useSelector(
     (state) => state?.TargetReducer?.distributionCenter
   );
@@ -200,9 +205,10 @@ export default function CreateTarget(props) {
     by_doctor_visits: '',
     end_date: '',
   };
-  
+
   //   console.log(target);
   const getStocks = async (uid) => {
+    setLoadingStocks(true);
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?distribution_centre_uid=${uid}`,
@@ -213,6 +219,7 @@ export default function CreateTarget(props) {
         },
       }
     );
+    setLoadingStocks(false);
 
     setStocks(response?.data?.response_data);
   };
@@ -234,6 +241,7 @@ export default function CreateTarget(props) {
   };
   // console.log(readTarget,"parent Sm Target");
   const getDirectorTarget = async (uid) => {
+    setLoadingMedicine(true);
     let token = await getToken();
     const response = await axios.get(
       // `https://concord-backend-m2.herokuapp.com/api/targets/read?manager_uid=${uid}`,
@@ -247,6 +255,7 @@ export default function CreateTarget(props) {
         },
       }
     );
+    setLoadingMedicine(false);
 
     setTargets(response?.data?.response_data);
   };
@@ -542,24 +551,22 @@ export default function CreateTarget(props) {
   const handleBack = () => {
     props.history.push('/app/Target/ViewTarget');
   };
+
   return (
     <Card>
       <CardBody>
+
         <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
           Back
         </Button>
-        <CardTitle>
-          Create Target
-        </CardTitle>
+        <CardTitle>Create Target</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
               <Col lg={6}>
                 <FormGroup>
-                  <Label>
-                    Select to Whom You Want to Assign
-                  </Label>
+                  <Label>Select to Whom You Want to Assign</Label>
 
                   <Select
                     required
@@ -570,6 +577,7 @@ export default function CreateTarget(props) {
                     name="form-field-name-gender"
                     onChange={(val) => {
                       setSelected(val);
+                      clearState();
                     }}
                     options={delaultOptions}
                   />
@@ -580,9 +588,7 @@ export default function CreateTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter Amount
-                      </Label>
+                      <Label>Enter Amount</Label>
 
                       <Input
                         name="amountTest"
@@ -598,19 +604,18 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Director
-                      </Label>
+                      <Label>Select Director</Label>
 
                       <Select
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
+                        ref={selectInputRef}
                         classNamePrefix="react-select"
                         name="form-field-name-gender"
                         onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'sm'));
                           getParentTarget(val?.key);
+                          dispatch(getUsers(val.key, 'sm'));
                         }}
                         options={directorOption}
                       />
@@ -618,56 +623,77 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Sales Manager
-                      </Label>
+                      <Label>Select Sales Manager</Label>
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          setTarget({ ...target, assigned_to_uid: val?.key });
-                          await getDirectorTarget(val?.key);
-                          //   setTimeout(async() => {
-                          //     await console.log(targets[0]?.start_date);
-                          //   }, 3000);
-                        }}
-                        options={salesManagerOption}
-                      />
+                      {loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          ref={selectInputRef}
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            setTarget({ ...target, assigned_to_uid: val?.key });
+                            await getDirectorTarget(val?.key);
+                            //   setTimeout(async() => {
+                            //     await console.log(targets[0]?.start_date);
+                            //   }, 3000);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
 
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
-                      <Select
-                        cacheOptions
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        isMulti
-                        // value={admin?.service_location_uid}
-                        onChange={(val, index) => {
-                          handleChangeProduct(val, index);
+                      {loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          cacheOptions
+                          closeMenuOnSelect={false}
+                          components={animatedComponents}
+                          isMulti
+                          // value={admin?.service_location_uid}
+                          onChange={(val, index) => {
+                            handleChangeProduct(val, index);
 
-                          setTarget({
-                            ...target,
-                            // start_date: moment
-                            //   .unix(targets[0]?.start_date)
-                            //   .format('YYYY-MM-DD h:mm:ss'),
-                          });
-                        }}
-                        options={medicineOption}
-                      />
+                            setTarget({
+                              ...target,
+                              // start_date: moment
+                              //   .unix(targets[0]?.start_date)
+                              //   .format('YYYY-MM-DD h:mm:ss'),
+                            });
+                          }}
+                          options={medicineOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Customer Visits
-                      </Label>
+                      <Label>Enter By Customer Visits</Label>
 
                       <Input
                         name="visit"
@@ -690,9 +716,7 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Doctor Visits
-                      </Label>
+                      <Label>Enter By Doctor Visits</Label>
 
                       <Input
                         name="visitByDoctor"
@@ -739,9 +763,7 @@ export default function CreateTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter Amount
-                      </Label>
+                      <Label>Enter Amount</Label>
 
                       <Input
                         name="amount"
@@ -757,14 +779,13 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Director
-                      </Label>
+                      <Label>Select Director</Label>
 
                       <Select
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
+                        ref={selectInputRef}
                         classNamePrefix="react-select"
                         name="form-field-name-gender"
                         onChange={async (val) => {
@@ -776,14 +797,13 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Distribtion Center
-                      </Label>
+                      <Label>Select Distribtion Center</Label>
 
                       <Select
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
+                        ref={selectInputRef}
                         classNamePrefix="react-select"
                         name="form-field-name-gender"
                         onChange={async (val) => {
@@ -798,17 +818,30 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
-                      <Select
-                        cacheOptions
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        isMulti
-                        // value={admin?.service_location_uid}
-                        onChange={(val, index) => {
-                          handleChangeProduct(val, index);
-                        }}
-                        options={medicineOptionFromStock}
-                      />
+                      {loadingStocks ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          cacheOptions
+                          closeMenuOnSelect={false}
+                          components={animatedComponents}
+                          isMulti
+                          ref={selectInputRef}
+                          // value={admin?.service_location_uid}
+                          onChange={(val, index) => {
+                            handleChangeProduct(val, index);
+                          }}
+                          options={medicineOptionFromStock}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
@@ -903,9 +936,7 @@ export default function CreateTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter Amount
-                      </Label>
+                      <Label>Enter Amount</Label>
 
                       <Input
                         name="amount"
@@ -921,9 +952,7 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Director
-                      </Label>
+                      <Label>Select Director</Label>
 
                       <Select
                         required
@@ -941,76 +970,67 @@ export default function CreateTarget(props) {
 
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Sales Manager
-                      </Label>
-
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'rsm'));
-                          getParentTarget(val?.key);
-
-                          //   setTimeout(async() => {
-                          //     await console.log(targets[0]?.start_date);
-                          //   }, 3000);
-                        }}
-                        options={salesManagerOption}
-                      />
+                      <Label>Select Sales Manager</Label>
+                      {loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
+                            getParentTarget(val?.key);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Regional Sales Manager
-                      </Label>
-
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          setTarget({ ...target, assigned_to_uid: val?.key });
-                          // await getDirectorTarget(val?.key);
-                          await getDirectorTarget(val?.key);
-                        }}
-                        options={regionalSalesManagerOption}
-                      />
+                      <Label>Select Regional Sales Manager</Label>
+                      {loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            setTarget({ ...target, assigned_to_uid: val?.key });
+                            // await getDirectorTarget(val?.key);
+                            await getDirectorTarget(val?.key);
+                          }}
+                          options={regionalSalesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
-                  {/* <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Distribtion Center" />
-                      </Label>
-
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          // setTarget({ ...target, assigned_to_uid: val?.key });
-                          // console.log(val);
-                          getStocks(val?.key);
-                        }}
-                        options={distributionCenterOption}
-                      />
-                    </FormGroup>
-                  </Col> */}
 
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Customer Visits
-                      </Label>
+                      <Label>Enter By Customer Visits</Label>
 
                       <Input
                         name="visit"
@@ -1026,9 +1046,7 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Doctor Visits
-                      </Label>
+                      <Label>Enter By Doctor Visits</Label>
 
                       <Input
                         name="visitByDoctor"
@@ -1045,24 +1063,36 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
-                      <Select
-                        cacheOptions
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        isMulti
-                        // value={admin?.service_location_uid}
-                        onChange={(val, index) => {
-                          handleChangeProduct(val, index);
+                      {loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          cacheOptions
+                          closeMenuOnSelect={false}
+                          components={animatedComponents}
+                          isMulti
+                          // value={admin?.service_location_uid}
+                          onChange={(val, index) => {
+                            handleChangeProduct(val, index);
 
-                          // setTarget({
-                          //   ...target,
-                          //   start_date: moment
-                          //     .unix(targets[0]?.start_date)
-                          //     .format('YYYY-MM-DD h:mm:ss'),
-                          // });
-                        }}
-                        options={medicineOption}
-                      />
+                            // setTarget({
+                            //   ...target,
+                            //   start_date: moment
+                            //     .unix(targets[0]?.start_date)
+                            //     .format('YYYY-MM-DD h:mm:ss'),
+                            // });
+                          }}
+                          options={medicineOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
@@ -1098,9 +1128,7 @@ export default function CreateTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter Amount
-                      </Label>
+                      <Label>Enter Amount</Label>
 
                       <Input
                         name="amount"
@@ -1116,9 +1144,7 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Director
-                      </Label>
+                      <Label>Select Director</Label>
 
                       <Select
                         required
@@ -1135,76 +1161,101 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Sales Manager
-                      </Label>
+                      <Label>Select Sales Manager</Label>
+                      {loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'rsm'));
-
-                          //   setTimeout(async() => {
-                          //     await console.log(targets[0]?.start_date);
-                          //   }, 3000);
-                        }}
-                        options={salesManagerOption}
-                      />
+                            //   setTimeout(async() => {
+                            //     await console.log(targets[0]?.start_date);
+                            //   }, 3000);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Regional Sales Manager
-                      </Label>
+                      <Label>Select Regional Sales Manager</Label>
+                      {loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'am'));
+                            getParentTarget(val?.key);
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'am'));
-                          getParentTarget(val?.key);
-
-                          // await getDirectorTarget(val?.key);
-                        }}
-                        options={regionalSalesManagerOption}
-                      />
+                            // await getDirectorTarget(val?.key);
+                          }}
+                          options={regionalSalesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Area Manager
-                      </Label>
-
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          setTarget({ ...target, assigned_to_uid: val?.key });
-                          // await getDirectorTarget(val?.key);
-                          await getDirectorTarget(val?.key);
-                        }}
-                        options={areaManagerOption}
-                      />
+                      <Label>Select Area Manager</Label>
+                      {loadingAM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            setTarget({ ...target, assigned_to_uid: val?.key });
+                            // await getDirectorTarget(val?.key);
+                            await getDirectorTarget(val?.key);
+                          }}
+                          options={areaManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
 
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Customer Visits
-                      </Label>
+                      <Label>Enter By Customer Visits</Label>
 
                       <Input
                         name="visit"
@@ -1220,9 +1271,7 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Doctor Visits
-                      </Label>
+                      <Label>Enter By Doctor Visits</Label>
 
                       <Input
                         name="visitByDoctor"
@@ -1239,24 +1288,36 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
-                      <Select
-                        cacheOptions
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        isMulti
-                        // value={admin?.service_location_uid}
-                        onChange={(val, index) => {
-                          handleChangeProduct(val, index);
+                      {loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          cacheOptions
+                          closeMenuOnSelect={false}
+                          components={animatedComponents}
+                          isMulti
+                          // value={admin?.service_location_uid}
+                          onChange={(val, index) => {
+                            handleChangeProduct(val, index);
 
-                          // setTarget({
-                          //   ...target,
-                          //   start_date: moment
-                          //     .unix(targets[0]?.start_date)
-                          //     .format('YYYY-MM-DD h:mm:ss'),
-                          // });
-                        }}
-                        options={medicineOption}
-                      />
+                            // setTarget({
+                            //   ...target,
+                            //   start_date: moment
+                            //     .unix(targets[0]?.start_date)
+                            //     .format('YYYY-MM-DD h:mm:ss'),
+                            // });
+                          }}
+                          options={medicineOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
@@ -1292,9 +1353,7 @@ export default function CreateTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter Amount
-                      </Label>
+                      <Label>Enter Amount</Label>
 
                       <Input
                         name="amount"
@@ -1310,9 +1369,7 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Director
-                      </Label>
+                      <Label>Select Director</Label>
 
                       <Select
                         required
@@ -1329,98 +1386,132 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Sales Manager
-                      </Label>
+                      <Label>Select Sales Manager</Label>
+                      {loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'rsm'));
-
-                          //   setTimeout(async() => {
-                          //     await console.log(targets[0]?.start_date);
-                          //   }, 3000);
-                        }}
-                        options={salesManagerOption}
-                      />
+                            //   setTimeout(async() => {
+                            //     await console.log(targets[0]?.start_date);
+                            //   }, 3000);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Regional Sales Manager
-                      </Label>
+                      <Label>Select Regional Sales Manager</Label>
+                      {loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'am'));
+                            // await getDirectorTarget(val?.key);
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'am'));
-                          // await getDirectorTarget(val?.key);
-
-                          // await getDirectorTarget(val?.key);
-                        }}
-                        options={regionalSalesManagerOption}
-                      />
+                            // await getDirectorTarget(val?.key);
+                          }}
+                          options={regionalSalesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select Area Manager
-                      </Label>
+                      <Label>Select Area Manager</Label>
+                      {loadingAM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'mpo'));
+                            getParentTarget(val?.key);
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'mpo'));
-                          getParentTarget(val?.key);
-
-                          // await getDirectorTarget(val?.key);
-                        }}
-                        options={areaManagerOption}
-                      />
+                            // await getDirectorTarget(val?.key);
+                          }}
+                          options={areaManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Select MPO
-                      </Label>
-
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          setTarget({ ...target, assigned_to_uid: val?.key });
-                          // await getDirectorTarget(val?.key);
-                          await getDirectorTarget(val?.key);
-                        }}
-                        options={mpoOption}
-                      />
+                      <Label>Select MPO</Label>
+                      {loadingMPO ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            setTarget({ ...target, assigned_to_uid: val?.key });
+                            // await getDirectorTarget(val?.key);
+                            await getDirectorTarget(val?.key);
+                          }}
+                          options={mpoOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
 
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Customer Visits
-                      </Label>
+                      <Label>Enter By Customer Visits</Label>
 
                       <Input
                         name="visit"
@@ -1437,9 +1528,7 @@ export default function CreateTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        Enter By Doctor Visits
-                      </Label>
+                      <Label>Enter By Doctor Visits</Label>
 
                       <Input
                         name="visitByDoctor"
@@ -1456,17 +1545,29 @@ export default function CreateTarget(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
-                      <Select
-                        cacheOptions
-                        closeMenuOnSelect={false}
-                        components={animatedComponents}
-                        isMulti
-                        // value={admin?.service_location_uid}
-                        onChange={(val, index) => {
-                          handleChangeProduct(val, index);
-                        }}
-                        options={medicineOption}
-                      />
+                      {loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          cacheOptions
+                          closeMenuOnSelect={false}
+                          components={animatedComponents}
+                          isMulti
+                          // value={admin?.service_location_uid}
+                          onChange={(val, index) => {
+                            handleChangeProduct(val, index);
+                          }}
+                          options={medicineOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>

@@ -2,7 +2,7 @@
 
 import { createStore, applyMiddleware } from 'redux';
 
-// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 // import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
@@ -19,7 +19,7 @@ export function configureStore(initialState) {
   const store = createStore(
     reducers,
     initialState,
-    applyMiddleware(thunk)
+    composeEnhancers(applyMiddleware(thunk))
   );
 
   // sagaMiddleware.run(sagas);

@@ -29,12 +29,15 @@ import CustomSelectInput from '../../../../components/common/CustomSelectInput';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import { getToken } from 'Utils/auth.util';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditRsm(props) {
+  let [loadingLocation, setLoadingLocation] = useState(false);
+
   const currentUser = props?.location?.state;
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
@@ -95,6 +98,7 @@ export default function EditRsm(props) {
     salesManager?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/area?child_uid=${uid}`,
@@ -105,6 +109,8 @@ export default function EditRsm(props) {
         },
       }
     );
+    setLoadingLocation(false)
+
     setService_location(response?.data?.response_data);
   };
   let option = [];
@@ -525,7 +531,15 @@ export default function EditRsm(props) {
                         <p>{item?.name}</p>
                       </span>
                     ))
-                  ) : (
+                  ) :loadingLocation ? <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> : (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}

@@ -5,15 +5,20 @@ import {
   CREATE_ATTENDANCE_CONSTANT,
   VIEW_USER_CONSTANT,
   SUSPAND_ATTENDANCE_CONSTANT,
+  LOADER_CONSTANT,
 } from 'Store/Constant/Constants';
 const initial_state = {
   attendance: [],
   create: [],
   loading: false,
-  sm: [],
+  sm: null,
   rsm: [],
   am: [],
   mpo: [],
+  loadingSm: false,
+  loadingAm: false,
+  loadingRsm: false,
+  loadingMpo: false,
 };
 export const AttendanceReducer = (state = initial_state, action) => {
   switch (action.type) {
@@ -43,6 +48,15 @@ export const AttendanceReducer = (state = initial_state, action) => {
       return { ...state, create: action.payload };
     case SUSPAND_ATTENDANCE_CONSTANT.SUSPAND_ATTENDANCE_ERROR:
       return { ...state, loading: action.payload };
+    case LOADER_CONSTANT.SM_LOADING:
+      return { ...state, loadingSm: action.payload };
+    case LOADER_CONSTANT.AM_LOADING:
+      return { ...state, loadingAm: action.payload };
+    case LOADER_CONSTANT.RSM_LOADING:
+      return { ...state, loadingRsm: action.payload };
+    case LOADER_CONSTANT.MPO_LOADING:
+      return { ...state, loadingMpo: action.payload };
+
     default:
       return state;
   }

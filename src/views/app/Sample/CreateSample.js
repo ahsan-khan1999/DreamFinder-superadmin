@@ -41,11 +41,21 @@ import { NotificationManager } from 'components/common/react-notifications';
 import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
 import CreateSampleTransaction from './CreateSampleTransaction';
 import { CreateSampleAction } from 'Store/Actions/SampleAction/SampleAction';
+import Loader from 'react-loader-spinner';
 
 export default function CreateSample(props) {
   const [array, setArray] = useState([]);
-  const [loading, setLoading] = useState(false);
+  let [loadingMedicine, setLoadingMedicine] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+  const loadingSM = useSelector((state) => state?.AttendanceReducer?.loadingSm);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
   const [stock, setStock] = useState([]);
   const sampleObj = {
     assigned_to_uid: '',
@@ -66,6 +76,8 @@ export default function CreateSample(props) {
     })
   );
   const getStocksMedicine = async (uid) => {
+    setLoadingMedicine(true)
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?child_uid=${uid}`,
@@ -76,7 +88,7 @@ export default function CreateSample(props) {
         },
       }
     );
-
+    setLoadingMedicine(false)
     setStock(response?.data?.response_data);
   };
   const director = useSelector((state) => state?.ViewUserReducer?.director);
@@ -180,8 +192,15 @@ export default function CreateSample(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>Select Sales Manager</Label>
-
-                  <Select
+                    {loadingSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : <Select
                     required
                     components={{ Input: CustomSelectInput }}
                     className="react-select"
@@ -195,14 +214,23 @@ export default function CreateSample(props) {
                       //   }, 3000);
                     }}
                     options={salesManagerOption}
-                  />
+                  />}
+                  
                 </FormGroup>
               </Col>
 
               <Col lg={6}>
                 <FormGroup>
                   <Label>Select Medicine</Label>
-                  <Select
+                    {loadingMedicine ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : <Select
                     cacheOptions
                     closeMenuOnSelect={false}
                     components={animatedComponents}
@@ -219,7 +247,8 @@ export default function CreateSample(props) {
                       //   });
                     }}
                     options={medicineOptionFromStock}
-                  />
+                  />}
+                  
                 </FormGroup>
               </Col>
             </Row>

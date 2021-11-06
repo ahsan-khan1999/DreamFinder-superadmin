@@ -28,11 +28,13 @@ import {
 import apiServices from 'services/requestHandler';
 import axios from 'axios';
 import { getToken } from 'Utils/auth.util';
+import Loader from 'react-loader-spinner';
 
 export default function EditDoctorPeriorityList(props) {
   const currentList = props.location.state;
-  console.log(currentList);
   const dispatch = useDispatch();
+  const [loadingList, setLoadingList] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [suspandloading, setsuspandLoading] = useState(false);
 
@@ -41,6 +43,7 @@ export default function EditDoctorPeriorityList(props) {
   const [view, setView] = useState(true);
 
   const readDoctors = async () => {
+    setLoadingList(true);
     let token = await getToken();
     let res = await axios.get(
       'https://concord-backend-m2.herokuapp.com/api/doctors/read',
@@ -51,6 +54,7 @@ export default function EditDoctorPeriorityList(props) {
         },
       }
     );
+    setLoadingList(false);
     setCustomer(res?.data?.response_data);
   };
   useEffect(() => {
@@ -117,42 +121,50 @@ export default function EditDoctorPeriorityList(props) {
         <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
           Back
         </Button>
-        <CardTitle>
-          View Doctor Priority List
-        </CardTitle>
+        <CardTitle>View Doctor Priority List</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
               <Col lg={6}>
                 <FormGroup>
-                  <label>
-                    Select Doctor
-                  </label>
+                  <label>Select Doctor</label>
                   {view ? (
                     <span>
                       <p>{currentList?.doctor?.name}</p>
                     </span>
                   ) : (
                     <>
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        // value={gender}
-                        defaultValue={{
-                          label: currentList?.doctor?.name,
-                          value: currentList?.doctor?.name,
-                          key: currentList?.doctor?.uid,
-                        }}
-                        onChange={(val) => {
-                          // console.log(val.key);
-                          setCustomerID(val.key);
-                        }}
-                        options={customerOptions}
-                      />
+                      {loadingList ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          // value={gender}
+                          defaultValue={{
+                            label: currentList?.doctor?.name,
+                            value: currentList?.doctor?.name,
+                            key: currentList?.doctor?.uid,
+                          }}
+                          onChange={(val) => {
+                            // console.log(val.key);
+                            setCustomerID(val.key);
+                          }}
+                          options={customerOptions}
+                        />
+                      )}
                     </>
                   )}
                 </FormGroup>
@@ -254,9 +266,7 @@ export default function EditDoctorPeriorityList(props) {
                     <span className="bounce2" />
                     <span className="bounce3" />
                   </span>
-                  <span className="label">
-                    Edit
-                  </span>
+                  <span className="label">Edit</span>
                 </Button>
               </>
             )}
@@ -276,9 +286,7 @@ export default function EditDoctorPeriorityList(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                Suspand
-              </span>
+              <span className="label">Suspand</span>
             </Button>
           </Form>
         </Formik>
