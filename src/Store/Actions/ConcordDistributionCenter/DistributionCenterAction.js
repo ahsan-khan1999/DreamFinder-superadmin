@@ -20,21 +20,31 @@ export const GetDistributionCenter = () => async (dispatch) => {
     let res = await apiServices.getdistributionCentres();
 
     if (res?.data?.response_code === 200) {
-      dispatch({
-        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
-        payload: false,
-      });
+   
       dispatch({
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_SUCESS,
         payload: res?.data?.response_data,
+      });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
+        payload: false,
       });
     } else {
       dispatch({
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_ERROR,
         payload: [],
       });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
+        payload: false,
+      });
     }
-  } catch {}
+  } catch {
+    dispatch({
+      type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
+      payload: false,
+    });
+  }
 };
 
 

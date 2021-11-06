@@ -77,6 +77,23 @@ export default function CreateCustomers({ history }) {
     (state) => state?.doctorsReducer?.hierarchy_market
   );
 
+  const hierarchy_region_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_region_loader
+  );
+
+  const hierarchy_area_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_area_loader
+  );
+  const hierarchy_thana_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_thana_loader
+  );
+  const hierarchy_territory_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_territory_loader
+  );
+  const hierarchy_market_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_market_loader
+  );
+
   let optionregion = [];
   hierarchy_region?.filter((item) =>
     optionregion.push({
@@ -404,6 +421,11 @@ export default function CreateCustomers({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_region_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -415,6 +437,7 @@ export default function CreateCustomers({ history }) {
                       }}
                       options={optionregion}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -426,6 +449,11 @@ export default function CreateCustomers({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_area_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -437,6 +465,7 @@ export default function CreateCustomers({ history }) {
                       }}
                       options={optionarea}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -448,6 +477,11 @@ export default function CreateCustomers({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_thana_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -459,6 +493,7 @@ export default function CreateCustomers({ history }) {
                       }}
                       options={optionthana}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -471,6 +506,11 @@ export default function CreateCustomers({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_territory_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -482,6 +522,7 @@ export default function CreateCustomers({ history }) {
                       }}
                       options={optionterritory}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -494,6 +535,11 @@ export default function CreateCustomers({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_market_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -508,6 +554,7 @@ export default function CreateCustomers({ history }) {
                       }}
                       options={optionmarket}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>

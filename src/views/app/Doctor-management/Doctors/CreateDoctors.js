@@ -100,6 +100,23 @@ export default function CreateDoctors({ history }) {
   const hierarchy_market = useSelector(
     (state) => state?.doctorsReducer?.hierarchy_market
   );
+  
+  const hierarchy_region_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_region_loader
+  );
+
+  const hierarchy_area_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_area_loader
+  );
+  const hierarchy_thana_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_thana_loader
+  );
+  const hierarchy_territory_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_territory_loader
+  );
+  const hierarchy_market_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_market_loader
+  );
 
   let optiongetdoc_category = [];
   doctorcategory?.filter((item) =>
@@ -524,6 +541,7 @@ export default function CreateDoctors({ history }) {
                   </Label>
 
                   <>
+                  
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -550,6 +568,11 @@ export default function CreateDoctors({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_region_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -561,6 +584,7 @@ export default function CreateDoctors({ history }) {
                       }}
                       options={optionregion}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -572,6 +596,11 @@ export default function CreateDoctors({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_area_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -583,6 +612,7 @@ export default function CreateDoctors({ history }) {
                       }}
                       options={optionarea}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -594,6 +624,11 @@ export default function CreateDoctors({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_thana_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -605,6 +640,7 @@ export default function CreateDoctors({ history }) {
                       }}
                       options={optionthana}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -617,6 +653,11 @@ export default function CreateDoctors({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_territory_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -628,6 +669,7 @@ export default function CreateDoctors({ history }) {
                       }}
                       options={optionterritory}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
@@ -640,8 +682,12 @@ export default function CreateDoctors({ history }) {
                   </Label>
 
                   <>
+                  {hierarchy_market_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
-                      required
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
@@ -654,6 +700,7 @@ export default function CreateDoctors({ history }) {
                       }}
                       options={optionmarket}
                     />
+                    }
                   </>
                 </AvGroup>
               </Col>
