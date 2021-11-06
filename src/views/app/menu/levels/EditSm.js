@@ -37,7 +37,10 @@ const selectGender = [
 ];
 export default function EditSm(props) {
   const currentUser = props?.location?.state;
-
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -65,10 +68,7 @@ export default function EditSm(props) {
   const [confirmPassword, setConfirmPassword] = useState('');
   let [service_location, setService_location] = useState([]);
   const [array, setArray] = useState(admin?.service_location_uid);
-  let service_location_id = [];
-  currentUser?.field_staff?.service_location?.map((item) =>
-    service_location_id?.push(item?.uid)
-  );
+  
  
   const dispatch = useDispatch();
   const readRoles = () => {

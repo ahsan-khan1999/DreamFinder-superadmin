@@ -36,7 +36,10 @@ const selectGender = [
 ];
 export default function EditRsm(props) {
   const currentUser = props?.location?.state;
-
+  let service_location_id = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    service_location_id?.push(item?.uid)
+  );
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -62,10 +65,7 @@ export default function EditRsm(props) {
 
   const [thisView, setThisView] = useState(true);
   //   console.log(currentUser);
-  let service_location_id = [];
-  currentUser?.field_staff?.service_location?.map((item) =>
-    service_location_id?.push(item?.uid)
-  );
+  
   const [confirmPassword, setConfirmPassword] = useState('');
   
   const dispatch = useDispatch();
