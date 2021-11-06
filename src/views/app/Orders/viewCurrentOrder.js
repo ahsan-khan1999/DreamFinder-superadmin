@@ -28,17 +28,22 @@ import { updateOrderAction } from 'Store/Actions/Orders/ViewOrderAction';
 import StatuschangedModal from './StatuschangedModal';
 export default function viewCurrentOrderComponent(props) {
   // let view = useSelector((state) => state?.ViewCurrentOrderRedcuer?.view);
+ 
+ 
+ 
+ 
+ 
   let currentOrder = props?.location?.state;
-  console.log(currentOrder)
+  const [show, setShow] = useState(false);
+ 
+ 
+ 
+ 
+ 
   const formikData = useFormik({
-    initialValues: {
-      //   password: doctor_obj?.password,
-      //   confirmPassword: confirmPassword,
-    },
-    // validate: validate,
-
     onSubmit: (values) => { },
   });
+
   useEffect(() => {
     if (currentOrder?.length === 0) {
       props.history.push('/app/Orders/orders');
@@ -123,7 +128,6 @@ export default function viewCurrentOrderComponent(props) {
   };
 
 
-  const [show, setShow] = useState(false);
 
   // MODAL CLOSE FUCNTION
   const handleClose = () => {

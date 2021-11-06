@@ -17,6 +17,9 @@ const initialState = {
   distributioncenterregions: [],
   depoManager: [],
   distributionRegionAreas: [],
+  distributionRegionAreasloader:false,
+  distributioncenterregionsloader:false,
+  depoManagerloader:false
 };
 export const DistributionCenterReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -33,7 +36,7 @@ export const DistributionCenterReducer = (state = initialState, { type, payload 
 
 
     case DISTRIBUTION_CENTER_CONSTANT.CREATE_DISTRIBUTION_CENTER_LOADING:
-      return { ...state, createdistributioncenter: true }
+      return { ...state, createdistributioncenterloader: payload }
 
     case DISTRIBUTION_CENTER_CONSTANT.CREATE_DISTRIBUTION_CENTER_SUCCESS:
       return { ...state, createdistributioncenter: payload }
@@ -43,7 +46,7 @@ export const DistributionCenterReducer = (state = initialState, { type, payload 
 
 
     case DISTRIBUTION_CENTER_CONSTANT.UPDATE_DISTRIBUTION_CENTER_LOADING:
-      return { ...state, updatedistributioncenter: true }
+      return { ...state, updatedistributioncenterloader: true }
 
     case DISTRIBUTION_CENTER_CONSTANT.UPDATE_DISTRIBUTION_CENTER_SUCCESS:
       return { ...state, updatedistributioncenter: payload }
@@ -58,7 +61,7 @@ export const DistributionCenterReducer = (state = initialState, { type, payload 
 
 
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_LOADING:
-      return { ...state, loading: payload, distributioncenterregions: [] };
+      return { ...state,  distributioncenterregionsloader: payload };
 
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_SUCESS:
       return { ...state, distributioncenterregions: payload };
@@ -68,7 +71,7 @@ export const DistributionCenterReducer = (state = initialState, { type, payload 
 
 
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING:
-      return { ...state, loading: payload };
+      return { ...state, depoManagerloader: payload };
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_SUCCESS:
       return { ...state, depoManager: payload };
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_ERROR:
@@ -78,6 +81,10 @@ export const DistributionCenterReducer = (state = initialState, { type, payload 
 
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_GET_AREAS:
       return { ...state, distributionRegionAreas: payload };
+
+
+    case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_GET_AREAS_LOADER:
+      return { ...state, distributionRegionAreasloader: payload };
 
 
     default:

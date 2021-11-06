@@ -115,18 +115,8 @@ export default function ViewCurrentDoctors(props) {
     (state) => state?.doctorsReducer?.hierarchy_market
   );
 
-    var specialDay_arr = []; 
-  for(var i = 0; i < Object.keys(currentDoctor?.special_day).length; i++) {
-    var objectspecialday = {}; 
-    objectspecialday['day'] = Object.keys(currentDoctor?.special_day)[i];
-    objectspecialday['date'] = Object.values(currentDoctor?.special_day)[i];
-    specialDay_arr.push(objectspecialday);
-    }
 
-
-
-
-  let optiongetdoc_category = [];
+    let optiongetdoc_category = [];
   doctorcategory?.filter((item) =>
     optiongetdoc_category.push({
       label: item?.name,
@@ -195,28 +185,57 @@ export default function ViewCurrentDoctors(props) {
   const [specialdate, setSpecialdate] = useState('');
   let [array, setArray] = useState([]);
   const [obj, setObj] = useState();
+ const [specialObj, setSpecialObj] = useState({});
 
+
+  useEffect(() => {
+    tabledata();
+  }, []);
+
+  const tabledata = () => {
+    var specialDay_arr = [];
+    for (var i = 0; i < Object.keys(currentDoctor?.special_day).length; i++) {
+      var objectspecialday = {};
+      objectspecialday['day'] = Object.keys(currentDoctor?.special_day)[i];
+      objectspecialday['date'] = Object.values(currentDoctor?.special_day)[i];
+      specialDay_arr.push(objectspecialday);
+    }
+
+    console.log(currentDoctor, 'currentobj');
+    console.log(array, 'array');
+    let defaultobj = {};
+    specialDay_arr?.filter(
+      (item) =>
+        (defaultobj = {
+          [item?.day]: item?.date,
+        })
+    );
+    setArray(specialDay_arr);
+    setSpecialObj(currentDoctor?.special_day);
+    }
 
   const handleChangeToView = () => {
     props.history.push('/app/doctor-management/viewDoctors');
+    
   };
 
   const handlespecialdaydate = async (day, date) => {
-    if(day!== undefined && date !== ""  )
-    {
-      const prearray = [...array];
+    if (day !== undefined && date !== '') {
+      let prearray = [...array];
       prearray.push({
         day: day,
         date: date,
       });
-      setArray(prearray);
+
+      let obj1 = { ...specialObj };
       const object = {
-        ...obj,
+        ...obj1,
         [day]: date,
       };
-      setObj(object);
-    }
-    else{
+      setSpecialObj(object);
+
+      setArray(prearray);
+    } else {
       NotificationManager.error(
         'Please Enter Required Special Date Fields',
         'Error',
@@ -249,6 +268,7 @@ export default function ViewCurrentDoctors(props) {
     console.log(apiData);
     apiData = {
       ...doctorCreate,
+      special_day: specialObj,
     }
     let res = await dispatch(UpdateDoctor(apiData));
     if (res) {
@@ -1001,7 +1021,7 @@ export default function ViewCurrentDoctors(props) {
                             </tr>
                           </thead>
                           <tbody>
-                            {specialDay_arr?.map((item, index) => {
+                            {array?.map((item, index) => {
                               return (
                                 <tr>
                                   <td className="text-capitalize">{item?.day}</td>
@@ -1031,7 +1051,7 @@ export default function ViewCurrentDoctors(props) {
                       </thead>
                       <tbody>
                        
-                        {specialDay_arr?.map((item, index) => {
+                        {array?.map((item, index) => {
                           return (
                             <tr>
                               <td>{item?.day}</td>
@@ -1039,11 +1059,13 @@ export default function ViewCurrentDoctors(props) {
                               <td>{item?.date}</td>
                               <td>
                                 <i
-                                  onClick={() => {
+                                   onClick={() => {
                                     const test = [...array];
                                     test.splice(index, 1);
-                                    console.log(test);
                                     setArray(test);
+                                    let table_obj = { ...specialObj };
+                                    delete table_obj[item.day];
+                                    setSpecialObj(table_obj);
                                   }}
                                   style={{ fontSize: '20px', color: 'red' }}
                                   className="simple-icon-close"

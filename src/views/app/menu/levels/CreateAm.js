@@ -40,6 +40,7 @@ import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
 import makeAnimated from 'react-select/animated';
 import axios from 'axios';
+import Loader from 'react-loader-spinner';
 const animatedComponents = makeAnimated();
 
 const selectGender = [
@@ -52,8 +53,8 @@ export default function CreateDirector({ history }) {
   const [loading, setLoading] = useState(false);
 
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [array, setArray] = useState(admin?.service_location_uid);
   let [service_location, setService_location] = useState([]);
+  let [loadingLocation, setLoadingLocation] = useState(false);
 
   const admin_obj = {
     email_address: '',
@@ -68,13 +69,15 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
     manager_uid: '',
-    service_location_uid: array,
+    service_location_uid: [],
   };
+  const [admin, setAdmin] = useState(admin_obj);
+
+  const [array, setArray] = useState(admin?.service_location_uid);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
-  const [admin, setAdmin] = useState(admin_obj);
 
   const readUser = () => {
     dispatch(ViewRegionalSalesManagerManagerAction());
@@ -131,12 +134,12 @@ export default function CreateDirector({ history }) {
 
       return;
     } else {
-      let res = await dispatch(CreateAmAction(test));
+      let res = await dispatch(CreateAmAction(admin));
       // console.log(test, 'admin create res');
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -160,6 +163,7 @@ export default function CreateDirector({ history }) {
     setLoading(false);
   };
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/thana?child_uid=${uid}`,
@@ -170,6 +174,7 @@ export default function CreateDirector({ history }) {
         },
       }
     );
+    setLoadingLocation(false)
 
     setService_location(response?.data?.response_data);
   };
@@ -183,7 +188,8 @@ export default function CreateDirector({ history }) {
     options?.map((item, index) => {
       value.push(item?.key);
     });
-    await setArray(value);
+    let test = { ...admin, service_location_uid: value };
+    setAdmin(test);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   return (
@@ -385,46 +391,30 @@ export default function CreateDirector({ history }) {
                   />
                 </FormGroup>
               </Col>
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select SM" />
-                  </Label>
-
-                  <Select
-                    required
-                    components={{ Input: CustomSelectInput }}
-                    className="react-select"
-                    classNamePrefix="react-select"
-                    name="form-field-name-gender"
-                    // value={gender}
-
-                    onChange={(val) => {
-                      setAdmin({
-                        ...admin,
-                        manager_uid: val.key,
-                      });
-                      getServiceLocationUid(val.key);
-                    }}
-                    options={smOptiopns}
-                  />
-                </FormGroup>
-              </Col> */}
+              
 
               <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select Area" />
                   </Label>
-                  <Select
+                  {loadingLocation ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : <Select
                     cacheOptions
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     isMulti
-                    value={admin?.service_location_uid}
                     onChange={(e) => handleChange(e)}
                     options={option}
-                  />
+                  />}
+                  
                 </FormGroup>
               </Col>
               {/* <Col lg={6}>
@@ -453,7 +443,6 @@ export default function CreateDirector({ history }) {
             <Button
               // className="btn btn-primary"
               disabled={loading ? true : false}
-
               style={{ 'background-color': '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -468,13 +457,10 @@ export default function CreateDirector({ history }) {
                 <span className="bounce3" />
               </span>
 
-              <span className="label">
-                <IntlMessages id="Add AM" />
-              </span>
+              <span className="label">Add AM</span>
             </Button>
           </Form>
         </Formik>
-        <div style={{ marginTop: '30px' }} />
       </CardBody>
     </Card>
   );

@@ -11,10 +11,6 @@ import { Formik, Form, Field, useFormik } from 'formik';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getToken } from 'Utils/auth.util';
-import BestSellers from 'containers/dashboards/BestSellers';
-import AdvancedSearch from 'containers/dashboards/AdvancedSearch';
-import { Link, NavLink } from 'react-router-dom';
-import products from 'data/products';
 import AddNewSurveyModal from 'containers/applications/AddNewSurveyModal';
 import AddNewModal from 'containers/pages/AddNewModal';
 import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
@@ -68,7 +64,11 @@ export default function CreateProduct({ history }) {
   const getProductCategory = useSelector(
     (state) => state?.productReducer?.getProductCategory
   );
+  const getProductCategoryloader = useSelector(
+    (state) => state?.productReducer?.getProductCategoryloader
+  );
 
+  
   const [product, setProduct] = useState(product_obj);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [file, setFile] = useState();
@@ -110,7 +110,7 @@ export default function CreateProduct({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Department Head Added Sucessfully',
+          'Products Added Sucessfully',
           'Success',
           3000,
           null,
@@ -234,11 +234,16 @@ export default function CreateProduct({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <label>
-                    <IntlMessages id="Select " />
+                    <IntlMessages id="Select" />
                     {selectedCategory}
                   </label>
 
                   <>
+                  {getProductCategoryloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -251,6 +256,7 @@ export default function CreateProduct({ history }) {
                       required
                       options={optioncategory}
                     />
+                  }
                   </>
                 </FormGroup>
               </Col>

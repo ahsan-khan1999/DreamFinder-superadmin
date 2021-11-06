@@ -76,7 +76,7 @@ module.exports = {
   'menu.admin': 'Admin',
   'menu.director': 'Director',
   'menu.depo': 'Depo Managar',
-
+  'meun.addAdmin':"Add Admin",
   'menu.orders': 'Order',
   'menu.viewOrders': 'View Order',
   'menu.request': 'Request',

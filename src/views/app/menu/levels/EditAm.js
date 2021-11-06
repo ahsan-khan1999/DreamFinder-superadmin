@@ -29,31 +29,20 @@ import CustomSelectInput from '../../../../components/common/CustomSelectInput';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import { getToken } from 'Utils/auth.util';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditAm(props) {
-  const [thisView, setThisView] = useState(true);
-  const [array, setArray] = useState(admin?.service_location_uid);
-  const [loading, setLoading] = useState(false);
-  const [loadingSuspand, setLoadingSuspand] = useState(false);
-
-  const [admin, setAdmin] = useState(admin_obj);
-
-  let [service_location, setService_location] = useState([]);
-
   const currentUser = props?.location?.state;
+  let [loadingLocation, setLoadingLocation] = useState(false);
+
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)
   );
-  //   console.log(currentUser);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  console.log(currentUser);
-  let [buttonName, setButtonName] = useState();
-
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -69,6 +58,21 @@ export default function EditAm(props) {
     manager_uid: currentUser?.field_staff?.manager?.uid,
     service_location_uid: service_location_id,
   };
+  const [thisView, setThisView] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
+
+  const [admin, setAdmin] = useState(admin_obj);
+  const [array, setArray] = useState(admin?.service_location_uid);
+
+  let [service_location, setService_location] = useState([]);
+
+  
+  //   console.log(currentUser);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  let [buttonName, setButtonName] = useState();
+
+ 
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -220,6 +224,7 @@ export default function EditAm(props) {
     // console.log(doctor?.password);
   };
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/thana?child_uid=${uid}`,
@@ -230,6 +235,7 @@ export default function EditAm(props) {
         },
       }
     );
+    setLoadingLocation(false)
 
     setService_location(response?.data?.response_data);
   };
@@ -487,7 +493,15 @@ export default function EditAm(props) {
                         <p>{item?.name}</p>
                       </span>
                     ))
-                  ) : (
+                  ) :loadingLocation ? <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> : (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}

@@ -95,6 +95,8 @@ export default function viewDistributioncenter({ match, history }) {
        
       ),
       uid: item?.uid,
+
+      depomanagersSelect: item?.depot_managers,
     })
   );
 
@@ -194,7 +196,7 @@ export default function viewDistributioncenter({ match, history }) {
                   color="#00BFFF"
                   height={100}
                   width={100}
-                  color="#003766"
+                  color="#0066b3"
                 />
               </div>
             ) : (

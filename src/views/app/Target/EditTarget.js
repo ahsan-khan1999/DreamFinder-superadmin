@@ -40,6 +40,7 @@ import {
 import { NotificationManager } from 'components/common/react-notifications';
 import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
 import { currentUser } from 'constants/defaultValues';
+import Loader from 'react-loader-spinner';
 
 const animatedComponents = makeAnimated();
 const delaultOptions = [
@@ -53,22 +54,36 @@ const delaultOptions = [
 
 export default function EditTarget(props) {
   let currentTarget = props?.location?.state;
-  console.log(currentTarget);
   const [array, setArray] = useState();
   const [loadingSuspand, setLoadingSuspand] = useState(false);
-  const [target, setTarget] = useState(target_obj);
   // console.log(target, 'targte');
   const [view, setView] = useState(true);
   const [stocks, setStocks] = useState([]);
-
+  let [loadingMedicine, setLoadingMedicine] = useState(false);
+  let [loadingStocks, setLoadingStocks] = useState(false);
   const [targets, setTargets] = useState([]);
   const [currentTargets, setCurrentTargets] = useState([]);
-  // console.log(currentTargets,"currentTarget");
+  // console.log(currentTargets,"currentTarget")
+  const target_obj = {
+    uid: currentTarget?.uid,
+    amount: currentTarget?.amount?.amount,
+    medicines: currentTarget?.medicines,
+    no_orders: currentTarget?.no_orders?.no_orders,
+    no_prescriptions: currentTarget?.no_prescriptions?.no_prescriptions,
+    start_date: currentTarget?.start_date,
+    by_customer_visits: Number(
+      currentTarget?.by_customer_visits?.by_customer_visits
+    ),
+    by_doctor_visits: Number(currentTarget?.by_doctor_visits?.by_doctor_visits),
+    end_date: currentTarget?.end_date,
+  };
   const [selected, setSelected] = useState({
     label: 'Director',
     value: 'Director',
     key: 1,
   });
+  const [target, setTarget] = useState(target_obj);
+
   // console.log(selected);
   const [selectedMedicine, setSelectedMedicine] = useState('');
   const dispatch = useDispatch();
@@ -91,6 +106,14 @@ export default function EditTarget(props) {
   const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
   const am = useSelector((state) => state?.AttendanceReducer?.am);
   const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+  const loadingSM = useSelector((state) => state?.AttendanceReducer?.loadingSm);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
   const salesManager = useSelector(
     (state) => state?.ViewUserReducer?.salesManager
   );
@@ -190,20 +213,10 @@ export default function EditTarget(props) {
       key: item?.quantity,
     });
   });
-  const target_obj = {
-    uid: currentTarget?.uid,
-    amount: currentTarget?.amount?.amount,
-    medicines: currentTarget?.medicines,
-    no_orders: currentTarget?.no_orders?.no_orders,
-    no_prescriptions: currentTarget?.no_prescriptions?.no_prescriptions,
-    start_date: currentTarget?.start_date,
-    by_customer_visits: Number(
-      currentTarget?.by_customer_visits?.by_customer_visits
-    ),
-    by_doctor_visits: Number(currentTarget?.by_doctor_visits?.by_doctor_visits),
-    end_date: currentTarget?.end_date,
-  };
+
   const getStocks = async (uid) => {
+    setLoadingStocks(true);
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?distribution_centre_uid=${uid}`,
@@ -214,10 +227,13 @@ export default function EditTarget(props) {
         },
       }
     );
+    setLoadingStocks(false);
 
     setStocks(response?.data?.response_data);
   };
   const getDirectorTarget = async (uid) => {
+    setLoadingMedicine(true);
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/targets/read_stocks?child_uid=${uid}`,
@@ -228,6 +244,7 @@ export default function EditTarget(props) {
         },
       }
     );
+    setLoadingMedicine(false);
 
     setTargets(response?.data?.response_data);
   };
@@ -381,9 +398,7 @@ export default function EditTarget(props) {
         <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
           Back
         </Button>
-        <CardTitle>
-          <IntlMessages id="View Target" />
-        </CardTitle>
+        <CardTitle>View Target</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
@@ -421,9 +436,7 @@ export default function EditTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Enter Amount" />
-                      </Label>
+                      <Label>Enter Amount</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.amount?.amount}</p>
@@ -445,9 +458,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Director" />
-                      </Label>
+                      <Label>Select Director</Label>
                       {view ? (
                         <span>
                           <p>
@@ -486,13 +497,21 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Sales Manager" />
-                      </Label>
+                      <Label>Select Sales Manager</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
+                      ) : loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
                       ) : (
                         <Select
                           required
@@ -521,32 +540,7 @@ export default function EditTarget(props) {
                     </FormGroup>
                   </Col>
 
-                  {/* <Col lg={6}>
-                    <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Distribtion Center" />
-                      </Label>
-                      {view ? (
-                        <span>
-                          <p>{}</p>
-                        </span>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            // setTarget({ ...target, assigned_to_uid: val?.key });
-                            // console.log(val);
-                            getStocks(val?.key);
-                          }}
-                          options={distributionCenterOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col> */}
+                
                   {view ? (
                     <Col lg={6}>
                       <FormGroup>
@@ -588,7 +582,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingMedicine ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -725,9 +727,7 @@ export default function EditTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Enter Amount" />
-                      </Label>
+                      <Label>Enter Amount</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.amount?.amount}</p>
@@ -749,9 +749,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Director" />
-                      </Label>
+                      <Label>Select Director</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
@@ -786,9 +784,7 @@ export default function EditTarget(props) {
                         <></>
                       ) : (
                         <>
-                          <Label>
-                            <IntlMessages id="Select Distribtion Center" />
-                          </Label>
+                          <Label>Select Distribtion Center</Label>
                           <Select
                             required
                             components={{ Input: CustomSelectInput }}
@@ -817,7 +813,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingStocks ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> :(
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -976,9 +980,7 @@ export default function EditTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Enter Amount" />
-                      </Label>
+                      <Label>Enter Amount</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.amount?.amount}</p>
@@ -1000,9 +1002,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Director" />
-                      </Label>
+                      <Label>Select Director</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1040,9 +1040,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Sales Manager" />
-                      </Label>
+                      <Label>Select Sales Manager</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1052,7 +1050,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           defaultValue={{
@@ -1085,14 +1091,20 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
-                      </Label>
+                      <Label>Select Regional Sales Manager</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : (
+                      ) : loadingRSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1151,7 +1163,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingMedicine ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -1169,8 +1189,6 @@ export default function EditTarget(props) {
                           // value={admin?.service_location_uid}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
-
-                           
                           }}
                           options={medicineOption}
                         />
@@ -1284,9 +1302,7 @@ export default function EditTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Enter Amount" />
-                      </Label>
+                      <Label>Enter Amount</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.amount?.amount}</p>
@@ -1393,9 +1409,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Director" />
-                      </Label>
+                      <Label>Select Director</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1437,9 +1451,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Sales Manager" />
-                      </Label>
+                      <Label>Select Sales Manager</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1449,7 +1461,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           defaultValue={{
@@ -1482,9 +1502,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
-                      </Label>
+                      <Label>Select Regional Sales Manager</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1494,7 +1512,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingRSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1525,14 +1551,20 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Area Manager" />
-                      </Label>
+                      <Label>Select Area Manager</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : (
+                      ) :loadingAM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1563,7 +1595,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) :loadingMedicine  ?<div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -1645,9 +1685,7 @@ export default function EditTarget(props) {
                 <>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Enter Amount" />
-                      </Label>
+                      <Label>Enter Amount</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.amount?.amount}</p>
@@ -1755,9 +1793,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Director" />
-                      </Label>
+                      <Label>Select Director</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1799,9 +1835,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Sales Manager" />
-                      </Label>
+                      <Label>Select Sales Manager</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1812,7 +1846,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           defaultValue={{
@@ -1848,9 +1890,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Regional Sales Manager" />
-                      </Label>
+                      <Label>Select Regional Sales Manager</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1860,7 +1900,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingRSM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1889,9 +1937,7 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select Area Manager" />
-                      </Label>
+                      <Label>Select Area Manager</Label>
                       {view ? (
                         <span>
                           <p>
@@ -1901,7 +1947,15 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : (
+                      ) : loadingAM ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1932,14 +1986,20 @@ export default function EditTarget(props) {
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>
-                        <IntlMessages id="Select MPO" />
-                      </Label>
+                      <Label>Select MPO</Label>
                       {view ? (
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : (
+                      ) : loadingMPO ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1970,7 +2030,15 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : (
+                      ) : loadingMedicine  ?<div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> :  (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -2172,8 +2240,7 @@ export default function EditTarget(props) {
                 // className="btn btn-primary"
                 // type="submit"
                 style={{ backgroundColor: '#0066B3' }}
-              disabled={loading ? true : false}
-
+                disabled={loading ? true : false}
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
                 }`}
@@ -2185,10 +2252,7 @@ export default function EditTarget(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                <IntlMessages id="Save" />
-              </span>
-                
+                <span className="label">Save</span>
               </Button>
             )}
           </Form>

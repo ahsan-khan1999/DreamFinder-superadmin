@@ -44,7 +44,15 @@ export default function viewCurrentDistributioncenter(props) {
       }
     }, []);
     
-    
+    const distributionRegionAreasloader = useSelector(
+      (state) => state?.distributionCenterReducer?.distributionRegionAreasloader
+    );
+    const distributioncenterregionsloader = useSelector(
+      (state) => state?.distributionCenterReducer?.distributioncenterregionsloader
+    );
+    const depoManagerloader = useSelector(
+      (state) => state?.distributionCenterReducer?.depoManagerloader
+    );
     const handleChangeToView = () => {
       props.history.push('/app/distributioncenter-management/viewDistributioncenter');
     };
@@ -68,7 +76,7 @@ export default function viewCurrentDistributioncenter(props) {
       (state) => state?.distributionCenterReducer?.distributionRegionAreas
     );
   
-    const regionareavalue = [];
+    
      //==============Areas
      let distributionRegionsArea = [];
      distributionRegionAreas?.map((item) =>
@@ -78,11 +86,9 @@ export default function viewCurrentDistributioncenter(props) {
          key: item?.uid,
        })
      );
-   
-    distributionRegionsArea?.map((item, index) => {
-          regionareavalue.push(item?.value);
-        }); 
-       
+     console.log(distributionRegionsArea,"distributionRegionsArea")
+
+
   
     useEffect(() => {
       dispatch(GetDistributionCenterRegions());
@@ -101,6 +107,7 @@ export default function viewCurrentDistributioncenter(props) {
       })
     );
   
+    const [assigned,setAssigned] = useState()
   
   
   
@@ -109,7 +116,7 @@ export default function viewCurrentDistributioncenter(props) {
     AllDepoManagers?.push({
         label: item?.name,
         value: item?.uid,
-        key: item?.uid,
+        key: item?.is_primary,
       })
     );
     
@@ -120,7 +127,7 @@ export default function viewCurrentDistributioncenter(props) {
     const distributioncenter_obj = {
       depot_managers_uid: depoarray,
   
-      areas_uid:  regionareavalue,
+      areas_uid:  array,
 
       uid : currentDistribution.uid,
       
@@ -129,7 +136,8 @@ export default function viewCurrentDistributioncenter(props) {
     const loading = useSelector(
       (state) => state?.departmentHeadReducer?.loader
       );
-      
+    
+      console.log(currentDistribution,"log")
     
       const editProfile = (e) => {
         e.preventDefault();
@@ -138,6 +146,7 @@ export default function viewCurrentDistributioncenter(props) {
       
       
       const editData = async () => {
+        console.log(distributioncenter_obj)
         let res = await dispatch(UpdateDistributionCenter(distributioncenter_obj));
         if (res) {
           NotificationManager.success(
@@ -152,28 +161,34 @@ export default function viewCurrentDistributioncenter(props) {
       };
   
       
-
-    // const regionareavalue = [];
-    // const handleChangeRegion = async (e, index) => {
-    //   // console.log(e);
-    //   let options = e;
-    //   options?.map((item, index) => {
-    //     regionareavalue.push(item?.value);
-    //   }); 
-    //   await setArray(regionareavalue);
-    // };
-  
+      const regionareavalue = [];
+      const handleChangeRegion = async (e, index) => {
+      
+        let options = e;
+        options?.map((item, index) => {
+          regionareavalue.push(item?.value);
+        }); 
+        await setArray(regionareavalue);
+      };
    
   
   
-    const depovalue = [];
-    const handleChangeDepoManagers = async (e, index) => {
-      let options = e;
-      options?.map((item, index) => {
-        depovalue.push(item?.value);
-      }); 
-      await setDepoarray(depovalue);
-    };
+  const depovalue = [];
+  const handleChangeDepoManagers = async (e, index) => {
+    let options = e;
+    options?.map((item, index) => {
+      if(item?.key === true)
+    {
+      setAssigned("True")
+    }
+    else{
+      setAssigned("False")
+    }
+      depovalue.push(item?.value);
+    }); 
+    await setDepoarray(depovalue);
+  };
+
   let [suspendloader, setsuspendloader] = useState(false);
   
 
@@ -235,7 +250,16 @@ export default function viewCurrentDistributioncenter(props) {
         }
       };
 
-  
+      const customStyles = {
+    
+        option: (provided, state) => 
+        ({
+          ...provided,
+          color: state.data.key ? 'green !important' :  'red !important' ,
+          padding: 10,
+        })
+    
+      }
   return (
     <Card>
       <CardBody>
@@ -377,6 +401,11 @@ export default function viewCurrentDistributioncenter(props) {
                   </Label>
 
                   <>
+                  {distributioncenterregionsloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -393,17 +422,23 @@ export default function viewCurrentDistributioncenter(props) {
                       }}
                       options={distributionRegions}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>
 
-              {/* <Col lg={6}>
+              <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select Areas" />
                   </Label>
 
                   <>
+                  {distributionRegionAreasloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -416,27 +451,39 @@ export default function viewCurrentDistributioncenter(props) {
                       }}
                       options={distributionRegionsArea}
                     />
+                  }
                   </>
                 </FormGroup>
-              </Col> */}
+              </Col>
 
               <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Select Depot Managers" />
+                    <div>Status : <span style={{color: assigned=== "True" ? 'green' : 'red'}}>{assigned}</span></div>
                   </Label>
 
                   <>
+                  {depoManagerloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                     <Select
-                      required
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
                       classNamePrefix="react-select"
                       isMulti
-                      defaultValue={{
-                        label:currentDistribution.depo_name,
-                        value:currentDistribution.depo_uid
-                      }}
+                      styles={customStyles}
+                      defaultValue={currentDistribution.depomanagersSelect.map(
+                        (item) => {
+                          return {
+                            label: item?.name,
+                            value: item?.name,
+                            key: item?.uid,
+                          };
+                        }
+                      )}
                       required
                       onChange={(e, index) => {
                         handleChangeDepoManagers(e, index);
@@ -444,6 +491,7 @@ export default function viewCurrentDistributioncenter(props) {
                       }}
                       options={AllDepoManagers}
                     />
+                  }
                   </>
 
                 </FormGroup>

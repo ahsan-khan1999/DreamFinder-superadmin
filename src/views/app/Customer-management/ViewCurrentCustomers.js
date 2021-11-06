@@ -24,6 +24,7 @@ import moment from 'moment';
 import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
 import apiServices from 'services/requestHandler';
 import { UpdateCustomer } from 'Store/Actions/ConcordCustomer/CustomerAction';
+import { bool } from 'prop-types';
 
 export default function ViewCurrentCustomers(props) {
   const dispatch = useDispatch();
@@ -32,8 +33,6 @@ export default function ViewCurrentCustomers(props) {
   const [thisView, setThisView] = useState(true);
 
   const currentCustomer = props?.location?.state;
-
-  console.log(currentCustomer, 'currentCustomer');
 
   useEffect(() => {
     if (currentCustomer?.status?.name === 'suspended') {
@@ -77,7 +76,9 @@ export default function ViewCurrentCustomers(props) {
     })
   );
 
-  const loading = useSelector((state) => state?.customerReducer?.updatecustomerloader);
+  const loading = useSelector(
+    (state) => state?.customerReducer?.updatecustomerloader
+  );
 
   const hierarchy_region = useSelector(
     (state) => state?.doctorsReducer?.hierarchy_region
@@ -95,14 +96,6 @@ export default function ViewCurrentCustomers(props) {
   const hierarchy_market = useSelector(
     (state) => state?.doctorsReducer?.hierarchy_market
   );
-
-  var specialDay_arr = [];
-  for (var i = 0; i < Object.keys(currentCustomer?.special_day).length; i++) {
-    var objectspecialday = {};
-    objectspecialday['day'] = Object.keys(currentCustomer?.special_day)[i];
-    objectspecialday['date'] = Object.values(currentCustomer?.special_day)[i];
-    specialDay_arr.push(objectspecialday);
-  }
 
   let optionregion = [];
   hierarchy_region?.filter((item) =>
@@ -150,48 +143,69 @@ export default function ViewCurrentCustomers(props) {
     phone_number: currentCustomer?.phone_number,
     email_address: currentCustomer?.email_address,
     street_address: currentCustomer?.street_address,
-    client_type:currentCustomer?.client_type,
+    client_type: currentCustomer?.client_type,
     market_uid: currentCustomer?.market?.uid,
     uid: currentCustomer?.uid,
   };
-
-  
 
   const [CustomerCreate, setCustomerCreate] = useState(Customer_obj);
   const [specialday, setSpecialday] = useState();
   const [specialdate, setSpecialdate] = useState('');
   const [array, setArray] = useState([]);
   const [obj, setObj] = useState();
+  const [specialObj, setSpecialObj] = useState({});
 
-  
-  var specialDay_arr = []; 
-  for(var i = 0; i < Object.keys(currentCustomer?.special_day).length; i++) {
-    var objectspecialday = {}; 
-    objectspecialday['day'] = Object.keys(currentCustomer?.special_day)[i];
-    objectspecialday['date'] = Object.values(currentCustomer?.special_day)[i];
-    specialDay_arr.push(objectspecialday);
+  useEffect(() => {
+    tabledata();
+  }, []);
+
+  const tabledata = () => {
+    var specialDay_arr = [];
+    for (var i = 0; i < Object.keys(currentCustomer?.special_day).length; i++) {
+      var objectspecialday = {};
+      objectspecialday['day'] = Object.keys(currentCustomer?.special_day)[i];
+      objectspecialday['date'] = Object.values(currentCustomer?.special_day)[i];
+      specialDay_arr.push(objectspecialday);
     }
-  
+
+    console.log(currentCustomer, 'currentobj');
+    let defaultobj = {};
+    specialDay_arr?.filter(
+      (item) =>
+        (defaultobj = {
+          [item?.day]: item?.date,
+        })
+    );
+
+    // const object = {
+    //   ...obj,
+    //   [day]: date,
+    // };
+    setArray(specialDay_arr);
+    setSpecialObj(currentCustomer?.special_day);
+  };
+
   const handleChangeToView = () => {
     props.history.push('/app/customer-management/viewCustomers');
   };
 
   const handlespecialdaydate = async (day, date) => {
-    if(day!== undefined && date !== ""  )
-    {
-      const prearray = [...array];
+    if (day !== undefined && date !== '') {
+      let prearray = [...array];
       prearray.push({
         day: day,
         date: date,
       });
-      setArray(prearray);
+
+      let obj1 = { ...specialObj };
       const object = {
-        ...obj,
+        ...obj1,
         [day]: date,
       };
-      setObj(object);
-    }
-    else{
+      setSpecialObj(object);
+
+      setArray(prearray);
+    } else {
       NotificationManager.error(
         'Please Enter Required Special Date Fields',
         'Error',
@@ -201,14 +215,16 @@ export default function ViewCurrentCustomers(props) {
       );
     }
   };
+  // console.log(array,"array")
+
   let apiData = {
     name: currentCustomer?.name,
     phone_number: currentCustomer?.phone_number,
     email_address: currentCustomer?.email_address,
     street_address: currentCustomer?.street_address,
-    client_type:currentCustomer?.client_type,
+    client_type: currentCustomer?.client_type,
     market_uid: currentCustomer?.market?.uid,
-    special_day: obj,
+    special_day: specialObj,
     uid: currentCustomer?.uid,
   };
 
@@ -217,14 +233,17 @@ export default function ViewCurrentCustomers(props) {
     setThisView(!thisView);
   };
 
+  // console.log(array,"array")
+
   const editData = async () => {
-    
     apiData = {
       ...CustomerCreate,
-    }
+      special_day: specialObj,
+    };
+
     
 
-    let res = await dispatch(UpdateCustomer(apiData));
+    let res = await dispatch(UpdateCustomer({...apiData}));
     if (res) {
       NotificationManager.success(
         'Successful response',
@@ -243,10 +262,8 @@ export default function ViewCurrentCustomers(props) {
       let apiData = {
         uid: currentCustomer?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true);
       let res = await apiServices.suspandcustomers(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(
@@ -273,7 +290,6 @@ export default function ViewCurrentCustomers(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspandcustomers(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(
@@ -304,8 +320,8 @@ export default function ViewCurrentCustomers(props) {
           {thisView ? (
             <>
               <Button
-               onClick={handleChangeToView}
-                style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
+                onClick={handleChangeToView}
+                style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
               >
                 Back
               </Button>
@@ -315,7 +331,7 @@ export default function ViewCurrentCustomers(props) {
             <>
               <Button
                 onClick={editProfile}
-                style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
+                style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
               >
                 Close Edit
               </Button>
@@ -536,78 +552,69 @@ export default function ViewCurrentCustomers(props) {
                     </AvGroup>
                   </Col>
 
-            
-               {/* street_address */}
-               <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>Address</Label>
+                  {/* street_address */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>Address</Label>
 
-                  <AvField
-                    className="form-control"
-                    name="street_address"
-                    type="text"
-                    value={currentCustomer?.street_address}
+                      <AvField
+                        className="form-control"
+                        name="street_address"
+                        type="text"
+                        value={currentCustomer?.street_address}
+                        validate={{
+                          required: {
+                            value: true,
+                            errorMessage: 'Please enter your Street Address',
+                          },
 
-                    validate={{
-                      required: {
-                        value: true,
-                        errorMessage: 'Please enter your Street Address',
-                      },
-                     
-                      minLength: {
-                        value: 5,
-                        errorMessage: 'To Short',
-                      },
-                      maxLength: {
-                        value: 25,
-                        errorMessage: 'To Long',
-                      },
-                    }}
-                    onChange={(e) =>
-                      setCustomerCreate({
-                        ...CustomerCreate,
-                        street_address: e.target.value,
-                      })
-                    }
-                  />
-                </AvGroup>
-              </Col>
+                          minLength: {
+                            value: 5,
+                            errorMessage: 'To Short',
+                          },
+                          maxLength: {
+                            value: 25,
+                            errorMessage: 'To Long',
+                          },
+                        }}
+                        onChange={(e) =>
+                          setCustomerCreate({
+                            ...CustomerCreate,
+                            street_address: e.target.value,
+                          })
+                        }
+                      />
+                    </AvGroup>
+                  </Col>
 
+                  {/* Client TYPE */}
+                  <Col lg={6}>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Client Type" />
+                      </Label>
 
-                   {/* Client TYPE */}
-               <Col lg={6}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Client Type" />
-                  </Label>
-
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      
-                      defaultValue={{
-                        label:CustomerCreate?.client_type.toUpperCase(),
-                        value:CustomerCreate?.client_type,
-                      }}
-
-                      onChange={(e, index) => {
-                        setCustomerCreate({
-                          ...CustomerCreate,
-                          client_type: e.value,
-                        });
-                      }}
-                      options={option_static_client_types}
-                    />
-                  </>
-                </AvGroup>
-              </Col>
-
-                 
-
-               
+                      <>
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          defaultValue={{
+                            label: CustomerCreate?.client_type.toUpperCase(),
+                            value: CustomerCreate?.client_type,
+                          }}
+                          onChange={(e, index) => {
+                            setCustomerCreate({
+                              ...CustomerCreate,
+                              client_type: e.value,
+                            });
+                          }}
+                          options={option_static_client_types}
+                        />
+                      </>
+                    </AvGroup>
+                  </Col>
 
                   {/* Select Region */}
                   <Col lg={6}>
@@ -753,8 +760,6 @@ export default function ViewCurrentCustomers(props) {
                     </AvGroup>
                   </Col>
 
-             
-
                   {/* Select Special Day */}
                   <Col lg={6}>
                     <AvGroup className="error-t-negative">
@@ -777,31 +782,31 @@ export default function ViewCurrentCustomers(props) {
                   </Col>
 
                   <Col lg={4}>
-                <AvGroup className="error-t-negative">
-                  <Label>
-                    <IntlMessages id="Select Special Day Date" />
-                  </Label>
-                  <AvField
-                    className="form-control"
-                    name="date-dd"
-                    type="date"
-                    onChange={(e) => setSpecialdate(e.target.value)}
-                  />
-                </AvGroup>
-              </Col>
-              <Col lg={2}>
-                <AvGroup className="error-t-negative" className="my-4">
-                  <Button
-                    style={{ backgroundColor:'#0066b3' }}
-                    size="sm"
-                    onClick={() => {
-                      handlespecialdaydate(specialday, specialdate);
-                    }}
-                  >
-                    Add SpecialDay
-                  </Button>
-                </AvGroup>
-              </Col>
+                    <AvGroup className="error-t-negative">
+                      <Label>
+                        <IntlMessages id="Select Special Day Date" />
+                      </Label>
+                      <AvField
+                        className="form-control"
+                        name="date-dd"
+                        type="date"
+                        onChange={(e) => setSpecialdate(e.target.value)}
+                      />
+                    </AvGroup>
+                  </Col>
+                  <Col lg={2}>
+                    <AvGroup className="error-t-negative" className="my-4">
+                      <Button
+                        style={{ backgroundColor: '#0066b3' }}
+                        size="sm"
+                        onClick={() => {
+                          handlespecialdaydate(specialday, specialdate);
+                        }}
+                      >
+                        Add SpecialDay
+                      </Button>
+                    </AvGroup>
+                  </Col>
                 </>
               )}
             </Row>
@@ -820,7 +825,7 @@ export default function ViewCurrentCustomers(props) {
                             </tr>
                           </thead>
                           <tbody>
-                            {specialDay_arr?.map((item, index) => {
+                            {array?.map((item, index) => {
                               return (
                                 <tr>
                                   <td className="text-capitalize">
@@ -850,7 +855,7 @@ export default function ViewCurrentCustomers(props) {
                             </tr>
                           </thead>
                           <tbody>
-                            {specialDay_arr?.map((item, index) => {
+                            {array?.map((item, index) => {
                               return (
                                 <tr>
                                   <td>{item?.day}</td>
@@ -861,8 +866,10 @@ export default function ViewCurrentCustomers(props) {
                                       onClick={() => {
                                         const test = [...array];
                                         test.splice(index, 1);
-                                        console.log(test);
                                         setArray(test);
+                                        let table_obj = { ...specialObj };
+                                        delete table_obj[item.day];
+                                        setSpecialObj(table_obj);
                                       }}
                                       style={{ fontSize: '20px', color: 'red' }}
                                       className="simple-icon-close"
@@ -897,32 +904,39 @@ export default function ViewCurrentCustomers(props) {
             </Button> */}
 
             {thisView ? (
-               <Button style={{backgroundColor:'#0066b3'}} className="mr-3" onClick={editProfile}>
+              <Button
+                style={{ backgroundColor: '#0066b3' }}
+                className="mr-3"
+                onClick={editProfile}
+              >
                 Edit Customer
               </Button>
             ) : (
-               <Button style={{backgroundColor:'#0066b3'}} onClick={editData}>
-              {loading ? (
-                <div className="d-flex justify-content-center">
-                  <Loader height={18} width={18} type="Oval" color="#fff" />
-                  &nbsp; Updating
-                </div> 
-              ) : (
-                'Save'
-              )}
+              <Button style={{ backgroundColor: '#0066b3' }} onClick={editData}>
+                {loading ? (
+                  <div className="d-flex justify-content-center">
+                    <Loader height={18} width={18} type="Oval" color="#fff" />
+                    &nbsp; Updating
+                  </div>
+                ) : (
+                  'Save'
+                )}
               </Button>
             )}
 
             {thisView ? (
-               <Button style={{backgroundColor:'#0066b3'}} onClick={suspandCustomers}>
-              {suspendloader ? (
-              <div className="d-flex justify-content-center">
-                <Loader height={18} width={18} type="Oval" color="#fff" />
-                &nbsp; Suspending
-              </div>
-            ) : (
-              buttonName
-              )}
+              <Button
+                style={{ backgroundColor: '#0066b3' }}
+                onClick={suspandCustomers}
+              >
+                {suspendloader ? (
+                  <div className="d-flex justify-content-center">
+                    <Loader height={18} width={18} type="Oval" color="#fff" />
+                    &nbsp; Suspending
+                  </div>
+                ) : (
+                  buttonName
+                )}
               </Button>
             ) : (
               ''

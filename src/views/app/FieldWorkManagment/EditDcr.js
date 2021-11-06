@@ -51,7 +51,7 @@ export default function EditDcr(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="Daily Call Record" />
+          Daily Call Record
         </CardTitle>
 
         <div style={{ marginBottom: '15px' }}></div>
@@ -61,7 +61,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Name" />
+                    Name
                   </Label>
                   <span>
                     <p>{currentItem?.dcp?.assigned_to?.name}</p>
@@ -72,7 +72,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Manager" />
+                    Assign to Manager
                   </Label>
                   <span>
                     <p>
@@ -88,7 +88,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Manager Role" />
+                    Assign to Manager Role
                   </Label>
                   <span>
                     <p>
@@ -104,7 +104,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Manager Service Location" />
+                    Assign to Manager Service Location
                   </Label>
                   {currentItem?.dcp?.assigned_to?.field_staff?.service_location?.map(
                     (item) => (
@@ -118,7 +118,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Doctor Name" />
+                    Assign to Doctor Name
                   </Label>
                   <span>
                     <p>{currentItem?.dcp?.doctor?.name}</p>
@@ -129,7 +129,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Doctor Name Market" />
+                    Assign to Doctor Name Market
                   </Label>
                   <span>
                     <p>{currentItem?.dcp?.doctor?.market?.name}</p>
@@ -139,7 +139,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assign to Doctor Category" />
+                    Assign to Doctor Category
                   </Label>
                   <span>
                     <p>{currentItem?.dcp?.doctor?.doctor_category?.name}</p>
@@ -149,7 +149,7 @@ export default function EditDcr(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Product Promoted" />
+                    Product Promoted
                   </Label>
                   {currentItem?.products_promoted?.map((item) => (
                     <span>
@@ -249,7 +249,7 @@ export default function EditDcr(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Suspand Dcr" />
+                Suspand Dcr
               </span>
             </Button>
           </Form>

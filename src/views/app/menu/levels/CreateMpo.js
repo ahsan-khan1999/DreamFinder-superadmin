@@ -40,6 +40,7 @@ import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
 import axios from 'axios';
 import makeAnimated from 'react-select/animated';
+import Loader from 'react-loader-spinner';
 
 const animatedComponents = makeAnimated();
 
@@ -52,7 +53,7 @@ export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   let [service_location, setService_location] = useState([]);
 
-  const [array, setArray] = useState(admin?.service_location_uid);
+  let [loadingLocation, setLoadingLocation] = useState(false);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
@@ -68,8 +69,11 @@ export default function CreateDirector({ history }) {
     phone_number: '',
 
     role_uid: '',
-    service_location_uid: array,
+    service_location_uid: [],
   };
+  const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+  const [array, setArray] = useState(admin?.service_location_uid);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -91,6 +95,7 @@ export default function CreateDirector({ history }) {
 
   const am = useSelector((state) => state?.ViewUserReducer?.areaManager);
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
@@ -101,6 +106,7 @@ export default function CreateDirector({ history }) {
         },
       }
     );
+    setLoadingLocation(false)
 
     setService_location(response?.data?.response_data);
   };
@@ -121,18 +127,19 @@ export default function CreateDirector({ history }) {
       value.push(item?.key);
     });
     await setArray(value);
+    let test = { ...admin, service_location_uid: value };
+    setAdmin(test)
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
 
   am?.filter((item) =>
     amOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  const [admin, setAdmin] = useState(admin_obj);
-  const [loading, setLoading] = useState(false);
+  
 
   const onAdminCreate = async () => {
     setLoading(true);
-    let test = { ...admin, service_location_uid: array };
+    // let test = { ...admin, service_location_uid: array };
 
     if (
       admin?.email_address === '' &&
@@ -156,12 +163,12 @@ export default function CreateDirector({ history }) {
     } else {
       setLoading(true);
 
-      let res = await dispatch(CreateMpoAction(test));
+      let res = await dispatch(CreateMpoAction(admin));
       // console.log(res, 'admin create res');
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -387,15 +394,23 @@ export default function CreateDirector({ history }) {
                   <Label>
                     <IntlMessages id="Select Teritory" />
                   </Label>
-                  <Select
+                  {loadingLocation ? <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div> : <Select
                     cacheOptions
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     isMulti
-                    value={admin?.service_location_uid}
                     onChange={(e) => handleChange(e)}
                     options={option}
-                  />
+                  />}
+                  
                 </FormGroup>
               </Col>
               {/* <Col lg={6}>
@@ -437,12 +452,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages
-                  id="Add MPO
-"
-                />
-              </span>
+              <span className="label">Add MPO</span>
             </Button>
           </Form>
         </Formik>

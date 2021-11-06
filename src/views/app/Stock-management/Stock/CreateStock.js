@@ -65,6 +65,9 @@ export default function CreateStock({ history }) {
   const getstockCategory = useSelector(
     (state) => state?.stockReducer?.getstockCategory
   );
+  const getstockCategoryloader = useSelector(
+    (state) => state?.stockReducer?.getstockCategoryloader
+  );
 
   let optioncategory = [];
   getstockCategory?.filter((item) =>
@@ -113,7 +116,7 @@ export default function CreateStock({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Department Head Added Sucessfully',
+          'Stocks Added Sucessfully',
           'Success',
           3000,
           null,
@@ -182,6 +185,11 @@ export default function CreateStock({ history }) {
                   </label>
 
                   <>
+                  {getstockCategoryloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -200,6 +208,7 @@ export default function CreateStock({ history }) {
                       required
                       options={optioncategory}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>

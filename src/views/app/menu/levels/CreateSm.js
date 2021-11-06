@@ -38,6 +38,7 @@ import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
 import axios from 'axios';
 import makeAnimated from 'react-select/animated';
+import Loader from 'react-loader-spinner';
 const animatedComponents = makeAnimated();
 
 const selectGender = [
@@ -48,8 +49,7 @@ const selectGender = [
 export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   let [service_location, setService_location] = useState([]);
-  const [array, setArray] = useState(admin?.service_location_uid);
-
+  let [loadingLocation, setLoadingLocation] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
     email_address: '',
@@ -65,9 +65,10 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
     manager_uid: '',
-    service_location_uid: array,
+    service_location_uid: [],
   };
   const [admin, setAdmin] = useState(admin_obj);
+  const [array, setArray] = useState(admin?.service_location_uid);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -103,14 +104,14 @@ export default function CreateDirector({ history }) {
     options?.map((item, index) => {
       value.push(item?.key);
     });
-    await setArray(value);
-    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+    let test = { ...admin, service_location_uid: value };
+    setAdmin(test);
   };
   const [loading, setLoading] = useState(false);
 
   const onAdminCreate = async () => {
     setLoading(true);
-    let test = { ...admin, service_location_uid: array };
+    // let test = { ...admin, service_location_uid: array };
 
     if (
       admin?.email_address === '' ||
@@ -135,11 +136,11 @@ export default function CreateDirector({ history }) {
     } else {
       setLoading(true);
 
-      let res = await dispatch(CreateSmAction(test));
+      let res = await dispatch(CreateSmAction(admin));
       // console.log(test);
       if (res) {
         NotificationManager.success(
-          'Sales Manager Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -163,6 +164,7 @@ export default function CreateDirector({ history }) {
     }
   };
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true);
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/region?child_uid=${uid}`,
@@ -173,6 +175,8 @@ export default function CreateDirector({ history }) {
         },
       }
     );
+    setLoadingLocation(false);
+
     setService_location(response?.data?.response_data);
   };
   service_location?.filter((item) =>
@@ -383,15 +387,27 @@ export default function CreateDirector({ history }) {
                   <Label>
                     <IntlMessages id="Select Area" />
                   </Label>
-                  <Select
-                    cacheOptions
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                    isMulti
-                    value={admin?.service_location_uid}
-                    onChange={(e) => handleChange(e)}
-                    options={option}
-                  />
+                  {loadingLocation ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      cacheOptions
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      // value={admin?.service_location_uid}
+                      onChange={(e) => handleChange(e)}
+                      options={option}
+                    />
+                  )}
                 </FormGroup>
               </Col>
             </Row>
@@ -399,7 +415,6 @@ export default function CreateDirector({ history }) {
             <Button
               // className="btn btn-primary"
               disabled={loading ? true : false}
-
               style={{ backgroundColor: '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -413,9 +428,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages id="Add SM" />
-              </span>
+              <span className="label">Add SM</span>
             </Button>
           </Form>
         </Formik>

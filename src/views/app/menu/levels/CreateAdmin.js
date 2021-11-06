@@ -59,6 +59,7 @@ export default function CreateAdmin({ history }) {
 
     role_uid: '',
   };
+  const [admin, setAdmin] = useState(admin_obj);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -85,7 +86,6 @@ export default function CreateAdmin({ history }) {
   // ))
   // const [loading, setLoading] = useState(false);
 
-  const [admin, setAdmin] = useState(admin_obj);
 
   useEffect(() => {
     // setAdmin({...admin,role_uid:user_id[0]?.key})
@@ -125,7 +125,7 @@ export default function CreateAdmin({ history }) {
           ''
         );
 
-        // history.push('/app/menu/levels/viewAdmin');
+        history.push('/app/menu/levels/viewAdmin');
       } else if (confirmPassword !== admin?.password) {
         NotificationManager.warning(
           'Password Doesnt match',
@@ -338,7 +338,7 @@ export default function CreateAdmin({ history }) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Add Admin" />
+                Create Admin
               </span>
               
             </Button>

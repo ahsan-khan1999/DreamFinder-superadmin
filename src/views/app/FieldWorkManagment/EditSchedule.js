@@ -84,7 +84,7 @@ export default function EditSchedule(props) {
         style={{backgroundColor:'#0066B3'}}
         onClick={handleBack} style={{marginBottom:'10px'}}>Back</Button>
         <CardTitle>
-          <IntlMessages id="View Schedule" />
+          View Schedule
         </CardTitle>
         <div style={{ marginBottom: '15px' }}></div>
         <Formik>
@@ -93,7 +93,7 @@ export default function EditSchedule(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assigne To Name" />
+                    Assigne To Name
                   </Label>
                   <span>
                     <p>{currentItem?.assigned_to?.name}</p>
@@ -106,7 +106,7 @@ export default function EditSchedule(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Assign to Doctor Name" />
+                        Assign to Doctor Name
                       </Label>
                       <span>
                         <p>{currentItem?.doctor?.name}</p>
@@ -116,7 +116,7 @@ export default function EditSchedule(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Assign to Doctor Market" />
+                        Assign to Doctor Market
                       </Label>
                       <span>
                         <p>{currentItem?.doctor?.market?.name}</p>
@@ -126,7 +126,7 @@ export default function EditSchedule(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Assign to Doctor Category" />
+                        Assign to Doctor Category
                       </Label>
                       <span>
                         <p>{currentItem?.doctor?.doctor_category?.name}</p>
@@ -139,7 +139,7 @@ export default function EditSchedule(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Assign to Customer Name" />
+                        Assign to Customer Name
                       </Label>
                       <span>
                         <p>{currentItem?.customer?.name}</p>
@@ -149,7 +149,7 @@ export default function EditSchedule(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Assign to Doctor Market" />
+                        Assign to Doctor Market
                       </Label>
                       <span>
                         <p>{currentItem?.customer?.market?.name}</p>
@@ -159,7 +159,7 @@ export default function EditSchedule(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
-                        <IntlMessages id="Assign to Customer Type" />
+                        Assign to Customer Type
                       </Label>
                       <span>
                         <p>{currentItem?.customer?.client_type}</p>
@@ -172,7 +172,7 @@ export default function EditSchedule(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Rescheduled By" />
+                    Rescheduled By
                   </Label>
                   <span>
                     <p>{currentItem?.scheduled_by?.name}</p>
@@ -182,7 +182,7 @@ export default function EditSchedule(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Rescheduled By Role" />
+                    Rescheduled By Role
                   </Label>
                   <span>
                     <p>{currentItem?.scheduled_by?.role?.category?.name}</p>
@@ -192,7 +192,7 @@ export default function EditSchedule(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Approval Status" />
+                    Approval Status
                   </Label>
                   <span
                     style={{
@@ -225,7 +225,7 @@ export default function EditSchedule(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Approve Schedule" />
+                Approve Schedule
               </span>
             </Button> : null}
             <Button
@@ -246,7 +246,7 @@ export default function EditSchedule(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id="Suspand Schedule" />
+                Suspand Schedule
               </span>
             </Button>
           </Form>

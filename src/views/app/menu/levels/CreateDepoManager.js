@@ -57,6 +57,7 @@ export default function CreateDepoManager({ history }) {
 
     role_uid: '',
   };
+  const [admin, setAdmin] = useState(admin_obj);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -82,7 +83,6 @@ export default function CreateDepoManager({ history }) {
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
 
-  const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
     if (
       admin?.email_address === '' &&
@@ -108,7 +108,7 @@ export default function CreateDepoManager({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -340,7 +340,7 @@ export default function CreateDepoManager({ history }) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                <IntlMessages id=" Add Depo Manager" />
+                Add Depo Manager
               </span>
             </Button>
           </Form>

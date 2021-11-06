@@ -41,14 +41,15 @@ export default function CreateRole(props) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [selectedRole, setSelectedRole] = useState('');
-  const [role, setRole] = useState(role_obj);
   const [name, setName] = useState('');
-  const [user_role_id, setUser_role_id] = useState('');
-  const [nameTitle, setNameTitle] = useState('');
-  const [title, setTitle] = useState('');
+  
+
+  // 
+
   const getStaticData = async () => {
     let res = await dispatch(ViewStaticDataAction());
   };
+
 
   useEffect(() => {
     getStaticData();
@@ -64,13 +65,10 @@ export default function CreateRole(props) {
       key: item?.user_role_id,
     })
   );
-  const role_obj = {
-    name: '',
-    category: selectedRole,
-  };
+  
   const onRoleCreate = async () => {
     setLoading(true);
-    if (role?.name === '') {
+    if (name == '') {
       NotificationManager.error('Enter valid Details', 'Error', 5000, null, '');
       setLoading(false);
 

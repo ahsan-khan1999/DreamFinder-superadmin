@@ -80,7 +80,7 @@ export default function EditSampleTransaction(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View Sample Transaction" />
+          View Sample Transaction
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -89,7 +89,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Assign To" />
+                    Sample Assign To
                   </Label>
                   <span>
                     <p>{currentTransaction?.sample?.assigned_to?.name}</p>
@@ -99,7 +99,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Assign To Manager" />
+                    Sample Assign To Manager
                   </Label>
                   <span>
                     <p>
@@ -114,7 +114,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Assign To Manager" />
+                    Sample Assign To Manager
                   </Label>
                   <span>
                     <p>
@@ -129,7 +129,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Assign To Service Location" />
+                    Sample Assign To Service Location
                   </Label>
 
                   {currentTransaction?.sample?.assigned_to?.field_staff?.service_location?.map(
@@ -144,7 +144,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Assign To Designation" />
+                    Sample Assign To Designation
                   </Label>
 
                   <span>
@@ -157,7 +157,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Assign To Address" />
+                    Sample Assign To Address
                   </Label>
 
                   <span>
@@ -170,7 +170,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Status" />
+                    Sample Status
                   </Label>
 
                   <span
@@ -190,7 +190,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Transaction Status" />
+                    Sample Transaction Status
                   </Label>
 
                   <span
@@ -208,7 +208,7 @@ export default function EditSampleTransaction(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Sample Transaction Date Time" />
+                    Sample Transaction Date Time
                   </Label>
 
                   <span>
@@ -261,7 +261,7 @@ export default function EditSampleTransaction(props) {
             <span className="bounce3" />
           </span>
           <span className="label">
-            <IntlMessages id="Suspand Sample Transaction" />
+            Suspend Sample Transaction
           </span>
         </Button>
       </CardBody>

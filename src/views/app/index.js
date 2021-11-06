@@ -12,17 +12,10 @@ const Dashboards = React.lazy(() =>
 const Pages = React.lazy(() =>
   import(/* webpackChunkName: "pages" */ './pages')
 );
-const Orders = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Orders/orders')
-);
-const AddOrder = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Orders/AddOrder')
-);
+
   
 
-const Test = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Test/viewTest')
-);
+
 const ViewRegion = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './TreeView/RegionTreeView')
 );
@@ -35,36 +28,10 @@ const CreateTarget = React.lazy(() =>
 const EditTarget = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Target/EditTarget')
 );
-const Category = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Test/viewCategory')
-);
-const CreateCategory = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Test/CreateCategory')
-);
-const ViewMedicines = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Medicines/viewMedicines')
-);
-const ViewCurrentCategory = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Test/viewCurrentCategory')
-);
-const ViewCurrentReport = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Reports/viewCurrentReport')
-);
-const CreateTest = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Test/createTest')
-);
-const CreateMedicines = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Medicines/CreateMedicines')
-);
-const ViewCurrentTest = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Test/viewCurrentTest')
-);
-const ViewReport = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Reports/viewReports')
-);
-const ViewPayment = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Payment/viewPayment')
-);
+
+
+
+
 const ViewDcp = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/ViewDcp')
 );
@@ -128,22 +95,8 @@ const EditDoctorPeriority = React.lazy(() =>
 const EditDcr = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditDcr')
 );
-const ViewCurrentPayment = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Payment/viewCurrentPayment')
-);
-const UploadReport = React.lazy(() =>
-  import(/* webpackChunkName: "dashboards" */ './Reports/uploadReport')
-);
-const ViewCurrentMedicines = React.lazy(() =>
-  import(
-    /* webpackChunkName: "dashboards" */ './Medicines/viewCurrentMedicines'
-  )
-);
-const ViewCurrentOrder = React.lazy(() =>
-  import(
-    /* webpackChunkName: "components-badges" */ './Orders/viewCurrentOrder'
-  )
-);
+
+
 const ViewSample = React.lazy(() =>
   import(/* webpackChunkName: "components-badges" */ './Sample/ViewSample')
 );
@@ -169,6 +122,17 @@ const EditSampleTranscation = React.lazy(() =>
   )
 );
 
+const Orders = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Orders/orders')
+);
+const AddOrder = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Orders/CreateOrder')
+);
+const ViewCurrentOrder = React.lazy(() =>
+  import(
+    /* webpackChunkName: "components-badges" */ './Orders/viewCurrentOrder'
+  )
+);
 
 // Distribution Concord --------------------------------------
 const ViewCurrentDepartmenthead = React.lazy(() =>
@@ -418,14 +382,8 @@ const App = ({ match }) => {
               path={`${match.url}/Target/EditTarget`}
               render={(props) => <EditTarget {...props} />}
             />
-            <Route
-              path={`${match.url}/orders/viewCurrentOrder`}
-              render={(props) => <ViewCurrentOrder {...props} />}
-            />
-            <Route
-              path={`${match.url}/Reports/viewReports`}
-              render={(props) => <ViewReport {...props} />}
-            />
+          
+            
             <Route
               path={`${match.url}/PeriorityList/ViewPeriorityList`}
               render={(props) => <ViewPeriority {...props} />}
@@ -454,26 +412,11 @@ const App = ({ match }) => {
               path={`${match.url}/TreeView/RegionTreeView`}
               render={(props) => <ViewRegion {...props} />}
             />
-            <Route
-              path={`${match.url}/Payment/viewPayment`}
-              render={(props) => <ViewPayment {...props} />}
-            />
-            <Route
-              path={`${match.url}/Payment/viewCurrentPayment`}
-              render={(props) => <ViewCurrentPayment {...props} />}
-            />
-            <Route
-              path={`${match.url}/Reports/uploadReport`}
-              render={(props) => <UploadReport {...props} />}
-            />
-            <Route
-              path={`${match.url}/Reports/viewCurrentReport`}
-              render={(props) => <ViewCurrentReport {...props} />}
-            />
-            <Route
-              path={`${match.url}/Medicines/viewCurrentMedicines`}
-              render={(props) => <ViewCurrentMedicines {...props} />}
-            />
+          
+          
+            
+           
+            
             <Route
               path={`${match.url}/FieldWorkManagment/ViewDcp`}
               render={(props) => <ViewDcp {...props} />}
@@ -498,16 +441,22 @@ const App = ({ match }) => {
               path={`${match.url}/FieldWorkManagment/EditSchedule`}
               render={(props) => <EditSchedule {...props} />}
             />
-            <Route
+            {/* <Route
               path={`${match.url}/orders`}
               render={(props) => <Orders {...props} />}
-            />
+            /> */}
             <Route
               path={`${match.url}/Orders/orders`}
               render={(props) => <Orders {...props} />}
             />
             <Route
-              path={`${match.url}/Orders/AddOrder`}
+              path={`${match.url}/Orders/viewCurrentOrder`}
+              render={(props) => <ViewCurrentOrder {...props} />}
+            />
+            
+            
+            <Route
+              path={`${match.url}/Orders/CreateOrder`}
               render={(props) => <AddOrder {...props} />}
             />
            
@@ -659,10 +608,7 @@ const App = ({ match }) => {
            
            
            
-            <Route
-              path={`${match.url}/Test/viewTest`}
-              render={(props) => <Test {...props} />}
-            />
+            
             <Route
               path={`${match.url}/Attendance/ViewAttendance`}
               render={(props) => <ViewAttendance {...props} />}
@@ -675,34 +621,11 @@ const App = ({ match }) => {
               path={`${match.url}/Attendance/EditAttendance`}
               render={(props) => <EditAttendance {...props} />}
             />
-            <Route
-              path={`${match.url}/Medicines/viewMedicines`}
-              render={(props) => <ViewMedicines {...props} />}
-            />
-            <Route
-              path={`${match.url}/Test/viewCategory`}
-              render={(props) => <Category {...props} />}
-            />
-            <Route
-              path={`${match.url}/Medicines/CreateMedicines`}
-              render={(props) => <CreateMedicines {...props} />}
-            />
-            <Route
-              path={`${match.url}/Test/CreateCategory`}
-              render={(props) => <CreateCategory {...props} />}
-            />
-            <Route
-              path={`${match.url}/Test/viewCurrentCategory`}
-              render={(props) => <ViewCurrentCategory {...props} />}
-            />
-            <Route
-              path={`${match.url}/Test/createTest`}
-              render={(props) => <CreateTest {...props} />}
-            />
-            <Route
-              path={`${match.url}/Test/viewCurrentTest`}
-              render={(props) => <ViewCurrentTest {...props} />}
-            />
+           
+           
+            
+            
+            
             {/* <ProtectedRoute
                     path={`${match.url}/applications`}
                     component={Applications}

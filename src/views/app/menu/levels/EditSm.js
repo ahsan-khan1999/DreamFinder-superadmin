@@ -30,25 +30,16 @@ import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import { getToken } from 'Utils/auth.util';
 import axios from 'axios';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditSm(props) {
-  const [buttonName, setButtonName] = useState('');
-  const [admin, setAdmin] = useState(admin_obj);
-  const [loading, setLoading] = useState(false);
-  const [loadingSuspand, setLoadingSuspand] = useState(false);
-
-  const [thisView, setThisView] = useState(true);
-
   const currentUser = props?.location?.state;
-  //   console.log(currentUser);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  console.log(currentUser);
-  let [service_location, setService_location] = useState([]);
-  const [array, setArray] = useState(admin?.service_location_uid);
+  let [loadingLocation, setLoadingLocation] = useState(false);
+
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)
@@ -69,6 +60,19 @@ export default function EditSm(props) {
 
     service_location_uid: service_location_id,
   };
+  const [buttonName, setButtonName] = useState('');
+  const [admin, setAdmin] = useState(admin_obj);
+  const [loading, setLoading] = useState(false);
+  const [loadingSuspand, setLoadingSuspand] = useState(false);
+
+  const [thisView, setThisView] = useState(true);
+
+  //   console.log(currentUser);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  let [service_location, setService_location] = useState([]);
+  const [array, setArray] = useState(admin?.service_location_uid);
+  
+ 
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -152,10 +156,8 @@ export default function EditSm(props) {
           props.history.push('/app/menu/levels/ViewSm');
         }
         setLoading(false);
-
       }
       setLoading(false);
-
     }
   };
   const suspandAdmin = async () => {
@@ -183,7 +185,7 @@ export default function EditSm(props) {
         );
       }
     } else {
-    setLoadingSuspand(true)
+      setLoadingSuspand(true);
 
       let apiData = {
         uid: currentUser?.uid,
@@ -197,11 +199,11 @@ export default function EditSm(props) {
           null,
           ''
         );
-    setLoadingSuspand(false)
+        setLoadingSuspand(false);
 
         props.history.push('/app/menu/levels/ViewSm');
       } else {
-    setLoadingSuspand(true)
+        setLoadingSuspand(true);
 
         NotificationManager.error(
           res?.response_message,
@@ -210,11 +212,9 @@ export default function EditSm(props) {
           null,
           ''
         );
-    setLoadingSuspand(false)
-
+        setLoadingSuspand(false);
       }
-    setLoadingSuspand(false)
-
+      setLoadingSuspand(false);
     }
     //  setStatusUpdate()
 
@@ -240,6 +240,8 @@ export default function EditSm(props) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/region?child_uid=${uid}`,
@@ -250,6 +252,8 @@ export default function EditSm(props) {
         },
       }
     );
+    setLoadingLocation(false)
+
     setService_location(response?.data?.response_data);
   };
   service_location?.filter((item) =>
@@ -312,8 +316,7 @@ export default function EditSm(props) {
                     </span>
                   ) : (
                     <Input
-                    disabled
-            
+                      disabled
                       required
                       value={admin?.email_address}
                       className="form-control"
@@ -416,7 +419,7 @@ export default function EditSm(props) {
                     </span>
                   ) : (
                     <Input
-                    disabled
+                      disabled
                       required
                       value={admin?.phone_number}
                       type="text"
@@ -536,7 +539,23 @@ export default function EditSm(props) {
                         <p>{item?.name}</p>
                       </span>
                     ))
-                  ) : (
+                  ) : loadingLocation ?  <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> : loadingLocation ? <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> : (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}
@@ -582,7 +601,6 @@ export default function EditSm(props) {
               <Button
                 // className="btn btn-primary"
                 disabled={loading ? true : false}
-
                 style={{ 'background-color': '##0066B3' }}
                 // type="submit"
                 className={`btn-shadow btn-multiple-state ${
@@ -596,30 +614,24 @@ export default function EditSm(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  <IntlMessages id="Save" />
-                </span>
+                <span className="label">Save</span>
               </Button>
             )}
             {thisView ? (
               <Button
                 style={{ 'background-color': '##0066B3', marginLeft: '5px' }}
                 disabled={loading ? true : false}
-
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
                 onClick={suspandAdmin}
-                
               >
                 <span className="spinner d-inline-block">
                   <span className="bounce1" />
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  <IntlMessages id={buttonName} />
-                </span>
+                <span className="label">{buttonName}</span>
               </Button>
             ) : (
               ''

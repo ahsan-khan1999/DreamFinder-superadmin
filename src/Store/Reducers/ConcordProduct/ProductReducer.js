@@ -14,6 +14,7 @@ const initialState = {
   createproduct: [],
   updateproduct: [],
   getProductCategory:[],
+  getProductCategoryloader:false,
 };
 export const ProductReducer = (state = initialState, { type, payload }) => {
   switch (type) {
@@ -48,6 +49,9 @@ export const ProductReducer = (state = initialState, { type, payload }) => {
 
     case PRODUCT_CONSTANT.PRODUCT_GET_CATEGORY:
       return { ...state, getProductCategory: payload };
+
+    case PRODUCT_CONSTANT.PRODUCT_GET_CATEGORY_LOADER:
+      return { ...state, getProductCategoryloader: payload };
   
 
     case PRODUCT_CONSTANT.PRODUCT_LOADING_All:

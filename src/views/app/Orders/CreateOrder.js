@@ -31,10 +31,11 @@ import {
   StaticDataGet,
 } from 'Store/Actions/ConcordOrder/OrderAction';
 import moment from 'moment';
-import data from 'data/notifications';
 
-import { set } from 'react-hook-form';
-export default function AddOrder(props) {
+export default function CreateOrders(props) {
+
+
+
   const [assignto, setAssginto] = useState();
   const [mpouid, setMpouid] = useState();
   // const [mpofield,setMpofield] = useState();
@@ -44,37 +45,13 @@ export default function AddOrder(props) {
   const [medproductquantity, setMedproductquantity] = useState();
   const [date, setDate] = useState();
   const [time, setTime] = useState();
+  
+  
   const [array, setArray] = useState([]);
-  const [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
   const [quantity, setQuantity] = useState(0);
   const [array1, setArray1] = useState();
 
-  // console.log("assignto",assignto);
-  // console.log("mpouid",mpouid);
-  // console.log("customeruid",customeruid);
-  // console.log("medproductuid",medproductuid);
-
-  const dispatch = useDispatch();
-
-  const usersm = useSelector((state) => state?.orderReducer?.usersm);
-  const userrsm = useSelector((state) => state?.orderReducer?.userrsm);
-  const useram = useSelector((state) => state?.orderReducer?.useram);
-  const usermpo = useSelector((state) => state?.orderReducer?.usermpo);
-  const getcustomers = useSelector(
-    (state) => state?.orderReducer?.getCustomerOrder
-  );
-  const stockproductmedicine = useSelector(
-    (state) => state?.orderReducer?.stockproductmedicine
-  );
-  const loading = useSelector(
-    (state) => state?.orderReducer?.loader
-  );
-  // const loading = true;
-  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
-  useEffect(() => {
-    dispatch(getUsers('', 'sm'));
-    dispatch(StaticDataGet());
-  }, []);
+  
 
   const CreateOrder_obj = {
     on_behalf_of_uid: '',
@@ -90,6 +67,56 @@ export default function AddOrder(props) {
     payment_status: 'pending',
     order_datetime: '',
   };
+
+  
+  const [orderCreate, setOrderCreate] = useState(CreateOrder_obj);
+
+
+
+  // console.log("assignto",assignto);
+  // console.log("mpouid",mpouid);
+  // console.log("customeruid",customeruid);
+  // console.log("medproductuid",medproductuid);
+
+  const dispatch = useDispatch();
+
+
+  const usersm = useSelector((state) => state?.orderReducer?.usersm);
+  const userrsm = useSelector((state) => state?.orderReducer?.userrsm);
+  const useram = useSelector((state) => state?.orderReducer?.useram);
+  const usermpo = useSelector((state) => state?.orderReducer?.usermpo);
+  const getcustomers = useSelector(
+    (state) => state?.orderReducer?.getCustomerOrder
+  );
+  const stockproductmedicine = useSelector(
+    (state) => state?.orderReducer?.stockproductmedicine
+  );
+  const loading = useSelector(
+    (state) => state?.orderReducer?.loader
+  );
+  const getCustomerOrderloader = useSelector(
+    (state) => state?.orderReducer?.getCustomerOrderloader
+  );
+  const usersmloader = useSelector(
+    (state) => state?.orderReducer?.usersmloader
+  );
+  const userrsmloader = useSelector(
+    (state) => state?.orderReducer?.userrsmloader
+  );
+  const useramloader = useSelector(
+    (state) => state?.orderReducer?.useramloader
+  );
+  const usermpoloader = useSelector(
+    (state) => state?.orderReducer?.usermpoloader
+  );
+  // const loading = true;
+  const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
+  useEffect(() => {
+    dispatch(getUsers('', 'sm'));
+    dispatch(StaticDataGet());
+  }, []);
+
+  
 
   let option_static_PaymentType = [];
   staticdata?.list_order__payment_types?.filter((item) =>
@@ -250,6 +277,7 @@ export default function AddOrder(props) {
                   </label>
 
                   <>
+                  
                     <Select
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
@@ -271,6 +299,11 @@ export default function AddOrder(props) {
                   </label>
 
                   <>
+                  {userrsmloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -284,6 +317,7 @@ export default function AddOrder(props) {
                       }}
                       options={optionrsm}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>
@@ -294,6 +328,11 @@ export default function AddOrder(props) {
                   </label>
 
                   <>
+                  {useramloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp; 
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -306,6 +345,7 @@ export default function AddOrder(props) {
                       }}
                       options={optionam}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>
@@ -316,6 +356,11 @@ export default function AddOrder(props) {
                   </label>
 
                   <>
+                  {usermpoloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -335,6 +380,7 @@ export default function AddOrder(props) {
                       }}
                       options={optionmpo}
                     />
+                    } 
                   </>
                 </FormGroup>
               </Col>
@@ -345,7 +391,11 @@ export default function AddOrder(props) {
                   </label>
 
                   <>
-                    <Select
+                  {getCustomerOrderloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :  <Select
                       required
                       components={{ Input: CustomSelectInput }}
                       className="react-select"
@@ -363,6 +413,9 @@ export default function AddOrder(props) {
                       }}
                       options={optiongetcustomer}
                     />
+                 }
+                  
+                   
                   </>
                 </FormGroup>
               </Col>

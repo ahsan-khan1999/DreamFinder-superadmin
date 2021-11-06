@@ -46,13 +46,12 @@ import {
   SuspandSampleAction,
   UpdateSampleAction,
 } from 'Store/Actions/SampleAction/SampleAction';
+import Loader from 'react-loader-spinner';
 
 export default function UpdateSample(props) {
   let currentSample = props?.location?.state;
-  console.log(currentSample);
-
-  const [stock, setStock] = useState([]);
-  const [sample, setSample] = useState(sampleObj);
+  const loadingSM = useSelector((state) => state?.AttendanceReducer?.loadingSm);
+  let [loadingMedicine, setLoadingMedicine] = useState(false);
 
   let optionDefault = [];
   currentSample?.medicines?.map((item) => {
@@ -61,11 +60,15 @@ export default function UpdateSample(props) {
       stock_uid: item?.stock_uid,
     });
   });
-  console.log(optionDefault);
+  const [stock, setStock] = useState([]);
   const sampleObj = {
     uid: currentSample?.uid,
     medicines: optionDefault,
   };
+  const [sample, setSample] = useState(sampleObj);
+
+  
+  
   const [array, setArray] = useState([]);
   // console.log(array,"array");
 
@@ -193,6 +196,8 @@ export default function UpdateSample(props) {
     })
   );
   const getStocksMedicine = async (uid) => {
+    setLoadingMedicine(true)
+
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?child_uid=${uid}`,
@@ -203,6 +208,7 @@ export default function UpdateSample(props) {
         },
       }
     );
+    setLoadingMedicine(false)
 
     setStock(response?.data?.response_data);
   };
@@ -218,7 +224,8 @@ export default function UpdateSample(props) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="View Sample" />
+          View Sample
+
         </CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -227,7 +234,7 @@ export default function UpdateSample(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Manager Name" />
+                    Manager Name
                   </Label>
                   {view ? (
                     <span>
@@ -265,13 +272,21 @@ export default function UpdateSample(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Assigned To Name" />
+                    Assigned To Name
                   </Label>
                   {view ? (
                     <span>
                       <p>{currentSample?.assigned_to?.name}</p>
                     </span>
-                  ) : (
+                  ) : loadingSM ? <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> :(
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -305,7 +320,15 @@ export default function UpdateSample(props) {
                         <p>{item?.medicine_name}</p>
                       </span>
                     ))
-                  ) : (
+                  ) :loadingMedicine ? <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> :  (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}
@@ -460,7 +483,7 @@ export default function UpdateSample(props) {
             <span className="bounce3" />
           </span>
           <span className="label">
-            <IntlMessages id="Suspand Sample" />
+            Suspand Sample
           </span>
         </Button>
       </CardBody>

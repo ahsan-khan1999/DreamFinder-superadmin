@@ -63,7 +63,7 @@ export default function Orders({ match, history }) {
 
   const handleAdd = () => {
 
-    history.push('/app/Orders/AddOrder');
+    history.push('/app/Orders/CreateOrder');
   };
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export default function Orders({ match, history }) {
                   color="#00BFFF"
                   height={100}
                   width={100}
-                  color="#003766"
+                  color="#0066b3"
                 />
               </div>
             ) : (

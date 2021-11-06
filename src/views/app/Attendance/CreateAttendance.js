@@ -37,6 +37,7 @@ import {
 } from 'Store/Actions/AttendanceActions/AttendanceAction';
 import moment from 'moment';
 import { getToken } from '@firebase/messaging';
+import Loader from 'react-loader-spinner';
 const delaultOptions = [
   { label: 'Depo Manager', value: 'Depo Manager', key: 1 },
   { label: 'Delivery Staff', value: 'Delivery Staff', key: 2 },
@@ -49,9 +50,25 @@ const delaultOptions = [
 ];
 
 export default function CreateAttendance(props) {
-  const [attendance, setAttendance] = useState(attendance_obj);
   const [imageUploadData, setImageUploadData] = useState({});
-  console.log(imageUploadData?.imattendance__image__url, 'test');
+
+  const attendance_obj = {
+    user_uid: '',
+    image_url: imageUploadData?.attendance__image__url,
+    datetime: '',
+  };
+  const loadingSM = useSelector((state) => state?.AttendanceReducer?.loadingSm);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
+  let [loadingMedicine, setLoadingMedicine] = useState(false);
+  let [loadingStocks, setLoadingStocks] = useState(false);
+  const [attendance, setAttendance] = useState(attendance_obj);
+  console.log(imageUploadData, 'test');
   const [director, setDirector] = useState([]);
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
@@ -137,11 +154,7 @@ export default function CreateAttendance(props) {
   //       key: item?.uid,
   //     });
   //   });
-  const attendance_obj = {
-    user_uid: '',
-    image_url: imageUploadData?.imattendance__image__url,
-    datetime: '',
-  };
+
   const uploadFile = async (event) => {
     setLoadingFileUpload(true);
     event.preventDefault();
@@ -193,9 +206,10 @@ export default function CreateAttendance(props) {
   };
   //   console.log(imageUploadData);
   const createAttendance = async () => {
+    console.log(attendance, 'attendance');
     if (
       attendance?.datetime === '' ||
-      imageUploadData?.imattendance__image__url === undefined ||
+      imageUploadData?.attendance__image__url === undefined ||
       attendance?.user_uid === ''
     ) {
       setLoading(true);
@@ -239,12 +253,17 @@ export default function CreateAttendance(props) {
       }
     }
   };
+  const handleBack =()=>{
+    props.history.push('/app/Attendance/ViewAttendance');
+
+  }
   return (
     <Card>
       <CardBody>
-        <CardTitle>
-          <IntlMessages id="Create Attendance" />
-        </CardTitle>
+      <Buttin style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>Back
+        </Buttin>
+
+        <CardTitle>Create Attendance</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
@@ -470,22 +489,34 @@ export default function CreateAttendance(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select SM</Label>
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="selectUserid"
-                        required
-                        onChange={async (val) => {
-                          setAttendance({
-                            ...attendance,
-                            user_uid: val?.key,
-                          });
-                          //   await getDirector(val?.key);
-                        }}
-                        options={salesManagerOption}
-                      />
+                      {loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="selectUserid"
+                          required
+                          onChange={async (val) => {
+                            setAttendance({
+                              ...attendance,
+                              user_uid: val?.key,
+                            });
+                            //   await getDirector(val?.key);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                 </>
@@ -553,42 +584,66 @@ export default function CreateAttendance(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select SM</Label>
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="selectUserid"
-                        required
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'rsm'));
+                      {loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="selectUserid"
+                          required
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
 
-                          //   await getDirector(val?.key);
-                        }}
-                        options={salesManagerOption}
-                      />
+                            //   await getDirector(val?.key);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select RSM</Label>
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="selectUserid"
-                        required
-                        onChange={async (val) => {
-                          setAttendance({
-                            ...attendance,
-                            user_uid: val.key,
-                          });
+                      {loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="selectUserid"
+                          required
+                          onChange={async (val) => {
+                            setAttendance({
+                              ...attendance,
+                              user_uid: val.key,
+                            });
 
-                          //   await getDirector(val?.key);
-                        }}
-                        options={rsmOptions}
-                      />
+                            //   await getDirector(val?.key);
+                          }}
+                          options={rsmOptions}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                 </>
@@ -656,59 +711,95 @@ export default function CreateAttendance(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select SM</Label>
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="selectUserid"
-                        required
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'rsm'));
+                      {loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="selectUserid"
+                          required
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'rsm'));
 
-                          //   await getDirector(val?.key);
-                        }}
-                        options={salesManagerOption}
-                      />
+                            //   await getDirector(val?.key);
+                          }}
+                          options={salesManagerOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select RSM</Label>
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="selectUserid"
-                        required
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'am'));
+                      {loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="selectUserid"
+                          required
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'am'));
 
-                          //   await getDirector(val?.key);
-                        }}
-                        options={rsmOptions}
-                      />
+                            //   await getDirector(val?.key);
+                          }}
+                          options={rsmOptions}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select AM</Label>
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="selectUserid"
-                        required
-                        onChange={async (val) => {
-                          setAttendance({
-                            ...attendance,
-                            user_uid: val.key,
-                          });
-                        }}
-                        options={amOptions}
-                      />
+                      {loadingAM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="selectUserid"
+                          required
+                          onChange={async (val) => {
+                            setAttendance({
+                              ...attendance,
+                              user_uid: val.key,
+                            });
+                          }}
+                          options={amOptions}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                 </>
@@ -782,7 +873,15 @@ export default function CreateAttendance(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select SM</Label>
-                      <Select
+                      {loadingSM ? <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div> : <Select
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
@@ -795,13 +894,22 @@ export default function CreateAttendance(props) {
                           //   await getDirector(val?.key);
                         }}
                         options={salesManagerOption}
-                      />
+                      />}
+                     
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select RSM</Label>
-                      <Select
+                      {loadingRSM ? <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div> :<Select
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
@@ -814,13 +922,22 @@ export default function CreateAttendance(props) {
                           //   await getDirector(val?.key);
                         }}
                         options={rsmOptions}
-                      />
+                      /> }
+                      
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select AM</Label>
-                      <Select
+                      {loaidngAM ? <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div> : <Select
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
@@ -831,13 +948,22 @@ export default function CreateAttendance(props) {
                           dispatch(getUsers(val.key, 'mpo'));
                         }}
                         options={amOptions}
-                      />
+                      />}
+                      
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select MPO</Label>
-                      <Select
+                      {loadingMPO ? <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div> : <Select
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
@@ -851,7 +977,8 @@ export default function CreateAttendance(props) {
                           });
                         }}
                         options={mpoOptions}
-                      />
+                      />}
+                      
                     </FormGroup>
                   </Col>
                 </>
@@ -864,7 +991,6 @@ export default function CreateAttendance(props) {
                 loading ? 'show-spinner' : ''
               }`}
               disabled={loading ? true : false}
-
               onClick={createAttendance}
             >
               <span className="spinner d-inline-block">
@@ -872,9 +998,7 @@ export default function CreateAttendance(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages id="Add Attendance" />
-              </span>
+              <span className="label">Add Attendance</span>
             </Buttin>
           </Form>
         </Formik>

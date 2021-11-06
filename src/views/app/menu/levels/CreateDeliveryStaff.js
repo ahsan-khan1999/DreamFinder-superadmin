@@ -44,7 +44,7 @@ const selectGender = [
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
-export default function CreateDeliveryStaff({history}) {
+export default function CreateDeliveryStaff({ history }) {
   let [filterLocationIds, setfilterLocationIds] = useState([]);
   // let filterLocationIds =[]
   let [service_location, setService_location] = useState([]);
@@ -52,7 +52,6 @@ export default function CreateDeliveryStaff({history}) {
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [array, setArray] = useState(deliveryStaff?.service_location_uid);
 
   const deliveryStaff_obj = {
     email_address: '',
@@ -64,12 +63,14 @@ export default function CreateDeliveryStaff({history}) {
     designation: '',
 
     phone_number: '',
-    service_location_uid: array,
+    service_location_uid: [],
 
     role_uid: '',
     manager_uid: '',
   };
   const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
+  const [array, setArray] = useState(deliveryStaff?.service_location_uid);
+
 
   let option = [];
 
@@ -124,13 +125,12 @@ export default function CreateDeliveryStaff({history}) {
     options?.map((item, index) => {
       value.push(item?.key);
     });
-    await setArray(value);
-    // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
+    // await setArray(value);
+    let test = { ...deliveryStaff, service_location_uid: value };
+    await setDeliveryStaff(test);
   };
   const onAdminCreate = async () => {
-    let test = { ...deliveryStaff, service_location_uid: array };
-    setDeliveryStaff(test);
-
+  
     if (
       deliveryStaff?.email_address === '' ||
       deliveryStaff?.name === '' ||
@@ -142,8 +142,6 @@ export default function CreateDeliveryStaff({history}) {
       deliveryStaff.manager_uid === '' ||
       deliveryStaff?.service_location_uid === []
     ) {
-      // console.log(deliveryStaff, 'at  if');
-
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
@@ -155,15 +153,13 @@ export default function CreateDeliveryStaff({history}) {
       return;
     } else {
       // setTimeout(() => {
-      // console.log(deliveryStaff,"at  else");
 
       // }, 5000);
 
-      let res = await dispatch(CreateAdminAction(test));
-      console.log(test);
+      let res = await dispatch(CreateAdminAction(deliveryStaff));
       if (res) {
         NotificationManager.success(
-          'Delivery Staff Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -396,12 +392,11 @@ export default function CreateDeliveryStaff({history}) {
                   />
                 </FormGroup>
               </Col>
-             
+
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                  <IntlMessages id="Select Area" />
-
+                    <IntlMessages id="Select Area" />
                   </Label>
                   <Select
                     cacheOptions
@@ -419,9 +414,7 @@ export default function CreateDeliveryStaff({history}) {
             <Button
               // className="btn btn-primary"
               disabled={loading ? true : false}
-
               style={{ backgroundColor: '#0066B3' }}
-
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -434,12 +427,7 @@ export default function CreateDeliveryStaff({history}) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages
-                  id="Add Delivery Staff"
-                />
-              </span>
-              
+              <span className="label">Add Delivery Staff</span>
             </Button>
           </Form>
         </Formik>

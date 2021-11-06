@@ -32,6 +32,7 @@ const AddRegionModal = (props) => {
   const { handleClose, show, header, id, history, editField, action, cat } =
     props;
 
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   // console.log(header, editField);
   const [name, setName] = useState(editField);
@@ -44,6 +45,8 @@ const AddRegionModal = (props) => {
     e.preventDefault();
 
     if (header === 'Add Region') {
+      setLoading(true);
+
       let apiData = {
         name: name,
         category: 'region',
@@ -56,9 +59,14 @@ const AddRegionModal = (props) => {
           5000,
           ''
         );
+        setLoading(false);
+        dispatch(ReadRegionAction())
+
         handleClose(true);
       }
     } else if (header === 'Add area') {
+      setLoading(true);
+
       // console.log(header,id,"at prrent area id header");
       let apiData = {
         name: name,
@@ -73,9 +81,13 @@ const AddRegionModal = (props) => {
           5000,
           ''
         );
+        setLoading(false);
+          dispatch(ReadRegionAction())
         handleClose(true);
       }
     } else if (header === 'Add thana') {
+      setLoading(true);
+
       let apiData = {
         name: name,
         category: 'thana',
@@ -89,9 +101,13 @@ const AddRegionModal = (props) => {
           5000,
           ''
         );
+        setLoading(false);
+          dispatch(ReadRegionAction())
         handleClose(true);
       }
     } else if (header === 'Add teritory') {
+      setLoading(true);
+
       let apiData = {
         name: name,
         category: 'territory',
@@ -106,8 +122,11 @@ const AddRegionModal = (props) => {
           ''
         );
         handleClose(true);
+        dispatch(ReadRegionAction())
+        setLoading(false);
       }
     } else if (header === 'Add market') {
+      setLoading(true);
       let apiData = {
         name: name,
         category: 'market',
@@ -121,9 +140,12 @@ const AddRegionModal = (props) => {
           5000,
           ''
         );
+          setLoading(false)
         handleClose(true);
-        // dispatch(ReadRegionAction())
+        dispatch(ReadRegionAction())
         // history.push('/app/TreeView/RegionTreeView')
+      } else {
+        setLoading(false);
       }
     }
   };
@@ -131,6 +153,8 @@ const AddRegionModal = (props) => {
   const editRegion = async (e) => {
     e.preventDefault();
     if (cat === 'region') {
+      setLoading(true);
+
       // console.log(name);
       let apiData = {
         name: name,
@@ -145,8 +169,10 @@ const AddRegionModal = (props) => {
           5000,
           ''
         );
+        setLoading(false);
+        dispatch(ReadRegionAction());
+
         handleClose(true);
-        // dispatch(ReadRegionAction())
         // history.push('/app/TreeView/RegionTreeView')
       }
     } else if (cat === 'area') {
@@ -165,7 +191,7 @@ const AddRegionModal = (props) => {
           ''
         );
         handleClose(true);
-        // dispatch(ReadRegionAction())
+        dispatch(ReadRegionAction())
         // history.push('/app/TreeView/RegionTreeView')
       }
     } else if (cat === 'thana') {
@@ -188,6 +214,7 @@ const AddRegionModal = (props) => {
         // history.push('/app/TreeView/RegionTreeView')
       }
     } else if (cat === 'territory') {
+      setLoading(true)
       // console.log(name);
       let apiData = {
         name: name,
@@ -202,9 +229,13 @@ const AddRegionModal = (props) => {
           5000,
           ''
         );
+      setLoading(false)
+          dispatch(ReadRegionAction())
         handleClose(true);
       }
     } else if (cat === 'market') {
+      setLoading(true)
+
       let apiData = {
         name: name,
         // category: 'market',
@@ -218,6 +249,8 @@ const AddRegionModal = (props) => {
           5000,
           ''
         );
+      setLoading(false)
+          dispatch(ReadRegionAction())
         handleClose(true);
       }
     }
@@ -290,11 +323,11 @@ const AddRegionModal = (props) => {
             </Row>
 
             <Button
-                style={{backgroundColor:'#0066b3'}}
+              style={{ backgroundColor: '#0066b3' }}
               // type="submit"
-              // className={`btn-shadow btn-multiple-state ${
-              //   loading ? 'show-spinner' : ''
-              // }`}
+              className={`btn-shadow btn-multiple-state ${
+                loading ? 'show-spinner' : ''
+              }`}
               size="sm"
               onClick={action === 'edit' ? editRegion : onCreateRegion}
             >
@@ -303,7 +336,7 @@ const AddRegionModal = (props) => {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Save
+              <span className="label">Save</span>
             </Button>
           </Form>
         </Formik>

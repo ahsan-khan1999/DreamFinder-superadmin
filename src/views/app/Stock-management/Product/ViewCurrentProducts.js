@@ -85,7 +85,10 @@ export default function ViewCurrentProduct(props) {
 
   const loading = useSelector((state) => state?.productReducer?.updateproductloading);
   const getProductCategory = useSelector((state) => state?.productReducer?.getProductCategory);
-  
+  const getProductCategoryloader = useSelector(
+    (state) => state?.productReducer?.getProductCategoryloader
+  );
+
   
   
   const [product, setProduct] = useState(product_obj);
@@ -489,6 +492,11 @@ export default function ViewCurrentProduct(props) {
                   </label>
 
                   <>
+                  {getProductCategoryloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -505,6 +513,7 @@ export default function ViewCurrentProduct(props) {
                       required
                       options={optioncategory}
                     />
+                  }
                   </>
                 </FormGroup>
               </Col>

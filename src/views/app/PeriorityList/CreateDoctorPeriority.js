@@ -18,19 +18,26 @@ import { useState } from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
-import { CreateCustomerPeriorityListAction, CreateDoctorPeriorityListAction } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
+import {
+  CreateCustomerPeriorityListAction,
+  CreateDoctorPeriorityListAction,
+} from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import apiServices from 'services/requestHandler';
 import axios from 'axios';
 import { getToken } from 'Utils/auth.util';
+import Loader from 'react-loader-spinner';
 
 export default function CreatePeriorityList(props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [loadingList, setLoadingList] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [doctor, setDoctor] = useState([]);
   const [doctorID, setDoctorID] = useState('');
   // const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
 
   const readDoctor = async () => {
+    setLoadingList(true);
     let token = await getToken();
     let res = await axios.get(
       'https://concord-backend-m2.herokuapp.com/api/doctors/read',
@@ -41,6 +48,8 @@ export default function CreatePeriorityList(props) {
         },
       }
     );
+    setLoadingList(false);
+
     setDoctor(res?.data?.response_data);
   };
   useEffect(() => {
@@ -48,16 +57,16 @@ export default function CreatePeriorityList(props) {
   }, []);
   let doctorOptions = [];
   doctor?.map((item) =>
-  doctorOptions.push({
+    doctorOptions.push({
       label: item?.name,
       value: item?.name,
       key: item?.uid,
     })
   );
   const createDoctorPeriorityList = async () => {
-    setLoading(true)
+    setLoading(true);
     let res = await dispatch(
-        CreateDoctorPeriorityListAction({ doctor_uid: doctorID })
+      CreateDoctorPeriorityListAction({ doctor_uid: doctorID })
     );
     if (res) {
       NotificationManager.success(
@@ -67,48 +76,49 @@ export default function CreatePeriorityList(props) {
         null,
         ''
       );
-      setLoading(false)
+      setLoading(false);
 
       props.history.push('/app/PeriorityList/ViewPeriorityListDoctor');
-    }else{
-      setLoading(false)
-
+    } else {
+      setLoading(false);
     }
   };
   return (
     <Card>
       <CardBody>
-        <CardTitle>
-          <IntlMessages id="Create Doctor Priority List" />
-        </CardTitle>
+        <CardTitle>Create Doctor Priority List</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
               <Col lg={6}>
                 <FormGroup>
-                  <label>
-                    <IntlMessages id="Select Doctor" />
-                  </label>
+                  <label>Select Doctor</label>
 
                   <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      name="form-field-name-gender"
-                      // value={gender}
-                      // defaultValue={{
-                      //   label: admin?.gender,
-                      //   value: admin?.gender,
-                      //   key: admin?.gender,
-                      // }}
-                      onChange={(val) => {
-                        // console.log(val.key);
-                        setDoctorID(val.key)}}
-                      options={doctorOptions}
-                    />
+                    {loadingList ? (
+                      <div className="">
+                        <Loader
+                          height={18}
+                          width={18}
+                          type="Oval"
+                          color="#0066B3"
+                        />
+                        &nbsp;
+                      </div>
+                    ) : (
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        onChange={(val) => {
+                          setDoctorID(val.key);
+                        }}
+                        options={doctorOptions}
+                      />
+                    )}
                   </>
                 </FormGroup>
               </Col>
@@ -116,9 +126,8 @@ export default function CreatePeriorityList(props) {
 
             <Button
               // className="btn btn-primary"
-              style={{backgroundColor:"#0066B3"}}
+              style={{ backgroundColor: '#0066B3' }}
               disabled={loading ? true : false}
-
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
@@ -131,10 +140,7 @@ export default function CreatePeriorityList(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages id="Add" />
-              </span>
-              
+              <span className="label">Add</span>
             </Button>
           </Form>
         </Formik>

@@ -57,6 +57,7 @@ export default function CreateDirector({ history }) {
 
     role_uid: '',
   };
+  const [admin, setAdmin] = useState(admin_obj);
 
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -82,7 +83,6 @@ export default function CreateDirector({ history }) {
   //     deliveryStaffFilter?.push(item?.role?.category?.user_role_id === 8 ? {label:item?.name,value:item?.name,key:item?.uid} : '')
   //   ))
 
-  const [admin, setAdmin] = useState(admin_obj);
   const onAdminCreate = async () => {
     if (
       admin?.email_address === '' ||
@@ -108,7 +108,7 @@ export default function CreateDirector({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Admin Added Sucessfully',
+          'User Added Sucessfully',
           'Success',
           3000,
           null,
@@ -335,7 +335,6 @@ export default function CreateDirector({ history }) {
 
             <Button
               disabled={loading ? true : false}
-
               style={{ backgroundColor: '#0066B3' }}
               // type="submit"
               className={`btn-shadow btn-multiple-state ${
@@ -349,11 +348,7 @@ export default function CreateDirector({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                <IntlMessages
-                  id="Add Director"
-                />
-              </span>
+              <span className="label">Add Director</span>
             </Button>
           </Form>
         </Formik>

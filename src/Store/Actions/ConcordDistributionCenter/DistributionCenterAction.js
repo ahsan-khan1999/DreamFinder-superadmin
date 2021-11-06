@@ -138,6 +138,10 @@ export const GetDistributionCenterRegions = () => async (dispatch) => {
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_ERROR,
         payload: [],
       });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_REGION_LOADING,
+        payload: false,
+      });
     }
   } catch {}
 };
@@ -164,6 +168,10 @@ export const GetDepoManagers = () => async (dispatch) => {
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_ERROR,
         payload: true,
       });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING,
+        payload: false,
+      });
     }
   } catch {}
 };
@@ -174,6 +182,10 @@ export const getAreas = (uid) => async (dispatch) => {
   const token = JSON.parse(localStorage.getItem("token"));
   try {
     const head = { "x-session-key": token.token, "x-session-type": token.type };
+    dispatch({
+      type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_GET_AREAS_LOADER,
+      payload: true,
+    });
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/area?parent_uid=${uid}&assigned_to_dc=0`,
       { headers: head }
@@ -183,6 +195,16 @@ export const getAreas = (uid) => async (dispatch) => {
           type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_GET_AREAS,
           payload: response?.data?.response_data,
         });
+        dispatch({
+          type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_GET_AREAS_LOADER,
+          payload: false,
+        });
+    }
+    else{
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_GET_AREAS_LOADER,
+        payload: false,
+      });
     }
   } catch (error) {
     return "Fail";

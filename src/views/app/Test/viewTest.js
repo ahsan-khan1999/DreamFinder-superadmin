@@ -136,7 +136,7 @@ export default function viewTest({ history }) {
                   color="#00BFFF"
                   height={100}
                   width={100}
-                  color="#003766"
+                  color="#0066b3"
                 />
               </div>
             ) : (

@@ -29,27 +29,20 @@ import CustomSelectInput from '../../../../components/common/CustomSelectInput';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import { getToken } from 'Utils/auth.util';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditRsm(props) {
-  const [buttonName, setButtonName] = useState('');
-  let [service_location, setService_location] = useState([]);
-  const [array, setArray] = useState(admin?.service_location_uid);
-  const [admin, setAdmin] = useState(admin_obj);
-  const [loading, setLoading] = useState(false);
-  const [suspandLoading, setSuspandLoading] = useState(false);
+  let [loadingLocation, setLoadingLocation] = useState(false);
 
-  const [thisView, setThisView] = useState(true);
   const currentUser = props?.location?.state;
-  //   console.log(currentUser);
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)
   );
-  const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -65,6 +58,19 @@ export default function EditRsm(props) {
     manager_uid: currentUser?.field_staff?.manager?.uid,
     service_location_uid: service_location_id,
   };
+  const [buttonName, setButtonName] = useState('');
+  let [service_location, setService_location] = useState([]);
+  const [admin, setAdmin] = useState(admin_obj);
+  const [array, setArray] = useState(admin?.service_location_uid);
+
+  const [loading, setLoading] = useState(false);
+  const [suspandLoading, setSuspandLoading] = useState(false);
+
+  const [thisView, setThisView] = useState(true);
+  //   console.log(currentUser);
+  
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
@@ -92,6 +98,7 @@ export default function EditRsm(props) {
     salesManager?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true)
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/area?child_uid=${uid}`,
@@ -102,6 +109,8 @@ export default function EditRsm(props) {
         },
       }
     );
+    setLoadingLocation(false)
+
     setService_location(response?.data?.response_data);
   };
   let option = [];
@@ -522,7 +531,15 @@ export default function EditRsm(props) {
                         <p>{item?.name}</p>
                       </span>
                     ))
-                  ) : (
+                  ) :loadingLocation ? <div className="">
+                  <Loader
+                    height={18}
+                    width={18}
+                    type="Oval"
+                    color="#0066B3"
+                  />
+                  &nbsp;
+                </div> : (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}
@@ -584,7 +601,7 @@ export default function EditRsm(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                  <IntlMessages id="Save" />
+                  Save
                 </span>
               </Button>
             )}
@@ -608,7 +625,7 @@ export default function EditRsm(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                  <IntlMessages id={buttonName} />
+                  {buttonName}
                 </span>
               </Button>
             ) : (

@@ -38,7 +38,6 @@ export default function EditDepoManager(props) {
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [buttonName, setButtonName] = useState('');
-  console.log(currentUser);
   const admin_obj = {
     email_address: currentUser?.email_address,
     uid: currentUser?.uid,
@@ -425,7 +424,7 @@ export default function EditDepoManager(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                  <IntlMessages id="Save" />
+                  Save
                 </span>
               </Button>
             )}
@@ -445,7 +444,7 @@ export default function EditDepoManager(props) {
                   <span className="bounce3" />
                 </span>
                 <span className="label">
-                  <IntlMessages id={buttonName} />
+                  {buttonName}
                 </span>
                 {/* {buttonName} */}
               </Button>
