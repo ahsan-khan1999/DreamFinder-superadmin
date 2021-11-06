@@ -49,6 +49,9 @@ export default function viewDistributioncenter({ match, history }) {
   const distributioncenter = useSelector(
     (state) => state?.distributionCenterReducer?.distributioncenter
   );
+  const distributioncenterloader = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenterloader
+  );
 
 
   // console.log(distributioncenter,"distributioncenter")
@@ -183,7 +186,7 @@ export default function viewDistributioncenter({ match, history }) {
 
         <Row>
           <Colxx xxs="12" className="mb-4">
-            {loading ? (
+            {distributioncenterloader ? (
               <div
                 style={{
                   width: '100%',
