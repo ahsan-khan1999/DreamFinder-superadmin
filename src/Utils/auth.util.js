@@ -1,6 +1,7 @@
 /* eslint-disable */
 import localStore from './localstore.util';
 import { updateHeaders } from '../services/HttpProvider';
+import { NotificationManager } from 'components/common/react-notifications';
 
 export const getToken = () => localStore.get_data('token');
 
@@ -37,9 +38,13 @@ export const logout = async () => {
   await updateHeaders();
   return true;
 };
-export const Check_Authentication = async (response,history) => {
+export const Check_Authentication = async (response) => {
   if (response?.data?.response_code === 401) {
-    history.push('/user/login');
+    NotificationManager.error('Autherization Failed', 'Error', 5000, null, '');
+    setTimeout(() => {
+      logout();
+      window.location.href = '/'
+    }, 2000);
   }
 };
 

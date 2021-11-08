@@ -74,6 +74,7 @@ const Login = ({ history, error, loginUserAction }) => {
 
       let res = await dispatch(Login_action(apiData));
       if (res === true) {
+        alert("at if")
         NotificationManager.success(
           'Sucess',
           'Login sucess',
