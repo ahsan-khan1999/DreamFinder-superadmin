@@ -38,6 +38,7 @@ const selectGender = [
 export default function EditAm(props) {
   const currentUser = props?.location?.state;
   let [loadingLocation, setLoadingLocation] = useState(false);
+  const [optionState,setOptionState] = useState([])
 
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
@@ -77,7 +78,11 @@ export default function EditAm(props) {
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
+  let defaultOptions = currentUser?.field_staff?.service_location?.map(
+    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
+  );
   useEffect(() => {
+    setOptionState(defaultOptions)
     setAdmin(admin_obj);
 
     if (currentUser?.status?.name === 'suspended') {
@@ -91,8 +96,10 @@ export default function EditAm(props) {
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
-  );
+  item?.category?.user_role_id == 5
+    ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    : null
+);
   const rsm = useSelector(
     (state) => state?.ViewUserReducer?.regionalSalesManager
   );
@@ -252,9 +259,7 @@ export default function EditAm(props) {
     await setArray(value);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
-  let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
-  );
+  
   return (
     <Card>
       <CardBody>
@@ -422,7 +427,7 @@ export default function EditAm(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin?.role_uid}</p>
+                      <p>{currentUser?.role?.name}</p>
                     </span>
                   ) : (
                     <Select
@@ -475,6 +480,9 @@ export default function EditAm(props) {
                           manager_uid: val.key,
                         });
                         getServiceLocationUid(val.key);
+                        setOptionState([])
+                        setArray([])
+
                       }}
                       options={rsmOptiopns}
                     />
@@ -485,7 +493,7 @@ export default function EditAm(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Teritory" />
+                    <IntlMessages id="Select Thana" />
                   </Label>
                   {thisView ? (
                     currentUser?.field_staff?.service_location?.map((item) => (
@@ -507,15 +515,7 @@ export default function EditAm(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={currentUser?.field_staff?.service_location?.map(
-                        (item) => {
-                          return {
-                            label: item?.name,
-                            value: item?.name,
-                            key: item?.uid,
-                          };
-                        }
-                      )}
+                      defaultValue={optionState}
                       // value={admin?.service_location_uid}
                       onChange={(e) => handleChange(e)}
                       options={option}

@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import {
   VIEW_ADMIN_CONSTANT,
@@ -32,7 +33,7 @@ import {
   UPDATE_CATEGORY__CONSTANT,
   VIEW_STATIC_CONSTANT
 } from 'Store/Constant/Constants';
-import { Check_Authentication, logout } from 'Utils/auth.util';
+import { Check_Authentication, Check_Validation, Check_Validation_Update, logout } from 'Utils/auth.util';
 import { logOutUser } from '../Auth/Actions';
 
 export const ViewAdminAction = (history) => async (dispatch) => {
@@ -320,17 +321,9 @@ export const CreateAdminAction = (data) => async (dispatch) => {
         payload: false,
       });
 
-      // let message = response?.data?.response_data[0];
-      // let mess = Object.values(message);
-      // console.log(mess);
-      // NotificationManager.error(response?.data?.response_message, 'Error', 5000, '');
-      NotificationManager.error(
-        response?.data?.response_message,
-        'Error',
-        5000,
-        ''
-      );
+     
 
+      Check_Validation(response)
       return false;
     }
   } catch {}
@@ -360,13 +353,7 @@ export const CreateSmAction = (data) => async (dispatch) => {
         payload: true,
       });
 
-      NotificationManager.error(
-        response?.data?.response_message,
-        'Error',
-        5000,
-        ''
-      );
-
+      Check_Validation(response)
       return false;
     }
   } catch {}
@@ -394,14 +381,10 @@ export const CreateRsmAction = (data) => async (dispatch) => {
         type: CREATE_RSM_CONSTANT.CREATE_RSM_ERROR,
         payload: true,
       });
+      Check_Validation(response)
 
-      NotificationManager.error(
-        response?.data?.response_message,
-        'Error',
-        5000,
-        ''
-      );
 
+      
       return false;
     }
   } catch {}
@@ -430,13 +413,7 @@ export const CreateAmAction = (data) => async (dispatch) => {
         payload: true,
       });
 
-      NotificationManager.error(
-        response?.data?.response_message,
-        'Error',
-        5000,
-        ''
-      );
-
+      Check_Validation(response)
       return false;
     }
   } catch {}
@@ -465,12 +442,7 @@ export const CreateMpoAction = (data) => async (dispatch) => {
         payload: true,
       });
 
-      NotificationManager.error(
-        response?.data?.response_message,
-        'Error',
-        5000,
-        ''
-      );
+      Check_Validation(response)
 
       return false;
     }
@@ -500,7 +472,7 @@ export const UpdateUserAction = (data) => async (dispatch) => {
         type: UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.response_message, 'Error', 5000, '');
+      Check_Validation_Update(res)
       return false;
     }
   } catch {}
@@ -538,10 +510,7 @@ export const CreateRoleAction = (data) => async (dispatch) => {
       type: CREATE_CATEGORY__CONSTANT.CREATE_CATEGORY_LOADING,
       payload: true,
     });
-    // readUserRoles,
-    // createRoles,
-    // updateRoles,
-    // suspandRoles
+    
     let response = await apiServices.createRoles(data);
     if (response?.data?.response_code === 200) {
       dispatch({

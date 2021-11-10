@@ -69,6 +69,7 @@ export default function ViewProductCategory({ match, history }) {
     setProductcategoryTable(productcategory);
   }, [productcategory]);
   const headers = [
+    // 'Category Id',
     'Name',
     'Category',
     'Status',

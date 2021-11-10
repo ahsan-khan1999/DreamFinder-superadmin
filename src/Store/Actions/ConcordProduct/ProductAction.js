@@ -54,7 +54,7 @@ export const GetProduct = (category,old_new) => async (dispatch) => {
       let res = await apiServices.createproducts(data);
       dispatch({
         type: PRODUCT_CONSTANT.CREATE_PRODUCT_LOADING,
-        payload: true
+        payload: false
       })
   
       if (res?.data?.response_code === 200) {

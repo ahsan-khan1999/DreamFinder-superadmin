@@ -78,7 +78,9 @@ export default function CreateAdmin({ history }) {
   
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 1
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
 
   // let user_id =options?.filter((item) => (

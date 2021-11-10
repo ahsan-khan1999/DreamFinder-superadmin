@@ -929,7 +929,7 @@ export default function CreateAttendance(props) {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select AM</Label>
-                      {loaidngAM ? <div className="">
+                      {loadngAM ? <div className="">
                           <Loader
                             height={18}
                             width={18}

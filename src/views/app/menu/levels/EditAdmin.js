@@ -72,7 +72,9 @@ export default function EditAdmin(props) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 5
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
   console.log(options);
   const [admin, setAdmin] = useState(admin_obj);

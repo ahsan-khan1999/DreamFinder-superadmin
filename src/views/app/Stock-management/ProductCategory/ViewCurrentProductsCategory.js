@@ -15,40 +15,38 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { CreateDepartmentHead } from 'Store/Actions/ConcordDepartmentHead/DepartmentHeadAction';
 import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
 import { CreateProducts } from 'Store/Actions/ConcordProduct/ProductAction';
-import { CreateProductCategories, UpdateProductCategory } from 'Store/Actions/ConcordProductCategory/ProductCategoryAction';
+import {
+  CreateProductCategories,
+  UpdateProductCategory,
+} from 'Store/Actions/ConcordProductCategory/ProductCategoryAction';
 import apiServices from 'services/requestHandler';
 
 export default function ViewCurrentProductCategory(props) {
   let [buttonName, setButtonName] = useState();
-  
-  const [thisView, setThisView] = useState(true);
-  
-  
-  const CurrentProductCategory = props?.location?.state;
 
+  const [thisView, setThisView] = useState(true);
+
+  const CurrentProductCategory = props?.location?.state;
 
   const dispatch = useDispatch();
 
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
   let option_static_Category = [];
   staticdata?.product_category__category_list?.filter((item) =>
-  option_static_Category.push({
+    option_static_Category.push({
       label: item?.name,
       value: item?.value,
       key: item?.id,
     })
   );
 
-
   useEffect(() => {
-
     if (CurrentProductCategory?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (CurrentProductCategory?.status?.name === 'active') {
       setButtonName('Suspend');
     }
   }, []);
-
 
   useEffect(() => {
     dispatch(StaticDataGet());
@@ -61,19 +59,18 @@ export default function ViewCurrentProductCategory(props) {
 
     description: CurrentProductCategory.description,
 
-    uid : CurrentProductCategory.uid,
+    uid: CurrentProductCategory.uid,
   };
 
-  const loading = useSelector((state) => state?.productCategoryReducer?.updateproductcategoryloader);
+  const loading = useSelector(
+    (state) => state?.productCategoryReducer?.updateproductcategoryloader
+  );
   const [productcategory, setProductcategory] = useState(productcategory_obj);
-
-
 
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(!thisView);
   };
-
 
   const editData = async () => {
     let res = await dispatch(UpdateProductCategory(productcategory));
@@ -89,17 +86,13 @@ export default function ViewCurrentProductCategory(props) {
     }
   };
 
-
-  
   const handleChangeToView = () => {
     props.history.push('/app/stocks-management/viewProductCategory');
   };
 
-
-  console.log(CurrentProductCategory,"CurrentProductCategory")
+  console.log(CurrentProductCategory, 'CurrentProductCategory');
 
   let [suspendloader, setsuspendloader] = useState(false);
-
 
   const suspandDepartmenthead = async () => {
     if (CurrentProductCategory?.status?.name === 'suspended') {
@@ -165,28 +158,27 @@ export default function ViewCurrentProductCategory(props) {
     <Card>
       <CardBody>
         <CardTitle>
-        {thisView ? (
+          {thisView ? (
             <>
-            <Button
-              onClick={handleChangeToView}
-              style={{ marginRight: '20px',backgroundColor:'#0066b3'}}
-            >
-              Back
-            </Button>
-            <IntlMessages id="View Product Category" />
+              <Button
+                onClick={handleChangeToView}
+                style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
+              >
+                Back
+              </Button>
+              <IntlMessages id="View Product Category" />
             </>
-            ) : (
-              
-              <>
+          ) : (
+            <>
               <Button
                 onClick={editProfile}
-                style={{ marginRight: '20px' , backgroundColor:'#0066b3'}}
+                style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
               >
                 Close Edit
               </Button>
               <IntlMessages id="Edit Product Category" />
-              </>
-              )}
+            </>
+          )}
         </CardTitle>
 
         <div style={{ marginBottom: '30px' }}></div>
@@ -195,158 +187,186 @@ export default function ViewCurrentProductCategory(props) {
             <Row className="h-100">
               <Col lg={6}>
                 <FormGroup>
-                <Label>
+                  <Label>
                     <h6
                       style={{
                         fontWeight: '700',
                         fontSize: '0.9rem',
                       }}
-                    >Name</h6>
+                    >
+                      Category Id
+                    </h6>
                   </Label>
 
                   {thisView ? (
-                  <span>
-                    <p>{CurrentProductCategory?.name.toUpperCase()}</p>
-                  </span>
-         
-                  ):(
-
-                  <Input
-                    value={productcategory?.name}
-                    required
-                    className="form-control"
-                    name="name"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setProductcategory({ ...productcategory, name: e.target.value })
-                    }
-                  />
-                  )}
-
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                <Label>
-                    <h6
-                      style={{
-                        fontWeight: '700',
-                        fontSize: '0.9rem',
-                      }}
-                    >Select Category</h6>
-                  </Label>
-
-                  {thisView ? (
-                  <span>
-                    <p>{CurrentProductCategory?.category.toUpperCase()}</p>
-                  </span>
-         
-                  ):(
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      defaultValue={{
-                        label:productcategory?.category,
-                        value:productcategory?.category
-                      }}
-                      classNamePrefix="react-select"
-                      required
-                      onChange={(e, index) => {
-                        setProductcategory({ ...productcategory, category: e.value })
-                      }}
-                      options={option_static_Category}
-                    />
-                  </>
-
-                  )}
-
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                <Label>
-                    <h6
-                      style={{
-                        fontWeight: '700',
-                        fontSize: '0.9rem',
-                      }}
-                    >Description</h6>
-                  </Label>
-
-                  {thisView ? (
-                  <span>
-                    <p>{CurrentProductCategory?.description ? CurrentProductCategory?.description.toUpperCase() : 'N/A'}</p>
-                  </span>
-         
-                  ):(
+                    <span>
+                      <p>{CurrentProductCategory?.name.toUpperCase()}</p>
+                    </span>
+                  ) : (
                     <Input
-                     type="textarea"
-                    value={productcategory?.description}
-                     className="form-control"
-                     name="description"
-                     onChange={(e) =>
-                      setProductcategory({ ...productcategory, description: e.target.value })
-                     }
+                      disabled
+                      value={productcategory?.name}
+                      className="form-control"
+                      name="name"
+                      // validate={validateEmail}
+                     
                     />
-                    
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >
+                      Name
+                    </h6>
+                  </Label>
+
+                  {thisView ? (
+                    <span>
+                      <p>{CurrentProductCategory?.name.toUpperCase()}</p>
+                    </span>
+                  ) : (
+                    <Input
+                      value={productcategory?.name}
+                      required
+                      className="form-control"
+                      name="name"
+                      // validate={validateEmail}
+                      onChange={(e) =>
+                        setProductcategory({
+                          ...productcategory,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >
+                      Select Category
+                    </h6>
+                  </Label>
+
+                  {thisView ? (
+                    <span>
+                      <p>{CurrentProductCategory?.category.toUpperCase()}</p>
+                    </span>
+                  ) : (
+                    <>
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        defaultValue={{
+                          label: productcategory?.category,
+                          value: productcategory?.category,
+                        }}
+                        classNamePrefix="react-select"
+                        required
+                        onChange={(e, index) => {
+                          setProductcategory({
+                            ...productcategory,
+                            category: e.value,
+                          });
+                        }}
+                        options={option_static_Category}
+                      />
+                    </>
+                  )}
+                </FormGroup>
+              </Col>
+
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <h6
+                      style={{
+                        fontWeight: '700',
+                        fontSize: '0.9rem',
+                      }}
+                    >
+                      Description
+                    </h6>
+                  </Label>
+
+                  {thisView ? (
+                    <span>
+                      <p>
+                        {CurrentProductCategory?.description
+                          ? CurrentProductCategory?.description.toUpperCase()
+                          : 'N/A'}
+                      </p>
+                    </span>
+                  ) : (
+                    <Input
+                      type="textarea"
+                      value={productcategory?.description}
+                      className="form-control"
+                      name="description"
+                      onChange={(e) =>
+                        setProductcategory({
+                          ...productcategory,
+                          description: e.target.value,
+                        })
+                      }
+                    />
                   )}
                 </FormGroup>
               </Col>
             </Row>
 
-
             {thisView ? (
               <Button
-                style={{backgroundColor:'#0066b3'}}
+                style={{ backgroundColor: '#0066b3' }}
                 className="mr-3"
                 onClick={editProfile}
               >
-              
                 Edit Profile
               </Button>
             ) : (
-              <Button
-                style={{backgroundColor:'#0066b3'}}
-
-              
-                onClick={editData}
-              >
-              
-              {loading ? (
-                <div className="d-flex justify-content-center">
-                  <Loader height={18} width={18} type="Oval" color="#fff" />
-                  &nbsp; Updating
-                </div> 
-              ) : (
-                'Save'
-              )}
+              <Button style={{ backgroundColor: '#0066b3' }} onClick={editData}>
+                {loading ? (
+                  <div className="d-flex justify-content-center">
+                    <Loader height={18} width={18} type="Oval" color="#fff" />
+                    &nbsp; Updating
+                  </div>
+                ) : (
+                  'Save'
+                )}
               </Button>
             )}
 
-
-
             {thisView ? (
               <Button
-                style={{backgroundColor:'#0066b3'}}
-
+                style={{ backgroundColor: '#0066b3' }}
                 onClick={suspandDepartmenthead}
               >
-                 {suspendloader ? (
-              <div className="d-flex justify-content-center">
-                <Loader height={18} width={18} type="Oval" color="#fff" />
-                &nbsp; Suspending
-              </div>
-            ) : (
-              buttonName
-              )}
+                {suspendloader ? (
+                  <div className="d-flex justify-content-center">
+                    <Loader height={18} width={18} type="Oval" color="#fff" />
+                    &nbsp; Suspending
+                  </div>
+                ) : (
+                  buttonName
+                )}
               </Button>
-
             ) : (
-                ""
+              ''
             )}
             {/* <Button
                 style={{backgroundColor:'#0066b3'}}

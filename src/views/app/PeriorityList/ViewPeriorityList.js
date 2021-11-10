@@ -11,6 +11,8 @@ import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
 import { searchArray } from 'Utils/auth.util';
 
 export default function ViewPeriorityList(props) {
+  const [search,setSearch] = useState('')
+  const [doc,setDoc] = useState()
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(ViewPeriorityListAction())    
@@ -18,10 +20,9 @@ export default function ViewPeriorityList(props) {
     const customerList = useSelector(state => state?.ViewPeriorityRedcuer?.list)
     const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
 
-    console.log(customerList);
     const handleSearch = (event) => {
         setSearch(event.target.value);
-        setDoc(searchArray(target, search));
+        setDoc(searchArray(customerList, search));
       };
       const handleAdd = () => {
         props.history.push('/app/PeriorityList/CreatePeriorityList');
@@ -103,7 +104,7 @@ export default function ViewPeriorityList(props) {
             ) : (
                 <ViewCustomerPeriorityTabel
                   header={header}
-                  data={customerList}
+                  data={search === '' ? customerList : doc}
                   changeRoute={changeRoute}
                 />
               

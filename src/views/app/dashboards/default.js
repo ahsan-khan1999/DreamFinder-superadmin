@@ -18,7 +18,7 @@ import GradientWithRadialProgressCard from 'components/cards/GradientWithRadialP
 import SortableStaticticsRow from 'containers/dashboards/SortableStaticticsRow';
 import AdvancedSearch from 'containers/dashboards/AdvancedSearch';
 import SmallLineCharts from 'containers/dashboards/SmallLineCharts';
-import SalesChartCard from 'containers/dashboards/SalesChartCard';
+import {PrescriptionChartCard, SalesChartCard,OrderChartCard} from 'containers/dashboards/SalesChartCard';
 import ProductCategoriesPolarArea from 'containers/dashboards/ProductCategoriesPolarArea';
 import WebsiteVisitsChartCard from 'containers/dashboards/WebsiteVisitsChartCard';
 import ConversionRatesChartCard from 'containers/dashboards/ConversionRatesChartCard';
@@ -37,7 +37,7 @@ const DefaultDashboard = ({ intl, match }) => {
       </Row>
       <Row>
         <Colxx lg="12" xl="6">
-          <IconCardsCarousel />
+          {/* <IconCardsCarousel /> */}
           <Row>
             <Colxx md="12" className="mb-4">
               <SalesChartCard />
@@ -48,7 +48,19 @@ const DefaultDashboard = ({ intl, match }) => {
           {/* <WebsiteVisitsChartCard /> */}
           <Row>
             <Colxx>
-              <BestSellers />
+            <PrescriptionChartCard />
+
+              {/* <BestSellers /> */}
+            </Colxx>
+          </Row>
+        </Colxx>
+        <Colxx lg="12" xl="6" className="mb-4">
+          {/* <WebsiteVisitsChartCard /> */}
+          <Row>
+            <Colxx>
+            <OrderChartCard />
+
+              {/* <BestSellers /> */}
             </Colxx>
           </Row>
         </Colxx>

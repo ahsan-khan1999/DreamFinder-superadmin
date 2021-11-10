@@ -43,8 +43,30 @@ export const Check_Authentication = async (response) => {
     NotificationManager.error('Autherization Failed', 'Error', 5000, null, '');
     setTimeout(() => {
       logout();
-      window.location.href = '/'
+      window.location.href = '/';
     }, 2000);
+  }
+};
+
+export const Check_Validation = async (response) => {
+  if (response?.data?.response_code === 4003) {
+    response?.data?.response_data?.map((item) => {
+      NotificationManager.error(Object.values(item), 'Error', 5000, null, '');
+    });
+  }else{
+    NotificationManager.error(response?.data?.response_message, 'Error', 5000, null, '');
+
+  }
+};
+
+export const Check_Validation_Update = async (response) => {
+  if (response?.response_code === 4003) {
+    response?.response_data?.map((item) => {
+      NotificationManager.error(Object.values(item), 'Error', 5000, null, '');
+    });
+  }else{
+    NotificationManager.error(response?.response_message, 'Error', 5000, null, '');
+
   }
 };
 

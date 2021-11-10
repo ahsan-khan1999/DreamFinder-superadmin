@@ -2,7 +2,7 @@
 
 import { Formik } from 'formik';
 import IntlMessages from 'helpers/IntlMessages';
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
@@ -37,9 +37,10 @@ const selectGender = [
   { label: 'Other', value: 'other', key: 3 },
 ];
 export default function EditSm(props) {
+  const selectRef = useRef('');
   const currentUser = props?.location?.state;
   let [loadingLocation, setLoadingLocation] = useState(false);
-
+  const [optionsState, setOptionState] = useState([]);
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)
@@ -71,15 +72,17 @@ export default function EditSm(props) {
   const [confirmPassword, setConfirmPassword] = useState('');
   let [service_location, setService_location] = useState([]);
   const [array, setArray] = useState(admin?.service_location_uid);
-  
- 
+
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
+  let defaultOptions = currentUser?.field_staff?.service_location?.map(
+    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
+  );
   useEffect(() => {
     setAdmin(admin_obj);
-
+    setOptionState(defaultOptions);
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
     } else if (currentUser?.status?.name === 'active') {
@@ -97,7 +100,9 @@ export default function EditSm(props) {
   const user = useSelector((state) => state?.ViewUserReducer?.director);
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 3
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
   const editProfile = (e) => {
     e.preventDefault();
@@ -240,7 +245,7 @@ export default function EditSm(props) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   const getServiceLocationUid = async (uid) => {
-    setLoadingLocation(true)
+    setLoadingLocation(true);
 
     let token = await getToken();
     const response = await axios.get(
@@ -252,16 +257,14 @@ export default function EditSm(props) {
         },
       }
     );
-    setLoadingLocation(false)
+    setLoadingLocation(false);
 
     setService_location(response?.data?.response_data);
   };
   service_location?.filter((item) =>
     option?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
-  );
+
   return (
     <Card>
       <CardBody>
@@ -330,46 +333,6 @@ export default function EditSm(props) {
                 </FormGroup>
               </Col>
 
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Password" />
-                  </Label>
-                  {thisView ? (
-                    <span>
-                      <p>{admin.password}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      value={admin.password}
-                      className="form-control"
-                      name="password"
-                      type="password"
-                      //   validate={validate}
-                      onChange={(e) =>
-                        setAdmin({ ...admin, password: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Confirm Password" />
-                  </Label>
-                  <Input
-                    required
-                    value={confirmPassword}
-                    className="form-control"
-                    name="confirm password"
-                    type="password"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </FormGroup>
-              </Col> */}
               <Col lg={6}>
                 <FormGroup>
                   <label>
@@ -468,7 +431,7 @@ export default function EditSm(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin?.role_uid}</p>
+                      <p>{currentUser?.role?.name}</p>
                     </span>
                   ) : (
                     <Select
@@ -522,6 +485,8 @@ export default function EditSm(props) {
                           manager_uid: val.key,
                         });
                         getServiceLocationUid(val.key);
+                        setOptionState([]);
+                        setArray([]);
                       }}
                       options={directorFilter}
                     />
@@ -531,7 +496,7 @@ export default function EditSm(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <h6>Select Teritory</h6>
+                    <IntlMessages id="Select Region" />
                   </Label>
                   {thisView ? (
                     currentUser?.field_staff?.service_location?.map((item) => (
@@ -539,38 +504,34 @@ export default function EditSm(props) {
                         <p>{item?.name}</p>
                       </span>
                     ))
-                  ) : loadingLocation ?  <div className="">
-                  <Loader
-                    height={18}
-                    width={18}
-                    type="Oval"
-                    color="#0066B3"
-                  />
-                  &nbsp;
-                </div> : loadingLocation ? <div className="">
-                  <Loader
-                    height={18}
-                    width={18}
-                    type="Oval"
-                    color="#0066B3"
-                  />
-                  &nbsp;
-                </div> : (
+                  ) : loadingLocation ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : loadingLocation ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
                       // defaultValue={defaultOptions[0]}
-                      defaultValue={currentUser?.field_staff?.service_location?.map(
-                        (item) => {
-                          return {
-                            label: item?.name,
-                            value: item?.name,
-                            key: item?.uid,
-                          };
-                        }
-                      )}
+                      defaultValue={optionsState}
                       // value={admin?.service_location_uid}
                       onChange={(e) => handleChange(e)}
                       options={option}
