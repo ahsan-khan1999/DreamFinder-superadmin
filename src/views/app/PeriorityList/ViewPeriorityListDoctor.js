@@ -1,37 +1,51 @@
 /* eslint-disable */
 
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
-import { TargetTable, ViewCustomerPeriorityTabel, ViewDoctorPeriorityTabel } from 'containers/ui/ReactTableCards';
+import {
+  TargetTable,
+  ViewCustomerPeriorityTabel,
+  ViewDoctorPeriorityTabel,
+} from 'containers/ui/ReactTableCards';
 import React, { useEffect, useState } from 'react';
 import Loader from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import { ViewDoctorPeriorityListAction, ViewPeriorityListAction } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
+import {
+  ViewDoctorPeriorityListAction,
+  ViewPeriorityListAction,
+} from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
 import { searchArray } from 'Utils/auth.util';
 
 export default function ViewPeriorityListDoctor(props) {
   const [doc, setDoc] = useState();
-
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(ViewDoctorPeriorityListAction())    
-    }, [])
-    const customerList = useSelector(state => state?.ViewPeriorityRedcuer?.doctorList)
-    const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
-
-    const handleSearch = (event) => {
-        setSearch(event.target.value);
-        setDoc(searchArray(customerList, search));
-      };
-      const handleAdd = () => {
-        props.history.push('/app/PeriorityList/CreateDoctorPeriority');
-
-      }
-      const header = ['Customer Name','Designation','Phone Number','Speciality','Status','Action']
-    const changeRoute = (item) => {
-        props.history.push('/app/PeriorityList/EditDoctorPeriorityList', item);
-      };
+  const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(ViewDoctorPeriorityListAction());
+  }, []);
+  const customerList = useSelector(
+    (state) => state?.ViewPeriorityRedcuer?.doctorList
+  );
+  const loading = useSelector((state) => state?.ViewPeriorityRedcuer?.loading);
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+    setDoc(searchArray(customerList, search));
+  };
+  const handleAdd = () => {
+    props.history.push('/app/PeriorityList/CreateDoctorPeriority');
+  };
+  const header = [
+    'Doctor Name',
+    'Designation',
+    'Phone Number',
+    'Speciality',
+    'Status',
+    'Action',
+  ];
+  const changeRoute = (item) => {
+    props.history.push('/app/PeriorityList/EditDoctorPeriorityList', item);
+  };
   return (
     <Card>
       <CardBody>
@@ -102,12 +116,11 @@ export default function ViewPeriorityListDoctor(props) {
                 />
               </div>
             ) : (
-                <ViewDoctorPeriorityTabel
-                  header={header}
-                  data={search === '' ? customerList : doc}
-                  changeRoute={changeRoute}
-                />
-              
+              <ViewDoctorPeriorityTabel
+                header={header}
+                data={customerList}
+                changeRoute={changeRoute}
+              />
             )}
           </Colxx>
         </Row>

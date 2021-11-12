@@ -54,6 +54,7 @@ const delaultOptions = [
 
 export default function EditTarget(props) {
   let currentTarget = props?.location?.state;
+  console.log(currentTarget);
   const [array, setArray] = useState();
   const [loadingSuspand, setLoadingSuspand] = useState(false);
   // console.log(target, 'targte');

@@ -2927,7 +2927,7 @@ export const ViewDoctorPeriorityTabel = (props) => {
       },
       {
         Header: header[3],
-        accessor: 'doctor.speciality',
+        accessor: 'doctor.speciality.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
