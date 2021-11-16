@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable */
+
+import React, { useState } from 'react';
 import {
   Card,
   CardBody,
@@ -13,12 +15,24 @@ import IntlMessages from 'helpers/IntlMessages';
 import { LineChart } from 'components/charts';
 
 import { lineChartData } from 'data/charts';
+import Switch from 'rc-switch';
 
-const SalesChartCard = () => {
+export const SalesChartCard = () => {
+  const [display, setDisplay] = useState(true);
+
+  const toggle = () => setDisplay(!display);
   return (
     <Card>
       <div className="position-absolute card-top-buttons">
-        <UncontrolledDropdown>
+        
+        <Switch
+          // name={name}
+          className="custom-switch custom-switch-primary"
+          // checked={value}
+          onChange={toggle}
+        />
+
+        {/* <UncontrolledDropdown>
           <DropdownToggle color="" className="btn btn-header-light icon-button">
             <i className="simple-icon-refresh" />
           </DropdownToggle>
@@ -33,18 +47,75 @@ const SalesChartCard = () => {
               <IntlMessages id="dashboards.refunds" />
             </DropdownItem>
           </DropdownMenu>
-        </UncontrolledDropdown>
+        </UncontrolledDropdown> */}
       </div>
+
       <CardBody>
         <CardTitle>
           <IntlMessages id="dashboards.sales" />
         </CardTitle>
-        <div className="dashboard-line-chart">
-          <LineChart shadow data={lineChartData} />
-        </div>
+        {display ? (
+          <div className="dashboard-line-chart">
+            <LineChart shadow data={lineChartData} />
+          </div>
+        ) : null}
       </CardBody>
     </Card>
   );
 };
 
-export default SalesChartCard;
+export const PrescriptionChartCard = () => {
+  const [display, setDisplay] = useState(true);
+
+  const toggle = () => setDisplay(!display);
+  return (
+    <Card>
+      <div className="position-absolute card-top-buttons">
+        <Switch
+          className="custom-switch custom-switch-primary"
+          onChange={toggle}
+        />
+      </div>
+
+      <CardBody>
+        <CardTitle>
+          <IntlMessages id="dashboards.prescription" />
+        </CardTitle>
+        {display ? (
+          <div className="dashboard-line-chart">
+            <LineChart shadow data={lineChartData} />
+          </div>
+        ) : null}
+      </CardBody>
+    </Card>
+  );
+};
+
+export const OrderChartCard = () => {
+  const [display, setDisplay] = useState(true);
+
+  const toggle = () => setDisplay(!display);
+  return (
+    <Card>
+      <div className="position-absolute card-top-buttons">
+        <Switch
+          className="custom-switch custom-switch-primary"
+          onChange={toggle}
+        />
+      </div>
+
+      <CardBody>
+        <CardTitle>
+          <IntlMessages id="dashboards.order" />
+        </CardTitle>
+        {display ? (
+          <div className="dashboard-line-chart">
+            <LineChart shadow data={lineChartData} />
+          </div>
+        ) : null}
+      </CardBody>
+    </Card>
+  );
+};
+
+// export default SalesChartCard;

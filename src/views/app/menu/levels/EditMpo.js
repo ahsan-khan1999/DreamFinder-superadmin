@@ -38,6 +38,7 @@ const selectGender = [
 ];
 export default function EditMpo(props) {
   const currentUser = props?.location?.state;
+  const [optionState, setOptionState] = useState([]);
   let [loadingLocation, setLoadingLocation] = useState(false);
 
   let service_location_id = [];
@@ -76,8 +77,12 @@ export default function EditMpo(props) {
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
+  let defaultOptions = currentUser?.field_staff?.service_location?.map(
+    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
+  );
   useEffect(() => {
     setAdmin(admin_obj);
+    setOptionState(defaultOptions);
 
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
@@ -92,7 +97,9 @@ export default function EditMpo(props) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 6
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
   let amOptiopns = [];
 
@@ -250,10 +257,7 @@ export default function EditMpo(props) {
     await setArray(value);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
-  let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
-  );
-  console.log(defaultOptions);
+
   return (
     <Card>
       <CardBody>
@@ -473,6 +477,8 @@ export default function EditMpo(props) {
                           manager_uid: val.key,
                         });
                         getServiceLocationUid(val.key);
+                        setOptionState([]);
+                        setArray([]);
                       }}
                       options={amOptiopns}
                     />
@@ -483,7 +489,7 @@ export default function EditMpo(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Teritory" />
+                    <IntlMessages id="Select Territory" />
                   </Label>
                   {thisView ? (
                     currentUser?.field_staff?.service_location?.map((item) => (
@@ -507,15 +513,7 @@ export default function EditMpo(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={currentUser?.field_staff?.service_location?.map(
-                        (item) => {
-                          return {
-                            label: item?.name,
-                            value: item?.name,
-                            key: item?.uid,
-                          };
-                        }
-                      )}
+                      defaultValue={optionState}
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />

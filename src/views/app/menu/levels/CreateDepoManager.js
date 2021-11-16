@@ -76,7 +76,9 @@ export default function CreateDepoManager({ history }) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 7
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
   // let deliveryStaffFilter = []
   //   user?.filter((item) => (

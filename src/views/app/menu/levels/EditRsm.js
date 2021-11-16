@@ -37,6 +37,8 @@ const selectGender = [
 ];
 export default function EditRsm(props) {
   let [loadingLocation, setLoadingLocation] = useState(false);
+  const [optionsState,setOptionState] = useState([])
+
 
   const currentUser = props?.location?.state;
   let service_location_id = [];
@@ -76,7 +78,12 @@ export default function EditRsm(props) {
     dispatch(ViewRoleAction());
     dispatch(ViewSalesManagerManagerAction());
   };
+  let defaultOptions = currentUser?.field_staff?.service_location?.map(
+    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
+  );
   useEffect(() => {
+    setOptionState(defaultOptions)
+
     setAdmin(admin_obj);
 
     if (currentUser?.status?.name === 'suspended') {
@@ -91,7 +98,9 @@ export default function EditRsm(props) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 4
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
   let salesManager = [];
   user?.filter((item) =>
@@ -117,7 +126,7 @@ export default function EditRsm(props) {
   service_location?.filter((item) =>
     option?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-
+ 
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(false);
@@ -250,9 +259,7 @@ export default function EditRsm(props) {
 
     // console.log(doctor?.password);
   };
-  let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
-  );
+  
   return (
     <Card>
       <CardBody>
@@ -322,46 +329,7 @@ export default function EditRsm(props) {
                 </FormGroup>
               </Col>
 
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Password" />
-                  </Label>
-                  {thisView ? (
-                    <span>
-                      <p>{admin.password}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      value={admin.password}
-                      className="form-control"
-                      name="password"
-                      type="password"
-                      //   validate={validate}
-                      onChange={(e) =>
-                        setAdmin({ ...admin, password: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Confirm Password" />
-                  </Label>
-                  <Input
-                    required
-                    value={confirmPassword}
-                    className="form-control"
-                    name="confirm password"
-                    type="password"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </FormGroup>
-              </Col> */}
+            
               <Col lg={6}>
                 <FormGroup>
                   <label>
@@ -460,7 +428,7 @@ export default function EditRsm(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin?.role_uid}</p>
+                      <p>{currentUser?.role?.name}</p>
                     </span>
                   ) : (
                     <Select
@@ -513,6 +481,8 @@ export default function EditRsm(props) {
                           manager_uid: val.key,
                         });
                         getServiceLocationUid(val.key);
+                        setOptionState([])
+                        setArray([])
                       }}
                       options={salesManager}
                     />
@@ -545,17 +515,7 @@ export default function EditRsm(props) {
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      // defaultValue={defaultOptions[0]}
-                      defaultValue={currentUser?.field_staff?.service_location?.map(
-                        (item) => {
-                          return {
-                            label: item?.name,
-                            value: item?.name,
-                            key: item?.uid,
-                          };
-                        }
-                      )}
-                      // value={admin?.service_location_uid}
+                      defaultValue={optionsState}
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />

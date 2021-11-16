@@ -6,7 +6,7 @@ import { getToken } from '../Utils/auth.util';
 
 const SERVICE_URLS = {
   // service URL's (API End-Points)
-  login: 'users/login/mobile',
+  login: 'users/login/web',
   changePassword: 'users/admin/change-password',
   staticData: 'static/all',
   registerPatient: 'patient/create',

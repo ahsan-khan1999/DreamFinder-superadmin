@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Row } from 'reactstrap';
@@ -6,7 +8,7 @@ import Breadcrumb from 'containers/navs/Breadcrumb';
 import ProfileStatuses from 'containers/dashboards/ProfileStatuses';
 import SortableStaticticsRow from 'containers/dashboards/SortableStaticticsRow';
 import SmallLineCharts from 'containers/dashboards/SmallLineCharts';
-import SalesChartCard from 'containers/dashboards/SalesChartCard';
+// import SalesChartCard from 'containers/dashboards/SalesChartCard';
 import ProductCategoriesDoughnut from 'containers/dashboards/ProductCategoriesDoughnut';
 import WebsiteVisitsChartCard from 'containers/dashboards/WebsiteVisitsChartCard';
 import ConversionRatesChartCard from 'containers/dashboards/ConversionRatesChartCard';

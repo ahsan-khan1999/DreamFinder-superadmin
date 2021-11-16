@@ -41,6 +41,12 @@ export default function ViewCurrentStock(props) {
   const distributioncenter = useSelector(
     (state) => state?.distributionCenterReducer?.distributioncenter
   );
+  const getstockCategoryloader = useSelector(
+    (state) => state?.stockReducer?.getstockCategoryloader
+  );
+  const distributioncenterloader = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenterloader
+  );
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
@@ -394,6 +400,11 @@ export default function ViewCurrentStock(props) {
                       </label>
 
                       <>
+                      {getstockCategoryloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -414,6 +425,7 @@ export default function ViewCurrentStock(props) {
                           required
                           options={optioncategory}
                         />
+                        }
                       </>
                     </FormGroup>
                   </Col>
@@ -425,6 +437,11 @@ export default function ViewCurrentStock(props) {
                       </label>
 
                       <>
+                      {distributioncenterloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -444,6 +461,7 @@ export default function ViewCurrentStock(props) {
                           required
                           options={distributioncenterData}
                         />
+                        }
                       </>
                     </FormGroup>
                   </Col>

@@ -122,6 +122,37 @@ export const GetDoctor = () => async (dispatch) => {
     const token = JSON.parse(localStorage.getItem("token"));
     try {
       const head = { "x-session-key": token.token, "x-session-type": token.type };
+      if (hierarchy === "region") {
+        dispatch({
+          type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION_LOADER,
+          payload: true,
+        });
+
+      }
+      else if (hierarchy === "area") {
+        dispatch({
+          type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_AREA_LOADER,
+          payload: true,
+        });
+      }
+      else if (hierarchy === "thana"){
+        dispatch({
+          type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_THANA_LOADER,
+          payload: true,
+        });
+      }
+      else if (hierarchy === "territory"){
+        dispatch({
+          type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_TERRITORY_LOADER,
+          payload: true,
+        });
+      }
+      else if (hierarchy === "market"){
+        dispatch({
+          type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_MARKET_LOADER,
+          payload: true,
+        });
+      }    
       const response = await axios.get(
         `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/${hierarchy}?parent_uid=${uid}`,
         { headers: head }
@@ -132,12 +163,19 @@ export const GetDoctor = () => async (dispatch) => {
             type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION,
             payload: response?.data?.response_data,
           });
-  
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION_LOADER,
+            payload: false,
+          });
         }
         else if (hierarchy === "area") {
           dispatch({
             type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_AREA,
             payload: response?.data?.response_data,
+          });
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_AREA_LOADER,
+            payload: false,
           });
         }
         else if (hierarchy === "thana"){
@@ -145,11 +183,19 @@ export const GetDoctor = () => async (dispatch) => {
             type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_THANA,
             payload: response?.data?.response_data,
           });
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_THANA_LOADER,
+            payload: false,
+          });
         }
         else if (hierarchy === "territory"){
           dispatch({
             type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_TERRITORY,
             payload: response?.data?.response_data,
+          });
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_TERRITORY_LOADER,
+            payload: false,
           });
         }
         else if (hierarchy === "market"){
@@ -157,15 +203,21 @@ export const GetDoctor = () => async (dispatch) => {
             type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_MARKET,
             payload: response?.data?.response_data,
           });
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_MARKET_LOADER,
+            payload: false,
+          });
         }      
         else{
           dispatch({
             type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION,
             payload: response?.data?.response_data,
           });
+          dispatch({
+            type: DOCTOR_CONSTANT.DOCTOR_GET_HIERARCHY_REGION_LOADER,
+            payload: false,
+          });
         }
-  
-       
       }
     } catch (error) {
       return "Fail";

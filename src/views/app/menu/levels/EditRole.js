@@ -8,6 +8,7 @@ import {
   UpdateRoleAction,
   ViewAdminAction,
   ViewRoleAction,
+  ViewStaticDataAction,
 } from 'Store/Actions/User/UserActions';
 import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
@@ -36,12 +37,15 @@ import ModalExample from './ModelTo';
 import data from 'data/notifications';
 import { object } from 'prop-types';
 import { objectOf } from 'prop-types';
+import apiServices from 'services/requestHandler';
 
 export default function EditRole(props) {
   let currentRole = props.location.state;
   console.log(currentRole);
   const [view, setView] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('');
+
   const [loadingEdit, setLoadingEdit] = useState(false);
 
   const dispatch = useDispatch();
@@ -49,12 +53,32 @@ export default function EditRole(props) {
   const [user_role_id, setUser_role_id] = useState('');
   const [nameTitle, setNameTitle] = useState('');
   const [title, setTitle] = useState('');
+  const getStaticData = async () => {
+    let res = await dispatch(ViewStaticDataAction());
+  };
+
+  useEffect(() => {
+    getStaticData();
+  }, []);
+
+  const user_role = useSelector((state) => state.ViewUserReducer?.staticData);
+  let categoryOption = [];
+  console.log(user_role?.user_roles_and_rights);
+  user_role?.user_roles_and_rights?.map((item) =>
+    categoryOption.push({
+      label: item?.name,
+      value: item,
+      key: item?.user_role_id,
+    })
+  );
+
   const editProfile = () => {
     setView(false);
   };
   const suspandRole = async () => {
-    let res = await apiServices.updateRoles({ uid: currentRole?.uid });
-    if (res?.data?.response_data === 200) {
+    setLoading(true)
+    let res = await apiServices.suspandRoles({ uid: currentRole?.uid });
+    if (res?.response_code === 200) {
       NotificationManager.success(
         'Successfully Suspanded',
         'Success',
@@ -62,23 +86,32 @@ export default function EditRole(props) {
         null,
         ''
       );
+    setLoading(false)
+
       props.history.push('/app/menu/levels/ViewRole');
     } else {
+    setLoading(true)
+
       NotificationManager.success(
-        res?.data?.response_message,
+        res?.response_message,
         'Error',
         5000,
         null,
         ''
       );
+    setLoading(false)
+
     }
   };
   const editData = async () => {
     setLoadingEdit(true);
+
     let apiData = {
-      uid: currentRole?.uid,
+      uid:currentRole?.uid,
       name: name,
+      category: selectedRole,
     };
+
     let res = await dispatch(UpdateRoleAction(apiData));
     if (res) {
       NotificationManager.success(
@@ -92,6 +125,10 @@ export default function EditRole(props) {
 
       props.history.push('/app/menu/levels/ViewRole');
     }
+    else{
+      setLoadingEdit(false);
+
+    }
   };
   const handleBack = () => {
     props.history.push('/app/menu/levels/ViewRole');
@@ -99,7 +136,11 @@ export default function EditRole(props) {
   return (
     <Card>
       <CardBody>
-        <Button className="" onClick={handleBack} style={{ backgroundColor:"0066B3",marginBottom: '10px' }}>
+        <Button
+          className=""
+          onClick={handleBack}
+          style={{ backgroundColor: '0066B3', marginBottom: '10px' }}
+        >
           Back
         </Button>
         <CardTitle>
@@ -115,13 +156,11 @@ export default function EditRole(props) {
                     <IntlMessages id="Name" />
                   </Label>
                   {view ? (
-                    <span>
-                      <p>{currentRole?.name}</p>
-                    </span>
+                    <span>{currentRole?.name}</span>
                   ) : (
                     <Input
                       required
-                      //   value={name}
+                      // value={name}
                       defaultValue={currentRole?.name}
                       className="form-control"
                       name="name"
@@ -136,77 +175,36 @@ export default function EditRole(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="User Role ID" />
-                  </Label>
-                  {view ? (
-                    <span>
-                      <p>{currentRole?.category?.user_role_id}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      disabled
-                      required
-                      //   value={user_role_id}
-                      defaultValue={currentRole?.category?.user_role_id}
-                      className="form-control"
-                      name="id"
-                      type="number"
-                      onChange={(e) => setUser_role_id(e.target.value)}
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Role Name" />
+                    <IntlMessages id="User Role Category" />
                   </Label>
                   {view ? (
                     <span>
                       <p>{currentRole?.category?.name}</p>
                     </span>
                   ) : (
-                    <Input
-                      disabled
+                    <Select
                       required
-                      //   value={nameTitle}
-                      defaultValue={currentRole?.category?.name}
-                      className="form-control"
-                      name="password"
-                      type="text"
-                      //   validate={validate}
-                      onChange={(e) => setNameTitle(e.target.value)}
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Role Title" />
-                  </Label>
-                  {view ? (
-                    <span>
-                      <p>{currentRole?.category?.title}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      defaultValue={currentRole?.category?.title}
-                      disabled
-                      //   value={title}
-                      className="form-control"
-                      name="password"
-                      type="text"
-                      //   validate={validate}
-                      onChange={(e) => setTitle(e.target.value)}
+                      defaultValue={{
+                        label: currentRole?.category?.name,
+                        value: currentRole?.category?.name,
+                        key: currentRole?.category?.user_role_id,
+                      }}
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      // value={gender}
+
+                      onChange={(val) => {
+                        setSelectedRole(val?.value);
+                      }}
+                      options={categoryOption}
                     />
                   )}
                 </FormGroup>
               </Col>
             </Row>
-            {/* {view ? (
+            {view ? (
               <Button onClick={editProfile}>Edit Role</Button>
             ) : (
               <Button
@@ -215,12 +213,19 @@ export default function EditRole(props) {
                 }`}
                 onClick={editData}
               >
-                Save
+                <span className="spinner d-inline-block">
+                  <span className="bounce1" />
+                  <span className="bounce2" />
+                  <span className="bounce3" />
+                </span>
+                <span className="label">Save</span>
               </Button>
-            )} */}
-            {/* <Button
+            )}
+            <Button
               //   className="btn btn-primary"
               // type="submit"
+              style={{marginLeft:'5px'}}
+
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
@@ -232,8 +237,8 @@ export default function EditRole(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              Suspand Role
-            </Button> */}
+              <span className="label">Suspand Role</span>
+            </Button>
           </Form>
         </Formik>
       </CardBody>

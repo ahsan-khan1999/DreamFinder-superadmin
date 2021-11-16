@@ -85,8 +85,10 @@ export default function CreateDirector({ history }) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
-  );
+  item?.category?.user_role_id == 3
+    ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    : null
+);
 
   let directorFilter = [];
   user?.filter((item) =>
@@ -385,7 +387,7 @@ export default function CreateDirector({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Area" />
+                    <IntlMessages id="Select Region" />
                   </Label>
                   {loadingLocation ? (
                     <div className="">

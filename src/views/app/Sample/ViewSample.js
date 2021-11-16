@@ -12,6 +12,8 @@ import { searchArray } from 'Utils/auth.util';
 
 export default function ViewSample(props) {
   const [search, setSearch] = useState('');
+  const [doc, setDoc] = useState();
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(ViewSampleAction());
@@ -25,7 +27,7 @@ export default function ViewSample(props) {
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(target, search));
+    setDoc(searchArray(sample, search));
   };
 
   const handleAdd = () => {
@@ -104,7 +106,7 @@ export default function ViewSample(props) {
             ) : (
               <SampleTabel
                 header={header}
-                data={sample}
+                data={search === '' ? sample : doc}
                 changeRoute={changeRoute}
               />
             )}

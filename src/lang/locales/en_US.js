@@ -213,6 +213,9 @@ module.exports = {
   'dashboards.refund-requests': 'Refund Requests',
   'dashboards.new-comments': 'New Comments',
   'dashboards.sales': 'Sales',
+  'dashboards.prescription':'Prescription',
+  'dashboards.order':'Order',
+
   'dashboards.orders': 'Orders',
   'dashboards.refunds': 'Refunds',
   'dashboards.recent-orders': 'Recent Orders',

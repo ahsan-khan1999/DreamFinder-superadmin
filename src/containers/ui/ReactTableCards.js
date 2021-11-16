@@ -916,6 +916,36 @@ export const ProductTable = (props) => {
       },
       {
         Header: props?.header[3],
+        accessor: 'vat_rate',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'total_price',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[5],
         accessor: 'created_by.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
@@ -932,7 +962,7 @@ export const ProductTable = (props) => {
 
 
       {
-        Header: props?.header[4],
+        Header: props?.header[6],
         accessor: 'status.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
@@ -951,7 +981,7 @@ export const ProductTable = (props) => {
      
       {
         Header: (
-          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[7]}</span>
         ),
         accessor: 'title6',
         cellClass: 'text-muted w-10',
@@ -2897,7 +2927,7 @@ export const ViewDoctorPeriorityTabel = (props) => {
       },
       {
         Header: header[3],
-        accessor: 'doctor.speciality',
+        accessor: 'doctor.speciality.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },

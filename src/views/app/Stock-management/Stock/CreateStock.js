@@ -31,6 +31,9 @@ export default function CreateStock({ history }) {
   const distributioncenter = useSelector(
     (state) => state?.distributionCenterReducer?.distributioncenter
   );
+  const distributioncenterloader = useSelector(
+    (state) => state?.distributionCenterReducer?.distributioncenterloader
+  );
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
@@ -68,6 +71,7 @@ export default function CreateStock({ history }) {
   const getstockCategoryloader = useSelector(
     (state) => state?.stockReducer?.getstockCategoryloader
   );
+
 
   let optioncategory = [];
   getstockCategory?.filter((item) =>
@@ -222,6 +226,11 @@ export default function CreateStock({ history }) {
                   </label>
 
                   <>
+                  {distributioncenterloader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                     <Select
                       required
                       components={{ Input: CustomSelectInput }}
@@ -239,6 +248,7 @@ export default function CreateStock({ history }) {
                       required
                       options={distributioncenterData}
                     />
+                    }
                   </>
                 </FormGroup>
               </Col>

@@ -152,7 +152,7 @@ const ViewDepoManager = ({ match, history }) => {
             ) : (
               <AdminTable
                 header={header}
-                data={user === undefined ? [] : user}
+                data={search === '' ? user : doc}
                 changeRoute={changeRoute}
               />
             )}

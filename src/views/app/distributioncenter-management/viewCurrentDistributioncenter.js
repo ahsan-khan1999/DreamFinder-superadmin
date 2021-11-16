@@ -34,7 +34,9 @@ export default function viewCurrentDistributioncenter(props) {
     let [buttonName, setButtonName] = useState();
     const [thisView, setThisView] = useState(true);
     const dispatch = useDispatch();
+  const currentDistribution = props?.location?.state;
     
+
     useEffect(() => {
     
       if (currentDistribution?.status === 'suspended') {
@@ -58,14 +60,37 @@ export default function viewCurrentDistributioncenter(props) {
     };
     
     
-    let options = [];
+
     
     
     
     const [array, setArray] = useState([]);
     const [depoarray, setDepoarray] = useState([]);
     
+
+    useEffect(() => {
+   
+      defauldata();
+
+    }, [])
   
+
+    const defauldata = () => {
+      let optionsareas = [];
+      currentDistribution?.areasSelect?.map((item, index) => {
+        optionsareas.push(item?.uid);
+        }); 
+        
+      let optionsdepo = [];
+      currentDistribution?.depomanagersSelect?.map((item, index) => {
+        optionsdepo.push(item?.uid);
+        }); 
+
+      setArray(currentDistribution," ")
+      setDepoarray(optionsdepo)
+    }
+
+
     const distributioncenterregions = useSelector(
       (state) => state?.distributionCenterReducer?.distributioncenterregions
     );
@@ -86,7 +111,6 @@ export default function viewCurrentDistributioncenter(props) {
          key: item?.uid,
        })
      );
-     console.log(distributionRegionsArea,"distributionRegionsArea")
 
 
   
@@ -121,10 +145,9 @@ export default function viewCurrentDistributioncenter(props) {
     );
     
     
-  const currentDistribution = props?.location?.state;
     
 
-    const distributioncenter_obj = {
+    let distributioncenter_obj = {
       depot_managers_uid: depoarray,
   
       areas_uid:  array,
@@ -137,15 +160,26 @@ export default function viewCurrentDistributioncenter(props) {
       (state) => state?.departmentHeadReducer?.loader
       );
     
-      console.log(currentDistribution,"log")
     
       const editProfile = (e) => {
         e.preventDefault();
         setThisView(!thisView);
       };
       
+
+      console.log()
       
       const editData = async () => {
+
+        distributioncenter_obj = {
+          
+          depot_managers_uid: depoarray,
+      
+          areas_uid:  array,
+    
+          uid : currentDistribution.uid,
+          
+        };
         console.log(distributioncenter_obj)
         let res = await dispatch(UpdateDistributionCenter(distributioncenter_obj));
         if (res) {
@@ -225,7 +259,6 @@ export default function viewCurrentDistributioncenter(props) {
           };
           setsuspendloader(true);
           let res = await apiServices.suspanddistributionCentres(apiData);
-          console.log(res);
           if (res?.response_code === 200) 
           {
             setsuspendloader(false);
@@ -445,6 +478,15 @@ export default function viewCurrentDistributioncenter(props) {
                       className="react-select"
                       classNamePrefix="react-select"
                       isMulti
+                      defaultValue={currentDistribution.areasSelect.map(
+                        (item) => {
+                          return {
+                            label: item?.name,
+                            value: item?.uid,
+                            key: item?.uid,
+                          };
+                        }
+                      )}
                       required
                       onChange={(e, index) => {
                         handleChangeRegion(e, index);
@@ -479,7 +521,7 @@ export default function viewCurrentDistributioncenter(props) {
                         (item) => {
                           return {
                             label: item?.name,
-                            value: item?.name,
+                            value: item?.uid,
                             key: item?.uid,
                           };
                         }

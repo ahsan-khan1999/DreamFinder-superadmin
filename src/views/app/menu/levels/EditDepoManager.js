@@ -67,12 +67,11 @@ export default function EditDepoManager(props) {
   const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 7
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
-  //   const [currentItem, setCurrentItem] = useState('');
-  //   roles?.filter((item) => (
-
-  //   ));
+  
 
   const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {

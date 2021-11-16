@@ -38,6 +38,7 @@ import makeAnimated from 'react-select/animated';
 const animatedComponents = makeAnimated();
 import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
+import Loader from 'react-loader-spinner';
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
@@ -47,11 +48,12 @@ const selectGender = [
 export default function CreateDeliveryStaff({ history }) {
   let [filterLocationIds, setfilterLocationIds] = useState([]);
   // let filterLocationIds =[]
+  let [loadingLocation, setLoadingLocation] = useState(false);
+
   let [service_location, setService_location] = useState([]);
 
   const dispatch = useDispatch();
   const [confirmPassword, setConfirmPassword] = useState('');
-
 
   const deliveryStaff_obj = {
     email_address: '',
@@ -71,10 +73,10 @@ export default function CreateDeliveryStaff({ history }) {
   const [deliveryStaff, setDeliveryStaff] = useState(deliveryStaff_obj);
   const [array, setArray] = useState(deliveryStaff?.service_location_uid);
 
-
   let option = [];
 
   const getServiceLocationUid = async (uid) => {
+    setLoadingLocation(true);
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}&assigned_to_ds=${0}`,
@@ -85,6 +87,7 @@ export default function CreateDeliveryStaff({ history }) {
         },
       }
     );
+    setLoadingLocation(false);
 
     setService_location(response?.data?.response_data);
   };
@@ -108,8 +111,12 @@ export default function CreateDeliveryStaff({ history }) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 8
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
+
+  console.log(roles);
   let depoManagerFilter = [];
   depoManager?.filter((item) =>
     depoManagerFilter?.push({
@@ -130,7 +137,6 @@ export default function CreateDeliveryStaff({ history }) {
     await setDeliveryStaff(test);
   };
   const onAdminCreate = async () => {
-  
     if (
       deliveryStaff?.email_address === '' ||
       deliveryStaff?.name === '' ||
@@ -152,10 +158,6 @@ export default function CreateDeliveryStaff({ history }) {
 
       return;
     } else {
-      // setTimeout(() => {
-
-      // }, 5000);
-
       let res = await dispatch(CreateAdminAction(deliveryStaff));
       if (res) {
         NotificationManager.success(
@@ -398,15 +400,27 @@ export default function CreateDeliveryStaff({ history }) {
                   <Label>
                     <IntlMessages id="Select Area" />
                   </Label>
-                  <Select
-                    cacheOptions
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                    isMulti
-                    // value={deliveryStaff?.service_location_uid}
-                    onChange={(e) => handleChange(e)}
-                    options={option}
-                  />
+                  {loadingLocation ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      cacheOptions
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      // value={admin?.service_location_uid}
+                      onChange={(e) => handleChange(e)}
+                      options={option}
+                    />
+                  )}
                 </FormGroup>
               </Col>
             </Row>
