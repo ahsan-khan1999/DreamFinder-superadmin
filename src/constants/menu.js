@@ -480,6 +480,7 @@ const data = [
     to: `${adminRoot}/Orders/orders`,
    
   },
+  
 
 
   {
@@ -649,6 +650,13 @@ const data = [
     //   },
 
     // ],
+  },
+  {
+    id: 'gift',
+    icon: 'iconsminds-gift-box',
+    label: 'Gift',
+    to: `${adminRoot}/Gift/ViewGift`,
+   
   },
   {
     id: 'Periority List',

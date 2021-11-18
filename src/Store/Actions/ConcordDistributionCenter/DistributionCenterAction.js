@@ -156,14 +156,14 @@ export const GetDistributionCenterRegions = () => async (dispatch) => {
   } catch {}
 };
 
-export const GetDepoManagers = () => async (dispatch) => {
+export const getDepoManagerAssigneds = () => async (dispatch) => {
   try {
     dispatch({
       type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING,
       payload: true,
     });
 
-    let response = await apiServices.getDepoManager();
+    let response = await apiServices.getDepoManagerAssigned();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING,

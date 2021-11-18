@@ -6,6 +6,7 @@ import {
   VIEW_USER_CONSTANT,
   SUSPAND_ATTENDANCE_CONSTANT,
   LOADER_CONSTANT,
+  GET_OLD_CONSTANT,
 } from 'Store/Constant/Constants';
 const initial_state = {
   attendance: [],
@@ -19,6 +20,8 @@ const initial_state = {
   loadingAm: false,
   loadingRsm: false,
   loadingMpo: false,
+  loadingGift:false,
+  oldGifts: [],
 };
 export const AttendanceReducer = (state = initial_state, action) => {
   switch (action.type) {
@@ -56,7 +59,12 @@ export const AttendanceReducer = (state = initial_state, action) => {
       return { ...state, loadingRsm: action.payload };
     case LOADER_CONSTANT.MPO_LOADING:
       return { ...state, loadingMpo: action.payload };
-
+    case GET_OLD_CONSTANT.GET_OLD_LOADING:
+      return { ...state, loadingGift: action.payload };
+    case GET_OLD_CONSTANT.GET_OLD_SUCCESS:
+      return { ...state, oldGifts: action.payload };
+    case GET_OLD_CONSTANT.GET_OLD_ERROR:
+      return { ...state, loadingGift: action.payload };
     default:
       return state;
   }

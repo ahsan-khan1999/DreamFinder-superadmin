@@ -4,22 +4,24 @@ import React from 'react';
 import moment from 'moment';
 
 const CalendarToolbar = (toolbar) => {
+  const {onNavigate, date} = toolbar;
+
   const goToBack = () => {
-    toolbar.onNavigate('PREV');
+    onNavigate('PREV');
   };
   const goToNext = () => {
-    toolbar.onNavigate('NEXT');
+    onNavigate('NEXT');
   };
   const goToCurrent = () => {
-    toolbar.onNavigate('TODAY');
+    onNavigate('TODAY');
   };
 
   const label = () => {
-    const date = moment(toolbar.date);
+    const labelDate = moment(date);
     return (
       <span>
-        <span>{date.format('MMMM')} </span>
-        <span> {date.format('YYYY')}</span>
+        <span>{labelDate.format('MMMM')} </span>
+        <span> {labelDate.format('YYYY')}</span>
       </span>
     );
   };

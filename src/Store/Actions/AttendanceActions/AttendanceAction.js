@@ -8,8 +8,10 @@ import {
   CREATE_ATTENDANCE_CONSTANT,
   SUSPAND_ATTENDANCE_CONSTANT,
   VIEW_USER_CONSTANT,
+  GET_OLD_CONSTANT,
   LOADER_CONSTANT,
 } from 'Store/Constant/Constants';
+import { getToken } from 'Utils/auth.util';
 
 export const ViewAttendanceAction = () => async (dispatch) => {
   try {
@@ -183,4 +185,41 @@ export const getUsers = (uid, user) => async (dispatch) => {
   } catch (error) {
     return 'Fail';
   }
+};
+
+
+
+export const GetOldGiftsAction = (uid) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_OLD_CONSTANT.GET_OLD_LOADING,
+      payload: true,
+    });
+
+    let token = await getToken();
+    const res = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/fieldstaffs/read_gift?user_uid=${uid}`,
+      {
+        headers: {
+          x_session_key: token.token,
+          x_session_type: token.type,
+        },
+      }
+    );
+    if (res?.data?.response_code === 200) {
+      dispatch({
+        type: GET_OLD_CONSTANT.GET_OLD_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: GET_OLD_CONSTANT.GET_OLD_SUCCESS,
+        payload: res?.data?.response_data?.assigned_gifts,
+      });
+    } else {
+      dispatch({
+        type: GET_OLD_CONSTANT.GET_OLD_ERROR,
+        payload: false,
+      });
+    }
+  } catch {}
 };
