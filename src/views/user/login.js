@@ -109,7 +109,7 @@ const Login = ({ history, error, loginUserAction }) => {
                   marginBottom: '30px',
                 }}
               >
-                <img class="logo" src={logo} alt="" height="70px" width="240px" />
+                <img className="logo" src={logo} alt="" height="70px" width="240px" />
               </span>
             </NavLink>
             <CardTitle className="mb-4">
