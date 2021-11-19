@@ -34,7 +34,6 @@ import { Provider } from 'react-redux';
 import { configureStore } from './redux/store';
 const color = defaultColor;
 import "./assets/css/sass/themes/gogo.light.bluenavy.scss"
-alert(defaultColor);
 setCurrentColor(color);
 
 const App = React.lazy(() => import(/* webpackChunkName: "App" */ './App'));
