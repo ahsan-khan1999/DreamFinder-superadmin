@@ -18,6 +18,8 @@ setCurrentColor(color);
 const render = () => {
   import(`./assets/css/sass/themes/gogo.${color}.scss`).then(() => {
     require('./AppRenderer');
-  });
+  }).catch(function() {
+    console.error("Error");
+  })
 };
 render();

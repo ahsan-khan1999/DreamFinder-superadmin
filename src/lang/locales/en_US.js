@@ -88,6 +88,12 @@ module.exports = {
 
   'menu.distribution-center-management':'Distribution',
   'menu.distribution-center':'Distribution Center',
+  'menu.stocks':'Stocks',
+  'menu.Doctors':'Doctor',
+  'menu.Sample':'Sample',
+  'menu.fieldWork':'Field Work',
+  
+  'menu.Customers':'Customer',
   'menu.department-head':'Department Head',
 
 
@@ -215,7 +221,7 @@ module.exports = {
   'dashboards.sales': 'Sales',
   'dashboards.prescription':'Prescription',
   'dashboards.order':'Order',
-
+  'dashboards.stocks':'Stocks',
   'dashboards.orders': 'Orders',
   'dashboards.refunds': 'Refunds',
   'dashboards.recent-orders': 'Recent Orders',
