@@ -59,7 +59,7 @@ export default function viewDistributioncenter({ match, history }) {
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
-      name: item?.areas[0].parent.name,
+      name: item?.name,
       designation: CheckConditionArray(
         item?.depot_managers,
         'is_primary',
@@ -84,13 +84,13 @@ export default function viewDistributioncenter({ match, history }) {
        
       ),
       status: item?.status.name,
-      area_uid:item?.areas[0].parent.uid,
       depo_uid:CheckConditionArray(
         item?.depot_managers,
         'is_primary',
         'uid',
        
       ),
+      regions:item?.regions,
       depo_name:CheckConditionArray(
         item?.depot_managers,
         'is_primary',
@@ -104,7 +104,6 @@ export default function viewDistributioncenter({ match, history }) {
     })
   );
 
-  console.log(distributioncenterData, 'distributioncenterssssssssssssss');
 
   const loading = useSelector(
     (state) => state?.distributionCenterReducer?.loading

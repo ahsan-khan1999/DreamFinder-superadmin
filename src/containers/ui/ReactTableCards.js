@@ -3039,6 +3039,61 @@ export const SampleTabel = (props) => {
   );
 };
 
+export const AssignedGiftTabel = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[1],
+        accessor: 'email_address',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+      {
+        Header: header[2],
+        accessor: 'phone_number',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+     
+
+      
+      {
+        Header: header[3],
+        accessor: 'action',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#0066B3' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};
+
+
+
+
+
+
+
+
 export const SampleTransactionTabel = (props) => {
   const { changeRoute, header } = props;
   const cols = React.useMemo(

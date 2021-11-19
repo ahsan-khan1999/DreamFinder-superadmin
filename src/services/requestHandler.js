@@ -23,7 +23,7 @@ const SERVICE_URLS = {
   createUser: 'user/create',
   getAdmin: 'users/read/admin',
   getDirector: 'users/read/director',
-  getDepoManager: 'users/read/depot_manager',
+  getDepoManagerAssigned: 'users/read/depot_manager',
   getDeliveryStaff: 'users/read/delivery_staff',
   getSM: 'users/read/sm',
   getRSM: 'users/read/rsm',
@@ -132,9 +132,9 @@ const SERVICE_URLS = {
   createdistributionCentres: 'distribution_centres/create',
   updatedistributionCentres: 'distribution_centres/update',
   suspanddistributionCentres: 'distribution_centres/suspend',
-  regiondistributionCentres: 'region-classifications/read/region',
+  regiondistributionCentres: 'region-classifications/read/region?assigned_to_dc=0',
   // areadistributionCentres:'region-classifications/read/area',
-  getDepoManager: 'users/read/depot_manager?assigned_to_dc=0',
+  getDepoManagerAssigned: 'users/read/depot_manager?assigned_to_dc=0',
 
   //Concord Products Categorys
   getproductcategory: 'product-categorys/read',
@@ -177,7 +177,13 @@ const SERVICE_URLS = {
   createcustomers: 'customers/create',
   updatecustomers: 'customers/update',
   suspandcustomers: 'customers/suspend',
+
+
+  giftAssignment:'fieldstaffs/gift-assignment',
+  readAssignedGift:'fieldstaffs/read_all_gifts'
 };
+const AssignGift = (data) =>
+  patch(SERVICE_URLS.giftAssignment, data, { feature: featureConstants.static });
 const ReadStatic = () =>
   get(SERVICE_URLS.readStatic, {}, { feature: featureConstants.static });
 const CreateSample = (data) =>
@@ -371,7 +377,7 @@ const getDirector = async () =>
   );
 const getDepo = async () =>
   get(
-    SERVICE_URLS.getDepoManager,
+    SERVICE_URLS.getDepoManagerAssigned,
     {},
     {
       feature: featureConstants.static,
@@ -660,9 +666,9 @@ const regiondistributionCentres = () =>
     feature: featureConstants.static,
   });
 
-const getDepoManager = async () =>
+const getDepoManagerAssigned = async () =>
   get(
-    SERVICE_URLS.getDepoManager,
+    SERVICE_URLS.getDepoManagerAssigned,
     {},
     {
       feature: featureConstants.static,
@@ -863,10 +869,15 @@ const EditRegion = (data) =>
     feature: featureConstants.static,
   });
 
+  const ReadAssignedGifts = (data) =>
+  get(SERVICE_URLS.readAssignedGift, data, {
+    feature: featureConstants.static,
+  });
 // post g
 
 const apiServices = {
   // define variables
+  ReadAssignedGifts,
   EditRegion,
   addRegion,
   deleteRegion,
@@ -995,7 +1006,7 @@ const apiServices = {
   suspanddistributionCentres,
   updatedistributionCentres,
   regiondistributionCentres,
-  getDepoManager,
+  getDepoManagerAssigned,
 
   //Concord Products Category
   getproductcategory,
@@ -1037,5 +1048,7 @@ const apiServices = {
   createcustomers,
   updatecustomers,
   suspandcustomers,
+
+  AssignGift
 };
 export default apiServices;

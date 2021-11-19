@@ -343,18 +343,7 @@ export default function UpdateSample(props) {
                           };
                         }
                       )}
-                      // defaultValue={{
-                      //   label: currentSample?.medicines?.map(
-                      //     (item) => item?.medicine_name
-                      //   ),
-                      //   value: currentSample?.medicines?.map(
-                      //     (item) => item?.stock_uid
-                      //   ),
-                      //   key: currentSample?.medicines?.map(
-                      //     (item) => item?.medicine_quantity
-                      //   ),
-                      // }}
-                      // value={admin?.service_location_uid}
+                      
                       onChange={(val, index) => {
                         handleChangeProduct(val, index);
                       }}

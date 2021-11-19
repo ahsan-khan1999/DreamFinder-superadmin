@@ -74,7 +74,7 @@ import { TargetReducer } from 'Store/Reducers/Target/TargetReducer';
 import { DcpReducer } from 'Store/Reducers/FieldWorkManagmentReducer/FieldWorkManagmentReducer';
 import { AttendanceReducer } from 'Store/Reducers/AttendanceReducer/AttendanceReducer';
 import { ViewPeriorityRedcuer } from 'Store/Reducers/PeriorityListReducer/PeriorityListReducer';
-import {SampleReducer} from 'Store/Reducers/SampleReducer/SampleReducer'
+import { SampleReducer } from 'Store/Reducers/SampleReducer/SampleReducer';
 import { combineReducers } from 'redux';
 import settings from './settings/reducer';
 import menu from './menu/reducer';
@@ -94,7 +94,7 @@ import { StockReducer } from 'Store/Reducers/ConcordStock/StockReducer';
 import { DoctorCategoryReducer } from 'Store/Reducers/ConcordDoctorCategorys/DoctorCategorysReducer';
 import { DoctorReducer } from 'Store/Reducers/ConcordDoctor/DoctorReducer';
 import { CustomerReducer } from 'Store/Reducers/ConcordCustomer/CustomerReducer';
-
+import { GiftReducer } from 'Store/Reducers/GiftReducer/GiftReducer';
 const reducers = combineReducers({
   menu,
   settings,
@@ -150,38 +150,36 @@ const reducers = combineReducers({
   SampleReducer,
   // DepartmentReducer,
 
+  //Concord Order Reducer
+  orderReducer: OrderReducer,
+  //Concord Static Reducer
+  staticDataReducer: StaticDataReducer,
+  //concord Department
+  distributionCenterReducer: DistributionCenterReducer,
+  //concord Distribution Center
+  departmentHeadReducer: DepartmentHeadReducer,
 
-   //Concord Order Reducer
-   orderReducer:OrderReducer,
-   //Concord Static Reducer
-   staticDataReducer:StaticDataReducer,
-   //concord Department
-   distributionCenterReducer:DistributionCenterReducer,
-   //concord Distribution Center
-   departmentHeadReducer:DepartmentHeadReducer,
-   
-   
-   //concord Product 
-   productReducer:ProductReducer,
+  //concord Product
+  productReducer: ProductReducer,
 
-   //concord Product Category 
-   productCategoryReducer:ProductCategoryReducer,
+  //concord Product Category
+  productCategoryReducer: ProductCategoryReducer,
 
-   //concord Stocks
-   stockReducer:StockReducer,
+  //concord Stocks
+  stockReducer: StockReducer,
 
-   //concord StocksTransactions
-   stockTransactionReducer:StockTransactionReducer,
+  //concord StocksTransactions
+  stockTransactionReducer: StockTransactionReducer,
 
-   //concord DoctorCategorys
-   doctorCategoryReducer:DoctorCategoryReducer,
-   
-   //concord Doctors
-   doctorsReducer:DoctorReducer,
+  //concord DoctorCategorys
+  doctorCategoryReducer: DoctorCategoryReducer,
 
-   //concord Customers
-   customerReducer:CustomerReducer,
+  //concord Doctors
+  doctorsReducer: DoctorReducer,
 
+  //concord Customers
+  customerReducer: CustomerReducer,
+  GiftReducer,
 });
 
 export default reducers;
