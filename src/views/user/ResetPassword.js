@@ -54,7 +54,7 @@ const ResetPassword = (props) => {
                   }}
                 >
                   <img
-                    class="logo"
+                    className="logo"
                     src={logo}
                     alt=""
                     height="70px"

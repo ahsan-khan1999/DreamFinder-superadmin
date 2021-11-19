@@ -504,9 +504,9 @@ const data = [
 
 
   {
-    id: 'Stocks',
+    id: 'menu.stocks',
     icon: 'iconsminds-bag-items',
-    label: 'Stocks',
+    label: 'menu.stocks',
     to: `${adminRoot}/stocks-management`,
     subs: [
       {
@@ -534,9 +534,9 @@ const data = [
 
 
   {
-    id: 'Doctors',
+    id: 'menu.Doctors',
     icon: 'iconsminds-doctor',
-    label: 'Doctors',
+    label: 'menu.Doctors',
     to: `${adminRoot}/doctor-management`,
     subs: [
       {
@@ -555,9 +555,9 @@ const data = [
 
 
   {
-    id: 'Customers',
+    id: 'menu.Customers',
     icon: 'iconsminds-business-man',
-    label: 'Customers',
+    label: 'menu.Customers',
     to: `${adminRoot}/customer-management/viewCustomers`,
     
   },
@@ -578,9 +578,9 @@ const data = [
     // ],
   },
   {
-    id: 'Sample',
+    id: 'menu.Sample',
     icon: 'iconsminds-bag-items',
-    label: 'Sample',
+    label: 'menu.Sample',
     to: `${adminRoot}/Sample/`,
     subs: [
       {
@@ -598,9 +598,9 @@ const data = [
     ],
   },
   {
-    id: 'Field Work',
+    id: 'menu.fieldWork',
     icon: 'iconsminds-shopping-cart',
-    label: 'Field Work',
+    label: 'menu.fieldWork',
     to: `${adminRoot}/FieldWorkManagment`,
     subs: [
       {
@@ -642,14 +642,6 @@ const data = [
     icon: 'iconsminds-embassy',
     label: 'menu.region',
     to: `${adminRoot}/TreeView/RegionTreeView`,
-    // subs: [
-    //   {
-    //     icon: 'simple-icon-check',
-    //     label: 'menu.viewRegion',
-    //     to: `${adminRoot}/TreeView/RegionTreeView`,
-    //   },
-
-    // ],
   },
   {
     id: 'gift',
