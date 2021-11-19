@@ -13,7 +13,7 @@ import { setCurrentColor } from './helpers/Utils';
 //   isMultiColorActive || isDarkSwitchActive ? getCurrentColor() : defaultColor;
 // alert(defaultColor);
 
-setCurrentColor(color);
+setCurrentColor(color); 
 
 const render = () => {
   import(`./assets/css/sass/themes/gogo.${color}.scss`).then(() => {
