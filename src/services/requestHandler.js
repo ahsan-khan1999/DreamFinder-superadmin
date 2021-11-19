@@ -2,7 +2,6 @@
 
 import { get, patch, post, put } from './HttpProvider';
 import featureConstants from './features-constants';
-import { getToken } from '../Utils/auth.util';
 
 const SERVICE_URLS = {
   // service URL's (API End-Points)
