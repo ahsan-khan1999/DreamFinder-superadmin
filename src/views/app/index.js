@@ -15,7 +15,9 @@ const Pages = React.lazy(() =>
 
   
 
-
+const CreateGift = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Gift/CreateGift')
+);
 const ViewRegion = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './TreeView/RegionTreeView')
 );
@@ -637,6 +639,10 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/Gift/ViewGift`}
               render={(props) => <ViewGift {...props} />}
+            />
+            <Route
+              path={`${match.url}/Gift/CreateGift`}
+              render={(props) => <CreateGift {...props} />}
             />
             
             {/* <ProtectedRoute

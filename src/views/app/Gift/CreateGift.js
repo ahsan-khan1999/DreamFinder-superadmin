@@ -46,28 +46,21 @@ import Loader from 'react-loader-spinner';
 import { NotificationManager } from 'components/common/react-notifications';
 import { CreateGift } from 'Store/Actions/GiftAction/GiftActions';
 const delaultOptions = [
-  { label: 'Director', value: 'Director', key: 1 },
   { label: 'SM', value: 'SM', key: 2 },
   { label: 'RSM', value: 'RSM', key: 3 },
 
   { label: 'AM', value: 'AM', key: 4 },
   { label: 'MPO', value: 'MPO', key: 5 },
 ];
-const Gift = (props) => {
-  let currentGift = props.location.state;
+const CreateGifts = (props) => {
   const [array, setArray] = useState();
   const [loading, setLoading] = useState(false);
-  let optionDefault = [];
-  currentGift?.assigned_gifts?.map((item) => {
-    optionDefault.push({
-      medicine_quantity: item?.medicine_quantity,
-      stock_uid: item?.stock_uid,
-    });
-  });
+  const [selected, setSelected] = useState('');
+  
   const [stocks, setStocks] = useState([]);
   const gift_obj = {
-    user_uid: currentGift?.user?.uid,
-    assigned_gifts: optionDefault,
+    user_uid: '',
+    assigned_gifts: [],
   };
   const [gift, setGift] = useState(gift_obj);
 
@@ -96,12 +89,12 @@ const Gift = (props) => {
   }, []);
   useEffect(() => {
     setGift(gift_obj);
-  }, []);
+  }, [])
 
   const director = useSelector((state) => state?.ViewUserReducer?.director);
 
-  // console.log(currentGift);
-
+  
+  
   const order = useSelector((state) => state?.TargetReducer?.order);
   let directorOption = [];
   director?.map((item) =>
@@ -163,13 +156,11 @@ const Gift = (props) => {
   );
 
   const [view, setView] = useState(false);
-  const [viewTest, setViewTest] = useState(true);
-
   const getStocks = async (uid) => {
     setLoadingStocks(true);
     let token = await getToken();
     const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/stocks/read/gift?child_uid=${uid}`,
+      `https://concord-backend-m2.herokuapp.com/api/stocks/read/gift`,
       {
         headers: {
           x_session_key: token.token,
@@ -181,6 +172,7 @@ const Gift = (props) => {
 
     setStocks(response?.data?.response_data);
   };
+
   const provalue = [];
   const handleChangeProduct = async (e, index) => {
     let options = e;
@@ -216,7 +208,7 @@ const Gift = (props) => {
 
   const onCreateGift = async () => {
     setLoading(true);
-    if (array === undefined) {
+    if(array === undefined){
       let apiData = {
         ...gift,
         assigned_gifts: currentGift?.assigned_gifts?.map((item) => {
@@ -226,8 +218,8 @@ const Gift = (props) => {
           };
         }),
       };
-      let res = await dispatch(CreateGift(apiData));
-      if (res) {
+      let res = await dispatch(CreateGift(apiData))
+      if(res){
         NotificationManager.success(
           'Successfully Created',
           'Success',
@@ -236,12 +228,14 @@ const Gift = (props) => {
           ''
         );
         setLoading(false);
-
+  
         props.history.push('/app/Gift/ViewGift');
-      } else {
-        setLoading(false);
+      }else{
+
+      setLoading(false);
+  
       }
-    } else {
+    }else{
       let apiData = {
         ...gift,
         assigned_gifts: array?.map((item) => {
@@ -251,9 +245,9 @@ const Gift = (props) => {
           };
         }),
       };
-
-      let res = await dispatch(CreateGift(apiData));
-      if (res) {
+  
+      let res = await dispatch(CreateGift(apiData))
+      if(res){
         NotificationManager.success(
           'Successfully Created',
           'Success',
@@ -262,63 +256,86 @@ const Gift = (props) => {
           ''
         );
         setLoading(false);
-
+  
         props.history.push('/app/Gift/ViewGift');
-      } else {
-        setLoading(false);
+      }else{
+      setLoading(false);
+  
       }
     }
-
+    
     setLoading(false);
   };
   const handleBack = () => {
     props.history.push('/app/Gift/ViewGift');
   };
+ 
 
   return (
     <Card>
       <CardBody>
-        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
-          Back
-        </Button>
+        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>Back</Button>
         <CardTitle>Create Gift</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
-              {currentGift?.role?.category?.name === 'sm' ? (
+            <Col lg={6}>
+                <FormGroup>
+                  <Label>Select to Whom You Want to Assign</Label>
+
+                  <Select
+                    required
+                    isDisabled={selected === '' ? false : true}
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name-gender"
+                    onChange={(val) => {
+                      setSelected(val);
+                    }}
+                    options={delaultOptions}
+                  />
+                </FormGroup>
+              </Col>
+              
+
+              {selected?.value === 'SM' ? (
                 <>
+
+
+
+
+
+
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Manager Name</Label>
+                      {view ? (
+                        ""
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          onChange={async (val) => {
+                            dispatch(getUsers(val.key, 'sm'));
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        defaultValue={{
-                          label: currentGift?.field_staff?.manager?.name,
-                          value: currentGift?.field_staff?.manager?.name,
-                          key: currentGift?.field_staff?.manager?.uid,
-                        }}
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'sm'));
-
-                          //   await getDirectorTarget(val?.key);
-                        }}
-                        options={directorOption}
-                      />
+                            //   await getDirectorTarget(val?.key);
+                          }}
+                          options={directorOption}
+                        />
+                      )}
                     </FormGroup>
                   </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Assigned To Name</Label>
                       {view ? (
-                        <span>
-                          <p>{currentGift?.name}</p>
-                        </span>
+                        ""
                       ) : loadingSM ? (
                         <div className="">
                           <Loader
@@ -335,11 +352,7 @@ const Gift = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
+                          
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             getStocks(val?.key);
@@ -356,13 +369,7 @@ const Gift = (props) => {
                     <FormGroup>
                       <Label>Select Gift</Label>
                       {view ? (
-                        currentGift?.field_staff?.assigned_gifts?.map(
-                          (item) => (
-                            <span>
-                              <p>{item?.medicine_name}</p>
-                            </span>
-                          )
-                        )
+                       ""
                       ) : laodingGifts ? (
                         <div className="">
                           <Loader
@@ -379,18 +386,9 @@ const Gift = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          defaultValue={currentGift?.field_staff?.assigned_gifts?.map(
-                            (item, index) => {
-                              return {
-                                label: item?.medicine_name,
-                                key: item?.medicine_quantity,
-                                value: item?.stock_uid,
-                              };
-                            }
-                          )}
+                          
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
-                            setViewTest(false);
                           }}
                           options={medicineOptionFromStock}
                         />
@@ -398,7 +396,7 @@ const Gift = (props) => {
                     </FormGroup>
                   </Col>
                 </>
-              ) : currentGift?.role?.category?.name === 'rsm' ? (
+              ) : selected?.value === 'RSM' ? (
                 <>
                   <Col lg={6}>
                     <FormGroup>
@@ -438,11 +436,6 @@ const Gift = (props) => {
                           className="react-select"
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
-                          defaultValue={{
-                            label: currentGift?.field_staff?.manager?.name,
-                            value: currentGift?.field_staff?.manager?.name,
-                            key: currentGift?.field_staff?.manager?.uid,
-                          }}
                           onChange={async (val) => {
                             dispatch(getUsers(val.key, 'rsm'));
                           }}
@@ -470,11 +463,7 @@ const Gift = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
+                         
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setGift({ ...gift, user_uid: val.key });
@@ -490,7 +479,7 @@ const Gift = (props) => {
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Gift</Label>
-                      {loadingMedicine ? (
+                      {laodingGifts ? (
                         <div className="">
                           <Loader
                             height={18}
@@ -506,15 +495,7 @@ const Gift = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          defaultValue={currentGift?.field_staff?.assigned_gifts?.map(
-                            (item) => {
-                              return {
-                                label: item?.medicine_name,
-                                key: item?.medicine_quantity,
-                                value: item?.stock_uid,
-                              };
-                            }
-                          )}
+                          
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
                           }}
@@ -524,7 +505,7 @@ const Gift = (props) => {
                     </FormGroup>
                   </Col>
                 </>
-              ) : currentGift?.role?.category?.name === 'am' ? (
+              ) : selected?.value === 'AM' ? (
                 <>
                   <Col lg={6}>
                     <FormGroup>
@@ -591,11 +572,6 @@ const Gift = (props) => {
                           className="react-select"
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
-                          defaultValue={{
-                            label: currentGift?.field_staff?.manager?.name,
-                            value: currentGift?.field_staff?.manager?.name,
-                            key: currentGift?.field_staff?.manager?.uid,
-                          }}
                           onChange={async (val) => {
                             dispatch(getUsers(val.key, 'am'));
                           }}
@@ -623,11 +599,7 @@ const Gift = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
+                          
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setGift({ ...gift, user_uid: val.key });
@@ -659,15 +631,7 @@ const Gift = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          defaultValue={currentGift?.field_staff?.assigned_gifts?.map(
-                            (item) => {
-                              return {
-                                label: item?.medicine_name,
-                                key: item?.medicine_quantity,
-                                value: item?.stock_uid,
-                              };
-                            }
-                          )}
+                          
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
                           }}
@@ -677,7 +641,7 @@ const Gift = (props) => {
                     </FormGroup>
                   </Col>
                 </>
-              ) : currentGift?.role?.category?.name === 'mpo' ? (
+              ) : selected?.value === 'MPO' ? (
                 <>
                   <Col lg={6}>
                     <FormGroup>
@@ -770,11 +734,6 @@ const Gift = (props) => {
                           required
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
-                          defaultValue={{
-                            label: currentGift?.field_staff?.manager?.name,
-                            value: currentGift?.field_staff?.manager?.name,
-                            key: currentGift?.field_staff?.manager?.uid,
-                          }}
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
                           onChange={async (val) => {
@@ -804,11 +763,8 @@ const Gift = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
+                          
+
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setGift({ ...gift, user_uid: val.key });
@@ -840,20 +796,11 @@ const Gift = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          defaultValue={currentGift?.field_staff?.assigned_gifts?.map(
-                            (item) => {
-                              return {
-                                label: item?.medicine_name,
-                                key: item?.medicine_quantity,
-                                value: item?.stock_uid,
-                              };
-                            }
-                          )}
-                          // value={admin?.service_location_uid}
+                         
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
                           }}
-                          options={medicineOptionFromStock}
+                        options={medicineOptionFromStock}
                         />
                       )}
                     </FormGroup>
@@ -863,30 +810,8 @@ const Gift = (props) => {
                 <p></p>
               )}
             </Row>
-            {viewTest ? <Row>
-              <Col lg={12}>
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Product Name</th>
-                      <th>Product Quanity</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {currentGift?.field_staff?.assigned_gifts?.map((item) => (
-                      <tr>
-                        <td>{item?.medicine_name}</td>
-                        <td>{item?.medicine_quantity}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row> : null}
             
-
-            {viewTest ? (
+            {view ? (
               ''
             ) : (
               <Row>
@@ -896,14 +821,13 @@ const Gift = (props) => {
                       <Table>
                         <thead>
                           <tr>
-                            <th>Medicine Products</th>
+                            <th>Gift Products</th>
                             <th>Available Quantity</th>
                             <th>Add Quantity</th>
                           </tr>
                         </thead>
                         <tbody>
                           {array?.map((item, index) => {
-                            console.log(item, 'at item');
                             return (
                               <tr>
                                 <td>{item?.label}</td>
@@ -963,4 +887,4 @@ const Gift = (props) => {
     </Card>
   );
 };
-export default Gift;
+export default CreateGifts;

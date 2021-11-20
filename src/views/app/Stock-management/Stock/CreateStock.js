@@ -37,7 +37,7 @@ export default function CreateStock({ history }) {
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
-      label: item?.areas[0].parent.name,
+      label: item?.name,
       value: item?.uid,
       key: item?.uid,
     })

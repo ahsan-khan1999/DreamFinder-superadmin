@@ -17,21 +17,24 @@ export default function ViewGift(props) {
   const gifts = useSelector((state) => state?.GiftReducer?.gifts);
   const loading = useSelector((state) => state?.GiftReducer?.loading);
   useEffect(() => {
-    gifts?.length === 0 ? dispatch(ViewGiftAction()) : null
+    dispatch(ViewGiftAction())
   }, []);
 
   
   const changeRoute = (item) => {
     props.history.push('/app/Gift/gift', item);
   };
-
+  const addGift = () => {
+    props.history.push('/app/Gift/CreateGift')
+  }
   const handleSearch = (event) => {
     setSearch(event.target.value);
     setDoc(searchArray(gifts, search));
   };
-  const handleAdd = () => {
-    props.history.push('/app/Gift/gift');
-  };
+  const filter_gift =gifts?.filter((item) => (
+    item?.field_staff?.assigned_gifts?.length === 0 ? null : item 
+  )) 
+ 
   const headers = [
     'Assigned To Name',
     'Email Address',
@@ -43,10 +46,13 @@ export default function ViewGift(props) {
       <CardBody>
         <Row>
           <Colxx xxs="12">
+
             <h4>View Gift</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
+        <Button className='mb-1' onClick={addGift}>Assign Gift</Button>
+
         <Row>
           <Col lg={12}>
             <div className="header-search">
@@ -81,7 +87,7 @@ export default function ViewGift(props) {
             ) : (
               <AssignedGiftTabel
                 header={headers}
-                data={search === '' ? gifts : doc}
+                data={search === '' ? filter_gift : doc}
                 changeRoute={changeRoute}
               />
             )}
