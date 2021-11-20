@@ -29,6 +29,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import axios from 'axios';
 import { getToken } from 'Utils/auth.util';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
@@ -36,6 +37,16 @@ const selectGender = [
 ];
 export default function EditDeliveryStaff(props) {
   const currentUser = props?.location?.state;
+  const [optionState, setOptionState] = useState([]);
+  const [loadingRegion, setLoadingRegion] = useState(false);
+  let defaultOptions = [];
+  currentUser?.field_staff?.service_location?.map((item) =>
+    defaultOptions?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
   let service_location_id = [];
   currentUser?.field_staff?.service_location?.map((item) =>
     service_location_id?.push(item?.uid)
@@ -63,16 +74,15 @@ export default function EditDeliveryStaff(props) {
   const [admin, setAdmin] = useState(admin_obj);
   const [array, setArray] = useState(admin?.service_location_uid);
 
-  
-
   const [loadingSuspand, setLoadingSuspand] = useState(false);
-  
+
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
   let option = [];
   const getServiceLocationUid = async (uid) => {
+    setLoadingRegion(true);
     let token = await getToken();
     const response = await axios.get(
       `https://concord-backend-m2.herokuapp.com/api/region-classifications/read/territory?child_uid=${uid}`,
@@ -83,6 +93,7 @@ export default function EditDeliveryStaff(props) {
         },
       }
     );
+    setLoadingRegion(false);
 
     setService_location(response?.data?.response_data);
   };
@@ -99,6 +110,7 @@ export default function EditDeliveryStaff(props) {
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
   useEffect(() => {
+    setOptionState(defaultOptions);
     setAdmin(admin_obj);
     if (currentUser?.status?.name === 'suspended') {
       setButtonName('Active');
@@ -117,7 +129,9 @@ export default function EditDeliveryStaff(props) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 8
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
   let depoManagerFilter = [];
   depoManager?.filter((item) =>
@@ -127,10 +141,6 @@ export default function EditDeliveryStaff(props) {
       key: item?.uid,
     })
   );
-  //   const [currentItem, setCurrentItem] = useState('');
-  //   roles?.filter((item) => (
-
-  //   ));
 
   const editProfile = (e) => {
     e.preventDefault();
@@ -187,14 +197,7 @@ export default function EditDeliveryStaff(props) {
 
     // console.log(test);
   };
-  let defaultOptions = [];
-  currentUser?.field_staff?.service_location?.map((item) =>
-    defaultOptions?.push({
-      label: item?.name,
-      value: item?.name,
-      key: item?.uid,
-    })
-  );
+
   // console.log(defaultOptions, 'default option');
   const suspandAdmin = async () => {
     if (currentUser?.status?.name === 'suspended') {
@@ -251,11 +254,8 @@ export default function EditDeliveryStaff(props) {
         setLoadingSuspand(false);
       }
     }
-    //  setStatusUpdate()
 
-    // console.log(doctor?.password);
   };
-  console.log(currentUser, 'curerntUser');
   return (
     <Card>
       <CardBody>
@@ -462,7 +462,7 @@ export default function EditDeliveryStaff(props) {
 
                   {thisView ? (
                     <span>
-                      <p>{admin?.role_uid}</p>
+                      <p>{currentUser?.role?.name}</p>
                     </span>
                   ) : (
                     <Select
@@ -487,7 +487,7 @@ export default function EditDeliveryStaff(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id=" Manager" />
+                    <IntlMessages id="Manager" />
                   </Label>
 
                   {thisView ? (
@@ -514,6 +514,8 @@ export default function EditDeliveryStaff(props) {
                           manager_uid: val.key,
                         });
                         getServiceLocationUid(val?.key);
+                        setOptionState([])
+                        setArray([])
                       }}
                       options={depoManagerFilter}
                     />
@@ -534,33 +536,23 @@ export default function EditDeliveryStaff(props) {
                         )
                       )}
                     </span>
+                  ) : loadingRegion ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
                   ) : (
                     <Select
                       cacheOptions
                       closeMenuOnSelect={false}
                       components={animatedComponents}
                       isMulti
-                      defaultValue={currentUser?.field_staff?.service_location?.map(
-                        (item) => {
-                          return {
-                            label: item?.name,
-                            value: item?.name,
-                            key: item?.uid,
-                          };
-                        }
-                      )}
-                      // defaultValue={[defaultOptions[0]]}
-                      // defaultValue={
-
-                      // }
-                      // defaultValue={[defaultOptions[0],defaultOptions[1],defaultOptions[2],defaultOptions[3]]}
-                      // defaultOptions={defaultOptions[0],defaultOptions[1],defaultOptions[2],defaultOptions[3]}
-                      // value={admin?.service_location_uid}
-
-                      // label:currentUser?.field_staff?.service_location?.map((item,index) => item[index]?.name),
-                      //value:currentUser?.field_staff?.service_location?.map((item_,index_) => item_[index_]?.name),
-                      //key:currentUser?.field_staff?.service_location?.map((_item_,_index_) => _item_[_index_]?.uid),
-
+                      defaultValue={optionState}
                       onChange={(e) => handleChange(e)}
                       options={option}
                     />
@@ -594,7 +586,6 @@ export default function EditDeliveryStaff(props) {
                 style={{ marginRight: '0px', backgroundColor: '#0066B3' }}
                 // type="submit"
                 disabled={loading ? true : false}
-
                 className={`btn-shadow btn-multiple-state ${
                   loading ? 'show-spinner' : ''
                 }`}
@@ -606,9 +597,7 @@ export default function EditDeliveryStaff(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  Save
-                </span>
+                <span className="label">Save</span>
               </Button>
             )}
             {thisView ? (
@@ -616,7 +605,6 @@ export default function EditDeliveryStaff(props) {
                 style={{ 'background-color': '#0066B3', marginRight: '5px' }}
                 // className="btn btn-primary"
                 disabled={loading ? true : false}
-
                 className={`btn-shadow btn-multiple-state ${
                   loadingSuspand ? 'show-spinner' : ''
                 }`}
@@ -627,9 +615,7 @@ export default function EditDeliveryStaff(props) {
                   <span className="bounce2" />
                   <span className="bounce3" />
                 </span>
-                <span className="label">
-                  {buttonName}
-                </span>
+                <span className="label">{buttonName}</span>
               </Button>
             ) : (
               ''

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import axios from "axios";
-import { getToken } from "../Utils/auth.util";
+import { Check_Authentication, getToken } from "../Utils/auth.util";
 // const BASE_URL = "prod link";
 // https://dmfr-backend.herokuapp.com/api/v1/
 // const BASE_URL = "https://concord-backend-prod.herokuapp.com/api";
@@ -45,8 +45,9 @@ export async function request({ method, url, data, headers }) {
   const promise = instance[method](url, data);
   let response;
   try {
-
+    
     response = await promise;
+    Check_Authentication(response);
   } catch (error) {
 
     throw error.response;
@@ -61,6 +62,7 @@ export async function newRequest({ method, url, data, headers }) {
   }
   const promise = instance[method](url, data);
   let response;
+
   try {
     response = await promise;
     // console.log(response);

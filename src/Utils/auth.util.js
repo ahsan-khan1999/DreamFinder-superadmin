@@ -1,6 +1,7 @@
 /* eslint-disable */
 import localStore from './localstore.util';
 import { updateHeaders } from '../services/HttpProvider';
+import { NotificationManager } from 'components/common/react-notifications';
 
 export const getToken = () => localStore.get_data('token');
 
@@ -37,9 +38,35 @@ export const logout = async () => {
   await updateHeaders();
   return true;
 };
-export const Check_Authentication = async (response,history) => {
+export const Check_Authentication = async (response) => {
   if (response?.data?.response_code === 401) {
-    history.push('/user/login');
+    NotificationManager.error('Autherization Failed', 'Error', 5000, null, '');
+    setTimeout(() => {
+      logout();
+      window.location.href = '/';
+    }, 2000);
+  }
+};
+
+export const Check_Validation = async (response) => {
+  if (response?.data?.response_code === 4003) {
+    response?.data?.response_data?.map((item) => {
+      NotificationManager.error(Object.values(item), 'Error', 5000, null, '');
+    });
+  }else{
+    NotificationManager.error(response?.data?.response_message, 'Error', 5000, null, '');
+
+  }
+};
+
+export const Check_Validation_Update = async (response) => {
+  if (response?.response_code === 4003) {
+    response?.response_data?.map((item) => {
+      NotificationManager.error(Object.values(item), 'Error', 5000, null, '');
+    });
+  }else{
+    NotificationManager.error(response?.response_message, 'Error', 5000, null, '');
+
   }
 };
 

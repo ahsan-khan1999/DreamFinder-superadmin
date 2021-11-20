@@ -19,8 +19,8 @@ export function configureStore(initialState) {
   const store = createStore(
     reducers,
     initialState,
+    // applyMiddleware(thunk)
     applyMiddleware(thunk)
-    // composeEnhancers(applyMiddleware(thunk))
   );
 
   // sagaMiddleware.run(sagas);

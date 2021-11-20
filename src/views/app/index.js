@@ -28,6 +28,12 @@ const CreateTarget = React.lazy(() =>
 const EditTarget = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Target/EditTarget')
 );
+const Gift = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Gift/gift')
+);
+const ViewGift = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './Gift/ViewGift')
+);
 
 
 
@@ -624,7 +630,14 @@ const App = ({ match }) => {
            
            
             
-            
+           <Route
+              path={`${match.url}/Gift/gift`}
+              render={(props) => <Gift {...props} />}
+            />
+            <Route
+              path={`${match.url}/Gift/ViewGift`}
+              render={(props) => <ViewGift {...props} />}
+            />
             
             {/* <ProtectedRoute
                     path={`${match.url}/applications`}

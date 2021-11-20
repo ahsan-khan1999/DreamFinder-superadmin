@@ -431,7 +431,6 @@ const Home = () => {
                     <a
                       className="btn btn-light btn-xl mr-2 mb-2"
                       href={adminRoot}
-                      target="_blank"
                     >
                       VIEW NOW <i className="simple-icon-arrow-right" />
                     </a>

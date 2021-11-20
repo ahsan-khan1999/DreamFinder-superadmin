@@ -10,11 +10,12 @@ import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
 import { searchArray } from 'Utils/auth.util';
 
 export default function ViewTarget(props) {
-    const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('');
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(ViewTargetAction());
-  },[]);
+  }, []);
+  const [doc, setDoc] = useState([]);
 
   const target = useSelector((state) => state?.TargetReducer?.target);
   const loading = useSelector((state) => state?.TargetReducer?.loading);
@@ -30,14 +31,7 @@ export default function ViewTarget(props) {
   const handleAdd = () => {
     props.history.push('/app/Target/CreateTarget');
   };
-  let header = [
-    'Name',
-    'Amount',
-    'Role',
-    'Start Date',
-    'Status',
-    'Actions',
-  ];
+  let header = ['Name', 'Amount', 'Role', 'Start Date', 'Status', 'Actions'];
   return (
     <Card>
       <CardBody>
@@ -108,12 +102,11 @@ export default function ViewTarget(props) {
                 />
               </div>
             ) : (
-                <TargetTable
-                  header={header}
-                  data={target}
-                  changeRoute={changeRoute}
-                />
-              
+              <TargetTable
+                header={header}
+                data={search == '' ? target : doc}
+                changeRoute={changeRoute}
+              />
             )}
           </Colxx>
         </Row>

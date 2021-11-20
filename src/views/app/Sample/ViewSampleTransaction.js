@@ -1,39 +1,57 @@
 /* eslint-disable */
 
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
-import { SampleTabel, SampleTransactionTabel, TargetTable } from 'containers/ui/ReactTableCards';
+import {
+  SampleTabel,
+  SampleTransactionTabel,
+  TargetTable,
+} from 'containers/ui/ReactTableCards';
 import React, { useEffect, useState } from 'react';
 import Loader from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import { ViewSampleAction, ViewSampleTransactionAction } from 'Store/Actions/SampleAction/SampleAction';
+import {
+  ViewSampleAction,
+  ViewSampleTransactionAction,
+} from 'Store/Actions/SampleAction/SampleAction';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
 import { searchArray } from 'Utils/auth.util';
 
 export default function ViewSampleTransaction(props) {
-    const [search, setSearch] = useState('');
-    const dispatch = useDispatch();
-    useEffect(() => {
-      dispatch(ViewSampleTransactionAction());
-    }, []);
+  const [search, setSearch] = useState('');
+  const [doc, setDoc] = useState();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(ViewSampleTransactionAction());
+  }, []);
   
-    const sampleTransaction = useSelector((state) => state?.SampleReducer?.sampleTransaction);
-    const loading = useSelector((state) => state?.SampleReducer?.loading);
-    const changeRoute = (item) => {
-      props.history.push('/app/Sample/EditSampleTransaction', item);
-    };
-  
-    const handleSearch = (event) => {
-      setSearch(event.target.value);
-      setDoc(searchArray(target, search));
-    };
-  
-    const handleAdd = () => {
-      props.history.push('/app/Sample/CreateSampleTransaction');
-    };
-    let header = ['Sample Assign To Name', 'Sample Assign To Manager', 'Desigination', 'Phone Number', 'Status', 'Actions'];
-    return (
-        <Card>
+  const sampleTransaction = useSelector(
+    (state) => state?.SampleReducer?.sampleTransaction
+  );
+  const loading = useSelector((state) => state?.SampleReducer?.loading);
+  const changeRoute = (item) => {
+    props.history.push('/app/Sample/EditSampleTransaction', item);
+  };
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+    setDoc(searchArray(sampleTransaction, search));
+  };
+
+  const handleAdd = () => {
+    props.history.push('/app/Sample/CreateSampleTransaction');
+  };
+  let header = [
+    'Sample Assign To Name',
+    'Sample Assign To Manager',
+    'Desigination',
+    'Phone Number',
+    'Status',
+    'Actions',
+  ];
+  return (
+    <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
@@ -104,7 +122,7 @@ export default function ViewSampleTransaction(props) {
             ) : (
               <SampleTransactionTabel
                 header={header}
-                data={sampleTransaction}
+                data={search === '' ? sampleTransaction : doc}
                 changeRoute={changeRoute}
               />
             )}
@@ -112,5 +130,5 @@ export default function ViewSampleTransaction(props) {
         </Row>
       </CardBody>
     </Card>
-    )
+  );
 }

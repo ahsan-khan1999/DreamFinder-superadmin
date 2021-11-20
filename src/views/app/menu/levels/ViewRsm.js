@@ -154,7 +154,7 @@ const ViewRsm = ({ match, history }) => {
             ) : (
               <AdminTable
                 header={header}
-                data={user}
+                data={search === '' ? user : doc}
                 changeRoute={changeRoute}
               />
             )}

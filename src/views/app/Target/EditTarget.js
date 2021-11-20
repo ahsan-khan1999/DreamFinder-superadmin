@@ -93,10 +93,6 @@ export default function EditTarget(props) {
     dispatch(ViewDirectorAction());
     dispatch(OrderRead());
     setTarget(target_obj);
-    // dispatch(ViewAreaManagerAction());
-    // dispatch(ViewSalesManagerManagerAction());
-    // dispatch(ViewRegionalSalesManagerManagerAction());
-    // dispatch(ViewMPOManagerAction());
   }, []);
 
   const director = useSelector((state) => state?.ViewUserReducer?.director);
@@ -114,15 +110,7 @@ export default function EditTarget(props) {
   const loadingMPO = useSelector(
     (state) => state?.AttendanceReducer?.loadingMpo
   );
-  const salesManager = useSelector(
-    (state) => state?.ViewUserReducer?.salesManager
-  );
-  const regionalSalesManager = useSelector(
-    (state) => state?.ViewUserReducer?.regionalSalesManager
-  );
-  const areaManager = useSelector(
-    (state) => state?.ViewUserReducer?.areaManager
-  );
+  
   const distributionCenter = useSelector(
     (state) => state?.TargetReducer?.distributionCenter
   );
@@ -137,7 +125,6 @@ export default function EditTarget(props) {
     })
   );
   let medicineOptionFromStock = [];
-  // console.log(stocks,"stocks");
   stocks?.map((item) =>
     medicineOptionFromStock?.push({
       label: item?.product?.name,
@@ -146,7 +133,6 @@ export default function EditTarget(props) {
     })
   );
 
-  //   console.log(order);
   let directorOption = [];
   let mpoOption = [];
   mpo?.map((item) =>
@@ -196,16 +182,7 @@ export default function EditTarget(props) {
       key: _item?.quantity,
     })
   );
-  //   console.log(medicineOptionFromOrder);
-  // targets?.map((item) =>
-  //   item?.medicines?.map((item_) =>
-  //     medicineOption.push({
-  //       label: item_?.name,
-  //       value: item_?.medicine_uid,
-  //       key: item_?.quantity,
-  //     })
-  //   )
-  // );
+  
   targets?.map((item) => {
     medicineOption.push({
       label: item?.name,
@@ -347,7 +324,6 @@ export default function EditTarget(props) {
         props?.history.push('/app/Target/ViewTarget');
       }
     } else {
-      // console.log(currentTarget);
       let medi = currentTarget?.medicines;
       let test = { ...target, medicines: medi };
       let apiData = {

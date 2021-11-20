@@ -97,6 +97,24 @@ export default function ViewCurrentCustomers(props) {
     (state) => state?.doctorsReducer?.hierarchy_market
   );
 
+  const hierarchy_region_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_region_loader
+  );
+
+  const hierarchy_area_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_area_loader
+  );
+  const hierarchy_thana_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_thana_loader
+  );
+  const hierarchy_territory_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_territory_loader
+  );
+  const hierarchy_market_loader = useSelector(
+    (state) => state?.doctorsReducer?.hierarchy_market_loader
+  );
+
+
   let optionregion = [];
   hierarchy_region?.filter((item) =>
     optionregion.push({
@@ -624,6 +642,11 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
+                      {hierarchy_region_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -643,6 +666,7 @@ export default function ViewCurrentCustomers(props) {
                           }}
                           options={optionregion}
                         />
+                        }
                       </>
                     </AvGroup>
                   </Col>
@@ -654,6 +678,11 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
+                      {hierarchy_area_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> : 
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -673,6 +702,7 @@ export default function ViewCurrentCustomers(props) {
                           }}
                           options={optionarea}
                         />
+                    }
                       </>
                     </AvGroup>
                   </Col>
@@ -684,6 +714,11 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
+                      {hierarchy_thana_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -700,6 +735,7 @@ export default function ViewCurrentCustomers(props) {
                           }}
                           options={optionthana}
                         />
+                        }
                       </>
                     </AvGroup>
                   </Col>
@@ -712,6 +748,11 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
+                      {hierarchy_territory_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -727,6 +768,7 @@ export default function ViewCurrentCustomers(props) {
                           }}
                           options={optionterritory}
                         />
+                      }
                       </>
                     </AvGroup>
                   </Col>
@@ -739,6 +781,11 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
+                      {hierarchy_market_loader ? 
+                  <div className="">
+                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
+                   &nbsp;
+                 </div> :
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -755,7 +802,8 @@ export default function ViewCurrentCustomers(props) {
                             });
                           }}
                           options={optionmarket}
-                        />
+                        />   
+                    }
                       </>
                     </AvGroup>
                   </Col>

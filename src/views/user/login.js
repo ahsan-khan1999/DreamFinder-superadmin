@@ -73,10 +73,10 @@ const Login = ({ history, error, loginUserAction }) => {
       // console.log(apiData);
 
       let res = await dispatch(Login_action(apiData));
-      if (res === true) {
+      if (res) {
         NotificationManager.success(
-          'Sucess',
-          'Login sucess',
+          'Success',
+          'Login Success',
           3000,
           null,
           null,
@@ -109,7 +109,7 @@ const Login = ({ history, error, loginUserAction }) => {
                   marginBottom: '30px',
                 }}
               >
-                <img class="logo" src={logo} alt="" height="70px" width="240px" />
+                <img className="logo" src={logo} alt="" height="70px" width="240px" />
               </span>
             </NavLink>
             <CardTitle className="mb-4">

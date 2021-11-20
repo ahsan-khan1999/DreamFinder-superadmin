@@ -70,7 +70,9 @@ export default function EditDirector(props) {
 
   let options = [];
   roles?.filter((item) =>
-    options.push({ label: item?.name, value: item?.name, key: item?.uid })
+    item?.category?.user_role_id == 2
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
   );
   //   const [currentItem, setCurrentItem] = useState('');
   //   roles?.filter((item) => (

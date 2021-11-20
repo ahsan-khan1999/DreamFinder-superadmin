@@ -12,6 +12,7 @@ const initialState = {
   loading: false,
   loader: false,
   distributioncenter: [],
+  distributioncenterloader: false,
   createdistributioncenter: [],
   updatedistributioncenter: [],
   distributioncenterregions: [],
@@ -24,7 +25,7 @@ const initialState = {
 export const DistributionCenterReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING:
-      return { ...state, loading: payload, distributioncenter: [] };
+      return { ...state, distributioncenterloader: payload };
 
     case DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_SUCESS:
       return { ...state, distributioncenter: payload };

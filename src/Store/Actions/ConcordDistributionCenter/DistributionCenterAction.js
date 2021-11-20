@@ -20,21 +20,31 @@ export const GetDistributionCenter = () => async (dispatch) => {
     let res = await apiServices.getdistributionCentres();
 
     if (res?.data?.response_code === 200) {
-      dispatch({
-        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
-        payload: false,
-      });
+   
       dispatch({
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_SUCESS,
         payload: res?.data?.response_data,
+      });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
+        payload: false,
       });
     } else {
       dispatch({
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_ERROR,
         payload: [],
       });
+      dispatch({
+        type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
+        payload: false,
+      });
     }
-  } catch {}
+  } catch {
+    dispatch({
+      type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_LOADING,
+      payload: false,
+    });
+  }
 };
 
 
@@ -146,14 +156,14 @@ export const GetDistributionCenterRegions = () => async (dispatch) => {
   } catch {}
 };
 
-export const GetDepoManagers = () => async (dispatch) => {
+export const getDepoManagerAssigneds = () => async (dispatch) => {
   try {
     dispatch({
       type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING,
       payload: true,
     });
 
-    let response = await apiServices.getDepoManager();
+    let response = await apiServices.getDepoManagerAssigned();
     if (response?.data?.response_code === 200) {
       dispatch({
         type: DISTRIBUTION_CENTER_CONSTANT.DISTRIBUTION_CENTER_VIEW_DEPO_LOADING,
