@@ -131,7 +131,8 @@ const SERVICE_URLS = {
   createdistributionCentres: 'distribution_centres/create',
   updatedistributionCentres: 'distribution_centres/update',
   suspanddistributionCentres: 'distribution_centres/suspend',
-  regiondistributionCentres: 'region-classifications/read/region?assigned_to_dc=0',
+  regiondistributionCentres:
+    'region-classifications/read/region?assigned_to_dc=0',
   // areadistributionCentres:'region-classifications/read/area',
   getDepoManagerAssigned: 'users/read/depot_manager?assigned_to_dc=0',
 
@@ -177,12 +178,14 @@ const SERVICE_URLS = {
   updatecustomers: 'customers/update',
   suspandcustomers: 'customers/suspend',
 
-
-  giftAssignment:'fieldstaffs/gift-assignment',
-  readAssignedGift:'fieldstaffs/read_all_gifts'
+  giftAssignment: 'fieldstaffs/gift-assignment',
+  readAssignedGift: 'fieldstaffs/read_all_gifts',
+  dashboard: 'dashboard/',
 };
 const AssignGift = (data) =>
-  patch(SERVICE_URLS.giftAssignment, data, { feature: featureConstants.static });
+  patch(SERVICE_URLS.giftAssignment, data, {
+    feature: featureConstants.static,
+  });
 const ReadStatic = () =>
   get(SERVICE_URLS.readStatic, {}, { feature: featureConstants.static });
 const CreateSample = (data) =>
@@ -868,14 +871,23 @@ const EditRegion = (data) =>
     feature: featureConstants.static,
   });
 
-  const ReadAssignedGifts = (data) =>
+const ReadAssignedGifts = (data) =>
   get(SERVICE_URLS.readAssignedGift, data, {
     feature: featureConstants.static,
   });
+const getDashboardData = () =>
+  get(
+    SERVICE_URLS.dashboard,
+    {},
+    {
+      feature: featureConstants.static,
+    }
+  );
 // post g
 
 const apiServices = {
   // define variables
+  getDashboardData,
   ReadAssignedGifts,
   EditRegion,
   addRegion,
@@ -1048,6 +1060,6 @@ const apiServices = {
   updatecustomers,
   suspandcustomers,
 
-  AssignGift
+  AssignGift,
 };
 export default apiServices;

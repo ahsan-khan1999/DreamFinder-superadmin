@@ -50,12 +50,10 @@ export default function ViewDoctorsCategory({ match, history }) {
 
     let res = await dispatch(GetDoctorCategory());
 
-    console.log("res Concord DoctorCategory",res);
   };
 
   const doctorcategory = useSelector((state) => state?.doctorCategoryReducer?.doctorcategory);
   const loading = useSelector((state) => state?.doctorCategoryReducer?.loading);
-  console.log(doctorcategory);
 
 
   const changeRoute = async (item) => {

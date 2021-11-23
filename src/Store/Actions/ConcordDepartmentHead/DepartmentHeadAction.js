@@ -91,7 +91,6 @@ export const GetDepartmentHead = () => async (dispatch) => {
         payload: true,
       });
       let res = await apiServices.updatedepartmentHead(data);
-      console.log(res);
       if (res?.response_code === 200) {
         dispatch({
           type: DEPARTMENT_HEAD_CONSTANT.UPDATE_DEPARTMENT_HEAD_LOADING,

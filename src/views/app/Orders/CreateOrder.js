@@ -200,7 +200,6 @@ export default function CreateOrders(props) {
       );
       return;
     } else {
-      console.log(orderCreate, "orderCreate");
 
 
       let res = await dispatch(CreateOrder(orderCreate));
@@ -234,14 +233,12 @@ export default function CreateOrders(props) {
 
 
   const QuantityHanle = async (e, index) => {
-    console.log("max", e)
     const obj = array[index];
     if (e.target.value <= Number(e.target.max)) {
       obj.quantity = Number(e.target.value);
     }
     array[index] = obj;
     const testArary = [...array];
-    console.log(testArary);
     setArray(testArary);
     
     

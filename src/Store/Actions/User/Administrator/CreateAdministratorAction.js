@@ -55,7 +55,6 @@ export const UpdateAdministratorAction = (data) => async (dispatch) => {
 
 
     let res = await apiServices.updateAdmin(data)
-    console.log(res);
 //  Api Call
     dispatch({
       type:UPDATE_ADMINISTRATOR_CONSTANT.UPDATE_ADMINISTRATOR_LOADING,

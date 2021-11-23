@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function EditSchedule(props) {
   let currentItem = props?.location?.state;
   const [view, setView] = useState(true);
-  console.log(currentItem);
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [loadingSuspand, setLoadingSuspand] = useState(false);
 

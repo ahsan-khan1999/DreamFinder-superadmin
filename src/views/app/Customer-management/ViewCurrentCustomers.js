@@ -186,7 +186,6 @@ export default function ViewCurrentCustomers(props) {
       specialDay_arr.push(objectspecialday);
     }
 
-    console.log(currentCustomer, 'currentobj');
     let defaultobj = {};
     specialDay_arr?.filter(
       (item) =>

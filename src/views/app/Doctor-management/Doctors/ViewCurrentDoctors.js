@@ -32,7 +32,6 @@ export default function ViewCurrentDoctors(props) {
 
   const currentDoctor = props?.location?.state;
 
-  console.log(currentDoctor, 'currentDoctor');
 
 
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
@@ -218,8 +217,6 @@ export default function ViewCurrentDoctors(props) {
       specialDay_arr.push(objectspecialday);
     }
 
-    console.log(currentDoctor, 'currentobj');
-    console.log(array, 'array');
     let defaultobj = {};
     specialDay_arr?.filter(
       (item) =>
@@ -282,7 +279,6 @@ export default function ViewCurrentDoctors(props) {
   };
 
   const editData = async () => {
-    console.log(apiData);
     apiData = {
       ...doctorCreate,
       special_day: specialObj,
@@ -308,10 +304,8 @@ export default function ViewCurrentDoctors(props) {
       let apiData = {
         uid: currentDoctor?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true);
       let res = await apiServices.suspanddoctors(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(
@@ -338,7 +332,6 @@ export default function ViewCurrentDoctors(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspanddoctors(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(

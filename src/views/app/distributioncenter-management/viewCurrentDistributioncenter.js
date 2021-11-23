@@ -144,7 +144,6 @@ export default function viewCurrentDistributioncenter(props) {
     setThisView(!thisView);
   };
 
-  console.log();
 
   const editData = async () => {
     distributioncenter_obj = {

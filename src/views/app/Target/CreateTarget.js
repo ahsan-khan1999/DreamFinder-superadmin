@@ -90,7 +90,6 @@ export default function CreateTarget(props) {
   let [loadingStocks, setLoadingStocks] = useState(false);
 
   const clearState = () => {
-    // onClear()
     setTarget(target_obj_initial);
   };
 
@@ -108,10 +107,9 @@ export default function CreateTarget(props) {
   );
   const distributionCenterOption = [];
   distributionCenter?.map((item) =>
-    // console.log(item?.areas[0]?.parent?.name)
     distributionCenterOption.push({
-      label: item?.areas[0]?.parent?.name,
-      value: item?.areas[0]?.parent?.name,
+      label: item?.name,
+      value: item?.name,
       key: item?.uid,
     })
   );
@@ -412,7 +410,6 @@ export default function CreateTarget(props) {
         // by_customer_visits: targets[0]?.by_customer_visits,
         // by_doctor_visits: targets[0]?.by_doctor_visits,
       };
-      console.log(apiData, 'data');
       if (
         target?.by_customer_visits === undefined ||
         target?.by_doctor_visits === undefined ||

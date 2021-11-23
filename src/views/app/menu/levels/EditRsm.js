@@ -204,7 +204,6 @@ export default function EditRsm(props) {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Activated',
@@ -229,7 +228,6 @@ export default function EditRsm(props) {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Suspaned',

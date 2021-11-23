@@ -57,7 +57,6 @@ export default function CreateRole(props) {
 
   const user_role = useSelector((state) => state.ViewUserReducer?.staticData);
   let categoryOption = [];
-  console.log(user_role?.user_roles_and_rights);
   user_role?.user_roles_and_rights?.map((item) =>
     categoryOption.push({
       label: item?.name,
@@ -80,7 +79,6 @@ export default function CreateRole(props) {
         name: name,
         category: selectedRole,
       };
-      console.log(apiData);
       let res = await dispatch(CreateRoleAction(apiData));
       if (res) {
         NotificationManager.success(

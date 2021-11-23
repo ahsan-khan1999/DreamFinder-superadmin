@@ -16,7 +16,6 @@ import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 export default function EditDcr(props) {
   let currentItem = props?.location?.state;
-  console.log(currentItem);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const onSuspandUser = async () => {

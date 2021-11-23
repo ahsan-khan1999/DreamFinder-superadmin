@@ -40,7 +40,6 @@ export default function CreateStockTransaction({ history }) {
     transactiontype: '',
   });
 
-  console.log('selectsinglecategory', selectsinglecategory);
 
   const dispatch = useDispatch();
 
@@ -60,7 +59,7 @@ export default function CreateStockTransaction({ history }) {
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
-      label: item?.areas[0].parent.name,
+      label: item?.name,
       value: item?.uid,
       key: item?.uid,
     })

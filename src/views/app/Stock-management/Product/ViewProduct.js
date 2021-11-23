@@ -45,7 +45,6 @@ export default function ViewProduct({ match, history }) {
   const getGetProduct = async () => {
     let res = await dispatch(GetProduct('', ''));
 
-    console.log('res Concord product', res);
   };
 
   const product = useSelector((state) => state?.productReducer?.product);
@@ -98,7 +97,6 @@ export default function ViewProduct({ match, history }) {
     }
   };
 
-  console.log();
 
   // Tabhandler All New Old
   const tabHandler1 = (item) => {

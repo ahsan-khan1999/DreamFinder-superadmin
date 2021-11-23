@@ -76,7 +76,6 @@ export default function EditAdmin(props) {
       ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
       : null
   );
-  console.log(options);
   const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
     e.preventDefault();
@@ -105,7 +104,6 @@ export default function EditAdmin(props) {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Activated',

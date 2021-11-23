@@ -83,7 +83,6 @@ export default function EditDepoManager(props) {
   };
   const editData = async (e) => {
     e.preventDefault();
-    console.log(admin);
     let res = await dispatch(UpdateUserAction(admin));
     if (res) {
       NotificationManager.success('Successful response', 'Success', 5000, '');
@@ -97,7 +96,6 @@ export default function EditDepoManager(props) {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Activated',
@@ -128,7 +126,6 @@ export default function EditDepoManager(props) {
         uid: currentUser?.uid,
       };
       let res = await apiServices.suspandUser(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         NotificationManager.success(
           'Sucessfully Suspaned',

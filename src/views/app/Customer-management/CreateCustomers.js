@@ -23,8 +23,6 @@ import { CreateCustomerRecord } from 'Store/Actions/ConcordCustomer/CustomerActi
 
 export default function CreateCustomers({ history }) {
   const onSubmit = (event, errors, values) => {
-    console.log(errors);
-    console.log(values);
     if (errors.length === 0) {
       onCustomerCreate();
     } else {
@@ -155,8 +153,6 @@ export default function CreateCustomers({ history }) {
   };
 
   const handlespecialdaydate = async (day, date) => {
-    console.log(day,"day")
-    console.log(date,"date")
     if(day!== undefined && date !== ""  )
     {
       const prearray = [...array];
@@ -209,7 +205,6 @@ export default function CreateCustomers({ history }) {
       );
       return;
     } else {
-      console.log(apiData, 'CustomerCreate');
       let res = await dispatch(CreateCustomerRecord({ ...apiData }));
 
       if (res) {
@@ -634,7 +629,6 @@ export default function CreateCustomers({ history }) {
                                   onClick={() => {
                                     const test = [...array];
                                     test.splice(index, 1);
-                                    console.log(test);
                                     setArray(test);
                                   }}
                                   style={{ fontSize: '20px', color: 'red' }}

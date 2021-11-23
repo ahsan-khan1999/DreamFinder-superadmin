@@ -100,7 +100,6 @@ export const SuspandDcpAction = (data) => async (dispatch) => {
     });
 
     let res = await apiServices.suspandDcp(data);
-    console.log(res);
     if (res?.response_code === 200) {
       dispatch({
         type: SUSPAND_DCP_DCR_CONSTANT.SUSPAND_DCP_DCR_LOADING,

@@ -18,7 +18,6 @@ export default function ViewDcp(props) {
   }, []);
 
   const dcps = useSelector((state) => state?.DcpReducer?.dcp);
-  console.log(dcps);
   const loading = useSelector((state) => state?.DcpReducer?.loading);
   const changeRoute = (item) => {
     props.history.push('/app/FieldWorkManagment/EditDcp', item);

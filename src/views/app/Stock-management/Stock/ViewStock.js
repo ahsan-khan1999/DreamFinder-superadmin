@@ -50,12 +50,10 @@ export default function ViewStock({ match, history }) {
 
     let res = await dispatch(GetStocks());
 
-    console.log("res Concord Stocksdata",res);
   };
 
   const stock = useSelector((state) => state?.stockReducer?.stock);
   const loading = useSelector((state) => state?.stockReducer?.loading);
-  console.log(stock);
 
 
   const changeRoute = async (item) => {

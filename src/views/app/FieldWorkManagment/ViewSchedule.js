@@ -21,7 +21,6 @@ export default function ViewSchedule(props) {
   }, []);
 
   const schedule = useSelector((state) => state?.DcpReducer?.schedule);
-  console.log(schedule);
   const loading = useSelector((state) => state?.DcpReducer?.loading);
   const changeRoute = (item) => {
     props.history.push('/app/FieldWorkManagment/EditSchedule', item);

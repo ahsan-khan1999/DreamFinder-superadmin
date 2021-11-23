@@ -57,32 +57,52 @@ const App = ({ locale }) => {
     }
   }, [direction]);
 
-  // useEffect(() => {
-  //   // dispatch(getUser());
-  //   if ('serviceWorker' in navigator) {
-  //     navigator?.serviceWorker
-  //       .register('/firebase-messaging-sw.js')
-  //       .then(function (registration) {
-  //         console.log('Registration successful, scope is:', registration.scope);
-  //       })
-  //       .catch(function (err) {
-  //         console.log('Service worker registration failed, error:', err);
-  //       });
-  //   }
-  //   Notification.requestPermission()
-  //     .then(async function () {
-  //       const token = await test?.getToken(messaging);
-  //       // console.log(token);
-  //       localStorage.setItem('fcm', token);
-  //     })
-  //     .catch(function (err) {
-  //       console.log('Unable to get permission to notify.', err);
-  //     });
-  //   navigator?.serviceWorker.addEventListener('message', (message) =>
-  //     console.log(message)
-  //   );
-  //   window.scrollTo(0, 0);
-  // }, []);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // dispatch(getUser());
+    if ('serviceWorker' in navigator) {
+      navigator?.serviceWorker
+        .register('./firebase-messaging-sw.js')
+        .then(function (registration) {
+          console.log('Registration successful, scope is:', registration.scope);
+        })
+        .catch(function (err) {
+          console.log('Service worker registration failed, error:', err);
+        });
+    }
+    Notification.requestPermission()
+      .then(async function () {
+        const token = await test?.getToken(messaging);
+        localStorage.setItem('fcm', token);
+      })
+      .catch(function (err) {
+        console.log('Unable to get permission to notify.', err);
+      });
+      navigator?.serviceWorker?.addEventListener("message", (message) => {
+        if (!("Notification" in window)) {
+          toast.error("This browser does not support desktop notification");
+        } else if (Notification.permission === "granted") {
+          const noti = new Notification(
+            message?.data?.["firebase-messaging-msg-data"]?.notification?.title,
+            {
+              icon: message?.data?.["firebase-messaging-msg-data"]?.notification
+                ?.image,
+              body: message?.data?.["firebase-messaging-msg-data"]?.notification
+                ?.body,
+              data: message?.data?.["firebase-messaging-msg-data"]?.data,
+            }
+          );
+          noti.onclick = (event) => {
+            console.log(event, "Notification clicked.");
+            // if (event?.currentTarget?.data?.url) {
+            //   window.location.href = event?.currentTarget?.data?.url;
+            // }
+          };
+        }
+      });
+    window.scrollTo(0, 0);
+  }, [dispatch]);
 
   return (
     <div className="h-100">

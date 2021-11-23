@@ -48,12 +48,10 @@ export default function viewDepartmenthead({ match, history }) {
 
     let res = await dispatch(GetDepartmentHead());
 
-    console.log("res Concord DepartmentHeads",res);
   };
 
   const departmenthead = useSelector((state) => state?.departmentHeadReducer?.departmenthead);
   const loading = useSelector((state) => state?.departmentHeadReducer?.loading);
-  console.log(departmenthead);
 
 
   const changeRoute = async (item) => {

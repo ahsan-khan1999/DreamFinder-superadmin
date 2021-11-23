@@ -101,7 +101,6 @@ export const UpdateDistributionCenter = (data) => async (dispatch) => {
       payload: true,
     });
     let res = await apiServices.updatedistributionCentres(data);
-    console.log(res);
     if (res?.response_code === 200) {
       dispatch({
         type: DISTRIBUTION_CENTER_CONSTANT.UPDATE_DISTRIBUTION_CENTER_LOADING,

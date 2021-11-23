@@ -46,7 +46,6 @@ const ViewDirector = ({ match, history }) => {
   const [doc, setDoc] = useState();
   const user = useSelector((state) => state?.ViewUserReducer?.director);
   const loading = useSelector((state) => state?.ViewUserReducer?.loading);
-  console.log(loading);
   // useEffect(() => {
   //   setDoc();
   // }, [user]);

@@ -19,8 +19,6 @@ export default function CreateDoctorsCategory({ history }) {
  
 
   const onSubmit = (event, errors, values) => {
-    console.log(errors);
-    console.log(values);
     if (errors.length === 0) {
       onDoctorCategoryCreate();
     }
@@ -61,7 +59,6 @@ export default function CreateDoctorsCategory({ history }) {
       );
       return;
     } else {
-      console.log(doctorcategory);
       let res = await dispatch(CreateDoctorCategory({ ...doctorcategory }));
 
       if (res) {

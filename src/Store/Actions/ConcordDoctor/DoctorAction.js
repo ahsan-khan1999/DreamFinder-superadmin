@@ -91,7 +91,6 @@ export const GetDoctor = () => async (dispatch) => {
         payload: true,
       });
       let res = await apiServices.updatedoctors(data);
-      console.log(res);
       if (res?.response_code === 200) {
         dispatch({
           type: DOCTOR_CONSTANT.UPDATE_DOCTOR_LOADING,

@@ -46,13 +46,12 @@ export default function ViewCurrentStockTransaction(props) {
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
-      label: item?.areas[0].parent.name,
+      label: item?.name,
       value: item?.uid,
       key: item?.uid,
     })
   );
 
-  console.log('distributioncenterData', distributioncenterData);
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
 
   let option_static_Category = [];
@@ -125,10 +124,8 @@ export default function ViewCurrentStockTransaction(props) {
       let apiData = {
         uid: CurrentStocks?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true)
       let res = await apiServices.suspandstockstransaction(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         setsuspendloader(false)
         NotificationManager.success(
@@ -155,7 +152,6 @@ export default function ViewCurrentStockTransaction(props) {
       };
       setsuspendloader(true)
       let res = await apiServices.suspandstockstransaction(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         setsuspendloader(false)
         NotificationManager.success(

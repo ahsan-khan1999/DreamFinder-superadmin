@@ -68,7 +68,6 @@ export default function CreateAttendance(props) {
   let [loadingMedicine, setLoadingMedicine] = useState(false);
   let [loadingStocks, setLoadingStocks] = useState(false);
   const [attendance, setAttendance] = useState(attendance_obj);
-  console.log(imageUploadData, 'test');
   const [director, setDirector] = useState([]);
   const [selected, setSelected] = useState('');
   const dispatch = useDispatch();
@@ -206,7 +205,6 @@ export default function CreateAttendance(props) {
   };
   //   console.log(imageUploadData);
   const createAttendance = async () => {
-    console.log(attendance, 'attendance');
     if (
       attendance?.datetime === '' ||
       imageUploadData?.attendance__image__url === undefined ||

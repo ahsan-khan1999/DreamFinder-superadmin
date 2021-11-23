@@ -50,12 +50,10 @@ export default function ViewStockTransaction({ match, history }) {
 
     let res = await dispatch(GetStocksTransaction());
 
-    console.log("res Concord DepartmentHeads",res);
   };
 
   const stocktransaction = useSelector((state) => state?.stockTransactionReducer?.stocktransaction);
   const loading = useSelector((state) => state?.stockTransactionReducer?.loading);
-  console.log(stocktransaction);
 
 
   const changeRoute = async (item) => {

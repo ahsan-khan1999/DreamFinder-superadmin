@@ -84,11 +84,7 @@ import Loader from 'react-loader-spinner';
   
   const onSubmit = async () => {
     
-    // const apiDataall = {
-      //   ...updateStatus,
-      //   uid: currentData?.uid,
-      // };
-      console.log(updateStatus)
+   
       let res = await dispatch(statusChange(updateStatus));
       if (res) {
         NotificationManager.success(

@@ -20,7 +20,6 @@ export const ViewTargetAction = () => async (dispatch) => {
     });
 
     let res = await apiServices.readTarget();
-    console.log(res);
     if (res?.data?.response_code === 200) {
       dispatch({
         type: VIEW_TARGET_CONSTANT.VIEW_TARGET_LOADING,
@@ -113,7 +112,6 @@ export const SuspandTargetAction = (data) => async (dispatch) => {
     });
 
     let res = await apiServices.suspandTarget(data);
-    console.log(res);
     if (res?.response_code === 200) {
       dispatch({
         type: SUSPAND_TARGET_CONSTANT.SUSPAND_TARGET_LOADING,
@@ -168,7 +166,6 @@ export const GetDistributionCenter = () => async (dispatch) => {
     });
 
     let res = await apiServices.ReadDistributionCenter();
-    console.log(res);
 
     if (res?.data?.response_code === 200) {
 

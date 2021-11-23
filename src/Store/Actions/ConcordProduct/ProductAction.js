@@ -97,7 +97,6 @@ export const GetProduct = (category,old_new) => async (dispatch) => {
         payload: true,
       });
       let res = await apiServices.updateproducts(data);
-      console.log(res);
       if (res?.response_code === 200) {
         dispatch({
           type: PRODUCT_CONSTANT.UPDATE_PRODUCT_LOADING,

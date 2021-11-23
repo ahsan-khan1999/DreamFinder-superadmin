@@ -49,7 +49,6 @@ export default function viewCurrentDepartmenthead(props) {
   const loading = useSelector((state) => state?.departmentHeadReducer?.updatedepartmentheadloader);
 
   
-  console.log("departhead",loading)
 
 
   const dispatch = useDispatch();
@@ -100,10 +99,8 @@ export default function viewCurrentDepartmenthead(props) {
       let apiData = {
         uid: currentDepartmenthead?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true)
       let res = await apiServices.suspanddepartmentHead(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
       setsuspendloader(false)
         NotificationManager.success(
@@ -130,7 +127,6 @@ export default function viewCurrentDepartmenthead(props) {
       };
       setsuspendloader(true)
       let res = await apiServices.suspanddepartmentHead(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
       setsuspendloader(false)
         NotificationManager.success(

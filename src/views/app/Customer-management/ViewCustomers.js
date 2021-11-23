@@ -50,12 +50,10 @@ export default function ViewCustomers({ match, history }) {
 
     let res = await dispatch(GetCustomer());
 
-    console.log("res Concord Customer",res);
   };
 
   const customer = useSelector((state) => state?.customerReducer?.customer);
   const loading = useSelector((state) => state?.customerReducer?.loading);
-  console.log(customer);
 
 
   const changeRoute = async (item) => {

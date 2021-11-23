@@ -50,13 +50,12 @@ export default function ViewCurrentStock(props) {
   let distributioncenterData = [];
   distributioncenter?.map((item) =>
     distributioncenterData.push({
-      label: item?.areas[0].parent.name,
+      label: item?.name,
       value: item?.uid,
       key: item?.uid,
     })
   );
 
-  console.log('distributioncenterData', distributioncenterData);
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
 
   let option_static_Category = [];
@@ -133,10 +132,8 @@ export default function ViewCurrentStock(props) {
       let apiData = {
         uid: CurrentStocks?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true);
       let res = await apiServices.suspandstocks(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
       setsuspendloader(false);
         NotificationManager.success(
@@ -163,7 +160,6 @@ export default function ViewCurrentStock(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspandstocks(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
       setsuspendloader(false);
         NotificationManager.success(
@@ -448,8 +444,8 @@ export default function ViewCurrentStock(props) {
                           className="react-select"
                           classNamePrefix="react-select"
                           defaultValue={{
-                            label:CurrentStocks?.distribution_centre.areas[0].parent.name,
-                            value:CurrentStocks?.distribution_centre.uid
+                            label:CurrentStocks?.distribution_centre?.name,
+                            value:CurrentStocks?.distribution_centre?.uid
                           }}
                           onChange={(e) => {
                             setStocksall({

@@ -24,10 +24,11 @@ import { CreateStocks } from 'Store/Actions/ConcordStock/StockAction';
 import { StaticDataGet } from 'Store/Actions/ConcordOrder/OrderAction';
 import { getStockProductCategory } from 'Store/Actions/ConcordStock/StockAction';
 import { GetDistributionCenter } from 'Store/Actions/ConcordDistributionCenter/DistributionCenterAction';
-
+import StockBuldUpload from './StockBulkUpload'
 export default function CreateStock({ history }) {
-
-
+  let [show, setShow] = useState(false);
+  const showModal = () => setShow(true);
+  const hideModal = () => setShow(false)
   const distributioncenter = useSelector(
     (state) => state?.distributionCenterReducer?.distributioncenter
   );
@@ -43,28 +44,25 @@ export default function CreateStock({ history }) {
     })
   );
 
-
-  console.log("distributioncenterData",distributioncenterData);
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
-  
+
   let option_static_Category = [];
   staticdata?.product_category__category_list?.filter((item) =>
-  option_static_Category.push({
+    option_static_Category.push({
       label: item?.name,
       value: item?.value,
       key: item?.id,
     })
   );
-  
+
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(StaticDataGet());
   }, []);
-  
-  
-  const [selectedCategory, setSelectedCategory] = useState(''); 
-  
+
+  const [selectedCategory, setSelectedCategory] = useState('');
+
   const getstockCategory = useSelector(
     (state) => state?.stockReducer?.getstockCategory
   );
@@ -72,31 +70,24 @@ export default function CreateStock({ history }) {
     (state) => state?.stockReducer?.getstockCategoryloader
   );
 
-
   let optioncategory = [];
   getstockCategory?.filter((item) =>
-  optioncategory.push({
-    label: item?.name,
-    value: item?.uid,
-    key: item?.uid,
-  })
+    optioncategory.push({
+      label: item?.name,
+      value: item?.uid,
+      key: item?.uid,
+    })
   );
 
-
   const stock_obj = {
-
     product_uid: '',
 
     distribution_centre_uid: '',
 
     quantity: 0,
-
   };
 
-  
-    const loading = useSelector(
-      (state) => state?.stockReducer?.loader
-    );
+  const loading = useSelector((state) => state?.stockReducer?.loader);
   const [stocksall, setStocksall] = useState(stock_obj);
 
   const onStockCreate = async () => {
@@ -114,9 +105,8 @@ export default function CreateStock({ history }) {
       );
       return;
     } else {
-      console.log(stocksall);
-        // console.log({...stocksall})
-        let res = await dispatch(CreateStocks({ ...stocksall }));
+      // console.log({...stocksall})
+      let res = await dispatch(CreateStocks({ ...stocksall }));
 
       if (res) {
         NotificationManager.success(
@@ -136,26 +126,25 @@ export default function CreateStock({ history }) {
   };
 
   return (
+    <>
     <Card>
       <CardBody>
-      <Button
-            className="btn btn-primary mb-4 "
-            onClick={handleChangeToView}
-            style={{ marginRight: '20px'}}
-          >
-            Back
-          </Button>
+        <Button
+          className="btn btn-primary mb-4 "
+          onClick={handleChangeToView}
+          style={{ marginRight: '20px' }}
+        >
+          Back
+        </Button>
         <CardTitle>
           <IntlMessages id="Create Stock" />
         </CardTitle>
-     
+
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
-             
-             
-            <Col lg={6}>
+              <Col lg={6}>
                 <FormGroup>
                   <label>
                     <IntlMessages id="Select Product Category" />
@@ -169,8 +158,7 @@ export default function CreateStock({ history }) {
                       classNamePrefix="react-select"
                       onChange={(e) => {
                         dispatch(getStockProductCategory(e.value));
-                        setSelectedCategory(e.label)
-                        
+                        setSelectedCategory(e.label);
                       }}
                       required
                       options={option_static_Category}
@@ -179,81 +167,83 @@ export default function CreateStock({ history }) {
                 </FormGroup>
               </Col>
 
-
-
               <Col lg={6}>
                 <FormGroup>
                   <label>
-                    <IntlMessages id="Select "/>
+                    <IntlMessages id="Select " />
                     {selectedCategory}
                   </label>
 
                   <>
-                  {getstockCategoryloader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      onChange={(e) => {
-                        setStocksall({
-                          ...stocksall,
+                    {getstockCategoryloader ? (
+                      <div className="">
+                        <Loader
+                          height={18}
+                          width={18}
+                          type="Oval"
+                          color="#0066b3"
+                        />
+                        &nbsp;
+                      </div>
+                    ) : (
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        onChange={(e) => {
+                          setStocksall({
+                            ...stocksall,
 
-                          product_uid: e?.value,
-                          
-                          
-                        });
-                        dispatch(GetDistributionCenter());
-                      }}
-                      required
-                      options={optioncategory}
-                    />
-                    }
+                            product_uid: e?.value,
+                          });
+                          dispatch(GetDistributionCenter());
+                        }}
+                        required
+                        options={optioncategory}
+                      />
+                    )}
                   </>
                 </FormGroup>
               </Col>
-
-             
 
               <Col lg={6}>
                 <FormGroup>
                   <label>
-                    <IntlMessages id="Select Distribution Center"/>
+                    <IntlMessages id="Select Distribution Center" />
                   </label>
 
                   <>
-                  {distributioncenterloader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      onChange={(e) => {
-                        setStocksall({
-                          ...stocksall,
+                    {distributioncenterloader ? (
+                      <div className="">
+                        <Loader
+                          height={18}
+                          width={18}
+                          type="Oval"
+                          color="#0066b3"
+                        />
+                        &nbsp;
+                      </div>
+                    ) : (
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        onChange={(e) => {
+                          setStocksall({
+                            ...stocksall,
 
-                          distribution_centre_uid: e?.value,
-                          
-                          
-                        });
-                      }}
-                      required
-                      options={distributioncenterData}
-                    />
-                    }
+                            distribution_centre_uid: e?.value,
+                          });
+                        }}
+                        required
+                        options={distributioncenterData}
+                      />
+                    )}
                   </>
                 </FormGroup>
               </Col>
-
-             
 
               <Col lg={6}>
                 <FormGroup>
@@ -268,20 +258,18 @@ export default function CreateStock({ history }) {
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
                     onChange={(e) =>
-                      setStocksall({ ...stocksall, quantity: Number(e.target.value) })
+                      setStocksall({
+                        ...stocksall,
+                        quantity: Number(e.target.value),
+                      })
                     }
                   />
                 </FormGroup>
               </Col>
-
-
-
-
-             
             </Row>
 
             <Button
-                style={{backgroundColor:'#0066b3'}}
+              style={{ backgroundColor: '#0066b3' }}
               size="sm"
               onClick={onStockCreate}
             >
@@ -289,15 +277,37 @@ export default function CreateStock({ history }) {
                 <div className="d-flex justify-content-center">
                   <Loader height={18} width={18} type="Oval" color="#fff" />
                   &nbsp; Creating
-                </div> 
+                </div>
               ) : (
                 'Add Stock'
               )}
+
+              
             </Button>
+            <Button
+                className="btn btn-primary ml-1"
+                style={{ 'background-color': '#0066b3' }}
+                size="sm"
+                onClick={showModal}
+              >
+                <span className="spinner d-inline-block">
+                  <span className="bounce1" />
+                  <span className="bounce2" />
+                  <span className="bounce3" />
+                </span>
+                Add Bulk Stock
+              </Button>
           </Form>
         </Formik>
         <div style={{ marginTop: '30px' }} />
       </CardBody>
     </Card>
+    <StockBuldUpload
+    show={show}
+    handleClose={hideModal}
+    history={history}
+    />
+    </>
+    
   );
 }

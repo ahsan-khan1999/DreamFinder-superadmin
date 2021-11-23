@@ -167,7 +167,6 @@ export default function CreateSampleTransaction(props) {
       key: item?.uid,
     })
   );
-  console.log(parentStock, 'stock is here');
   const director = useSelector((state) => state?.ViewUserReducer?.director);
   let directorOption = [];
   director?.map((item) =>
@@ -186,7 +185,6 @@ export default function CreateSampleTransaction(props) {
       key: item?.uid,
     })
   );
-  console.log(salesManagerOption);
 
   const provalue = [];
   const handleChangeProduct = async (e, index) => {
@@ -222,7 +220,6 @@ export default function CreateSampleTransaction(props) {
     });
   };
   const AddSampleTransaction = async () => {
-    console.log(sampleTransaction, 'sample');
     if (
       sampleTransaction === undefined ||
       !('medicines' in sampleTransaction)
@@ -267,14 +264,7 @@ export default function CreateSampleTransaction(props) {
     }
   };
 
-  const test = () => {
-    console.log(sampleTransaction, 'sa,mple');
-    if ('medicines' in sampleTransaction) {
-      alert('test if');
-    } else {
-      alert('else');
-    }
-  };
+  
 
   let [option, setOption] = useState('');
   const getSample = (uid) => {

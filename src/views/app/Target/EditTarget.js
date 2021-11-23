@@ -117,10 +117,9 @@ export default function EditTarget(props) {
   const loading = useSelector((state) => state?.TargetReducer?.loading);
   const distributionCenterOption = [];
   distributionCenter?.map((item) =>
-    // console.log(item?.areas[0]?.parent?.name)
     distributionCenterOption.push({
-      label: item?.areas[0]?.parent?.name,
-      value: item?.areas[0]?.parent?.name,
+      label: item?.name,
+      value: item?.name,
       key: item?.uid,
     })
   );

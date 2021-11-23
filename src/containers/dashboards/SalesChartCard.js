@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardBody,
@@ -16,6 +16,7 @@ import { LineChart } from 'components/charts';
 
 import { lineChartData } from 'data/charts';
 import Switch from 'rc-switch';
+import apiServices from 'services/requestHandler';
 
 export const SalesChartCard = () => {
   const [display, setDisplay] = useState(true);
@@ -24,7 +25,6 @@ export const SalesChartCard = () => {
   return (
     <Card>
       <div className="position-absolute card-top-buttons">
-        
         <Switch
           // name={name}
           className="custom-switch custom-switch-primary"
@@ -92,6 +92,13 @@ export const PrescriptionChartCard = () => {
 };
 
 export const OrderChartCard = () => {
+  // const getOrderData = async () => {
+  //   let res = await apiServices.getDashboardData();
+  //   console.log(res, 'res');
+  // };
+  // useEffect(() => {
+  //   getOrderData();
+  // }, []);
   const [display, setDisplay] = useState(true);
 
   const toggle = () => setDisplay(!display);

@@ -347,7 +347,6 @@ export default function RegionTreeView({ history }) {
               treeData={data}
               getNodeKey={({ node }) => node.uid}
               onChange={(treeData) => {
-                console.log(treeData,"onChgange");
                 setData(treeData)
               }}
               isVirtualized={false}

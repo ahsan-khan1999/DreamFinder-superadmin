@@ -46,7 +46,6 @@ const ViewRole = ({ match, history }) => {
   const [doc, setDoc] = useState();
   const role = useSelector((state) => state?.ViewUserReducer?.roles);
   const loading = useSelector((state) => state?.ViewUserReducer?.loading);
-  console.log(role);
   // useEffect(() => {
   //   setDoc();
   // }, [user]);

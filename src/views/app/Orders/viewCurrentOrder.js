@@ -75,7 +75,6 @@ export default function viewCurrentOrderComponent(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspandorder(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
       setsuspendloader(false);
         NotificationManager.success(
@@ -102,7 +101,6 @@ export default function viewCurrentOrderComponent(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspandorder(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
       setsuspendloader(false);
 

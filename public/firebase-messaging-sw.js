@@ -1,46 +1,13 @@
-// importScripts('https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js');
-// importScripts('https://www.gstatic.com/firebasejs/5.9.4/firebase-messaging.js');
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyDlHdMHt8VvlufMuzFW8TaZXPlO6yylsZY',
-//   authDomain: 'dmfr-7d776.firebaseapp.com',
-//   projectId: 'dmfr-7d776',
-//   storageBucket: 'dmfr-7d776.appspot.com',
-//   messagingSenderId: '883082489982',
-//   appId: '1:883082489982:web:a624329759c54a7ee4682f',
-//   measurementId: 'G-K4WLK8ZL9M',
-// };
-// firebase.initializeApp(firebaseConfig);
-// const messaging = firebase.messaging();
-// messaging.setBackgroundMessageHandler(function (payload) {
-//   const promiseChain = clients
-//     .matchAll({
-//       type: 'window',
-//       includeUncontrolled: true,
-//     })
-//     .then((windowClients) => {
-//       for (let i = 0; i < windowClients.length; i++) {
-//         const windowClient = windowClients[i];
-//         windowClient.postMessage(payload);
-//       }
-//     })
-//     .then(() => {
-//       return registration.showNotification('my notification title');
-//     });
-//   return promiseChain;
-// });
-// self.addEventListener('notificationclick', function (event) {
-//   console.log(event);
-// });
 importScripts('https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/5.9.4/firebase-messaging.js');
 const firebaseConfig = {
-  apiKey: 'AIzaSyDlHdMHt8VvlufMuzFW8TaZXPlO6yylsZY',
-  authDomain: 'dmfr-7d776.firebaseapp.com',
-  projectId: 'dmfr-7d776',
-  storageBucket: 'dmfr-7d776.appspot.com',
-  messagingSenderId: '883082489982',
-  appId: '1:883082489982:web:a624329759c54a7ee4682f',
-  measurementId: 'G-K4WLK8ZL9M',
+  apiKey: 'AIzaSyBy4eBIxA1GuGcK9TpcXf2FxJCAMUl3SHw',
+  authDomain: 'concordpharma-9d29f.firebaseapp.com',
+  projectId: 'concordpharma-9d29f',
+  storageBucket: 'concordpharma-9d29f.appspot.com',
+  messagingSenderId: '966861684005',
+  appId: '1:966861684005:web:55829152e2973e9fa5aecc',
+  measurementId: 'G-LK6DL35KQN',
 };
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
@@ -61,5 +28,4 @@ messaging.setBackgroundMessageHandler(function (payload) {
     });
   return promiseChain;
 });
-self.addEventListener('notificationclick', function (event) {
-});
+self.addEventListener('notificationclick', function (event) {});

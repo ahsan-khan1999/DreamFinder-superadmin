@@ -46,13 +46,10 @@ export default function Orders({ match, history }) {
 
     let res = await dispatch(OrderAction());
 
-    console.log("res Concord Order",res);
   };
 
   const orders = useSelector((state) => state?.orderReducer?.order);
   const loading = useSelector((state) => state?.orderReducer?.loading);
-  console.log("LoadingOrder")
-  console.log(orders);
 
 
   const changeRoute = async (item) => {

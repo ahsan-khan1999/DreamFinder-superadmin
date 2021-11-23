@@ -90,7 +90,6 @@ export default function ViewCurrentProductCategory(props) {
     props.history.push('/app/stocks-management/viewProductCategory');
   };
 
-  console.log(CurrentProductCategory, 'CurrentProductCategory');
 
   let [suspendloader, setsuspendloader] = useState(false);
 
@@ -99,10 +98,8 @@ export default function ViewCurrentProductCategory(props) {
       let apiData = {
         uid: CurrentProductCategory?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true);
       let res = await apiServices.suspandproductcategory(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(
@@ -130,7 +127,6 @@ export default function ViewCurrentProductCategory(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspandproductcategory(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(

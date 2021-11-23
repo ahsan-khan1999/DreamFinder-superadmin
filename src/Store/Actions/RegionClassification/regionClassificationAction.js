@@ -18,7 +18,6 @@ export const CreateRegionAction = (data) => async (dispatch) => {
 
     
     let res = await apiServices.addRegion(data);
-    console.log(res);
     if (res?.data?.response_code === 200) {
       // dispatch(ReadRegionAction())
 

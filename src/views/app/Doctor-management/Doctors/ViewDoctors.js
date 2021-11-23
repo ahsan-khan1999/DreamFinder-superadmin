@@ -50,12 +50,10 @@ export default function ViewDoctors({ match, history }) {
 
     let res = await dispatch(GetDoctor());
 
-    console.log("res Concord Doctor",res);
   };
 
   const doctor = useSelector((state) => state?.doctorsReducer?.doctor);
   const loading = useSelector((state) => state?.doctorsReducer?.loading);
-  console.log(doctor);
 
 
   const changeRoute = async (item) => {

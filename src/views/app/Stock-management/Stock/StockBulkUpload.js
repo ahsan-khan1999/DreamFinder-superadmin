@@ -19,8 +19,7 @@ import { Row, Card, CardTitle, Label, FormGroup } from 'reactstrap';
 import { NotificationManager } from 'components/common/react-notifications';
 import axios from 'axios';
 import IntlMessages from 'helpers/IntlMessages';
-import ProductsData from '../../../../static/files/ProductsData.xlsx'
-
+import sample_stock_data from '../../../../static/files/StocksData.xlsx';
 const AddBulkUploadModal = (props) => {
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -28,7 +27,6 @@ const AddBulkUploadModal = (props) => {
   const { handleClose, show } = props;
   const [file, setFile] = useState();
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
-  
   let option_static_Category = [];
   staticdata?.product_category__category_list?.filter((item) =>
     option_static_Category.push({
@@ -51,7 +49,7 @@ const AddBulkUploadModal = (props) => {
 
       formdata.append('file', file[0]);
       let res = await axios.post(
-        `https://concord-backend-m2.herokuapp.com/api/products/bulk_create/${selectedCategory?.toLowerCase()}`,
+        `https://concord-backend-m2.herokuapp.com/api/stocks/bulk-create`,
         formdata,
         {
           headers: {
@@ -79,11 +77,12 @@ const AddBulkUploadModal = (props) => {
           5000,
           ''
         );
-      setLoading(false);
-
+        setLoading(false);
       }
       setLoading(false);
     }
+    setLoading(false);
+
   };
 
   const test = () => {
@@ -97,26 +96,7 @@ const AddBulkUploadModal = (props) => {
         Add Bulk
       </ModalHeader>
       <ModalBody>
-        <Col lg={12}>
-          <FormGroup>
-            <label>
-              <IntlMessages id="Select Category" />
-            </label>
-
-            <Select
-              required
-              components={{ Input: CustomSelectInput }}
-              className="react-select"
-              classNamePrefix="react-select"
-              onChange={(e) => {
-                //   dispatch(getCategory(e.value));
-                setSelectedCategory(e.label);
-              }}
-              required
-              options={option_static_Category}
-            />
-          </FormGroup>
-        </Col>
+        
         <Col>
           <div className="form-row">
             <div className="form-group col-md-12">
@@ -156,9 +136,9 @@ const AddBulkUploadModal = (props) => {
               <Button
                 className="btn btn-primary"
                 style={{ backgroundColor: '#0066b3' }}
+                href={sample_stock_data}
+                download={sample_stock_data}
                 target="_blank"
-                href={ProductsData}
-                download={ProductsData}
                 onClick={test}
                 size="sm"
               >

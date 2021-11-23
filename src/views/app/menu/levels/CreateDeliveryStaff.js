@@ -116,7 +116,6 @@ export default function CreateDeliveryStaff({ history }) {
       : null
   );
 
-  console.log(roles);
   let depoManagerFilter = [];
   depoManager?.filter((item) =>
     depoManagerFilter?.push({

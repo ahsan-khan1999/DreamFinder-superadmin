@@ -40,7 +40,6 @@ export default function CreateDepartmenthead({ history }) {
 
   const onSubmit = (values) => {
     onDepartHeadCreate(values);
-    console.log(values,"Hello");
   };
 
 
@@ -74,7 +73,6 @@ export default function CreateDepartmenthead({ history }) {
       );
       return;
     } else {
-      console.log(values,"ResPnoseWala");
       let res = await dispatch(CreateDepartmentHead({ ...values }));
 
       if (res) {

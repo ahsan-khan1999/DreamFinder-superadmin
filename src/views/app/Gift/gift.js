@@ -903,7 +903,6 @@ const Gift = (props) => {
                         </thead>
                         <tbody>
                           {array?.map((item, index) => {
-                            console.log(item, 'at item');
                             return (
                               <tr>
                                 <td>{item?.label}</td>

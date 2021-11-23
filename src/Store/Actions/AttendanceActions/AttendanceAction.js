@@ -21,7 +21,6 @@ export const ViewAttendanceAction = () => async (dispatch) => {
     });
 
     let res = await apiServices.readAttendance();
-    console.log(res);
     if (res?.data?.response_code === 200) {
       dispatch({
         type: VIEW_ATTENDANCE_CONSTANT.VIEW_ATTENDANCE_LOADING,
@@ -48,7 +47,6 @@ export const SuspandAttendanceAction = (data) => async (dispatch) => {
     });
 
     let res = await apiServices.suspandAttendance(data);
-    console.log(res);
     if (res?.response_code === 200) {
       dispatch({
         type: SUSPAND_ATTENDANCE_CONSTANT.SUSPAND_ATTENDANCE_LOADING,
@@ -78,7 +76,6 @@ export const CreateAttendanceAction = (data) => async (dispatch) => {
     });
 
     let res = await apiServices.createAttendance(data);
-    console.log(res);
     if (res?.data?.response_code === 200) {
       dispatch({
         type: CREATE_ATTENDANCE_CONSTANT.CREATE_ATTENDANCE_LOADING,

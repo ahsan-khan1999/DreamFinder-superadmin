@@ -26,7 +26,6 @@ export default function ViewCurrentProduct(props) {
   const [thisView, setThisView] = useState(true);
 
   const CurrentProduct = props?.location?.state;
-  console.log(CurrentProduct);
   const [imageUploadData, setImageUploadData] = useState({});
   const [loadingFileUpload, setLoadingFileUpload] = useState(false);
   const [file, setFile] = useState();
@@ -97,7 +96,6 @@ export default function ViewCurrentProduct(props) {
       key: item?.uid,
     })
   );
-  console.log(getProductCategory, 'getProductCategory');
 
   const editProfile = (e) => {
     e.preventDefault();
@@ -138,10 +136,8 @@ export default function ViewCurrentProduct(props) {
       let apiData = {
         uid: CurrentProduct?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true);
       let res = await apiServices.suspandproducts(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(
@@ -168,7 +164,6 @@ export default function ViewCurrentProduct(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspandproducts(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(

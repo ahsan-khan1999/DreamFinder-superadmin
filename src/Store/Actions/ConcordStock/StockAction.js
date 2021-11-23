@@ -91,7 +91,6 @@ export const GetStocks = () => async (dispatch) => {
         payload: true,
       });
       let res = await apiServices.updatestocks(data);
-      console.log(res);
       if (res?.response_code === 200) {
         dispatch({
           type: STOCKS_CONSTANT.UPDATE_STOCKS_LOADING,

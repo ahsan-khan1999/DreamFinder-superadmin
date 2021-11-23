@@ -24,8 +24,6 @@ export default function CreateDoctors({ history }) {
   
   
     const onSubmit = (event, errors, values) => {
-      console.log(errors);
-      console.log(values);
       if (errors.length === 0) {
         onDoctorCreate();
       }
@@ -253,7 +251,6 @@ export default function CreateDoctors({ history }) {
       );
       return;
     } else {
-    console.log(apiData, 'doctorCreate');
     let res = await dispatch(CreateDoctorsRecord( {...apiData} ));
 
     if (res) {
@@ -810,7 +807,6 @@ export default function CreateDoctors({ history }) {
                                   onClick={() => {
                                     const test = [...array];
                                     test.splice(index, 1);
-                                    console.log(test);
                                     setArray(test);
                                   }}
                                   style={{ fontSize: '20px', color: 'red' }}

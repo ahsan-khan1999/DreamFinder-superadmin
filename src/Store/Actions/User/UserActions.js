@@ -45,7 +45,6 @@ export const ViewAdminAction = (history) => async (dispatch) => {
     });
 
     let response = await apiServices.getAdmin();
-    console.log(response);
     Check_Authentication(response,history);
 
     if (response?.data?.response_code === 200) {

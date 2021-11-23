@@ -32,8 +32,6 @@ export default function ViewCurrentDoctorsCategory(props) {
 
 
   const onSubmit = (event, errors, values) => {
-    console.log(errors);
-    console.log(values);
     if (errors.length === 0) {
       onDoctorCategoryCreate();
     }
@@ -104,10 +102,8 @@ export default function ViewCurrentDoctorsCategory(props) {
       let apiData = {
         uid: CurrentDoctorCategory?.uid,
       };
-      console.log(apiData);
       setsuspendloader(true);
       let res = await apiServices.suspanddoctorcategorys(apiData);
-      console.log(res);
       if (res?.data?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(
@@ -134,7 +130,6 @@ export default function ViewCurrentDoctorsCategory(props) {
       };
       setsuspendloader(true);
       let res = await apiServices.suspanddoctorcategorys(apiData);
-      console.log(res);
       if (res?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(

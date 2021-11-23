@@ -41,7 +41,6 @@ import apiServices from 'services/requestHandler';
 
 export default function EditRole(props) {
   let currentRole = props.location.state;
-  console.log(currentRole);
   const [view, setView] = useState(true);
   const [loading, setLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState('');
@@ -63,7 +62,6 @@ export default function EditRole(props) {
 
   const user_role = useSelector((state) => state.ViewUserReducer?.staticData);
   let categoryOption = [];
-  console.log(user_role?.user_roles_and_rights);
   user_role?.user_roles_and_rights?.map((item) =>
     categoryOption.push({
       label: item?.name,

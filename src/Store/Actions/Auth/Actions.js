@@ -69,7 +69,6 @@ export const Login_action = (data) => async (dispatch) => {
 export const logOutUser = () => async (dispatch) => {
   try {
     let res = await apiServices.logout();
-    console.log(res);
     if (res?.data?.response_code === 200) {
       dispatch({
         type: LOGOUT_USER,
@@ -104,7 +103,6 @@ export const ChangePasswordAction = (data) => async (dispatch) => {
 
     let res = await apiServices.changePassword(data);
 
-    console.log(res);
     if (res?.response_code === 200) {
       dispatch({
         type: CHANGE_PASSWORD_CONSTANT.CHANGE_PASSWORD_LOADING,
@@ -138,7 +136,6 @@ export const ForgotAction = (data) => async (dispatch) => {
       payload: true,
     });
     const res = await apiServices.forgotPassword(data);
-    console.log(res);
 
     if (res?.data?.response_code === 200) {
       dispatch({

@@ -47,12 +47,10 @@ export default function ViewProductCategory({ match, history }) {
 
     let res = await dispatch(GetProductCategory());
 
-    console.log("res Concord DepartmentHeads",res);
   };
 
   const productcategory = useSelector((state) => state?.productCategoryReducer?.productcategory);
   const loading = useSelector((state) => state?.productCategoryReducer?.loading);
-  console.log(productcategory);
 
 
   const changeRoute = async (item) => {

@@ -15,7 +15,6 @@ export const View_Doctor = () => async (dispatch) => {
       payload: true,
     });
     let response = await apiServices.getUsers();
-    console.log(response);
     
 
     if (response?.data?.response_code === 200) {

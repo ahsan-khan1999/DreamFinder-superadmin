@@ -61,7 +61,6 @@ export default function CreateProductCategory({ history }) {
       );
       return;
     } else {
-      console.log(productcategory);
       let res = await dispatch(CreateProductCategories({ ...productcategory }));
 
       if (res) {

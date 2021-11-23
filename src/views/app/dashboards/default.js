@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { injectIntl } from 'react-intl';
 import { Row } from 'reactstrap';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
@@ -23,10 +23,17 @@ import ProductCategoriesPolarArea from 'containers/dashboards/ProductCategoriesP
 import WebsiteVisitsChartCard from 'containers/dashboards/WebsiteVisitsChartCard';
 import ConversionRatesChartCard from 'containers/dashboards/ConversionRatesChartCard';
 import TopRatedItems from 'containers/dashboards/TopRatedItems';
-
+import apiServices from 'services/requestHandler';
+import axios from 'axios'
 const DefaultDashboard = ({ intl, match }) => {
   const { messages } = intl;
-
+  const getOrderData = async() => {
+   
+    let res = await apiServices.getDashboardData()
+  }
+  useEffect(() => {
+    getOrderData()
+  }, [])
   return (
     <>
       <Row>
