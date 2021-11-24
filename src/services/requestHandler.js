@@ -22,7 +22,7 @@ const SERVICE_URLS = {
   createUser: 'user/create',
   getAdmin: 'users/read/admin',
   getDirector: 'users/read/director',
-  getDepoManagerAssigned: 'users/read/depot_manager',
+  getDepoManagerAll: 'users/read/depot_manager',
   getDeliveryStaff: 'users/read/delivery_staff',
   getSM: 'users/read/sm',
   getRSM: 'users/read/rsm',
@@ -379,7 +379,7 @@ const getDirector = async () =>
   );
 const getDepo = async () =>
   get(
-    SERVICE_URLS.getDepoManagerAssigned,
+    SERVICE_URLS.getDepoManagerAll,
     {},
     {
       feature: featureConstants.static,
