@@ -15,7 +15,7 @@ import { ThemeColors } from 'helpers/ThemeColors';
 const colors = ThemeColors();
 import IntlMessages from 'helpers/IntlMessages';
 import { LineChart } from 'components/charts';
-
+import Bar from 'components/charts/Bar'
 import { lineChartData } from 'data/charts';
 import Switch from 'rc-switch';
 import apiServices from 'services/requestHandler';
