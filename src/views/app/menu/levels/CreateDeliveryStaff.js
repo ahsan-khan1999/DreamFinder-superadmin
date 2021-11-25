@@ -397,7 +397,7 @@ export default function CreateDeliveryStaff({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Area" />
+                    <IntlMessages id="Select Territory" />
                   </Label>
                   {loadingLocation ? (
                     <div className="">
