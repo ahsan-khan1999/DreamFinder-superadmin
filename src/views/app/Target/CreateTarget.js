@@ -517,11 +517,11 @@ export default function CreateTarget(props) {
         target?.by_doctor_visits === undefined ||
         target?.no_orders === undefined ||
         target?.no_prescriptions === undefined ||
-        target?.medicines?.map((item) => item?.quantity === 0) ||
         target?.medicines === [] ||
         target?.medicines?.length === 0
       ) {
-        alert('at if mpo');
+        // alert('at if mpo');
+        console.log(target,"at target");
         NotificationManager.error('Enter Details', 'Error', 5000, null, '');
         return;
       } else {
@@ -538,6 +538,8 @@ export default function CreateTarget(props) {
 
           props.history.push('/app/Target/ViewTarget');
         }
+      setLoading(false);
+
       }
     } else {
       setLoading(false);
