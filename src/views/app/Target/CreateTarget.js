@@ -209,7 +209,7 @@ export default function CreateTarget(props) {
     setLoadingStocks(true);
     let token = await getToken();
     const response = await axios.get(
-      `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?distribution_centre_uid=${uid}`,
+      `https://concord-backend-m2.herokuapp.com/api/stocks/read/medicine?distribution_center_uid=${uid}`,
       {
         headers: {
           x_session_key: token.token,
