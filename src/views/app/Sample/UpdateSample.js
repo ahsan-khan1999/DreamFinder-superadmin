@@ -472,7 +472,7 @@ export default function UpdateSample(props) {
             <span className="bounce3" />
           </span>
           <span className="label">
-            Suspand Sample
+          Suspend Sample
           </span>
         </Button>
       </CardBody>

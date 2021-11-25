@@ -180,12 +180,16 @@ const SERVICE_URLS = {
 
   giftAssignment: 'fieldstaffs/gift-assignment',
   readAssignedGift: 'fieldstaffs/read_all_gifts',
-  dashboard: 'dashboard/',
 };
 const AssignGift = (data) =>
   patch(SERVICE_URLS.giftAssignment, data, {
     feature: featureConstants.static,
   });
+const getDashboardChart = (convertFrom, convertTo) => {
+  let url = `https://concord-backend-m2.herokuapp.com/api/dashboard/${convertFrom}/${convertTo}`;
+  return get(url, {}, { feature: featureConstants.static });
+};
+
 const ReadStatic = () =>
   get(SERVICE_URLS.readStatic, {}, { feature: featureConstants.static });
 const CreateSample = (data) =>
@@ -875,19 +879,12 @@ const ReadAssignedGifts = (data) =>
   get(SERVICE_URLS.readAssignedGift, data, {
     feature: featureConstants.static,
   });
-const getDashboardData = () =>
-  get(
-    SERVICE_URLS.dashboard,
-    {},
-    {
-      feature: featureConstants.static,
-    }
-  );
+
 // post g
 
 const apiServices = {
   // define variables
-  getDashboardData,
+
   ReadAssignedGifts,
   EditRegion,
   addRegion,
@@ -1061,5 +1058,6 @@ const apiServices = {
   suspandcustomers,
 
   AssignGift,
+  getDashboardChart,
 };
 export default apiServices;

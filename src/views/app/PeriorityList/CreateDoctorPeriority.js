@@ -6,6 +6,7 @@ import {
   CreateAdminAction,
   ViewAdminAction,
   ViewRoleAction,
+  ViewSalesManagerManagerAction,
 } from 'Store/Actions/User/UserActions';
 import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
@@ -16,44 +17,82 @@ import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import Breadcrumb from 'containers/navs/Breadcrumb';
 import { useState } from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import {
   CreateCustomerPeriorityListAction,
   CreateDoctorPeriorityListAction,
+  ViewMpoDoctor,
 } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import apiServices from 'services/requestHandler';
 import axios from 'axios';
 import { getToken } from 'Utils/auth.util';
 import Loader from 'react-loader-spinner';
+import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
 
 export default function CreatePeriorityList(props) {
   const dispatch = useDispatch();
-  const [loadingList, setLoadingList] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [doctor, setDoctor] = useState([]);
   const [doctorID, setDoctorID] = useState('');
-  // const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
+  const doctor = useSelector(state => state?.ViewPeriorityRedcuer?.doctor)
+  const loadingDoctor = useSelector(state => state?.ViewPeriorityRedcuer?.loadingDoctor)
 
-  const readDoctor = async () => {
-    setLoadingList(true);
-    let token = await getToken();
-    let res = await axios.get(
-      'https://concord-backend-m2.herokuapp.com/api/doctors/read',
-      {
-        headers: {
-          'x-session-key': token?.token,
-          'x-session-type': token?.type,
-        },
-      }
-    );
-    setLoadingList(false);
 
-    setDoctor(res?.data?.response_data);
-  };
+  const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
+  const loadingSM = useSelector((state) => state?.ViewUserReducer?.loading);
+
+  const customers = useSelector(
+    (state) => state?.ViewPeriorityRedcuer?.customers
+  );
+  const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
+  const am = useSelector((state) => state?.AttendanceReducer?.am);
+  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
+
+  let salesManagerOption = [];
+  sm?.map((item) =>
+    salesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+
+  let regionalSalesManagerOption = [];
+  rsm?.map((item) =>
+    regionalSalesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  let areaManagerOption = [];
+  am?.map((item) =>
+    areaManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  let mpoOption = [];
+  mpo?.map((item) =>
+    mpoOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+ 
   useEffect(() => {
-    readDoctor();
+    // readDoctor();
+    dispatch(ViewSalesManagerManagerAction())
   }, []);
   let doctorOptions = [];
   doctor?.map((item) =>
@@ -91,12 +130,114 @@ export default function CreatePeriorityList(props) {
         <Formik>
           <Form>
             <Row className="h-100">
+
+
+            <Col lg={6}>
+                <FormGroup>
+                  <Label>Select Sales Manager</Label>
+                  <Select
+                    required
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name-gender"
+                    onChange={async (val) => {
+                      dispatch(getUsers(val.key, 'rsm'));
+                    }}
+                    options={salesManagerOption}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Select Regional Sales Manager</Label>
+                  {loadingRSM ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        dispatch(getUsers(val.key, 'am'));
+                      }}
+                      options={regionalSalesManagerOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Select Area Manager</Label>
+                  {loadingAM ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        dispatch(getUsers(val.key, 'mpo'));
+                      }}
+                      options={areaManagerOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Select MPO</Label>
+                  {loadingMPO ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        dispatch(ViewMpoDoctor(val?.key));
+                      }}
+                      options={mpoOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
               <Col lg={6}>
                 <FormGroup>
                   <label>Select Doctor</label>
 
                   <>
-                    {loadingList ? (
+                    {loadingDoctor ? (
                       <div className="">
                         <Loader
                           height={18}

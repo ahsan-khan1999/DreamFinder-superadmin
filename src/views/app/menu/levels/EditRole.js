@@ -235,7 +235,7 @@ export default function EditRole(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">Suspand Role</span>
+              <span className="label">Suspend Role</span>
             </Button>
           </Form>
         </Formik>

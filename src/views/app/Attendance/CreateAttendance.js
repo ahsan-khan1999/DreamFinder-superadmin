@@ -96,6 +96,15 @@ export default function CreateAttendance(props) {
   const deliveryStaff = useSelector(
     (state) => state?.ViewUserReducer?.deliveryStaff
   );
+  console.log(depo,"depo");
+let depoOption = []
+depo?.map((item) => (
+  depoOption?.push({
+    label:item?.name,
+    value:item?.name,
+    key:item?.uid
+  })
+))
 
   let directorOption = [];
   directorUser?.map((item) =>
@@ -357,7 +366,7 @@ export default function CreateAttendance(props) {
                             user_uid: val?.key,
                           })
                         }
-                        options={directorOption}
+                        options={depoOption}
                       />
                     </FormGroup>
                   </Col>

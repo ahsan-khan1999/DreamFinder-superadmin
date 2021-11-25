@@ -10,13 +10,16 @@ import {
   DropdownToggle,
   DropdownMenu,
 } from 'reactstrap';
+import { ThemeColors } from 'helpers/ThemeColors';
 
+const colors = ThemeColors();
 import IntlMessages from 'helpers/IntlMessages';
 import { LineChart } from 'components/charts';
 
 import { lineChartData } from 'data/charts';
 import Switch from 'rc-switch';
 import apiServices from 'services/requestHandler';
+import moment from 'moment';
 
 export const SalesChartCard = () => {
   const [display, setDisplay] = useState(true);
@@ -64,9 +67,33 @@ export const SalesChartCard = () => {
   );
 };
 
-export const PrescriptionChartCard = () => {
-  const [display, setDisplay] = useState(true);
+export const PrescriptionChartCard = (props) => {
+  let label = props?.data?.time_list?.map((item) =>
+    moment.unix(item).format('dddd ')
+  );
 
+
+  let lineChartDataTest = {
+    labels: label,
+    datasets: [
+      {
+        label: '',
+        data: props?.data?.prescription?.map((item) => {
+          return item;
+        }),
+        borderColor: colors.themeColor1,
+        pointBackgroundColor: colors.foregroundColor,
+        pointBorderColor: colors.themeColor1,
+        pointHoverBackgroundColor: colors.themeColor1,
+        pointHoverBorderColor: colors.foregroundColor,
+        pointRadius: 6,
+        pointBorderWidth: 2,
+        pointHoverRadius: 8,
+        fill: false,
+      },
+    ],
+  };
+  const [display, setDisplay] = useState(true);
   const toggle = () => setDisplay(!display);
   return (
     <Card>
@@ -83,7 +110,7 @@ export const PrescriptionChartCard = () => {
         </CardTitle>
         {display ? (
           <div className="dashboard-line-chart">
-            <LineChart shadow data={lineChartData} />
+            <LineChart shadow data={lineChartDataTest} />
           </div>
         ) : null}
       </CardBody>
@@ -91,14 +118,31 @@ export const PrescriptionChartCard = () => {
   );
 };
 
-export const OrderChartCard = () => {
-  // const getOrderData = async () => {
-  //   let res = await apiServices.getDashboardData();
-  //   console.log(res, 'res');
-  // };
-  // useEffect(() => {
-  //   getOrderData();
-  // }, []);
+export const OrderChartCard = (props) => {
+  let label = props?.data?.time_list?.map((item) =>
+    moment.unix(item).format('dddd ')
+  );
+
+  let lineChartDataTest = {
+    labels: label,
+    datasets: [
+      {
+        label: '',
+        data: props?.data?.order?.map((item) => {
+          return item;
+        }),
+        borderColor: colors.themeColor1,
+        pointBackgroundColor: colors.foregroundColor,
+        pointBorderColor: colors.themeColor1,
+        pointHoverBackgroundColor: colors.themeColor1,
+        pointHoverBorderColor: colors.foregroundColor,
+        pointRadius: 6,
+        pointBorderWidth: 2,
+        pointHoverRadius: 8,
+        fill: false,
+      },
+    ],
+  };
   const [display, setDisplay] = useState(true);
 
   const toggle = () => setDisplay(!display);
@@ -117,7 +161,7 @@ export const OrderChartCard = () => {
         </CardTitle>
         {display ? (
           <div className="dashboard-line-chart">
-            <LineChart shadow data={lineChartData} />
+            <LineChart shadow data={lineChartDataTest} />
           </div>
         ) : null}
       </CardBody>

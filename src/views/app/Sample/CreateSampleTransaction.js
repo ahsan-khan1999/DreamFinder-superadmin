@@ -47,7 +47,6 @@ import {
 import { SampleReducer } from 'Store/Reducers/SampleReducer/SampleReducer';
 import Loader from 'react-loader-spinner';
 const delaultOptions = [
-  { label: 'Director', value: 'Director', key: 1 },
   { label: 'SM', value: 'SM', key: 2 },
   { label: 'RSM', value: 'RSM', key: 3 },
 

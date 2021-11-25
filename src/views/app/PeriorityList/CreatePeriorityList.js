@@ -6,6 +6,7 @@ import {
   CreateAdminAction,
   ViewAdminAction,
   ViewRoleAction,
+  ViewSalesManagerManagerAction,
 } from 'Store/Actions/User/UserActions';
 import { CardBody, Col, Row, Table } from 'reactstrap';
 import IntlMessages from 'helpers/IntlMessages';
@@ -18,38 +19,79 @@ import { useState } from 'react';
 import { Formik, Form, Field, useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
-import { CreateCustomerPeriorityListAction } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
+import {
+  CreateCustomerPeriorityListAction,
+  ViewMpoCustomer,
+} from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import apiServices from 'services/requestHandler';
 import axios from 'axios';
 import { getToken } from 'Utils/auth.util';
 import Loader from 'react-loader-spinner';
+import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
 
 export default function CreatePeriorityList(props) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [loadingList, setLoadingList] = useState(false);
-  const [customers, setCustomers] = useState([]);
+  // const [customers, setCustomers] = useState([]);
   const [customersID, setCustomersID] = useState('');
+  const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
+  const loadingSM = useSelector((state) => state?.ViewUserReducer?.loading);
 
- 
-  const readCustomers = async () => {
-    setLoadingList(true);
-    let token = await getToken();
-    let res = await axios.get(
-      'https://concord-backend-m2.herokuapp.com/api/customers/read',
-      {
-        headers: {
-          'x-session-key': token?.token,
-          'x-session-type': token?.type,
-        },
-      }
-    );
-    setLoadingList(false);
-    setCustomers(res?.data?.response_data);
-  };
-  // const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
+  const customers = useSelector(
+    (state) => state?.ViewPeriorityRedcuer?.customers
+  );
+  const loadingCustomers = useSelector(
+    (state) => state?.ViewPeriorityRedcuer?.loadingCustomers
+  );
+  const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
+  const am = useSelector((state) => state?.AttendanceReducer?.am);
+  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
+
+  let salesManagerOption = [];
+  sm?.map((item) =>
+    salesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+
+  let regionalSalesManagerOption = [];
+  rsm?.map((item) =>
+    regionalSalesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  let areaManagerOption = [];
+  am?.map((item) =>
+    areaManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  let mpoOption = [];
+  mpo?.map((item) =>
+    mpoOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+
+
   useEffect(() => {
-    readCustomers();
+    // readCustomers();
+    dispatch(ViewSalesManagerManagerAction());
   }, []);
   let customerOptions = [];
   customers?.map((item) =>
@@ -89,10 +131,110 @@ export default function CreatePeriorityList(props) {
             <Row className="h-100">
               <Col lg={6}>
                 <FormGroup>
+                  <Label>Select Sales Manager</Label>
+                  <Select
+                    required
+                    components={{ Input: CustomSelectInput }}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    name="form-field-name-gender"
+                    onChange={async (val) => {
+                      dispatch(getUsers(val.key, 'rsm'));
+                    }}
+                    options={salesManagerOption}
+                  />
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Select Regional Sales Manager</Label>
+                  {loadingRSM ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        dispatch(getUsers(val.key, 'am'));
+                      }}
+                      options={regionalSalesManagerOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Select Area Manager</Label>
+                  {loadingAM ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        dispatch(getUsers(val.key, 'mpo'));
+                      }}
+                      options={areaManagerOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>Select MPO</Label>
+                  {loadingMPO ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      onChange={async (val) => {
+                        dispatch(ViewMpoCustomer(val?.key));
+                      }}
+                      options={mpoOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
                   <label>Select Customer</label>
 
                   <>
-                    {loadingList ? (
+                    {loadingCustomers ? (
                       <div className="">
                         <Loader
                           height={18}
@@ -109,9 +251,8 @@ export default function CreatePeriorityList(props) {
                         className="react-select"
                         classNamePrefix="react-select"
                         name="form-field-name-gender"
-                       
                         onChange={(val) => {
-                          setCustomersID(val.key);
+                          setCustomersID(val?.key);
                         }}
                         options={customerOptions}
                       />

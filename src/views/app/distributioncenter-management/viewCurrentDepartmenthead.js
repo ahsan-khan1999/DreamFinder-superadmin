@@ -402,7 +402,7 @@ export default function viewCurrentDepartmenthead(props) {
               {suspendloader ? (
               <div className="d-flex justify-content-center">
                 <Loader height={18} width={18} type="Oval" color="#fff" />
-                &nbsp; Suspending
+                &nbsp; Suspended
               </div>
             ) : (
               buttonName

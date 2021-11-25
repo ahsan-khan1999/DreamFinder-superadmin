@@ -2207,7 +2207,7 @@ export default function EditTarget(props) {
                     <span className="bounce2" />
                     <span className="bounce3" />
                   </span>
-                  Suspand Target
+                  Suspend Target
                 </Button>
               </>
             ) : (

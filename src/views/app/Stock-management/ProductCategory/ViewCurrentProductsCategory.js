@@ -104,7 +104,7 @@ export default function ViewCurrentProductCategory(props) {
         setsuspendloader(false);
         NotificationManager.success(
           'Sucessfully Activated',
-          'Sucess',
+          'Success',
           5000,
           null,
           ''

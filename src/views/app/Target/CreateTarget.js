@@ -101,7 +101,7 @@ export default function CreateTarget(props) {
   }, []);
 
   const director = useSelector((state) => state?.ViewUserReducer?.director);
-  
+
   const distributionCenter = useSelector(
     (state) => state?.TargetReducer?.distributionCenter
   );
@@ -293,8 +293,9 @@ export default function CreateTarget(props) {
   // console.log(readTarsget,"read");
 
   const onTargetCreate = async () => {
-    setLoading(true);
     if (selected?.value === 'Director') {
+      setLoading(true);
+
       let startDate = moment(target?.start_date).format('YYYY-MM-DD h:mm:ss');
       let endDate = moment(target?.end_date).format('YYYY-MM-DD h:mm:ss');
       let apiData = {
@@ -320,6 +321,8 @@ export default function CreateTarget(props) {
         target?.medicines === [] ||
         target?.medicines?.length === 0
       ) {
+        setLoading(false);
+
         NotificationManager.error('Enter Details', 'Error', 5000, null, '');
       } else {
         let res = await dispatch(CreateTargetAction(apiData));
@@ -335,8 +338,11 @@ export default function CreateTarget(props) {
 
           props.history.push('/app/Target/ViewTarget');
         }
+        setLoading(false);
       }
     } else if (selected?.value === 'SM') {
+      setLoading(true);
+
       // console.log(targets);
       // console.log(targe);
       let startDate = moment
@@ -370,6 +376,8 @@ export default function CreateTarget(props) {
         target?.medicines === [] ||
         target?.medicines?.length === 0
       ) {
+        setLoading(false);
+
         NotificationManager.error('Enter Details', 'Error', 5000, null, '');
       } else {
         let res = await dispatch(CreateTargetAction(apiData));
@@ -385,8 +393,11 @@ export default function CreateTarget(props) {
 
           props.history.push('/app/Target/ViewTarget');
         }
+        setLoading(false);
       }
     } else if (selected?.value === 'RSM') {
+      setLoading(true);
+
       let startDate = moment
         .unix(readTarget?.start_date)
         .format('YYYY-MM-DD h:mm:ss');
@@ -419,6 +430,8 @@ export default function CreateTarget(props) {
         target?.medicines?.length === 0 ||
         target?.medicines === ''
       ) {
+        setLoading(false);
+
         NotificationManager.error('Enter Details', 'Error', 5000, null, '');
       } else {
         let res = await dispatch(CreateTargetAction(apiData));
@@ -434,8 +447,11 @@ export default function CreateTarget(props) {
 
           props.history.push('/app/Target/ViewTarget');
         }
+        setLoading(false);
       }
     } else if (selected?.value === 'AM') {
+      setLoading(true);
+
       let startDate = moment
         .unix(readTarget?.start_date)
         .format('YYYY-MM-DD h:mm:ss');
@@ -465,6 +481,8 @@ export default function CreateTarget(props) {
         target?.medicines === [] ||
         target?.medicines?.length === 0
       ) {
+      setLoading(false);
+
         NotificationManager.error('Enter Details', 'Error', 5000, null, '');
       } else {
         let res = await dispatch(CreateTargetAction(apiData));
@@ -480,8 +498,11 @@ export default function CreateTarget(props) {
 
           props.history.push('/app/Target/ViewTarget');
         }
+        setLoading(false);
       }
     } else if (selected?.value === 'MPO') {
+      setLoading(true);
+
       let startDate = moment
         .unix(readTarget?.start_date)
         .format('YYYY-MM-DD h:mm:ss');
@@ -520,11 +541,13 @@ export default function CreateTarget(props) {
         target?.medicines === [] ||
         target?.medicines?.length === 0
       ) {
-        // alert('at if mpo');
-        console.log(target,"at target");
+      setLoading(false);
+
         NotificationManager.error('Enter Details', 'Error', 5000, null, '');
         return;
       } else {
+      setLoading(true);
+
         let res = await dispatch(CreateTargetAction(apiData));
         if (res) {
           NotificationManager.success(
@@ -538,15 +561,13 @@ export default function CreateTarget(props) {
 
           props.history.push('/app/Target/ViewTarget');
         }
-      setLoading(false);
-
+        setLoading(false);
       }
     } else {
       setLoading(false);
     }
     setLoading(false);
   };
-  // console.log(targets[0]?.by_customer_visits?.by_customer_visits);
   const handleBack = () => {
     props.history.push('/app/Target/ViewTarget');
   };
@@ -554,7 +575,6 @@ export default function CreateTarget(props) {
   return (
     <Card>
       <CardBody>
-
         <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
           Back
         </Button>

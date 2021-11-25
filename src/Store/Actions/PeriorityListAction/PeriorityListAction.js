@@ -1,4 +1,5 @@
 /* eslint-disable */
+import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import {
@@ -6,8 +7,11 @@ import {
   CREATE_PERORITY_CONSTANT,
   UPDATE_PERORITY_CONSTANT,
   SUSPAND_PERORITY_CONSTANT,
-  VIEW_DOCTOR_PERORITY_CONSTANT
+  VIEW_DOCTOR_PERORITY_CONSTANT,
+  GET_MPO_CUSTOMER_CONSTANT,
+  GET_MPO_DOCTOR_CONSTANT
 } from 'Store/Constant/Constants';
+import { getToken } from 'Utils/auth.util';
 
 export const ViewPeriorityListAction = () => async (dispatch) => {
   try {
@@ -76,14 +80,20 @@ export const CreateCustomerPeriorityListAction = (data) => async (dispatch) => {
         type: CREATE_PERORITY_CONSTANT.CREATE_PERORITY_SUCCESS,
         payload: res?.data?.response_data,
       });
-      return true
+      return true;
     } else {
       dispatch({
         type: CREATE_PERORITY_CONSTANT.CREATE_PERORITY_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.data?.response_message,'Error',5000,null,'')
-      return false
+      NotificationManager.error(
+        res?.data?.response_message,
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      return false;
     }
   } catch {}
 };
@@ -104,14 +114,20 @@ export const CreateDoctorPeriorityListAction = (data) => async (dispatch) => {
         type: CREATE_PERORITY_CONSTANT.CREATE_PERORITY_SUCCESS,
         payload: res?.data?.response_data,
       });
-      return true
+      return true;
     } else {
       dispatch({
         type: CREATE_PERORITY_CONSTANT.CREATE_PERORITY_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.data?.response_message,'Error',5000,null,'')
-      return false
+      NotificationManager.error(
+        res?.data?.response_message,
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      return false;
     }
   } catch {}
 };
@@ -133,14 +149,14 @@ export const EditDoctorPeriorityListAction = (data) => async (dispatch) => {
         type: UPDATE_PERORITY_CONSTANT.UPDATE_PERORITY_SUCCESS,
         payload: res?.data?.response_data,
       });
-      return true
+      return true;
     } else {
       dispatch({
         type: UPDATE_PERORITY_CONSTANT.UPDATE_PERORITY_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.response_message,'Error',5000,null,'')
-      return false
+      NotificationManager.error(res?.response_message, 'Error', 5000, null, '');
+      return false;
     }
   } catch {}
 };
@@ -162,46 +178,53 @@ export const EditCustomerPeriorityListAction = (data) => async (dispatch) => {
         type: UPDATE_PERORITY_CONSTANT.UPDATE_PERORITY_SUCCESS,
         payload: res?.data?.response_data,
       });
-      return true
+      return true;
     } else {
       dispatch({
         type: UPDATE_PERORITY_CONSTANT.UPDATE_PERORITY_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.response_message,'Error',5000,null,'')
-      return false
+      NotificationManager.error(res?.response_message, 'Error', 5000, null, '');
+      return false;
     }
   } catch {}
 };
 
-export const SuspandCustomerPeriorityListAction = (data) => async (dispatch) => {
-  try {
-    dispatch({
-      type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_LOADING,
-      payload: true,
-    });
-
-    let res = await apiServices.SuspandPeriorityList(data);
-    if (res?.response_code === 200) {
+export const SuspandCustomerPeriorityListAction =
+  (data) => async (dispatch) => {
+    try {
       dispatch({
         type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_LOADING,
-        payload: false,
+        payload: true,
       });
-      dispatch({
-        type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_SUCCESS,
-        payload: res?.data?.response_data,
-      });
-      return true
-    } else {
-      dispatch({
-        type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_ERROR,
-        payload: false,
-      });
-      NotificationManager.error(res?.response_message,'Error',5000,null,'')
-      return false
-    }
-  } catch {}
-};
+
+      let res = await apiServices.SuspandPeriorityList(data);
+      if (res?.response_code === 200) {
+        dispatch({
+          type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_LOADING,
+          payload: false,
+        });
+        dispatch({
+          type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_SUCCESS,
+          payload: res?.data?.response_data,
+        });
+        return true;
+      } else {
+        dispatch({
+          type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_ERROR,
+          payload: false,
+        });
+        NotificationManager.error(
+          res?.response_message,
+          'Error',
+          5000,
+          null,
+          ''
+        );
+        return false;
+      }
+    } catch {}
+  };
 
 export const SuspandDoctorPeriorityListAction = (data) => async (dispatch) => {
   try {
@@ -220,14 +243,86 @@ export const SuspandDoctorPeriorityListAction = (data) => async (dispatch) => {
         type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_SUCCESS,
         payload: res?.data?.response_data,
       });
-      return true
+      return true;
     } else {
       dispatch({
         type: SUSPAND_PERORITY_CONSTANT.SUSPAND_PERORITY_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.response_message,'Error',5000,null,'')
-      return false
+      NotificationManager.error(res?.response_message, 'Error', 5000, null, '');
+      return false;
     }
   } catch {}
 };
+
+export const ViewMpoCustomer = (uid) => async (dispatch) => {
+  try {
+    dispatch({
+      type:GET_MPO_CUSTOMER_CONSTANT.GET_MPO_CUSTOMER_LOADING,
+      payload:true
+    })
+    let token = await getToken();
+    let res = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/customers/read?child_uid=${uid}`,
+      {
+        headers: {
+          'x-session-key': token?.token,
+          'x-session-type': token?.type,
+        },
+      }
+    );
+    if(res?.data?.response_code === 200){
+      dispatch({
+        type:GET_MPO_CUSTOMER_CONSTANT.GET_MPO_CUSTOMER_LOADING,
+        payload:false
+      })
+      dispatch({
+        type:GET_MPO_CUSTOMER_CONSTANT.GET_MPO_CUSTOMER_SUCCESS,
+        payload:res?.data?.response_data
+      })
+    }else{
+      dispatch({
+        type:GET_MPO_CUSTOMER_CONSTANT.GET_MPO_CUSTOMER_ERROR,
+        payload:false
+      })
+    }
+    
+  } catch {}
+};
+export const ViewMpoDoctor = (uid) => async (dispatch) => {
+  try {
+    dispatch({
+      type:GET_MPO_DOCTOR_CONSTANT.GET_MPO_DOCTOR_LOADING,
+      payload:true
+    })
+    let token = await getToken();
+    let res = await axios.get(
+      `https://concord-backend-m2.herokuapp.com/api/doctors/read?child_uid=${uid}`,
+      {
+        headers: {
+          'x-session-key': token?.token,
+          'x-session-type': token?.type,
+        },
+      }
+    );
+    
+    if(res?.data?.response_code === 200){
+      dispatch({
+        type:GET_MPO_DOCTOR_CONSTANT.GET_MPO_DOCTOR_LOADING,
+        payload:false
+      })
+      dispatch({
+        type:GET_MPO_DOCTOR_CONSTANT.GET_MPO_DOCTOR_SUCCESS,
+        payload:res?.data?.response_data
+      })
+    }else{
+      dispatch({
+        type:GET_MPO_DOCTOR_CONSTANT.GET_MPO_DOCTOR_ERROR,
+        payload:false
+      })
+    }
+    
+  } catch {}
+};
+
+

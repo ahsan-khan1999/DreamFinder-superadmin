@@ -241,7 +241,7 @@ export default function EditDoctorPeriorityList(props) {
                 </FormGroup>
               </Col>
             </Row>
-            {view ? (
+            {/* {view ? (
               <Button
                 style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
                 onClick={editPeriority}
@@ -269,7 +269,7 @@ export default function EditDoctorPeriorityList(props) {
                   <span className="label">Edit</span>
                 </Button>
               </>
-            )}
+            )} */}
             <Button
               // className="btn btn-primary"
               disabled={suspandloading ? true : false}
@@ -286,7 +286,7 @@ export default function EditDoctorPeriorityList(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">Suspand</span>
+              <span className="label">Suspend</span>
             </Button>
           </Form>
         </Formik>

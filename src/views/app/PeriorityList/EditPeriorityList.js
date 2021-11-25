@@ -239,7 +239,7 @@ export default function EditPeriorityList(props) {
                 </FormGroup>
               </Col>
             </Row>
-            {view ? (
+            {/* {view ? (
               <Button
                 style={{ backgroundColor: '#0066B3', marginRight: '5px' }}
                 onClick={editPeriority}
@@ -265,7 +265,7 @@ export default function EditPeriorityList(props) {
                 </span>
                 <span className="label">Edit</span>
               </Button>
-            )}
+            )} */}
             <Button
               style={{ backgroundColor: '#0066B3' }}
               // className="btn btn-primary"
@@ -282,7 +282,7 @@ export default function EditPeriorityList(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">Suspand</span>
+              <span className="label">Suspend</span>
             </Button>
           </Form>
         </Formik>
