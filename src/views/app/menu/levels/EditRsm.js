@@ -131,7 +131,6 @@ export default function EditRsm(props) {
   service_location?.filter((item) =>
     option?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-
   const editProfile = (e) => {
     e.preventDefault();
     setThisView(false);
