@@ -40,7 +40,7 @@ export const logout = async () => {
 };
 export const Check_Authentication = async (response) => {
   if (response?.data?.response_code === 401) {
-    NotificationManager.error('Autherization Failed', 'Error', 5000, null, '');
+    NotificationManager.error('Authentication Failed', 'Error', 5000, null, '');
     setTimeout(() => {
       logout();
       window.location.href = '/';
