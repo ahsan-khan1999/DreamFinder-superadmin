@@ -106,8 +106,8 @@ export default function CreateSampleTransaction(props) {
       BASEURL+`/stocks/read/medicine?child_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );
@@ -123,8 +123,8 @@ export default function CreateSampleTransaction(props) {
       BASEURL+`/samples/read?assigned_to_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );

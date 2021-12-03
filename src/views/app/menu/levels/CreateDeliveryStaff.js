@@ -83,8 +83,8 @@ export default function CreateDeliveryStaff({ history }) {
       BASEURL+`/region-classifications/read/territory?child_uid=${uid}&assigned_to_ds=${0}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );

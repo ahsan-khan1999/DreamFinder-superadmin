@@ -50,8 +50,8 @@ export default function EditDoctorPeriorityList(props) {
       BASEURL+'/doctors/read',
       {
         headers: {
-          'x-session-key': token?.token,
-          'x-session-type': token?.type,
+          "x-session-key": token?.token,
+          "x-session-type": token?.type,
         },
       }
     );

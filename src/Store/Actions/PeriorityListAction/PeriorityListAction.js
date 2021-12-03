@@ -267,8 +267,8 @@ export const ViewMpoCustomer = (uid) => async (dispatch) => {
       BASEURL+`/customers/read?child_uid=${uid}`,
       {
         headers: {
-          'x-session-key': token?.token,
-          'x-session-type': token?.type,
+          "x-session-key": token?.token,
+          "x-session-type": token?.type,
         },
       }
     );
@@ -301,8 +301,8 @@ export const ViewMpoDoctor = (uid) => async (dispatch) => {
       BASEURL+`/doctors/read?child_uid=${uid}`,
       {
         headers: {
-          'x-session-key': token?.token,
-          'x-session-type': token?.type,
+          "x-session-key": token?.token,
+          "x-session-type": token?.type,
         },
       }
     );

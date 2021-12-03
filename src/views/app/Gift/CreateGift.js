@@ -164,8 +164,8 @@ const CreateGifts = (props) => {
       BASEURL+`ttps://concord-backend-m2.herokuapp.com/api/stocks/read/gift?child_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );

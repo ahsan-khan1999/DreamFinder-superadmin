@@ -50,8 +50,8 @@ export const AcceptRemovalAction = (data) => async (dispatch) => {
       data,
       {
         headers: {
-          'x-session-key': token?.token,
-          'x-session-type': token?.type,
+          "x-session-key": token?.token,
+          "x-session-type": token?.type,
         },
       }
     );

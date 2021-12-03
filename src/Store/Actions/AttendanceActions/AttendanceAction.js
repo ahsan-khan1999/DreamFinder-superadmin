@@ -129,7 +129,7 @@ export const getUsers = (uid, user) => async (dispatch) => {
       });
     }
 
-    const head = { 'x-session-key': token.token, 'x-session-type': token.type };
+    const head = { "x-session-key": token.token, "x-session-type": token.type };
     const response = await axios.get(
       BASEURL+`/users/read/${user}?manager_uid=${uid}`,
       { headers: head }
@@ -199,8 +199,8 @@ export const GetOldGiftsAction = (uid) => async (dispatch) => {
       BASEURL+`/fieldstaffs/read_gift?user_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );

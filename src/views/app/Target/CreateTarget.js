@@ -213,8 +213,8 @@ export default function CreateTarget(props) {
       BASEURL+`/stocks/read/medicine?distribution_center_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );
@@ -230,8 +230,8 @@ export default function CreateTarget(props) {
       // /${user}?manager_uid=${uid}
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );
@@ -249,8 +249,8 @@ export default function CreateTarget(props) {
       // /${user}?manager_uid=${uid}
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );

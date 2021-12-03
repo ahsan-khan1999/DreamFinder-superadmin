@@ -87,8 +87,8 @@ export const UpdateLabAdminAction = (data) => async (dispatch) => {
 //   data,
 //   {
 //     headers: {
-//       'x-session-key': token,
-//       'x-session-type': 'super_admin',
+//       '"x-session-key"': token,
+//       '"x-session-type"': 'super_admin',
 //     },
 //   }
 // );
@@ -102,8 +102,8 @@ export const UpdateLabAdminAction = (data) => async (dispatch) => {
 //       data,
 //       {
 //         headers: {
-//           'x-session-key': token,
-//           'x-session-type': 'super_admin',
+//           '"x-session-key"': token,
+//           '"x-session-type"': 'super_admin',
 //         },
 //       }
 //     );

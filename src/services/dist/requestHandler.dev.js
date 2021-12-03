@@ -687,8 +687,8 @@ var getPatient = function getPatient() {
 //   {},
 //   {
 //     headers: {
-//       'x-session-key': token,
-//       'x-session-type': 'super_admin',
+//       '"x-session-key"': token,
+//       '"x-session-type"': 'super_admin',
 //     },
 //   }
 // );

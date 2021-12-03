@@ -97,8 +97,8 @@ export const UpdateDoctorAction = (data) => async (dispatch) => {
 //   data,
 //   {
 //     headers: {
-//       'x-session-key': token,
-//       'x-session-type': 'super_admin',
+//       '"x-session-key"': token,
+//       '"x-session-type"': 'super_admin',
 //     },
 //   }
 // );
@@ -112,8 +112,8 @@ export const UpdateDoctorAction = (data) => async (dispatch) => {
 //       data,
 //       {
 //         headers: {
-//           'x-session-key': token,
-//           'x-session-type': 'super_admin',
+//           '"x-session-key"': token,
+//           '"x-session-type"': 'super_admin',
 //         },
 //       }
 //     );

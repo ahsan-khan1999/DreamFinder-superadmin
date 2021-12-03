@@ -199,8 +199,8 @@ export default function EditTarget(props) {
       BASEURL+`/stocks/read/medicine?distribution_center_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );
@@ -216,8 +216,8 @@ export default function EditTarget(props) {
       BASEURL+`/targets/read_stocks?child_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );
@@ -282,8 +282,8 @@ export default function EditTarget(props) {
       BASEURL+`/targets/read_current_target?assigned_to_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );

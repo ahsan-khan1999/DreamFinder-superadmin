@@ -204,8 +204,8 @@ export default function UpdateSample(props) {
       BASEURL+`/stocks/read/medicine?child_uid=${uid}`,
       {
         headers: {
-          x_session_key: token.token,
-          x_session_type: token.type,
+          "x-session-key": token.token,
+          "x-session-type": token.type,
         },
       }
     );

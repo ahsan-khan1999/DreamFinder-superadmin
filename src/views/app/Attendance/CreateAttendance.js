@@ -185,8 +185,8 @@ depo?.map((item) => (
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            'x-session-key': authToken.token,
-            'x-session-type': authToken.type,
+            "x-session-key": authToken.token,
+            "x-session-type": authToken.type,
           },
         }
       );
