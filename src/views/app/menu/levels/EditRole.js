@@ -154,7 +154,7 @@ export default function EditRole(props) {
                     <IntlMessages id="Name" />
                   </Label>
                   {view ? (
-                    <span>{currentRole?.name}</span>
+                    <span><p>{currentRole?.name}</p></span>
                   ) : (
                     <Input
                       required

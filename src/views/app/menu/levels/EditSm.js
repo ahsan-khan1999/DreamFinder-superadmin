@@ -45,6 +45,7 @@ export default function EditSm(props) {
   const showModal = () => setShow(true);
   const hideModal = () => setShow(false);
   const currentUser = props?.location?.state;
+  
   let [loadingLocation, setLoadingLocation] = useState(false);
   const [optionsState, setOptionState] = useState([]);
   let service_location_id = [];
@@ -87,6 +88,8 @@ export default function EditSm(props) {
     (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
   );
   useEffect(() => {
+    getServiceLocationUid(currentUser?.field_staff?.manager?.uid);
+
     setAdmin(admin_obj);
     setOptionState(defaultOptions);
     if (currentUser?.status?.name === 'suspended') {

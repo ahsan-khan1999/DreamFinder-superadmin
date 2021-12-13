@@ -9,8 +9,9 @@ import {
   VIEW_DCR_CONSTANT,
   SUSPAND_DCP_DCR_CONSTANT,
   SUSPAND_SCHEDULE_CONSTANT,
-  EDIT_SCHEDULE_CONSTANT
+  EDIT_SCHEDULE_CONSTANT,
 } from 'Store/Constant/Constants';
+import { Check_Validation_Update } from 'Utils/auth.util';
 
 export const ViewDcpAction = () => async (dispatch) => {
   try {
@@ -87,7 +88,7 @@ export const SuspandDcpDcrAction = (data) => async (dispatch) => {
         type: SUSPAND_DCP_DCR_CONSTANT.SUSPAND_DCP_DCR_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.repsonse_message,'Error',5000,null,'')
+      NotificationManager.error(res?.repsonse_message, 'Error', 5000, null, '');
       return false;
     }
   } catch {}
@@ -115,7 +116,8 @@ export const SuspandDcpAction = (data) => async (dispatch) => {
         type: SUSPAND_DCP_DCR_CONSTANT.SUSPAND_DCP_DCR_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.repsonse_message,'Error',5000,null,'')
+      Check_Validation_Update(res);
+      // NotificationManager.error(res?.repsonse_message,'Error',5000,null,'')
       return false;
     }
   } catch {}
@@ -154,7 +156,7 @@ export const ReadScheduleAction = () => async (dispatch) => {
     });
 
     let res = await apiServices.readSchedule();
-    
+
     if (res?.data?.response_code === 200) {
       dispatch({
         type: VIEW_SCHEDULE_CONSTANT.VIEW_SCHEDULE_LOADING,
@@ -173,7 +175,6 @@ export const ReadScheduleAction = () => async (dispatch) => {
   } catch {}
 };
 
-
 export const SuspandScheduleAction = (data) => async (dispatch) => {
   try {
     dispatch({
@@ -182,7 +183,7 @@ export const SuspandScheduleAction = (data) => async (dispatch) => {
     });
 
     let res = await apiServices.suspandSchedule(data);
-    
+
     if (res?.response_code === 200) {
       dispatch({
         type: SUSPAND_SCHEDULE_CONSTANT.SUSPAND_SCHEDULE_LOADING,
@@ -192,14 +193,14 @@ export const SuspandScheduleAction = (data) => async (dispatch) => {
         type: SUSPAND_SCHEDULE_CONSTANT.SUSPAND_SCHEDULE_SUCCESS,
         payload: res?.data?.response_data,
       });
-      return true
+      return true;
     } else {
       dispatch({
         type: SUSPAND_SCHEDULE_CONSTANT.SUSPAND_SCHEDULE_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.repsonse_message,'Error',5000,null,'')
-      return false
+      NotificationManager.error(res?.repsonse_message, 'Error', 5000, null, '');
+      return false;
     }
   } catch {}
 };
@@ -212,7 +213,7 @@ export const EditScheduleAction = (data) => async (dispatch) => {
     });
 
     let res = await apiServices.editSchedule(data);
-    
+
     if (res?.response_code === 200) {
       dispatch({
         type: EDIT_SCHEDULE_CONSTANT.EDIT_SCHEDULE_LOADING,
@@ -222,14 +223,14 @@ export const EditScheduleAction = (data) => async (dispatch) => {
         type: EDIT_SCHEDULE_CONSTANT.EDIT_SCHEDULE_SUCCESS,
         payload: res?.data?.response_data,
       });
-      return true
+      return true;
     } else {
       dispatch({
         type: EDIT_SCHEDULE_CONSTANT.EDIT_SCHEDULE_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.repsonse_message,'Error',5000,null,'')
-      return false
+      NotificationManager.error(res?.repsonse_message, 'Error', 5000, null, '');
+      return false;
     }
   } catch {}
 };

@@ -33,7 +33,7 @@ export const Login_action = (data) => async (dispatch) => {
       };
       setToken({
         token: response?.data?.response_data?.token?.access_token,
-        type: response?.data?.response_data?.token?.user?.role?.name,
+        type: response?.data?.response_data?.token?.user?.role?.category?.name,
       });
       saveUser(response?.data?.response_data?.token?.user);
       dispatch({

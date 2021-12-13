@@ -2,14 +2,17 @@
 
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import { AttendanceTabel, TargetTable } from 'containers/ui/ReactTableCards';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Loader from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { ViewAttendanceAction } from 'Store/Actions/AttendanceActions/AttendanceAction';
+import { testSearch } from 'Utils/auth.util';
 
 export default function ViewAttendance(props) {
   const dispatch = useDispatch();
+  const [search, setSearch] = useState('');
+  const [doc, setDoc] = useState([]);
 
   useEffect(() => {
     dispatch(ViewAttendanceAction());
@@ -20,13 +23,21 @@ export default function ViewAttendance(props) {
   const loading = useSelector((state) => state?.AttendanceReducer?.loading);
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(target, search));
+    setDoc(testSearch(attendance, search));
   };
 
   const handleAdd = () => {
     props.history.push('/app/Attendance/CreateAttendance');
   };
-  let header = ['User Name', 'Email', 'Manager Name', 'Phone Number', 'Attendance Status', 'Date','Action'];
+  let header = [
+    'User Name',
+    'Email',
+    'Manager Name',
+    'Phone Number',
+    'Attendance Status',
+    'Date',
+    'Action',
+  ];
   const changeRoute = (item) => {
     props.history.push('/app/Attendance/EditAttendance', item);
   };
@@ -51,6 +62,9 @@ export default function ViewAttendance(props) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name Manger name And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">
@@ -82,17 +96,12 @@ export default function ViewAttendance(props) {
                   alignItems: 'center',
                 }}
               >
-                <Loader
-                  type="Puff"
-                  color="#0066B3"
-                  height={100}
-                  width={100}
-                />
+                <Loader type="Puff" color="#0066B3" height={100} width={100} />
               </div>
             ) : (
               <AttendanceTabel
                 header={header}
-                data={attendance}
+                data={search === '' ? attendance : doc}
                 changeRoute={changeRoute}
               />
             )}

@@ -25,7 +25,7 @@ import {
   RemovalRequestTable,
   StockTable,
 } from 'containers/ui/ReactTableCards';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
@@ -80,7 +80,7 @@ export default function ViewStock({ match, history }) {
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setStockTable(searchArray(stock, search));
+    setStockTable(testSearch(stock, search));
   };
 
 
@@ -117,6 +117,9 @@ export default function ViewStock({ match, history }) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name Category Formula And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">
@@ -150,7 +153,7 @@ export default function ViewStock({ match, history }) {
               <StockTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={stockTable}
+                data={search === '' ? stock : stockTable}
               />
             )}
           </Colxx>

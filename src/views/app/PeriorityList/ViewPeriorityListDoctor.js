@@ -15,7 +15,7 @@ import {
   ViewPeriorityListAction,
 } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 export default function ViewPeriorityListDoctor(props) {
   const [doc, setDoc] = useState();
@@ -30,7 +30,7 @@ export default function ViewPeriorityListDoctor(props) {
   const loading = useSelector((state) => state?.ViewPeriorityRedcuer?.loading);
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(customerList, search));
+    setDoc(testSearch(customerList, search));
   };
   const handleAdd = () => {
     props.history.push('/app/PeriorityList/CreateDoctorPeriority');
@@ -67,6 +67,9 @@ export default function ViewPeriorityListDoctor(props) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Doctor Name Designation And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">
@@ -118,7 +121,7 @@ export default function ViewPeriorityListDoctor(props) {
             ) : (
               <ViewDoctorPeriorityTabel
                 header={header}
-                data={customerList}
+                data={search === '' ? customerList : doc}
                 changeRoute={changeRoute}
               />
             )}

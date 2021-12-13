@@ -111,7 +111,7 @@ export default function EditTarget(props) {
   const loadingMPO = useSelector(
     (state) => state?.AttendanceReducer?.loadingMpo
   );
-  
+
   const distributionCenter = useSelector(
     (state) => state?.TargetReducer?.distributionCenter
   );
@@ -182,7 +182,7 @@ export default function EditTarget(props) {
       key: _item?.quantity,
     })
   );
-  
+
   targets?.map((item) => {
     medicineOption.push({
       label: item?.name,
@@ -196,11 +196,11 @@ export default function EditTarget(props) {
 
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/stocks/read/medicine?distribution_center_uid=${uid}`,
+      BASEURL + `/stocks/read/medicine?distribution_center_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
@@ -213,11 +213,11 @@ export default function EditTarget(props) {
 
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/targets/read_stocks?child_uid=${uid}`,
+      BASEURL + `/targets/read_stocks?child_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
@@ -265,7 +265,7 @@ export default function EditTarget(props) {
     let res = await dispatch(SuspandTargetAction({ uid: currentTarget?.uid }));
     if (res) {
       NotificationManager.success(
-        'Successfully Suspanded',
+        'Successfully Suspended',
         'Success',
         5000,
         null,
@@ -279,11 +279,11 @@ export default function EditTarget(props) {
   const readCurentTarget = async (uid) => {
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/targets/read_current_target?assigned_to_uid=${uid}`,
+      BASEURL + `/targets/read_current_target?assigned_to_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
@@ -379,35 +379,6 @@ export default function EditTarget(props) {
         <Formik>
           <Form>
             <Row className="h-100">
-              {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select to Whom You Want to Assign" />
-                  </Label>
-                  {view ? (
-                    <span>
-                      <p>{currentTarget?.assigned_to?.role?.name}</p>
-                    </span>
-                  ) : (
-                    <Select
-                      required
-                      disabled
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      defaultValue={{
-                        label: currentTarget?.assigned_to?.role?.name,
-                        value: currentTarget?.assigned_to?.role?.name,
-                        key: currentTarget?.assigned_to?.role?.uid,
-                      }}
-                      name="form-field-name-gender"
-                      onChange={(val) => setSelected(val)}
-                      options={delaultOptions}
-                    />
-                  )}
-                </FormGroup>
-              </Col> */}
-
               {currentTarget?.assigned_to?.role?.category?.name === 'sm' ? (
                 <>
                   <Col lg={6}>
@@ -422,16 +393,19 @@ export default function EditTarget(props) {
                           name="amount"
                           type="number"
                           defaultValue={currentTarget?.amount?.amount}
-                          onChange={(e) =>
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            })
-                          }
+                          onChange={(e) => {
+                            if (e.target?.value > 0) {
+                              setTarget({
+                                ...target,
+                                amount: Number(e.target.value),
+                              });
+                            }
+                          }}
                         />
                       )}
                     </FormGroup>
                   </Col>
+
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Director</Label>
@@ -504,11 +478,6 @@ export default function EditTarget(props) {
                             getDirectorTarget(val?.key);
 
                             setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
-
-                            //   setTimeout(async() => {
-                            //     await console.log(targets[0]?.start_date);
-                            //   }, 3000);
                           }}
                           options={salesManagerOption}
                         />
@@ -516,7 +485,6 @@ export default function EditTarget(props) {
                     </FormGroup>
                   </Col>
 
-                
                   {view ? (
                     <Col lg={6}>
                       <FormGroup>
@@ -531,12 +499,25 @@ export default function EditTarget(props) {
                         </span>
                       </FormGroup>
                     </Col>
-                  ) : null}
+                  ) : (
+                    <Input
+                      name="amount"
+                      type="number"
+                      disabled
+                      defaultValue={currentTarget?.start_date}
+                      onChange={(e) =>
+                        setTarget({
+                          ...target,
+                          amount: Number(e.target.value),
+                        })
+                      }
+                    />
+                  )}
 
                   {view ? (
                     <Col lg={6}>
                       <FormGroup>
-                        <Label>Start Date</Label>
+                        <Label>End Date</Label>
 
                         <span>
                           <p>
@@ -547,7 +528,20 @@ export default function EditTarget(props) {
                         </span>
                       </FormGroup>
                     </Col>
-                  ) : null}
+                  ) : (
+                    <Input
+                      name="amount"
+                      type="number"
+                      disabled
+                      defaultValue={currentTarget?.end_date}
+                      onChange={(e) =>
+                        setTarget({
+                          ...target,
+                          amount: Number(e.target.value),
+                        })
+                      }
+                    />
+                  )}
 
                   <Col lg={6}>
                     <FormGroup>
@@ -558,15 +552,17 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : loadingMedicine ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -617,10 +613,12 @@ export default function EditTarget(props) {
                               ?.by_customer_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_customer_visits: Number(e.target.value),
-                            });
+                            if (e.target?.value > 0) {
+                              setTarget({
+                                ...target,
+                                by_customer_visits: Number(e.target.value),
+                              });
+                            }
                           }}
                         />
                       )}
@@ -642,10 +640,12 @@ export default function EditTarget(props) {
                             currentTarget?.by_doctor_visits?.by_doctor_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_doctor_visits: Number(e.target.value),
-                            });
+                            if (e.target.value > 0) {
+                              setTarget({
+                                ...target,
+                                by_doctor_visits: Number(e.target.value),
+                              });
+                            }
                           }}
                         />
                       )}
@@ -663,10 +663,12 @@ export default function EditTarget(props) {
                           value={target?.no_orders}
                           defaultValue={currentTarget?.no_orders?.no_orders}
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
+                            if (e.target.value > 0) {
+                              setTarget({
+                                ...target,
+                                no_orders: Number(e.target.value),
+                              });
+                            }
                           }}
                         />
                       )}
@@ -688,10 +690,13 @@ export default function EditTarget(props) {
                             currentTarget?.no_prescriptions?.no_prescriptions
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                no_prescriptions: Number(e.target.value),
+                              });
+                            }
                           }}
                         />
                       )}
@@ -789,15 +794,17 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : loadingStocks ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> :(
+                      ) : loadingStocks ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -841,7 +848,7 @@ export default function EditTarget(props) {
                   {view ? (
                     <Col lg={6}>
                       <FormGroup>
-                        <Label>Start Date</Label>
+                        <Label>End Date</Label>
 
                         <span>
                           <p>
@@ -1026,15 +1033,17 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : loadingSM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           defaultValue={{
@@ -1072,15 +1081,17 @@ export default function EditTarget(props) {
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : loadingRSM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1139,15 +1150,17 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : loadingMedicine ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -1437,15 +1450,17 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : loadingSM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           defaultValue={{
@@ -1488,15 +1503,17 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : loadingRSM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1514,7 +1531,7 @@ export default function EditTarget(props) {
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
                           onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'rsm'));
+                            dispatch(getUsers(val.key, 'am'));
 
                             readCurentTarget(val?.key);
 
@@ -1532,15 +1549,17 @@ export default function EditTarget(props) {
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) :loadingAM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingAM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1571,15 +1590,17 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) :loadingMedicine  ?<div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -1734,7 +1755,7 @@ export default function EditTarget(props) {
                           onChange={(e) => {
                             setTarget({
                               ...target,
-                              by_customer_visits: e.target.value,
+                              by_customer_visits: Number(e.target.value),
                             });
                           }}
                         />
@@ -1760,7 +1781,7 @@ export default function EditTarget(props) {
                           onChange={(e) => {
                             setTarget({
                               ...target,
-                              by_doctor_visits: e.target.value,
+                              by_doctor_visits: Number(e.target.value),
                             });
                           }}
                         />
@@ -1822,15 +1843,17 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : loadingSM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           defaultValue={{
@@ -1876,15 +1899,17 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : loadingRSM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingRSM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1923,15 +1948,17 @@ export default function EditTarget(props) {
                             }
                           </p>
                         </span>
-                      ) : loadingAM ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingAM ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -1967,15 +1994,17 @@ export default function EditTarget(props) {
                         <span>
                           <p>{currentTarget?.assigned_to?.name}</p>
                         </span>
-                      ) : loadingMPO ? <div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> : (
+                      ) : loadingMPO ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
@@ -2006,15 +2035,17 @@ export default function EditTarget(props) {
                             <p>{item?.name}</p>
                           </span>
                         ))
-                      ) : loadingMedicine  ?<div className="">
-                      <Loader
-                        height={18}
-                        width={18}
-                        type="Oval"
-                        color="#0066B3"
-                      />
-                      &nbsp;
-                    </div> :  (
+                      ) : loadingMedicine ? (
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
                         <Select
                           cacheOptions
                           closeMenuOnSelect={false}
@@ -2208,7 +2239,7 @@ export default function EditTarget(props) {
                     <span className="bounce2" />
                     <span className="bounce3" />
                   </span>
-                  Suspend Target
+                  <span className="label">Suspend Target</span>
                 </Button>
               </>
             ) : (

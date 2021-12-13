@@ -24,7 +24,7 @@ import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
@@ -78,7 +78,7 @@ export default function viewDepartmenthead({ match, history }) {
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDepartmentTable(searchArray(departmenthead, search));
+    setDepartmentTable(testSearch(departmenthead, search));
   };
 
 
@@ -115,6 +115,9 @@ export default function viewDepartmenthead({ match, history }) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name Designation And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

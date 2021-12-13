@@ -41,7 +41,7 @@ const selectGender = [
 export default function EditAm(props) {
   const currentUser = props?.location?.state;
   let [loadingLocation, setLoadingLocation] = useState(false);
-  const [optionState,setOptionState] = useState([])
+  const [optionState, setOptionState] = useState([]);
   let [show, setShow] = useState(false);
   const showModal = () => setShow(true);
   const hideModal = () => setShow(false);
@@ -73,21 +73,20 @@ export default function EditAm(props) {
 
   let [service_location, setService_location] = useState([]);
 
-  
   //   console.log(currentUser);
   const [confirmPassword, setConfirmPassword] = useState('');
   let [buttonName, setButtonName] = useState();
 
- 
   const dispatch = useDispatch();
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
   let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
+    (item) => ({ label: item?.name, value: item?.name, key: item?.uid })
   );
   useEffect(() => {
-    setOptionState(defaultOptions)
+    getServiceLocationUid(currentUser?.uid);
+    setOptionState(defaultOptions);
     setAdmin(admin_obj);
 
     if (currentUser?.status?.name === 'suspended') {
@@ -101,10 +100,10 @@ export default function EditAm(props) {
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
   let options = [];
   roles?.filter((item) =>
-  item?.category?.user_role_id == 5
-    ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
-    : null
-);
+    item?.category?.user_role_id == 5
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
+  );
   const rsm = useSelector(
     (state) => state?.ViewUserReducer?.regionalSalesManager
   );
@@ -234,18 +233,18 @@ export default function EditAm(props) {
     // console.log(doctor?.password);
   };
   const getServiceLocationUid = async (uid) => {
-    setLoadingLocation(true)
+    setLoadingLocation(true);
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/region-classifications/read/thana?child_uid=${uid}`,
+      BASEURL + `/region-classifications/read/thana?child_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
-    setLoadingLocation(false)
+    setLoadingLocation(false);
 
     setService_location(response?.data?.response_data);
   };
@@ -262,87 +261,207 @@ export default function EditAm(props) {
     await setArray(value);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
-  
+
   return (
     <>
-    <Card>
-      <CardBody>
-        <CardTitle>
-          <Button
-            className="btn-btn-secondary"
-            onClick={handleChangeToView}
-            style={{ marginRight: '20px', 'background-color': '#0066B3' }}
-          >
-            Back
-          </Button>
-          <IntlMessages id="View User" />
-        </CardTitle>
+      <Card>
+        <CardBody>
+          <CardTitle>
+            <Button
+              className="btn-btn-secondary"
+              onClick={handleChangeToView}
+              style={{ marginRight: '20px', 'background-color': '#0066B3' }}
+            >
+              Back
+            </Button>
+            <IntlMessages id="View User" />
+          </CardTitle>
 
-        <Formik>
-          <Form>
-            <Row className="h-100">
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Name" />
-                  </Label>
+          <Formik>
+            <Form>
+              <Row className="h-100">
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Name" />
+                    </Label>
 
-                  {thisView ? (
-                    <span>
-                      <p>{admin?.name}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      value={admin?.name}
-                      className="form-control"
-                      name="name"
-                      // validate={validateEmail}
-                      onChange={(e) =>
-                        setAdmin({ ...admin, name: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Email" />
-                  </Label>
-
-                  {thisView ? (
-                    <span>
-                      <p>{admin?.email_address}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      disabled
-                      value={admin?.email_address}
-                      className="form-control"
-                      name="email"
-                      type="email"
-                      onChange={(e) =>
-                        setAdmin({ ...admin, email_address: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-           
-              <Col lg={6}>
-                <FormGroup>
-                  <label>
-                    <IntlMessages id="Select Gender" />
-                  </label>
-
-                  <>
                     {thisView ? (
                       <span>
-                        <p>{admin?.gender}</p>
+                        <p>{admin?.name}</p>
+                      </span>
+                    ) : (
+                      <Input
+                        required
+                        value={admin?.name}
+                        className="form-control"
+                        name="name"
+                        // validate={validateEmail}
+                        onChange={(e) =>
+                          setAdmin({ ...admin, name: e.target.value })
+                        }
+                      />
+                    )}
+                  </FormGroup>
+                </Col>
+
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Email" />
+                    </Label>
+
+                    {thisView ? (
+                      <span>
+                        <p>{admin?.email_address}</p>
+                      </span>
+                    ) : (
+                      <Input
+                        required
+                        disabled
+                        value={admin?.email_address}
+                        className="form-control"
+                        name="email"
+                        type="email"
+                        onChange={(e) =>
+                          setAdmin({ ...admin, email_address: e.target.value })
+                        }
+                      />
+                    )}
+                  </FormGroup>
+                </Col>
+
+                <Col lg={6}>
+                  <FormGroup>
+                    <label>
+                      <IntlMessages id="Select Gender" />
+                    </label>
+
+                    <>
+                      {thisView ? (
+                        <span>
+                          <p>{admin?.gender}</p>
+                        </span>
+                      ) : (
+                        <Select
+                          required
+                          components={{ Input: CustomSelectInput }}
+                          className="react-select"
+                          classNamePrefix="react-select"
+                          name="form-field-name-gender"
+                          // value={gender}
+                          defaultValue={{
+                            label: admin?.gender,
+                            value: admin?.gender,
+                            key: admin?.gender,
+                          }}
+                          onChange={(val) =>
+                            setAdmin({
+                              ...admin,
+                              gender: val?.value,
+                            })
+                          }
+                          options={selectGender}
+                        />
+                      )}
+                    </>
+                  </FormGroup>
+                </Col>
+
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Phone Number" />
+                    </Label>
+
+                    {thisView ? (
+                      <span>
+                        <p>{admin?.phone_number}</p>
+                      </span>
+                    ) : (
+                      <Input
+                        required
+                        disabled
+                        value={admin?.phone_number}
+                        type="text"
+                        className="radio-in"
+                        name="phone_number"
+                        // validate={validateEmail}
+                        // onChange={(e) => setNumber()}
+                        onChange={(e) =>
+                          setAdmin({ ...admin, phone_number: e.target.value })
+                        }
+                      />
+                    )}
+                  </FormGroup>
+                </Col>
+
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Enter Designation" />
+                    </Label>
+
+                    {thisView ? (
+                      <span>
+                        <p>{admin?.designation}</p>
+                      </span>
+                    ) : (
+                      <Input
+                        required={true}
+                        value={admin.designation}
+                        className="form-control"
+                        name="designation"
+                        type="text"
+                        // validate={validateEmail}
+                        onChange={(e) =>
+                          setAdmin({ ...admin, designation: e.target.value })
+                        }
+                      />
+                    )}
+                  </FormGroup>
+                </Col>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Select Role" />
+                    </Label>
+
+                    {thisView ? (
+                      <span>
+                        <p>{currentUser?.role?.name}</p>
+                      </span>
+                    ) : (
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        //   defaultValue={}
+                        defaultValue={{
+                          label: currentUser?.role?.name,
+                          value: currentUser?.role?.name,
+                          id: currentUser?.role?.id,
+                        }}
+                        // value={gender}
+
+                        onChange={(val) =>
+                          setAdmin({ ...admin, role_uid: val?.key })
+                        }
+                        options={options}
+                      />
+                    )}
+                  </FormGroup>
+                </Col>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Select RSM" />
+                    </Label>
+                    {thisView ? (
+                      <span>
+                        <p>{currentUser?.field_staff?.manager?.name}</p>
                       </span>
                     ) : (
                       <Select
@@ -353,239 +472,121 @@ export default function EditAm(props) {
                         name="form-field-name-gender"
                         // value={gender}
                         defaultValue={{
-                          label: admin?.gender,
-                          value: admin?.gender,
-                          key: admin?.gender,
+                          label: currentUser?.field_staff?.manager?.name,
+                          value: currentUser?.field_staff?.manager?.name,
+                          id: currentUser?.field_staff?.manager?.id,
                         }}
-                        onChange={(val) =>
+                        onChange={(val) => {
                           setAdmin({
                             ...admin,
-                            gender: val?.value,
-                          })
-                        }
-                        options={selectGender}
+                            manager_uid: val.key,
+                          });
+                          getServiceLocationUid(val.key);
+                          setOptionState([]);
+                          setArray([]);
+                        }}
+                        options={rsmOptiopns}
                       />
                     )}
-                  </>
-                </FormGroup>
-              </Col>
+                  </FormGroup>
+                </Col>
 
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Phone Number" />
-                  </Label>
+                <Col lg={6}>
+                  <FormGroup>
+                    <Label>
+                      <IntlMessages id="Select Thana" />
+                    </Label>
+                    {thisView ? (
+                      currentUser?.field_staff?.service_location?.map(
+                        (item) => (
+                          <span>
+                            <p>{item?.name}</p>
+                          </span>
+                        )
+                      )
+                    ) : loadingLocation ? (
+                      <div className="">
+                        <Loader
+                          height={18}
+                          width={18}
+                          type="Oval"
+                          color="#0066B3"
+                        />
+                        &nbsp;
+                      </div>
+                    ) : (
+                      <Select
+                        cacheOptions
+                        closeMenuOnSelect={false}
+                        components={animatedComponents}
+                        isMulti
+                        defaultValue={optionState}
+                        // value={admin?.service_location_uid}
+                        onChange={(e) => handleChange(e)}
+                        options={option}
+                      />
+                    )}
+                  </FormGroup>
+                </Col>
+              </Row>
 
-                  {thisView ? (
-                    <span>
-                      <p>{admin?.phone_number}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      disabled
-                      value={admin?.phone_number}
-                      type="text"
-                      className="radio-in"
-                      name="phone_number"
-                      // validate={validateEmail}
-                      // onChange={(e) => setNumber()}
-                      onChange={(e) =>
-                        setAdmin({ ...admin, phone_number: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Enter Designation" />
-                  </Label>
-
-                  {thisView ? (
-                    <span>
-                      <p>{admin?.designation}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required={true}
-                      value={admin.designation}
-                      className="form-control"
-                      name="designation"
-                      type="text"
-                      // validate={validateEmail}
-                      onChange={(e) =>
-                        setAdmin({ ...admin, designation: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Role" />
-                  </Label>
-
-                  {thisView ? (
-                    <span>
-                      <p>{currentUser?.role?.name}</p>
-                    </span>
-                  ) : (
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      name="form-field-name-gender"
-                      //   defaultValue={}
-                      defaultValue={{
-                        label: currentUser?.role?.name,
-                        value: currentUser?.role?.name,
-                        id: currentUser?.role?.id,
-                      }}
-                      // value={gender}
-
-                      onChange={(val) =>
-                        setAdmin({ ...admin, role_uid: val?.key })
-                      }
-                      options={options}
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select RSM" />
-                  </Label>
-                  {thisView ? (
-                    <span>
-                      <p>{currentUser?.field_staff?.manager?.name}</p>
-                    </span>
-                  ) : (
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      name="form-field-name-gender"
-                      // value={gender}
-                      defaultValue={{
-                        label: currentUser?.field_staff?.manager?.name,
-                        value: currentUser?.field_staff?.manager?.name,
-                        id: currentUser?.field_staff?.manager?.id,
-                      }}
-                      onChange={(val) => {
-                        setAdmin({
-                          ...admin,
-                          manager_uid: val.key,
-                        });
-                        getServiceLocationUid(val.key);
-                        setOptionState([])
-                        setArray([])
-
-                      }}
-                      options={rsmOptiopns}
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Thana" />
-                  </Label>
-                  {thisView ? (
-                    currentUser?.field_staff?.service_location?.map((item) => (
-                      <span>
-                        <p>{item?.name}</p>
-                      </span>
-                    ))
-                  ) :loadingLocation ? <div className="">
-                  <Loader
-                    height={18}
-                    width={18}
-                    type="Oval"
-                    color="#0066B3"
-                  />
-                  &nbsp;
-                </div> : (
-                    <Select
-                      cacheOptions
-                      closeMenuOnSelect={false}
-                      components={animatedComponents}
-                      isMulti
-                      defaultValue={optionState}
-                      // value={admin?.service_location_uid}
-                      onChange={(e) => handleChange(e)}
-                      options={option}
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-            </Row>
-
-            {thisView ? (
-              <Button
-                className="btn btn-primary"
-                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
-                // type="submit"
-                // className={`btn-shadow btn-multiple-state ${
-                //   loading ? 'show-spinner' : ''
-                // }`}
-                size="sm"
-                onClick={editProfile}
-              >
-                <span className="spinner d-inline-block">
-                  <span className="bounce1" />
-                  <span className="bounce2" />
-                  <span className="bounce3" />
-                </span>
-                Edit Profile
-              </Button>
-            ) : (
-              <Button
-                className="btn btn-primary"
-                style={{ 'background-color': '#0066B3', marginRight: '5px' }}
-                // type="submit"
-                className={`btn-shadow btn-multiple-state ${
-                  loading ? 'show-spinner' : ''
-                }`}
-                size="sm"
-                onClick={editData}
-              >
-                <span className="spinner d-inline-block">
-                  <span className="bounce1" />
-                  <span className="bounce2" />
-                  <span className="bounce3" />
-                </span>
-                Save
-              </Button>
-            )}
-            {thisView ? (
-              <Button
-                style={{ 'background-color': '#0066B3' }}
-                // className="btn btn-primary"
-                className={`btn-shadow btn-multiple-state ${
-                  loadingSuspand ? 'show-spinner' : ''
-                }`}
-                onClick={suspandAdmin}
-                
-              >
-                <span className="spinner d-inline-block">
-                  <span className="bounce1" />
-                  <span className="bounce2" />
-                  <span className="bounce3" />
-                </span>
-                {buttonName}
-              </Button>
-            ) : (
-              ''
-            )}
+              {thisView ? (
+                <Button
+                  className="btn btn-primary"
+                  style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+                  // type="submit"
+                  // className={`btn-shadow btn-multiple-state ${
+                  //   loading ? 'show-spinner' : ''
+                  // }`}
+                  size="sm"
+                  onClick={editProfile}
+                >
+                  <span className="spinner d-inline-block">
+                    <span className="bounce1" />
+                    <span className="bounce2" />
+                    <span className="bounce3" />
+                  </span>
+                  Edit Profile
+                </Button>
+              ) : (
+                <Button
+                  className="btn btn-primary"
+                  style={{ 'background-color': '#0066B3', marginRight: '5px' }}
+                  // type="submit"
+                  disabled={loading ? true : false}
+                  className={`btn-shadow btn-multiple-state ${
+                    loading ? 'show-spinner' : ''
+                  }`}
+                  size="sm"
+                  onClick={editData}
+                >
+                  <span className="spinner d-inline-block">
+                    <span className="bounce1" />
+                    <span className="bounce2" />
+                    <span className="bounce3" />
+                  </span>
+                  <span className="label">Save</span>
+                </Button>
+              )}
+              {thisView ? (
+                <Button
+                  style={{ 'background-color': '#0066B3' }}
+                  // className="btn btn-primary"
+                  className={`btn-shadow btn-multiple-state ${
+                    loadingSuspand ? 'show-spinner' : ''
+                  }`}
+                  onClick={suspandAdmin}
+                >
+                  <span className="spinner d-inline-block">
+                    <span className="bounce1" />
+                    <span className="bounce2" />
+                    <span className="bounce3" />
+                  </span>
+                  {buttonName}
+                </Button>
+              ) : (
+                ''
+              )}
               {thisView ? (
                 <Button
                   className="btn btn-primary"
@@ -597,16 +598,15 @@ export default function EditAm(props) {
               ) : (
                 ''
               )}
-          </Form>
-        </Formik>
-      </CardBody>
-    </Card>
-     <ChangePasswordModal
-     show={show}
-     handleClose={hideModal}
-     data={currentUser?.email_address}
-   />
+            </Form>
+          </Formik>
+        </CardBody>
+      </Card>
+      <ChangePasswordModal
+        show={show}
+        handleClose={hideModal}
+        data={currentUser?.email_address}
+      />
     </>
-    
   );
 }

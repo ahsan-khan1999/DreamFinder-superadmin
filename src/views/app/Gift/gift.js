@@ -39,6 +39,7 @@ const animatedComponents = makeAnimated();
 
 import {
   GetOldGiftsAction,
+  getParentHirarchy,
   getUsers,
 } from 'Store/Actions/AttendanceActions/AttendanceAction';
 import AsyncSelect from 'react-select/async';
@@ -46,18 +47,28 @@ import Loader from 'react-loader-spinner';
 import { NotificationManager } from 'components/common/react-notifications';
 import { CreateGift } from 'Store/Actions/GiftAction/GiftActions';
 import { BASEURL } from 'services/HttpProvider';
-const delaultOptions = [
-  { label: 'Director', value: 'Director', key: 1 },
-  { label: 'SM', value: 'SM', key: 2 },
-  { label: 'RSM', value: 'RSM', key: 3 },
 
-  { label: 'AM', value: 'AM', key: 4 },
-  { label: 'MPO', value: 'MPO', key: 5 },
-];
 const Gift = (props) => {
   let currentGift = props.location.state;
   const [array, setArray] = useState();
   const [loading, setLoading] = useState(false);
+  const parents = useSelector((state) => state?.AttendanceReducer?.parents);
+  let smName = '';
+  let amName = '';
+  let rsmName = '';
+
+  const handleParents = () => {
+    parents?.map((item) => {
+      if (item?.role?.category?.user_role_id === 3) {
+        smName = item?.name;
+      } else if (item?.role?.category?.user_role_id === 4) {
+        rsmName = item?.name;
+      } else if (item?.role?.category?.user_role_id === 5) {
+        amName = item?.name;
+      }
+    });
+  };
+
   let optionDefault = [];
   currentGift?.assigned_gifts?.map((item) => {
     optionDefault.push({
@@ -67,7 +78,7 @@ const Gift = (props) => {
   });
   const [stocks, setStocks] = useState([]);
   const gift_obj = {
-    user_uid: currentGift?.user?.uid,
+    user_uid: currentGift?.uid,
     assigned_gifts: optionDefault,
   };
   const [gift, setGift] = useState(gift_obj);
@@ -93,6 +104,9 @@ const Gift = (props) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(getParentHirarchy(currentGift?.uid));
+    getStocks(currentGift?.uid);
+    dispatch(GetOldGiftsAction(currentGift?.uid));
     dispatch(ViewDirectorAction());
   }, []);
   useEffect(() => {
@@ -170,11 +184,11 @@ const Gift = (props) => {
     setLoadingStocks(true);
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/stocks/read/gift?child_uid=${uid}`,
+      BASEURL + `/stocks/read/gift?child_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
@@ -198,9 +212,10 @@ const Gift = (props) => {
   };
   const QuantityHanle = async (e, index) => {
     const obj = array[index];
-    if (e?.target?.value <= Number(e?.target?.max)) {
-      obj.quantity = Number(e?.target?.value);
-    }
+    // if (e?.target?.value <= Number(e?.target?.max)) {
+    //   obj.quantity = Number(e?.target?.value);
+    // }
+    obj.quantity = Number(e?.target?.value);
     array[index] = obj;
     const testArary = [...array];
     setArray(testArary);
@@ -282,76 +297,40 @@ const Gift = (props) => {
         <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
           Back
         </Button>
-        <CardTitle>Create Gift</CardTitle>
+        <CardTitle>Edit Gift</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
               {currentGift?.role?.category?.name === 'sm' ? (
                 <>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Manager Name</Label>
+                  {parents?.map((item, index) => (
+                    <>
+                      <Col lg={6}>
+                        <FormGroup>
+                          <Label>{`${item?.name}`}</Label>
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        defaultValue={{
-                          label: currentGift?.field_staff?.manager?.name,
-                          value: currentGift?.field_staff?.manager?.name,
-                          key: currentGift?.field_staff?.manager?.uid,
-                        }}
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'sm'));
-
-                          //   await getDirectorTarget(val?.key);
-                        }}
-                        options={directorOption}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Assigned To Name</Label>
-                      {view ? (
-                        <span>
-                          <p>{currentGift?.name}</p>
-                        </span>
-                      ) : loadingSM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
+                          <Select
+                            required
+                            isDisabled={true}
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            defaultValue={{
+                              label: item?.name,
+                              value: item?.uid,
+                              key: item?.uid,
+                            }}
+                            classNamePrefix="react-select"
+                            name="form-field-name-gender"
+                            onChange={async (val) => {
+                              dispatch(getUsers(val.key, 'sm'));
+                            }}
+                            options={directorOption}
                           />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            getStocks(val?.key);
-                            setGift({ ...gift, user_uid: val.key });
-                            dispatch(GetOldGiftsAction(val.key));
-                          }}
-                          options={salesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
+                        </FormGroup>
+                      </Col>
+                    </>
+                  ))}
 
                   <Col lg={6}>
                     <FormGroup>
@@ -401,93 +380,33 @@ const Gift = (props) => {
                 </>
               ) : currentGift?.role?.category?.name === 'rsm' ? (
                 <>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Director</Label>
+                  {parents?.map((item, index) => (
+                    <>
+                      <Col lg={6}>
+                        <FormGroup>
+                          <Label>{`${item?.name}`}</Label>
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'sm'));
-                        }}
-                        options={directorOption}
-                      />
-                    </FormGroup>
-                  </Col>
-
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Sales Manager</Label>
-                      {loadingSM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
+                          <Select
+                            required
+                            isDisabled={true}
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            defaultValue={{
+                              label: item?.name,
+                              value: item?.uid,
+                              key: item?.uid,
+                            }}
+                            classNamePrefix="react-select"
+                            name="form-field-name-gender"
+                            onChange={async (val) => {
+                              dispatch(getUsers(val.key, 'sm'));
+                            }}
+                            options={directorOption}
                           />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          defaultValue={{
-                            label: currentGift?.field_staff?.manager?.name,
-                            value: currentGift?.field_staff?.manager?.name,
-                            key: currentGift?.field_staff?.manager?.uid,
-                          }}
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'rsm'));
-                          }}
-                          options={salesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Regional Sales Manager</Label>
-                      {loadingRSM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
-                          />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            setGift({ ...gift, user_uid: val.key });
-                            getStocks(val?.key);
-                            dispatch(GetOldGiftsAction(val.key));
-                          }}
-                          options={regionalSalesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-
+                        </FormGroup>
+                      </Col>
+                    </>
+                  ))}
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Gift</Label>
@@ -518,6 +437,7 @@ const Gift = (props) => {
                           )}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
+                            setViewTest(false);
                           }}
                           options={medicineOptionFromStock}
                         />
@@ -527,119 +447,33 @@ const Gift = (props) => {
                 </>
               ) : currentGift?.role?.category?.name === 'am' ? (
                 <>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Director</Label>
+                  {parents?.map((item, index) => (
+                    <>
+                      <Col lg={6}>
+                        <FormGroup>
+                          <Label>{`${item?.name}`}</Label>
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'sm'));
-                        }}
-                        options={directorOption}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Sales Manager</Label>
-                      {loadingSM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
+                          <Select
+                            required
+                            isDisabled={true}
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            defaultValue={{
+                              label: item?.name,
+                              value: item?.uid,
+                              key: item?.uid,
+                            }}
+                            classNamePrefix="react-select"
+                            name="form-field-name-gender"
+                            onChange={async (val) => {
+                              dispatch(getUsers(val.key, 'sm'));
+                            }}
+                            options={directorOption}
                           />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'rsm'));
-                          }}
-                          options={salesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Regional Sales Manager</Label>
-                      {loadingRSM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
-                          />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          defaultValue={{
-                            label: currentGift?.field_staff?.manager?.name,
-                            value: currentGift?.field_staff?.manager?.name,
-                            key: currentGift?.field_staff?.manager?.uid,
-                          }}
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'am'));
-                          }}
-                          options={regionalSalesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Area Manager</Label>
-                      {loadingAM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
-                          />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            setGift({ ...gift, user_uid: val.key });
-                            getStocks(val?.key);
-                            dispatch(GetOldGiftsAction(val.key));
-                          }}
-                          options={areaManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
+                        </FormGroup>
+                      </Col>
+                    </>
+                  ))}
 
                   <Col lg={6}>
                     <FormGroup>
@@ -671,6 +505,7 @@ const Gift = (props) => {
                           )}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
+                            setViewTest(false);
                           }}
                           options={medicineOptionFromStock}
                         />
@@ -680,147 +515,33 @@ const Gift = (props) => {
                 </>
               ) : currentGift?.role?.category?.name === 'mpo' ? (
                 <>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Director</Label>
+                  {parents?.map((item, index) => (
+                    <>
+                      <Col lg={6}>
+                        <FormGroup>
+                          <Label>{`${item?.name}`}</Label>
 
-                      <Select
-                        required
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        onChange={async (val) => {
-                          dispatch(getUsers(val.key, 'sm'));
-                        }}
-                        options={directorOption}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Sales Manager</Label>
-                      {loadingSM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
+                          <Select
+                            required
+                            isDisabled={true}
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            defaultValue={{
+                              label: item?.name,
+                              value: item?.uid,
+                              key: item?.uid,
+                            }}
+                            classNamePrefix="react-select"
+                            name="form-field-name-gender"
+                            onChange={async (val) => {
+                              dispatch(getUsers(val.key, 'sm'));
+                            }}
+                            options={directorOption}
                           />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'rsm'));
-                          }}
-                          options={salesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Regional Sales Manager</Label>
-                      {loadingRSM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
-                          />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'am'));
-                          }}
-                          options={regionalSalesManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select Area Manager</Label>
-                      {loadingAM ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
-                          />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          defaultValue={{
-                            label: currentGift?.field_staff?.manager?.name,
-                            value: currentGift?.field_staff?.manager?.name,
-                            key: currentGift?.field_staff?.manager?.uid,
-                          }}
-                          classNamePrefix="react-select"
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            dispatch(getUsers(val.key, 'mpo'));
-                          }}
-                          options={areaManagerOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Select MPO</Label>
-                      {loadingMPO ? (
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
-                          />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentGift?.name,
-                            value: currentGift?.name,
-                            key: currentGift?.uid,
-                          }}
-                          name="form-field-name-gender"
-                          onChange={async (val) => {
-                            setGift({ ...gift, user_uid: val.key });
-                            getStocks(val?.key);
-                            dispatch(GetOldGiftsAction(val.key));
-                          }}
-                          options={mpoOption}
-                        />
-                      )}
-                    </FormGroup>
-                  </Col>
+                        </FormGroup>
+                      </Col>
+                    </>
+                  ))}
 
                   <Col lg={6}>
                     <FormGroup>
@@ -853,6 +574,7 @@ const Gift = (props) => {
                           // value={admin?.service_location_uid}
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
+                            setViewTest(false);
                           }}
                           options={medicineOptionFromStock}
                         />
@@ -864,28 +586,29 @@ const Gift = (props) => {
                 <p></p>
               )}
             </Row>
-            {viewTest ? <Row>
-              <Col lg={12}>
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Product Name</th>
-                      <th>Product Quanity</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {currentGift?.field_staff?.assigned_gifts?.map((item) => (
+            {viewTest ? (
+              <Row>
+                <Col lg={12}>
+                  <Table>
+                    <thead>
                       <tr>
-                        <td>{item?.medicine_name}</td>
-                        <td>{item?.medicine_quantity}</td>
+                        <th>Product Name</th>
+                        <th>Product Quanity</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row> : null}
-            
+                    </thead>
+
+                    <tbody>
+                      {currentGift?.field_staff?.assigned_gifts?.map((item) => (
+                        <tr>
+                          <td>{item?.medicine_name}</td>
+                          <td>{item?.medicine_quantity}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            ) : null}
 
             {viewTest ? (
               ''
@@ -893,7 +616,7 @@ const Gift = (props) => {
               <Row>
                 <Col xl={12}>
                   <FormGroup>
-                    <div className="table-form">
+                    <div className="table-form table-reponsive">
                       <Table>
                         <thead>
                           <tr>
@@ -917,9 +640,9 @@ const Gift = (props) => {
                                         className="form-control"
                                         name="name"
                                         type="number"
-                                        max={item?.availalbequantity}
+                                        // max={item?.availalbequantity}
                                         min={0}
-                                        value={item?.quantity}
+                                        defaultValue={item?.quantity}
                                         className="radio-in"
                                         onChange={(e) => {
                                           QuantityHanle(e, index);

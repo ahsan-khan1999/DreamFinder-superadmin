@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { ViewPeriorityListAction } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 export default function ViewPeriorityList(props) {
   const [search,setSearch] = useState('')
@@ -22,7 +22,7 @@ export default function ViewPeriorityList(props) {
 
     const handleSearch = (event) => {
         setSearch(event.target.value);
-        setDoc(searchArray(customerList, search));
+        setDoc(testSearch(customerList, search));
       };
       const handleAdd = () => {
         props.history.push('/app/PeriorityList/CreatePeriorityList');
@@ -53,6 +53,9 @@ export default function ViewPeriorityList(props) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Customer Name And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

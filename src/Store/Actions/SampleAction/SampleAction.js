@@ -11,6 +11,7 @@ import {
   CREATE_SAMPLE_TRANSACTION_CONSTANT,
   SUSPAND_SAMPLE_TRANSACTION_CONSTANT,
 } from 'Store/Constant/Constants';
+import { Check_Validation } from 'Utils/auth.util';
 
 export const ViewSampleAction = () => async (dispatch) => {
   try {
@@ -58,13 +59,7 @@ export const CreateSampleAction = (data) => async (dispatch) => {
         type: CREATE_SAMPLE_CONSTANT.CREATE_SAMPLE_ERROR,
         payload: false,
       });
-      NotificationManager.error(
-        res?.data?.response_message,
-        'Error',
-        5000,
-        null,
-        ''
-      );
+      Check_Validation(res)
       return false;
     }
   } catch {}

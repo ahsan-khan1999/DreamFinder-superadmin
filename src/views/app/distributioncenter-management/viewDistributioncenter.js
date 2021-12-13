@@ -25,7 +25,7 @@ import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
@@ -151,7 +151,7 @@ export default function viewDistributioncenter({ match, history }) {
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDistributionTable(searchArray(distributioncenterData, search));
+    setDistributionTable(testSearch(distributioncenterData, search));
   };
 
   return (
@@ -185,6 +185,9 @@ export default function viewDistributioncenter({ match, history }) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

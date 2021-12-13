@@ -17,7 +17,10 @@ export default function ViewGift(props) {
   const gifts = useSelector((state) => state?.GiftReducer?.gifts);
   const loading = useSelector((state) => state?.GiftReducer?.loading);
   useEffect(() => {
-    dispatch(ViewGiftAction())
+    if(gifts?.length < 1){
+      dispatch(ViewGiftAction())
+
+    }
   }, []);
 
   

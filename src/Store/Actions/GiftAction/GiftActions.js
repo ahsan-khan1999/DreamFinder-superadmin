@@ -6,6 +6,7 @@ import {
   VIEW_GIFT_CONSTANT,
   CREATE_GIFT_CONSTANT,
 } from 'Store/Constant/Constants';
+import { Check_Validation, Check_Validation_Update } from 'Utils/auth.util';
 
 export const CreateGift = (data) => async (dispatch) => {
   try {
@@ -30,7 +31,8 @@ export const CreateGift = (data) => async (dispatch) => {
         type: CREATE_GIFT_CONSTANT.CREATE_GIFT_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.response_message, 'Error', 5000, null, '');
+      Check_Validation_Update(res)
+      // NotificationManager.error(res?.response_message, 'Error', 5000, null, '');
       return false;
     }
   } catch {}

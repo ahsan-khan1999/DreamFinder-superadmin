@@ -84,9 +84,10 @@ export default function EditRsm(props) {
     dispatch(ViewSalesManagerManagerAction());
   };
   let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
+    (item) => ({ label: item?.name, value: item?.name, key: item?.uid })
   );
   useEffect(() => {
+    getServiceLocationUid(currentUser?.uid);
     setOptionState(defaultOptions);
 
     setAdmin(admin_obj);
@@ -115,11 +116,11 @@ export default function EditRsm(props) {
     setLoadingLocation(true);
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/region-classifications/read/area?child_uid=${uid}`,
+      BASEURL + `/region-classifications/read/area?child_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
@@ -140,10 +141,12 @@ export default function EditRsm(props) {
   };
   let value = [];
   const handleChange = async (e) => {
+    console.log(e,"event");
     let options = e;
     options?.map((item, index) => {
       value.push(item?.key);
     });
+    console.log(value,"value");
     await setArray(value);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
@@ -167,7 +170,7 @@ export default function EditRsm(props) {
       setLoading(false);
     } else {
       setLoading(true);
-
+      console.log(array, 'array');
       let test = { ...admin, service_location_uid: array };
 
       if (array === undefined) {
@@ -184,6 +187,7 @@ export default function EditRsm(props) {
           props.history.push('/app/menu/levels/ViewRsm');
         }
       } else {
+
         let res = await dispatch(UpdateUserAction(test));
         if (res) {
           NotificationManager.success(

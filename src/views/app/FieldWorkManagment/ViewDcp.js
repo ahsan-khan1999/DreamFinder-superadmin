@@ -12,6 +12,7 @@ import { searchArray } from 'Utils/auth.util';
 
 export default function ViewDcp(props) {
   const [search, setSearch] = useState('');
+  const [doc, setDoc] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(ViewDcpAction());
@@ -25,10 +26,17 @@ export default function ViewDcp(props) {
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(target, search));
+    setDoc(searchArray(dcps, search));
   };
-  
-  let header = ['Name', 'Doctor Name', 'Designation', 'Purpose', 'Status', 'Actions'];
+
+  let header = [
+    'Name',
+    'Doctor Name',
+    'Designation',
+    'Purpose',
+    'Status',
+    'Actions',
+  ];
   return (
     <Card>
       <CardBody>
@@ -59,7 +67,7 @@ export default function ViewDcp(props) {
             </div>
           </Col>
         </Row>
-       
+
         {/* <Button
           onClick={handleAddStaff}
           style={{
@@ -92,7 +100,7 @@ export default function ViewDcp(props) {
             ) : (
               <DCPTable
                 header={header}
-                data={dcps}
+                data={search === '' ? dcps : doc}
                 changeRoute={changeRoute}
               />
             )}
