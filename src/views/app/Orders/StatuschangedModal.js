@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -80,7 +79,7 @@ import Loader from 'react-loader-spinner';
   
   
   
-  
+  console.log(currentData,"Testing Status Update")
   
   const onSubmit = async () => {
     
@@ -123,7 +122,7 @@ import Loader from 'react-loader-spinner';
               <div className="d-flex justify-content-center  me-3 ">
                 <div
                   className="card cardlogmodel"
-                  style={{ minWidth: '50%', width: '400px', height: '200px' }}
+                  style={{ minWidth: '50%', width: '400px', height: '230px' }}
                 >
                   <div className="">
                     <div
@@ -178,12 +177,16 @@ import Loader from 'react-loader-spinner';
                               options={option_static_PaymentStatus}
                             />
                           </>
+                    
+                    
                         </FormGroup>
+                    
                       </Col>
-                      
-                      <div className="d-flex justify-content-center">
+                      <Col lg={12}>
+                        <FormGroup>
+                        <div className="text-center">
                       <Button
-                        className="btn btn-primary w-50"
+                        className="btn btn-primary "
                         size="md"
                         onClick={onSubmit}
                       >
@@ -194,7 +197,12 @@ import Loader from 'react-loader-spinner';
                 </div> : "Change Status"
               }
                       </Button>
-                      </div>
+                      </div>              
+                        </FormGroup>
+                    
+                      </Col>
+                      
+                    
                       
                     </div>
                   </div>
