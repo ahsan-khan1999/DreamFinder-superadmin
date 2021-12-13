@@ -390,7 +390,7 @@ export const iconsmind = [
       'iconsminds-folder-close',
       'iconsminds-folder-cloud',
       'iconsminds-folder-delete',
-      'iconsminds-folder-edit',
+      'p',
       'iconsminds-folder-open',
       'iconsminds-folders',
       'iconsminds-folder-zip',
