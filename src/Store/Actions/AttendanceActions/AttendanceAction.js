@@ -11,6 +11,7 @@ import {
   VIEW_USER_CONSTANT,
   GET_OLD_CONSTANT,
   LOADER_CONSTANT,
+  GET_PARENT_CONSTANT,
 } from 'Store/Constant/Constants';
 import { getToken } from 'Utils/auth.util';
 
@@ -129,9 +130,9 @@ export const getUsers = (uid, user) => async (dispatch) => {
       });
     }
 
-    const head = { "x-session-key": token.token, "x-session-type": token.type };
+    const head = { 'x-session-key': token.token, 'x-session-type': token.type };
     const response = await axios.get(
-      BASEURL+`/users/read/${user}?manager_uid=${uid}`,
+      BASEURL + `/users/read/${user}?manager_uid=${uid}`,
       { headers: head }
     );
     if (response?.data?.response_code === 200) {
@@ -173,7 +174,6 @@ export const getUsers = (uid, user) => async (dispatch) => {
           payload: response?.data?.response_data,
         });
       } else {
-        
         // dispatch({
         //   type: ORDER_CONSTANTS.ORDER_GET_USER,
         //   payload: response?.data?.response_data,
@@ -185,8 +185,6 @@ export const getUsers = (uid, user) => async (dispatch) => {
   }
 };
 
-
-
 export const GetOldGiftsAction = (uid) => async (dispatch) => {
   try {
     dispatch({
@@ -196,11 +194,11 @@ export const GetOldGiftsAction = (uid) => async (dispatch) => {
 
     let token = await getToken();
     const res = await axios.get(
-      BASEURL+`/fieldstaffs/read_gift?user_uid=${uid}`,
+      BASEURL + `/fieldstaffs/read_gift?user_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
@@ -218,6 +216,30 @@ export const GetOldGiftsAction = (uid) => async (dispatch) => {
         type: GET_OLD_CONSTANT.GET_OLD_ERROR,
         payload: false,
       });
+    }
+  } catch {}
+};
+
+export const getParentHirarchy = (uid) => async (dispatch) => {
+  try {
+    let token = await getToken();
+    const res = await axios.get(
+      BASEURL + `/fieldstaffs/parents?child_uid=${uid}`,
+      {
+        headers: {
+          'x-session-key': token.token,
+          'x-session-type': token.type,
+        },
+      }
+    );
+    if (res?.data?.response_code === 200) {
+      dispatch({
+        type: GET_PARENT_CONSTANT.GET_PARENT_SUCCESS,
+        payload: res?.data?.response_data,
+      });
+      return true;
+    } else {
+      return false;
     }
   } catch {}
 };

@@ -10,6 +10,7 @@ import {
   SUSPAND_TARGET_CONSTANT,
   DISTRIBUTION_CENTER_CONSTANT
 } from 'Store/Constant/Constants';
+import { Check_Validation } from 'Utils/auth.util';
 import { logOutUser } from '../Auth/Actions';
 
 export const ViewTargetAction = () => async (dispatch) => {
@@ -62,13 +63,14 @@ export const CreateTargetAction = (data) => async (dispatch) => {
         type: CREATE_TARGET_CONSTANT.CREATE_TARGET_ERROR,
         paylaod: false,
       });
-      NotificationManager.error(
-        res?.data?.response_message,
-        'Error',
-        5000,
-        null,
-        ''
-      );
+      Check_Validation(res)
+      // NotificationManager.error(
+      //   res?.data?.response_message,
+      //   'Error',
+      //   5000,
+      //   null,
+      //   ''
+      // );
       return false;
     }
   } catch {}

@@ -92,17 +92,31 @@ const ResetPassword = ({
 
   const onResetPassword = async (values) => {
     if (
-      changePasswordFormik?.values?.new_password.length > 3
-      
+      changePasswordFormik?.values?.new_password !==
+        changePasswordFormik?.values?.old_password &&
+      changePasswordFormik?.values?.new_password !==
+        changePasswordFormik?.values?.new_password_next
     ) {
+      
+      NotificationManager.error(
+        'Password Does not Match',
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      handleClose(true);
+    }
+    // setModal(false);
+    else {
+
       const apiData = {
         email_address: user?.email_address,
-
+        old_password: changePasswordFormik?.values?.old_password,
         new_password: changePasswordFormik?.values?.new_password,
       };
 
       let res = await dispatch(ChangePasswordAction(apiData));
-      // console.log(res);
       if (res) {
         NotificationManager.success(
           'Password has been successfully changed',
@@ -111,28 +125,8 @@ const ResetPassword = ({
           null,
           ''
         );
-        history.push('/user/login')
-      } else {
-        NotificationManager.error(
-          'Password has not been changed ',
-          'Error',
-          5000,
-          null,
-          ''
-        );
+        history.push('/user/login');
       }
-      // setModal(false);
-      handleClose(true);
-    } else {
-      NotificationManager.error(
-        'Password Does Not Match ',
-        'Error',
-        5000,
-        null,
-        ''
-      );
-      // setModal(false);
-      handleClose(true);
     }
   };
   const changePasswordFormik = useFormik({

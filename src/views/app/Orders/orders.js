@@ -23,43 +23,33 @@ import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
 
 export default function Orders({ match, history }) {
-
   let dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-
     getOrders();
-
   }, []);
-    
-
 
   const getOrders = async () => {
-
     let res = await dispatch(OrderAction());
-
   };
 
   const orders = useSelector((state) => state?.orderReducer?.order);
   const loading = useSelector((state) => state?.orderReducer?.loading);
 
-
   const changeRoute = async (item) => {
-    history.push('/app/Orders/viewCurrentOrder',item);
+    history.push('/app/Orders/viewCurrentOrder', item);
   };
   const [orderTable, setOrderTable] = useState(orders);
 
-
   const handleAdd = () => {
-
     history.push('/app/Orders/CreateOrder');
   };
 
@@ -80,7 +70,7 @@ export default function Orders({ match, history }) {
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setOrderTable(searchArray(orders, search));
+    setOrderTable(testSearch(orders, search));
   };
   return (
     <Card>
@@ -92,12 +82,10 @@ export default function Orders({ match, history }) {
           </Colxx>
         </Row>
         <Button
-           onClick={handleAdd}
-         
-
+          onClick={handleAdd}
           style={{
             marginBottom: '15px',
-         backgroundColor:'#0066b3',   
+            backgroundColor: '#0066b3',
             marginTop: '10px',
           }}
         >
@@ -108,13 +96,16 @@ export default function Orders({ match, history }) {
             {/* <label htmlFor="search">
               <input id="search" type="text" onChange={handleSearch} />
             </label> */}
-            
+
             <div className="header-search">
               <form action="#" className="">
                 <i className="fas fa-search search-icon"></i>
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Customer Name Payment Type  Delivery Status Payment Status And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">
@@ -124,7 +115,7 @@ export default function Orders({ match, history }) {
             </div>
           </Col>
         </Row>
-        
+
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (
@@ -148,7 +139,7 @@ export default function Orders({ match, history }) {
               <OrderRequestTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={orderTable}
+                data={search === '' ? orders : orderTable}
               />
             )}
           </Colxx>
@@ -157,4 +148,3 @@ export default function Orders({ match, history }) {
     </Card>
   );
 }
-

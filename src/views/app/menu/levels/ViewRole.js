@@ -6,7 +6,7 @@ import IntlMessages from 'helpers/IntlMessages';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import Breadcrumb from 'containers/navs/Breadcrumb';
 import axios from 'axios';
-import { getToken, searchArray } from '../../../../Utils/auth.util';
+import { getToken, searchArray, testSearch } from '../../../../Utils/auth.util';
 import { CardBody, Col, Table, CardTitle } from 'reactstrap';
 import { doc } from 'prettier';
 import { items } from 'data/carouselItems';
@@ -39,7 +39,7 @@ import {
 } from 'Store/Actions/User/UserActions';
 const ViewRole = ({ match, history }) => {
   const dispatch = useDispatch();
- 
+
   useEffect(() => {
     dispatch(ViewRoleAction());
   }, []);
@@ -51,26 +51,20 @@ const ViewRole = ({ match, history }) => {
   // }, [user]);
   const [search, setSearch] = useState('');
 
-  const changeRoute =  (item) => {
+  const changeRoute = (item) => {
     history.push('/app/menu/levels/EditRole', item);
   };
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(user, search));
+    setDoc(testSearch(role, search));
   };
 
   const handleAdd = () => {
     history.push('/app/menu/levels/CreateRole');
   };
-  
 
-  let header = [
-    'Name',
-    'Category',
-    'Status',
-    'Action',
-  ];
+  let header = ['Name', 'Category', 'Status', 'Action'];
   // const filterAdmin = user?.filter((item) =>
   //   item?.role?.category?.user_role_id === 1 ? item : null
   // );
@@ -95,6 +89,9 @@ const ViewRole = ({ match, history }) => {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">
@@ -146,10 +143,9 @@ const ViewRole = ({ match, history }) => {
             ) : (
               <ViewCategoryTabel
                 header={header}
-                data={role}
+                data={search === '' ? role : doc}
                 changeRoute={changeRoute}
               />
-            
             )}
           </Colxx>
         </Row>

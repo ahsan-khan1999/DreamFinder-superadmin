@@ -57,7 +57,7 @@ const CreateGifts = (props) => {
   const [array, setArray] = useState();
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState('');
-  
+
   const [stocks, setStocks] = useState([]);
   const gift_obj = {
     user_uid: '',
@@ -90,12 +90,10 @@ const CreateGifts = (props) => {
   }, []);
   useEffect(() => {
     setGift(gift_obj);
-  }, [])
+  }, []);
 
   const director = useSelector((state) => state?.ViewUserReducer?.director);
 
-  
-  
   const order = useSelector((state) => state?.TargetReducer?.order);
   let directorOption = [];
   director?.map((item) =>
@@ -161,11 +159,11 @@ const CreateGifts = (props) => {
     setLoadingStocks(true);
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`ttps://concord-backend-m2.herokuapp.com/api/stocks/read/gift?child_uid=${uid}`,
+      BASEURL + `/stocks/read/gift?child_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
@@ -177,6 +175,7 @@ const CreateGifts = (props) => {
   const provalue = [];
   const handleChangeProduct = async (e, index) => {
     let options = e;
+    console.log(options, 'options');
     options?.map((item, index) => {
       provalue.push({
         label: item?.label,
@@ -185,16 +184,21 @@ const CreateGifts = (props) => {
         quantity: array?.length > 0 ? array[index]?.quantity : 0,
       });
     });
-
+    console.log(provalue, 'provalue');
     await setArray(provalue);
   };
   const QuantityHanle = async (e, index) => {
+    console.log(e?.target?.value, index, 'index and event');
     const obj = array[index];
-    if (e?.target?.value <= Number(e?.target?.max)) {
-      obj.quantity = Number(e?.target?.value);
-    }
+    console.log(obj, 'obj');
+    // if (e?.target?.value <= Number(e?.target?.max)) {
+    //   obj.quantity = Number(e?.target?.value);
+    // }
+    obj.quantity = Number(e?.target?.value);
     array[index] = obj;
     const testArary = [...array];
+    console.log(testArary, 'testArary');
+
     setArray(testArary);
     await setGift({
       ...gift,
@@ -208,35 +212,15 @@ const CreateGifts = (props) => {
   };
 
   const onCreateGift = async () => {
-    setLoading(true);
-    if(array === undefined){
-      let apiData = {
-        ...gift,
-        assigned_gifts: currentGift?.assigned_gifts?.map((item) => {
-          return {
-            stock_uid: item?.stock_uid,
-            medicine_quantity: item?.medicine_quantity,
-          };
-        }),
-      };
-      let res = await dispatch(CreateGift(apiData))
-      if(res){
-        NotificationManager.success(
-          'Successfully Created',
-          'Success',
-          5000,
-          null,
-          ''
-        );
-        setLoading(false);
-  
-        props.history.push('/app/Gift/ViewGift');
-      }else{
-
-      setLoading(false);
-  
-      }
-    }else{
+    if (
+      gift?.user_uid === undefined ||
+      gift?.user_uid === '' ||
+      gift?.assigned_gifts?.length < 1
+    ) {
+      NotificationManager.error('Enter Details', 'Error', 5000, null, '');
+      return;
+    } else {
+      setLoading(true);
       let apiData = {
         ...gift,
         assigned_gifts: array?.map((item) => {
@@ -246,9 +230,9 @@ const CreateGifts = (props) => {
           };
         }),
       };
-  
-      let res = await dispatch(CreateGift(apiData))
-      if(res){
+
+      let res = await dispatch(CreateGift(apiData));
+      if (res) {
         NotificationManager.success(
           'Successfully Created',
           'Success',
@@ -257,31 +241,32 @@ const CreateGifts = (props) => {
           ''
         );
         setLoading(false);
-  
+
         props.history.push('/app/Gift/ViewGift');
-      }else{
-      setLoading(false);
-  
+      } else {
+        setLoading(false);
       }
+      setLoading(false);
     }
-    
+
     setLoading(false);
   };
   const handleBack = () => {
     props.history.push('/app/Gift/ViewGift');
   };
- 
 
   return (
     <Card>
       <CardBody>
-        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>Back</Button>
+        <Button style={{ backgroundColor: '#0066B3' }} onClick={handleBack}>
+          Back
+        </Button>
         <CardTitle>Create Gift</CardTitle>
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
           <Form>
             <Row className="h-100">
-            <Col lg={6}>
+              <Col lg={6}>
                 <FormGroup>
                   <Label>Select to Whom You Want to Assign</Label>
 
@@ -299,27 +284,19 @@ const CreateGifts = (props) => {
                   />
                 </FormGroup>
               </Col>
-              
 
               {selected?.value === 'SM' ? (
                 <>
-
-
-
-
-
-
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Manager Name</Label>
                       {view ? (
-                        ""
+                        ''
                       ) : (
                         <Select
                           required
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
-                          
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
                           onChange={async (val) => {
@@ -336,7 +313,7 @@ const CreateGifts = (props) => {
                     <FormGroup>
                       <Label>Assigned To Name</Label>
                       {view ? (
-                        ""
+                        ''
                       ) : loadingSM ? (
                         <div className="">
                           <Loader
@@ -353,7 +330,6 @@ const CreateGifts = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             getStocks(val?.key);
@@ -370,7 +346,7 @@ const CreateGifts = (props) => {
                     <FormGroup>
                       <Label>Select Gift</Label>
                       {view ? (
-                       ""
+                        ''
                       ) : laodingGifts ? (
                         <div className="">
                           <Loader
@@ -387,7 +363,6 @@ const CreateGifts = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
                           }}
@@ -464,7 +439,6 @@ const CreateGifts = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                         
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setGift({ ...gift, user_uid: val.key });
@@ -496,7 +470,6 @@ const CreateGifts = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
                           }}
@@ -600,7 +573,6 @@ const CreateGifts = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setGift({ ...gift, user_uid: val.key });
@@ -632,7 +604,6 @@ const CreateGifts = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                          
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
                           }}
@@ -764,8 +735,6 @@ const CreateGifts = (props) => {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          
-
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setGift({ ...gift, user_uid: val.key });
@@ -797,11 +766,10 @@ const CreateGifts = (props) => {
                           closeMenuOnSelect={false}
                           components={animatedComponents}
                           isMulti
-                         
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
                           }}
-                        options={medicineOptionFromStock}
+                          options={medicineOptionFromStock}
                         />
                       )}
                     </FormGroup>
@@ -811,7 +779,7 @@ const CreateGifts = (props) => {
                 <p></p>
               )}
             </Row>
-            
+
             {view ? (
               ''
             ) : (
@@ -842,9 +810,9 @@ const CreateGifts = (props) => {
                                         className="form-control"
                                         name="name"
                                         type="number"
-                                        max={item?.availalbequantity}
-                                        min={0}
-                                        value={item?.quantity}
+                                        // max={item?.availalbequantity}
+                                        // min={0}
+                                        defaultValue={item?.quantity}
                                         className="radio-in"
                                         onChange={(e) => {
                                           QuantityHanle(e, index);

@@ -7,25 +7,27 @@ import Loader from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 export default function ViewTarget(props) {
+  const target = useSelector((state) => state?.TargetReducer?.target);
+  const loading = useSelector((state) => state?.TargetReducer?.loading);
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(ViewTargetAction());
-  }, []);
+    if (target?.length < 1) {
+      dispatch(ViewTargetAction());
+    }
+  }, [dispatch]);
   const [doc, setDoc] = useState([]);
 
-  const target = useSelector((state) => state?.TargetReducer?.target);
-  const loading = useSelector((state) => state?.TargetReducer?.loading);
   const changeRoute = (item) => {
     props.history.push('/app/Target/EditTarget', item);
   };
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(target, search));
+    setDoc(testSearch(target, search));
   };
 
   const handleAdd = () => {
@@ -53,6 +55,9 @@ export default function ViewTarget(props) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name Role And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

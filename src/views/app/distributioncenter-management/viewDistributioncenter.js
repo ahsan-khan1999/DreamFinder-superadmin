@@ -25,7 +25,7 @@ import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
@@ -53,7 +53,6 @@ export default function viewDistributioncenter({ match, history }) {
     (state) => state?.distributionCenterReducer?.distributioncenterloader
   );
 
-
   // console.log(distributioncenter,"distributioncenter")
 
   let distributioncenterData = [];
@@ -64,38 +63,52 @@ export default function viewDistributioncenter({ match, history }) {
         item?.depot_managers,
         'is_primary',
         'designation'
-        
       ),
       email: CheckConditionArray(
         item?.depot_managers,
         'is_primary',
         'email_address'
-        
       ),
       address:
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','street_address') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','area') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','province') + " " +
-        CheckConditionArray(item?.depot_managers, 'is_primary', 'address','city') ,
+        CheckConditionArray(
+          item?.depot_managers,
+          'is_primary',
+          'address',
+          'street_address'
+        ) +
+        ' ' +
+        CheckConditionArray(
+          item?.depot_managers,
+          'is_primary',
+          'address',
+          'area'
+        ) +
+        ' ' +
+        CheckConditionArray(
+          item?.depot_managers,
+          'is_primary',
+          'address',
+          'province'
+        ) +
+        ' ' +
+        CheckConditionArray(
+          item?.depot_managers,
+          'is_primary',
+          'address',
+          'city'
+        ),
       phone: CheckConditionArray(
         item?.depot_managers,
         'is_primary',
-        'phone_number',
-       
+        'phone_number'
       ),
       status: item?.status.name,
-      depo_uid:CheckConditionArray(
+      depo_uid: CheckConditionArray(item?.depot_managers, 'is_primary', 'uid'),
+      regions: item?.regions,
+      depo_name: CheckConditionArray(
         item?.depot_managers,
         'is_primary',
-        'uid',
-       
-      ),
-      regions:item?.regions,
-      depo_name:CheckConditionArray(
-        item?.depot_managers,
-        'is_primary',
-        'name',
-       
+        'name'
       ),
       uid: item?.uid,
 
@@ -103,7 +116,6 @@ export default function viewDistributioncenter({ match, history }) {
       areasSelect: item?.areas,
     })
   );
-
 
   const loading = useSelector(
     (state) => state?.distributionCenterReducer?.loading
@@ -137,7 +149,7 @@ export default function viewDistributioncenter({ match, history }) {
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDistributionTable(searchArray(distributioncenterData, search));
+    setDistributionTable(testSearch(distributioncenterData, search));
   };
 
   return (
@@ -150,12 +162,10 @@ export default function viewDistributioncenter({ match, history }) {
           </Colxx>
         </Row>
         <Button
-           onClick={handleAdd}
-         
-
+          onClick={handleAdd}
           style={{
             marginBottom: '15px',
-         backgroundColor:'#0066b3',   
+            backgroundColor: '#0066b3',
             marginTop: '10px',
           }}
         >
@@ -173,6 +183,9 @@ export default function viewDistributioncenter({ match, history }) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

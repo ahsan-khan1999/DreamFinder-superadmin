@@ -6,7 +6,7 @@ import IntlMessages from 'helpers/IntlMessages';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
 import Breadcrumb from 'containers/navs/Breadcrumb';
 import axios from 'axios';
-import { getToken, searchArray } from '../../../../Utils/auth.util';
+import { getToken, searchArray, testSearch } from '../../../../Utils/auth.util';
 import { CardBody, Col, Table, CardTitle } from 'reactstrap';
 import { doc } from 'prettier';
 import { items } from 'data/carouselItems';
@@ -56,7 +56,8 @@ const ViewAdmin = ({ match, history }) => {
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(user, search));
+    
+    setDoc(testSearch(user, search));
   };
 
   const handleAdd = () => {
@@ -96,6 +97,9 @@ const ViewAdmin = ({ match, history }) => {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name Designation Gender And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

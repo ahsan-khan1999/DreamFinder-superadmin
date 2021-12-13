@@ -83,10 +83,11 @@ export default function EditMpo(props) {
     dispatch(ViewRoleAction());
   };
   let defaultOptions = currentUser?.field_staff?.service_location?.map(
-    (item) => ({ label: item?.name, value: item?.name, id: item?.uid })
+    (item) => ({ label: item?.name, value: item?.name, key: item?.uid })
   );
   useEffect(() => {
     setAdmin(admin_obj);
+    getServiceLocationUid(currentUser?.uid);
     setOptionState(defaultOptions);
 
     if (currentUser?.status?.name === 'suspended') {
@@ -235,11 +236,11 @@ export default function EditMpo(props) {
     setLoadingLocation(true);
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/region-classifications/read/territory?child_uid=${uid}`,
+      BASEURL + `/region-classifications/read/territory?child_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );

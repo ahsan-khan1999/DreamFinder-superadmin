@@ -779,7 +779,7 @@ export const DistributionCenter = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -794,7 +794,7 @@ export const DistributionCenter = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -809,7 +809,7 @@ export const DistributionCenter = (props) => {
               fontSize: '0.9rem',
             }}
           >
-           {props?.value?.toUpperCase()}
+           {props?.value}
           </span>
         ),
       },
@@ -1033,7 +1033,7 @@ export const StockTable = (props) => {
       },
       {
         Header: props?.header[1],
-        accessor: 'product.category.category',
+        accessor: 'product.category.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -1115,7 +1115,7 @@ export const StockTable = (props) => {
 
       {
         Header: (
-          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[6]}</span>
+          <span >{props?.header[6]}</span>
         ),
         accessor: 'title6',
         cellClass: 'text-muted w-10',
