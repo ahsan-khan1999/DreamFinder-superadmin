@@ -15,9 +15,7 @@ export default function ViewTarget(props) {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
   useEffect(() => {
-    if (target?.length < 1) {
       dispatch(ViewTargetAction());
-    }
   }, [dispatch]);
   const [doc, setDoc] = useState([]);
 

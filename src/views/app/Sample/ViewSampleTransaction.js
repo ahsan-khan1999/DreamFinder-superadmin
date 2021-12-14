@@ -88,7 +88,7 @@ export default function ViewSampleTransaction(props) {
             marginTop: '10px',
           }}
         >
-          Add Sample
+          Add Sample Transaction
         </Button>
         {/* <Button
             onClick={handleAddStaff}

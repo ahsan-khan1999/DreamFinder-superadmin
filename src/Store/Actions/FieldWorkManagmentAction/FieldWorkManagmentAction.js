@@ -88,7 +88,9 @@ export const SuspandDcpDcrAction = (data) => async (dispatch) => {
         type: SUSPAND_DCP_DCR_CONSTANT.SUSPAND_DCP_DCR_ERROR,
         payload: false,
       });
-      NotificationManager.error(res?.repsonse_message, 'Error', 5000, null, '');
+      Check_Validation_Update(res);
+
+      // NotificationManager.error(res?.repsonse_message, 'Error', 5000, null, '');
       return false;
     }
   } catch {}

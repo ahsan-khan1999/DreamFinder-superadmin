@@ -23,7 +23,7 @@ export default function EditDcr(props) {
     let res = await dispatch(SuspandDcpDcrAction({ uid: currentItem?.uid }));
     if (res) {
       NotificationManager.success(
-        'Successfully Suspanded',
+        'Successfully Suspended',
         'Success',
         5000,
         null,
@@ -248,7 +248,7 @@ export default function EditDcr(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                Suspand Dcr
+                Suspend Dcr
               </span>
             </Button>
           </Form>

@@ -530,7 +530,7 @@ export default function EditDeliveryStaff(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Area" />
+                    <IntlMessages id="Territory" />
                   </Label>
 
                   {thisView ? (

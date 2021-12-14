@@ -609,12 +609,12 @@ const data = [
         label: 'View Daily Call Plan',
         to: `${adminRoot}/FieldWorkManagment/ViewDcp`,
       },
-      {
-        icon: 'simple-icon-check',
+      // {
+      //   icon: 'simple-icon-check',
 
-        label: 'View Schedule',
-        to: `${adminRoot}/FieldWorkManagment/ViewSchedule`,
-      },
+      //   label: 'View Schedule',
+      //   to: `${adminRoot}/FieldWorkManagment/ViewSchedule`,
+      // },
       {
         icon: 'simple-icon-check',
 

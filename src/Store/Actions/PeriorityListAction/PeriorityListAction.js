@@ -12,7 +12,7 @@ import {
   GET_MPO_CUSTOMER_CONSTANT,
   GET_MPO_DOCTOR_CONSTANT
 } from 'Store/Constant/Constants';
-import { getToken } from 'Utils/auth.util';
+import { Check_Validation, Check_Validation_Update, getToken } from 'Utils/auth.util';
 
 export const ViewPeriorityListAction = () => async (dispatch) => {
   try {
@@ -87,13 +87,15 @@ export const CreateCustomerPeriorityListAction = (data) => async (dispatch) => {
         type: CREATE_PERORITY_CONSTANT.CREATE_PERORITY_ERROR,
         payload: false,
       });
-      NotificationManager.error(
-        res?.data?.response_message,
-        'Error',
-        5000,
-        null,
-        ''
-      );
+
+      Check_Validation(res)
+      // NotificationManager.error(
+      //   res?.data?.response_message,
+      //   'Error',
+      //   5000,
+      //   null,
+      //   ''
+      // );
       return false;
     }
   } catch {}
@@ -121,13 +123,15 @@ export const CreateDoctorPeriorityListAction = (data) => async (dispatch) => {
         type: CREATE_PERORITY_CONSTANT.CREATE_PERORITY_ERROR,
         payload: false,
       });
-      NotificationManager.error(
-        res?.data?.response_message,
-        'Error',
-        5000,
-        null,
-        ''
-      );
+      Check_Validation(res)
+
+      // NotificationManager.error(
+      //   res?.data?.response_message,
+      //   'Error',
+      //   5000,
+      //   null,
+      //   ''
+      // );
       return false;
     }
   } catch {}
@@ -156,6 +160,8 @@ export const EditDoctorPeriorityListAction = (data) => async (dispatch) => {
         type: UPDATE_PERORITY_CONSTANT.UPDATE_PERORITY_ERROR,
         payload: false,
       });
+      // Check_Validation_Update(res)
+
       NotificationManager.error(res?.response_message, 'Error', 5000, null, '');
       return false;
     }

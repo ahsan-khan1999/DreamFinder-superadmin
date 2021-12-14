@@ -681,7 +681,6 @@ const Gift = (props) => {
             </Button>
           </Form>
         </Formik>
-        <div style={{ marginTop: '30px' }} />
       </CardBody>
     </Card>
   );

@@ -500,18 +500,19 @@ export default function EditTarget(props) {
                       </FormGroup>
                     </Col>
                   ) : (
-                    <Input
-                      name="amount"
-                      type="number"
-                      disabled
-                      defaultValue={currentTarget?.start_date}
-                      onChange={(e) =>
-                        setTarget({
-                          ...target,
-                          amount: Number(e.target.value),
-                        })
-                      }
-                    />
+                    // <Input
+                    //   name="amount"
+                    //   type="number"
+                    //   disabled
+                    //   defaultValue={currentTarget?.start_date}
+                    //   onChange={(e) =>
+                    //     setTarget({
+                    //       ...target,
+                    //       amount: Number(e.target.value),
+                    //     })
+                    //   }
+                    // />
+                    null
                   )}
 
                   {view ? (
@@ -529,18 +530,19 @@ export default function EditTarget(props) {
                       </FormGroup>
                     </Col>
                   ) : (
-                    <Input
-                      name="amount"
-                      type="number"
-                      disabled
-                      defaultValue={currentTarget?.end_date}
-                      onChange={(e) =>
-                        setTarget({
-                          ...target,
-                          amount: Number(e.target.value),
-                        })
-                      }
-                    />
+                    // <Input
+                    //   name="amount"
+                    //   type="number"
+                    //   disabled
+                    //   defaultValue={currentTarget?.end_date}
+                    //   onChange={(e) =>
+                    //     setTarget({
+                    //       ...target,
+                    //       amount: Number(e.target.value),
+                    //     })
+                    //   }
+                    // />
+                    null
                   )}
 
                   <Col lg={6}>
@@ -608,6 +610,8 @@ export default function EditTarget(props) {
                       ) : (
                         <Input
                           value={target?.by_customer_visits}
+                          type='number'
+
                           defaultValue={
                             currentTarget?.by_customer_visits
                               ?.by_customer_visits
@@ -636,6 +640,8 @@ export default function EditTarget(props) {
                       ) : (
                         <Input
                           value={target?.by_doctor_visits}
+                          type='number'
+
                           defaultValue={
                             currentTarget?.by_doctor_visits?.by_doctor_visits
                           }
@@ -661,6 +667,8 @@ export default function EditTarget(props) {
                       ) : (
                         <Input
                           value={target?.no_orders}
+                          type='number'
+
                           defaultValue={currentTarget?.no_orders?.no_orders}
                           onChange={(e) => {
                             if (e.target.value > 0) {
@@ -686,12 +694,12 @@ export default function EditTarget(props) {
                       ) : (
                         <Input
                           value={target?.no_prescriptions}
+                          type='number'
                           defaultValue={
                             currentTarget?.no_prescriptions?.no_prescriptions
                           }
                           onChange={(e) => {
-                            if(e.target.value > 0){
-
+                            if (e.target.value > 0) {
                               setTarget({
                                 ...target,
                                 no_prescriptions: Number(e.target.value),
@@ -718,12 +726,14 @@ export default function EditTarget(props) {
                           name="amount"
                           type="number"
                           defaultValue={currentTarget?.amount?.amount}
-                          onChange={(e) =>
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            })
-                          }
+                          onChange={(e) => {
+                            if (e.target.value > 0) {
+                              setTarget({
+                                ...target,
+                                amount: Number(e.target.value),
+                              });
+                            }
+                          }}
                         />
                       )}
                     </FormGroup>
@@ -881,10 +891,13 @@ export default function EditTarget(props) {
                               ?.by_customer_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_customer_visits: e.target.value,
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                by_customer_visits: e.target.value,
+                              });
+                            }
                           }}
                         />
                       )}
@@ -907,10 +920,14 @@ export default function EditTarget(props) {
                             currentTarget?.by_doctor_visits?.by_doctor_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_doctor_visits: e.target.value,
-                            });
+                            if(e.target.value > 0){
+                              setTarget({
+                                ...target,
+                                by_doctor_visits: e.target.value,
+                              });
+                              
+                            }
+
                           }}
                         />
                       )}
@@ -928,10 +945,15 @@ export default function EditTarget(props) {
                           value={target?.no_orders}
                           defaultValue={currentTarget?.no_orders?.no_orders}
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                no_orders: Number(e.target.value),
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -949,10 +971,15 @@ export default function EditTarget(props) {
                           value={target?.no_prescriptions}
                           defaultValue={currentTarget?.no_orders?.no_orders}
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                no_prescriptions: Number(e.target.value),
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -973,11 +1000,17 @@ export default function EditTarget(props) {
                           name="amount"
                           type="number"
                           defaultValue={currentTarget?.amount?.amount}
-                          onChange={(e) =>
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            })
+                          onChange={(e) =>{
+
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                amount: Number(e.target.value),
+                              })
+                            }
+
+                          }
                           }
                         />
                       )}
@@ -1205,10 +1238,15 @@ export default function EditTarget(props) {
                               ?.by_customer_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_customer_visits: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+
+                              setTarget({
+                                ...target,
+                                by_customer_visits: Number(e.target.value),
+                              });
+                            }
+
                           }}
                         />
                       )}
@@ -1231,10 +1269,15 @@ export default function EditTarget(props) {
                             currentTarget?.by_doctor_visits?.by_doctor_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_doctor_visits: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                by_doctor_visits: Number(e.target.value),
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -1252,10 +1295,15 @@ export default function EditTarget(props) {
                           value={target?.no_orders}
                           defaultValue={currentTarget?.no_orders?.no_orders}
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              
+                                                          setTarget({
+                                                            ...target,
+                                                            no_orders: Number(e.target.value),
+                                                          });
+
+                            }
                           }}
                         />
                       )}
@@ -1277,10 +1325,15 @@ export default function EditTarget(props) {
                             currentTarget?.no_prescriptions?.no_prescriptions
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                no_prescriptions: Number(e.target.value),
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -1301,11 +1354,16 @@ export default function EditTarget(props) {
                           name="amount"
                           type="number"
                           defaultValue={currentTarget?.amount?.amount}
-                          onChange={(e) =>
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            })
+                          onChange={(e) =>{
+                            if(e.target.value > 0){
+                              setTarget({
+                                ...target,
+                                amount: Number(e.target.value),
+                              })
+
+                            }
+
+                          }
                           }
                         />
                       )}
@@ -1361,10 +1419,15 @@ export default function EditTarget(props) {
                               ?.by_customer_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_customer_visits: e.target.value,
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                by_customer_visits: e.target.value,
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -1387,10 +1450,15 @@ export default function EditTarget(props) {
                             currentTarget?.by_doctor_visits?.by_doctor_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_doctor_visits: e.target.value,
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                by_doctor_visits: e.target.value,
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -1643,10 +1711,15 @@ export default function EditTarget(props) {
                           value={target?.no_orders}
                           defaultValue={currentTarget?.no_orders?.no_orders}
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                no_orders: Number(e.target.value),
+                              });
+
+                            }
+                            
                           }}
                         />
                       )}
@@ -1668,10 +1741,15 @@ export default function EditTarget(props) {
                             currentTarget?.no_prescriptions?.no_prescriptions
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                no_prescriptions: Number(e.target.value),
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -1692,11 +1770,17 @@ export default function EditTarget(props) {
                           name="amount"
                           type="number"
                           defaultValue={currentTarget?.amount?.amount}
-                          onChange={(e) =>
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            })
+                          onChange={(e) =>{
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                amount: Number(e.target.value),
+                              })
+
+                            }
+
+                          }
                           }
                         />
                       )}
@@ -1753,10 +1837,14 @@ export default function EditTarget(props) {
                               ?.by_customer_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_customer_visits: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                by_customer_visits: Number(e.target.value),
+                              });
+                            }
+
                           }}
                         />
                       )}
@@ -1779,10 +1867,15 @@ export default function EditTarget(props) {
                             currentTarget?.by_doctor_visits?.by_doctor_visits
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              by_doctor_visits: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                by_doctor_visits: Number(e.target.value),
+                              });
+
+                            }
+
                           }}
                         />
                       )}
@@ -2088,10 +2181,14 @@ export default function EditTarget(props) {
                           value={target?.no_orders}
                           defaultValue={currentTarget?.no_orders?.no_orders}
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+
+                              setTarget({
+                                ...target,
+                                no_orders: Number(e.target.value),
+                              });
+                            }
+
                           }}
                         />
                       )}
@@ -2113,10 +2210,13 @@ export default function EditTarget(props) {
                             currentTarget?.no_prescriptions?.no_prescriptions
                           }
                           onChange={(e) => {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
+                            if(e.target.value > 0){
+                            
+                              setTarget({
+                                ...target,
+                                no_prescriptions: Number(e.target.value),
+                              });
+                            }
                           }}
                         />
                       )}
@@ -2164,7 +2264,7 @@ export default function EditTarget(props) {
                         <thead>
                           <tr>
                             <th>Medicine Products</th>
-                            <th>Available Quantity</th>
+                            {/* <th>Available Quantity</th> */}
                             <th>Add Quantity</th>
                           </tr>
                         </thead>
@@ -2174,7 +2274,7 @@ export default function EditTarget(props) {
                               <tr>
                                 <td>{item?.label}</td>
 
-                                <td>{item?.availalbequantity}</td>
+                                {/* <td>{item?.availalbequantity}</td> */}
                                 <td>
                                   <Col lg={12}>
                                     <FormGroup>

@@ -7,7 +7,7 @@ import Loader from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { ViewGiftAction } from 'Store/Actions/GiftAction/GiftActions';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 export default function ViewGift(props) {
   const [search, setSearch] = useState('');
@@ -30,14 +30,14 @@ export default function ViewGift(props) {
   const addGift = () => {
     props.history.push('/app/Gift/CreateGift')
   }
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-    setDoc(searchArray(gifts, search));
-  };
+  
   const filter_gift =gifts?.filter((item) => (
     item?.field_staff?.assigned_gifts?.length === 0 ? null : item 
   )) 
- 
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+    setDoc(searchArray(filter_gift, search));
+  };
   const headers = [
     'Assigned To Name',
     'Email Address',
@@ -64,6 +64,9 @@ export default function ViewGift(props) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name And Email Address"
                   onChange={handleSearch}
                 />
                 <button type="submit">

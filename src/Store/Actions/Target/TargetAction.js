@@ -10,7 +10,7 @@ import {
   SUSPAND_TARGET_CONSTANT,
   DISTRIBUTION_CENTER_CONSTANT
 } from 'Store/Constant/Constants';
-import { Check_Validation } from 'Utils/auth.util';
+import { Check_Validation, Check_Validation_Update } from 'Utils/auth.util';
 import { logOutUser } from '../Auth/Actions';
 
 export const ViewTargetAction = () => async (dispatch) => {
@@ -98,8 +98,10 @@ export const EditTargetAction = (data) => async (dispatch) => {
         type:EDIT_TARGET_CONSTANT.EDIT_TARGET_ERROR,
         payload:false
       })
+      Check_Validation_Update(res)
 
-      NotificationManager.error(res?.response_message,'Error',5000,null,'')
+
+      // NotificationManager.error(res?.response_message,'Error',5000,null,'')
       return false
     }
   }catch{

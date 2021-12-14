@@ -87,9 +87,9 @@ export default function ViewCurrentStockTransaction(props) {
 
     distribution_centre_uid: CurrentStocks?.distribution_centre?.uid,
 
-    quantity: CurrentStocks.quantity,
+    quantity: CurrentStocks?.quantity,
 
-    uid: CurrentStocks.uid,
+    uid: CurrentStocks?.uid,
   };
 
   const loading = useSelector((state) => state?.stockReducer?.loader);
@@ -224,7 +224,7 @@ export default function ViewCurrentStockTransaction(props) {
                       </Label>
 
                       <span>
-                        <p>{CurrentStocks?.name ? CurrentStocks?.name.toUpperCase() : 'N/A'}</p>
+                        <p>{CurrentStocks?.name ? CurrentStocks?.name?.toUpperCase() : 'N/A'}</p>
                       </span>
                     </FormGroup>
                   </Col>
@@ -243,7 +243,7 @@ export default function ViewCurrentStockTransaction(props) {
                       </Label>
 
                       <span>
-                        <p>{CurrentStocks?.stock?.product?.category?.category.toUpperCase()}</p>
+                        <p>{CurrentStocks?.stock?.product?.category?.category?.toUpperCase()}</p>
                       </span>
                     </FormGroup>
                   </Col>
@@ -339,7 +339,7 @@ export default function ViewCurrentStockTransaction(props) {
                       </Label>
                       <span>
                         <p>
-                          {CurrentStocks?.transaction_type.toUpperCase()}
+                          {CurrentStocks?.transaction_type?.toUpperCase()}
                         </p>
                       </span>
                     </FormGroup>

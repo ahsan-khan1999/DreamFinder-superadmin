@@ -26,7 +26,7 @@ export default function EditDcp(props) {
     let res = await dispatch(SuspandDcpAction({ uid: currentItem?.uid }));
     if (res) {
       NotificationManager.success(
-        'Successfully Suspanded',
+        'Successfully Suspended',
         'Success',
         5000,
         null,
@@ -164,7 +164,7 @@ export default function EditDcp(props) {
                 <span className="bounce3" />
               </span>
               <span className="label">
-                Suspand Dcp
+                Suspend Dcp
               </span>
             </Button>
           </Form>

@@ -55,16 +55,16 @@ const CreateAttendance = React.lazy(() =>
 const EditAttendance = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Attendance/EditAttendance')
 );
-const ViewSchedule = React.lazy(() =>
-  import(
-    /* webpackChunkName: "dashboards" */ './FieldWorkManagment/ViewSchedule'
-  )
-);
-const EditSchedule = React.lazy(() =>
-  import(
-    /* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditSchedule'
-  )
-);
+// const ViewSchedule = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "dashboards" */ './FieldWorkManagment/ViewSchedule'
+//   )
+// );
+// const EditSchedule = React.lazy(() =>
+//   import(
+//     /* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditSchedule'
+//   )
+// );
 
 const EditDcp = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './FieldWorkManagment/EditDcp')
@@ -441,14 +441,14 @@ const App = ({ match }) => {
               path={`${match.url}/FieldWorkManagment/EditDcr`}
               render={(props) => <EditDcr {...props} />}
             />
-            <Route
+            {/* <Route
               path={`${match.url}/FieldWorkManagment/ViewSchedule`}
               render={(props) => <ViewSchedule {...props} />}
             />
             <Route
               path={`${match.url}/FieldWorkManagment/EditSchedule`}
               render={(props) => <EditSchedule {...props} />}
-            />
+            /> */}
             {/* <Route
               path={`${match.url}/orders`}
               render={(props) => <Orders {...props} />}

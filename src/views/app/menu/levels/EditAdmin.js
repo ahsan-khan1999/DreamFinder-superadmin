@@ -76,7 +76,7 @@ export default function EditAdmin(props) {
 
   let options = [];
   roles?.filter((item) =>
-    item?.category?.user_role_id == 5
+    item?.category?.user_role_id == 1
       ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
       : null
   );

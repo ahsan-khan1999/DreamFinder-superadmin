@@ -101,7 +101,7 @@ export default function EditDoctorPeriorityList(props) {
     );
     if (res) {
       NotificationManager.success(
-        'Successfully Suspanded',
+        'Successfully Suspended',
         'Success',
         5000,
         null,
