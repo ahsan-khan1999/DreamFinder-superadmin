@@ -437,7 +437,7 @@ export const OrderRequestTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -452,7 +452,7 @@ export const OrderRequestTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -544,7 +544,7 @@ export const OrderRequestTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -794,7 +794,7 @@ export const DistributionCenter = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value}
+            {props?.value === "N/A N/A N/A N/A" ? "N/A" :props?.value}
           </span>
         ),
       },
@@ -2452,7 +2452,7 @@ export const TargetTable = (props) => {
         Header: header[3],
         accessor: 'start_date',
         cellClass: 'list-item-heading w-10',
-        Cell: (props) => <>{moment.unix(props.value).format('MMM DD, YYYY')}</>,
+        Cell: (props) => <>{moment.unix(props.value).format('MMM DD, YYYY  / HH:mm:ss')}</>,
       },
 
       {

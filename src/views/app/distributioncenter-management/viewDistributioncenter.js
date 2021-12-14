@@ -71,32 +71,32 @@ export default function viewDistributioncenter({ match, history }) {
       ),
       address:
         CheckConditionArray(
-          item?.depot_managers,
-          'is_primary',
-          'address',
-          'street_address'
-        ) +
-        ' ' +
-        CheckConditionArray(
-          item?.depot_managers,
-          'is_primary',
-          'address',
-          'area'
-        ) +
-        ' ' +
-        CheckConditionArray(
-          item?.depot_managers,
-          'is_primary',
-          'address',
-          'province'
-        ) +
-        ' ' +
-        CheckConditionArray(
-          item?.depot_managers,
-          'is_primary',
-          'address',
-          'city'
-        ),
+              item?.depot_managers,
+              'is_primary',
+              'address',
+              'street_address'
+            ) +
+            ' ' +
+            CheckConditionArray(
+              item?.depot_managers,
+              'is_primary',
+              'address',
+              'area'
+            ) +
+            ' ' +
+            CheckConditionArray(
+              item?.depot_managers,
+              'is_primary',
+              'address',
+              'province'
+            ) +
+            ' ' +
+            CheckConditionArray(
+              item?.depot_managers,
+              'is_primary',
+              'address',
+              'city'
+            ),
       phone: CheckConditionArray(
         item?.depot_managers,
         'is_primary',
@@ -117,6 +117,8 @@ export default function viewDistributioncenter({ match, history }) {
     })
   );
 
+
+  console.log(distributioncenterData,"Testing Now")
   const loading = useSelector(
     (state) => state?.distributionCenterReducer?.loading
   );

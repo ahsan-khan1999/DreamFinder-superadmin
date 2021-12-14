@@ -189,7 +189,7 @@ export default function viewCurrentOrderComponent(props) {
                     >Customer Name</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder.customer.name.toUpperCase()}</p>
+                    <p>{currentOrder.customer.name}</p>
                   </span>
                 </FormGroup>
               </Col>
@@ -204,7 +204,7 @@ export default function viewCurrentOrderComponent(props) {
                     >Market & Address</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder.customer.market__street_address.toUpperCase()}</p>
+                    <p>{currentOrder.customer.market__street_address}</p>
                   </span>
                 </FormGroup>
               </Col>
@@ -222,7 +222,7 @@ export default function viewCurrentOrderComponent(props) {
                     <p>
                       {moment
                         .unix(currentOrder.order_datetime)
-                        .format('MMM DD, YYYY')}
+                        .format('MMM DD, YYYY  / HH:mm:ss')}
                     </p>
                   </span>
                 </FormGroup>
@@ -330,7 +330,7 @@ export default function viewCurrentOrderComponent(props) {
                     >Proceed By</h6>
                   </Label>
                   <span>
-                    <p>{currentOrder.ordered_by.name.toUpperCase()}</p>
+                    <p>{currentOrder.ordered_by.name}</p>
                   </span>
                 </FormGroup>
               </Col>
