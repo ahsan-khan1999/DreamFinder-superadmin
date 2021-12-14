@@ -232,7 +232,7 @@ export default function ViewCurrentStock(props) {
                       </Label>
 
                       <span>
-                        <p>{CurrentStocks?.product?.name.toUpperCase()}</p>
+                        <p>{CurrentStocks?.product?.name?.toUpperCase()}</p>
                       </span>
                     </FormGroup>
                   </Col>
@@ -251,7 +251,7 @@ export default function ViewCurrentStock(props) {
                       </Label>
 
                       <span>
-                        <p>{CurrentStocks?.product?.category?.category.toUpperCase()}</p>
+                        <p>{CurrentStocks?.product?.category?.category?.toUpperCase()}</p>
                       </span>
                     </FormGroup>
                   </Col>

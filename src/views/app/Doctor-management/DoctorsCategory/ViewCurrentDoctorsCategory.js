@@ -168,7 +168,7 @@ export default function ViewCurrentDoctorsCategory(props) {
             >
               Back
             </Button>
-            <IntlMessages id="Doctor Category" />
+            <IntlMessages id="Doctor Speciality" />
             </>
             ) : (
               

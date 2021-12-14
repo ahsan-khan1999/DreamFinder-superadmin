@@ -85,7 +85,7 @@ export default function ViewDoctorsCategory({ match, history }) {
       <CardBody>
         <Row>
           <Colxx xxs="12">
-            <h4>DoctorsCategory</h4>
+            <h4>Doctors Speciality</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
@@ -99,7 +99,7 @@ export default function ViewDoctorsCategory({ match, history }) {
             marginTop: '10px',
           }}
         >
-          Add New Doctors Category
+          Add New Doctors Speciality
         </Button>
         <Row>
           <Col lg={12}>

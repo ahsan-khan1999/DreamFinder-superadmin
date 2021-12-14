@@ -131,7 +131,7 @@ export const GetProduct = (category,old_new) => async (dispatch) => {
       });
     
       const response = await axios.get(
-        BASEURL+`ttps://concord-backend-m2.herokuapp.com/api/product-categorys/read?category=${category}`,
+        BASEURL+`/product-categorys/read?category=${category}`,
         { headers: head }
       );
       if (response?.data?.response_code === 200) {

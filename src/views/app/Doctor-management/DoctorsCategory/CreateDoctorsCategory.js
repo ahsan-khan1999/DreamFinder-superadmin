@@ -92,7 +92,7 @@ export default function CreateDoctorsCategory({ history }) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="Create Doctor Category" />
+          <IntlMessages id="Create Doctor Speciality" />
         </CardTitle>
 
         <div style={{ marginBottom: '30px' }}></div>

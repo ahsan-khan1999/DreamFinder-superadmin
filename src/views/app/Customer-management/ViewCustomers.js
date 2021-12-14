@@ -25,7 +25,7 @@ import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
-import { searchArray } from 'Utils/auth.util';
+import { searchArray, testSearch } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
@@ -33,34 +33,25 @@ import { GetDepartmentHead } from '../../../Store/Actions/ConcordDepartmentHead/
 import { GetCustomer } from 'Store/Actions/ConcordCustomer/CustomerAction';
 
 export default function ViewCustomers({ match, history }) {
-
   let dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-
     getCustomer();
-
   }, []);
-    
-
 
   const getCustomer = async () => {
-
     let res = await dispatch(GetCustomer());
-
   };
 
   const customer = useSelector((state) => state?.customerReducer?.customer);
   const loading = useSelector((state) => state?.customerReducer?.loading);
 
-
   const changeRoute = async (item) => {
-    history.push('/app/customer-management/viewCurrentCustomers',item);
+    history.push('/app/customer-management/viewCurrentCustomers', item);
   };
   const [customerTable, setCustomerTable] = useState(customer);
-
 
   const handleAdd = () => {
     history.push('/app/customer-management/createCustomers');
@@ -73,16 +64,15 @@ export default function ViewCustomers({ match, history }) {
     'Name',
     'Client Type',
     'Email',
-    'Market & Address',
+    'Market Address',
     'Phone',
     'Status',
     'Actions',
   ];
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setCustomerTable(searchArray(customer, search));
+    setCustomerTable(testSearch(customer, search));
   };
-
 
   return (
     <Card>
@@ -94,12 +84,10 @@ export default function ViewCustomers({ match, history }) {
           </Colxx>
         </Row>
         <Button
-           onClick={handleAdd}
-         
-
+          onClick={handleAdd}
           style={{
             marginBottom: '15px',
-         backgroundColor:'#0066b3',   
+            backgroundColor: '#0066b3',
             marginTop: '10px',
           }}
         >
@@ -110,7 +98,7 @@ export default function ViewCustomers({ match, history }) {
             {/* <label htmlFor="search">
               <input id="search" type="text" onChange={handleSearch} />
             </label> */}
-            
+
             <div className="header-search">
               <form action="#" className="">
                 <i className="fas fa-search search-icon"></i>
@@ -126,7 +114,7 @@ export default function ViewCustomers({ match, history }) {
             </div>
           </Col>
         </Row>
-        
+
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (
@@ -150,7 +138,7 @@ export default function ViewCustomers({ match, history }) {
               <CustomersTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={customerTable}
+                data={search === '' ? customer : customerTable}
               />
             )}
           </Colxx>
@@ -159,4 +147,3 @@ export default function ViewCustomers({ match, history }) {
     </Card>
   );
 }
-

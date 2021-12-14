@@ -310,7 +310,7 @@ export default function ViewCurrentCustomers(props) {
       if (res?.response_code === 200) {
         setsuspendloader(false);
         NotificationManager.success(
-          'Sucessfully Suspaned',
+          'Successfully Suspened',
           'Sucess',
           5000,
           null,
