@@ -527,16 +527,7 @@ export default function CreateTarget(props) {
         medicines: array?.map((item) => {
           return {
             medicine_uid: item?.medicine_uid,
-            quantity:
-              item?.quantity === undefined
-                ? NotificationManager.error(
-                    'Enter Quantity',
-                    'Error',
-                    5000,
-                    null,
-                    ''
-                  )
-                : item?.quantity,
+            quantity: item?.quantity,
           };
         }),
         no_orders: target?.no_orders,
@@ -582,7 +573,6 @@ export default function CreateTarget(props) {
   const handleBack = () => {
     props.history.push('/app/Target/ViewTarget');
   };
-  console.log(readTarget, 'parent Target');
   return (
     <Card>
       <CardBody>

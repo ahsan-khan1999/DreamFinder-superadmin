@@ -28,26 +28,25 @@ export default function ViewCurrentDoctors(props) {
   const dispatch = useDispatch();
   let [buttonName, setButtonName] = useState();
 
+  let [datevaldefault, setDatevaldefault] = useState();
+  let [dayvaldefault, setDayvaldefault] = useState();
+  let [selectedindex, setSelectedindex] = useState();
+  let [updatabutshow, setUpdatabutshow] = useState(false);
+
   const [thisView, setThisView] = useState(true);
 
   const currentDoctor = props?.location?.state;
-
-
 
   const staticdata = useSelector((state) => state?.orderReducer?.staticdata);
 
   let option_static_docCat_Category = [];
   staticdata?.doctor__doctor_categorys?.filter((item) =>
-  option_static_docCat_Category.push({
+    option_static_docCat_Category.push({
       label: item?.name,
       value: item?.value,
       key: item?.id,
     })
   );
-
-
-
-
 
   useEffect(() => {
     if (currentDoctor?.status?.name === 'suspended') {
@@ -95,7 +94,9 @@ export default function ViewCurrentDoctors(props) {
     (state) => state?.doctorCategoryReducer?.doctorcategory
   );
 
-  const loading = useSelector((state) => state?.doctorsReducer?.updatedoctorloading);
+  const loading = useSelector(
+    (state) => state?.doctorsReducer?.updatedoctorloading
+  );
 
   const hierarchy_region = useSelector(
     (state) => state?.doctorsReducer?.hierarchy_region
@@ -131,8 +132,7 @@ export default function ViewCurrentDoctors(props) {
     (state) => state?.doctorsReducer?.hierarchy_market_loader
   );
 
-
-    let optiongetdoc_category = [];
+  let optiongetdoc_category = [];
   doctorcategory?.filter((item) =>
     optiongetdoc_category.push({
       label: item?.name,
@@ -201,8 +201,7 @@ export default function ViewCurrentDoctors(props) {
   const [specialdate, setSpecialdate] = useState('');
   let [array, setArray] = useState([]);
   const [obj, setObj] = useState();
- const [specialObj, setSpecialObj] = useState({});
-
+  const [specialObj, setSpecialObj] = useState({});
 
   useEffect(() => {
     tabledata();
@@ -226,11 +225,10 @@ export default function ViewCurrentDoctors(props) {
     );
     setArray(specialDay_arr);
     setSpecialObj(currentDoctor?.special_day);
-    }
+  };
 
   const handleChangeToView = () => {
     props.history.push('/app/doctor-management/viewDoctors');
-    
   };
 
   const handlespecialdaydate = async (day, date) => {
@@ -259,6 +257,7 @@ export default function ViewCurrentDoctors(props) {
       );
     }
   };
+
   let apiData = {
     name: currentDoctor?.name,
     phone_number: currentDoctor?.phone_number,
@@ -282,7 +281,7 @@ export default function ViewCurrentDoctors(props) {
     apiData = {
       ...doctorCreate,
       special_day: specialObj,
-    }
+    };
     let res = await dispatch(UpdateDoctor(apiData));
     if (res) {
       NotificationManager.success(
@@ -297,7 +296,6 @@ export default function ViewCurrentDoctors(props) {
   };
 
   let [suspendloader, setsuspendloader] = useState(false);
-
 
   const suspandDepartmenthead = async () => {
     if (currentDoctor?.status?.name === 'suspended') {
@@ -358,31 +356,29 @@ export default function ViewCurrentDoctors(props) {
   return (
     <Card>
       <CardBody>
-      <CardTitle>
-        {thisView ? (
-          <>
-             <Button
-         
-              onClick={handleChangeToView}
-              style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
-            >
-              Back
-            </Button>
-            <IntlMessages id="Doctors" />
-          </>
-        ) : (
-          <>
-             <Button
-                
-              onClick={editProfile}
-              style={{ marginRight: '20px',backgroundColor:'#0066b3' }}
-            >
-              Close Edit
-            </Button>
-            <IntlMessages id="Edit Doctors" />
-          </>
-        )}
-       </CardTitle>
+        <CardTitle>
+          {thisView ? (
+            <>
+              <Button
+                onClick={handleChangeToView}
+                style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
+              >
+                Back
+              </Button>
+              <IntlMessages id="Doctors" />
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={editProfile}
+                style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
+              >
+                Close Edit
+              </Button>
+              <IntlMessages id="Edit Doctors" />
+            </>
+          )}
+        </CardTitle>
 
         <div style={{ marginBottom: '30px' }}></div>
         <Formik>
@@ -393,7 +389,6 @@ export default function ViewCurrentDoctors(props) {
             }
           >
             <Row className="h-100">
- 
               {thisView ? (
                 <>
                   <Col lg={6}>
@@ -718,10 +713,7 @@ export default function ViewCurrentDoctors(props) {
 
                   {/* Speciality */}
                   <Col lg={6}>
-                    <AvGroup
-                      className="error-t-negative"
-                      
-                    >
+                    <AvGroup className="error-t-negative">
                       {/* <Label>Doctor Category</Label>
 
                       <AvField
@@ -748,14 +740,14 @@ export default function ViewCurrentDoctors(props) {
 
                       <>
                         <Select
-                        required
+                          required
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
                           required
                           defaultValue={{
-                            label:currentDoctor?.doctor_category,
-                            value:currentDoctor?.doctor_category,
+                            label: currentDoctor?.doctor_category,
+                            value: currentDoctor?.doctor_category,
                           }}
                           onChange={(e, index) => {
                             setDoctorCreate({
@@ -778,14 +770,14 @@ export default function ViewCurrentDoctors(props) {
 
                       <>
                         <Select
-                        required
+                          required
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
                           required
                           defaultValue={{
-                            label:currentDoctor?.speciality?.name,
-                            value:currentDoctor?.speciality?.uid,
+                            label: currentDoctor?.speciality?.name,
+                            value: currentDoctor?.speciality?.uid,
                           }}
                           onChange={(e, index) => {
                             setDoctorCreate({
@@ -807,27 +799,37 @@ export default function ViewCurrentDoctors(props) {
                       </Label>
 
                       <>
-                      {hierarchy_region_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> :
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          required
-                          defaultValue={{
-                            label:currentDoctor?.market?.parent?.parent?.parent?.parent?.name,
-                            value:currentDoctor?.market?.parent?.parent?.parent?.parent?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'area'));
-                          }}
-                          options={optionregion}
-                        />
-                        }
+                        {hierarchy_region_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            required
+                            defaultValue={{
+                              label:
+                                currentDoctor?.market?.parent?.parent?.parent
+                                  ?.parent?.name,
+                              value:
+                                currentDoctor?.market?.parent?.parent?.parent
+                                  ?.parent?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'area'));
+                            }}
+                            options={optionregion}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -839,27 +841,37 @@ export default function ViewCurrentDoctors(props) {
                       </Label>
 
                       <>
-                      {hierarchy_area_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          required
-                          defaultValue={{
-                            label:currentDoctor?.market?.parent?.parent?.parent?.name,
-                            value:currentDoctor?.market?.parent?.parent?.parent?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'thana'));
-                          }}
-                          options={optionarea}
-                        />
-                        }
+                        {hierarchy_area_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            required
+                            defaultValue={{
+                              label:
+                                currentDoctor?.market?.parent?.parent?.parent
+                                  ?.name,
+                              value:
+                                currentDoctor?.market?.parent?.parent?.parent
+                                  ?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'thana'));
+                            }}
+                            options={optionarea}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -871,27 +883,34 @@ export default function ViewCurrentDoctors(props) {
                       </Label>
 
                       <>
-                      {hierarchy_thana_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          required
-                          defaultValue={{
-                            label:currentDoctor?.market?.parent?.parent?.name,
-                            value:currentDoctor?.market?.parent?.parent?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'territory'));
-                          }}
-                          options={optionthana}
-                        />
-                      }
+                        {hierarchy_thana_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            required
+                            defaultValue={{
+                              label:
+                                currentDoctor?.market?.parent?.parent?.name,
+                              value: currentDoctor?.market?.parent?.parent?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'territory'));
+                            }}
+                            options={optionthana}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -904,27 +923,33 @@ export default function ViewCurrentDoctors(props) {
                       </Label>
 
                       <>
-                      {hierarchy_territory_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label:currentDoctor?.market?.parent?.name,
-                            value:currentDoctor?.market?.parent?.uid,
-                          }}
-                          required
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'market'));
-                          }}
-                          options={optionterritory}
-                        />
-                      }
+                        {hierarchy_territory_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            defaultValue={{
+                              label: currentDoctor?.market?.parent?.name,
+                              value: currentDoctor?.market?.parent?.uid,
+                            }}
+                            required
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'market'));
+                            }}
+                            options={optionterritory}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -937,29 +962,35 @@ export default function ViewCurrentDoctors(props) {
                       </Label>
 
                       <>
-                      {hierarchy_market_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label:currentDoctor?.market?.name,
-                            value:currentDoctor?.market?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            setDoctorCreate({
-                              ...doctorCreate,
-                              market_uid: e.value,
-                            });
-                          }}
-                          options={optionmarket}
-                        />
-                    }
+                        {hierarchy_market_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            defaultValue={{
+                              label: currentDoctor?.market?.name,
+                              value: currentDoctor?.market?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              setDoctorCreate({
+                                ...doctorCreate,
+                                market_uid: e.value,
+                              });
+                            }}
+                            options={optionmarket}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -977,12 +1008,10 @@ export default function ViewCurrentDoctors(props) {
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
-                          
                           defaultValue={{
-                            label:currentDoctor?.station_type.toUpperCase(),
-                            value:currentDoctor?.station_type,
+                            label: currentDoctor?.station_type.toUpperCase(),
+                            value: currentDoctor?.station_type,
                           }}
-
                           onChange={(e, index) => {
                             setDoctorCreate({
                               ...doctorCreate,
@@ -1007,7 +1036,7 @@ export default function ViewCurrentDoctors(props) {
                           className="form-control"
                           name="specialday"
                           type="text"
-                          // validate={validateEmail}
+                          value={dayvaldefault ? dayvaldefault : array[0].day}
                           onChange={(e) => {
                             setSpecialday(e.target.value);
                           }}
@@ -1016,7 +1045,7 @@ export default function ViewCurrentDoctors(props) {
                     </AvGroup>
                   </Col>
 
-                  <Col lg={10}>
+                  <Col lg={8}>
                     <AvGroup className="error-t-negative">
                       <Label>
                         <IntlMessages id="Select Special Day Date" />
@@ -1025,15 +1054,68 @@ export default function ViewCurrentDoctors(props) {
                         required
                         className="form-control"
                         name="date-dd"
+                        value={datevaldefault ? datevaldefault : array[0]?.date}
                         type="date"
                         onChange={(e) => setSpecialdate(e.target.value)}
                       />
                     </AvGroup>
                   </Col>
-                  <Col lg={2}>
-                    <AvGroup className="error-t-negative" className="my-4">
+                  <Col lg={4}>
+                    <AvGroup className="error-t-negative" className="my-4 mx-0">
+
+                          {updatabutshow ?
+                          
+                          
+                          <>
+                     <Button
+                     style={{ backgroundColor: '#0066b3' }}
+                     className="mr-3"
+                     size="sm"
+                     onClick={() => {
+                       handlespecialdaydate(specialday, specialdate);
+                     }}
+                   >
+                     Add SpecialDay
+                   </Button>
                       <Button
-                       style={{backgroundColor:'#0066b3'}}
+                      style={{ backgroundColor: '#0066b3' }}
+                      size="sm"
+                      onClick={() => {
+                        console.log(specialdate,specialday,selectedindex,"Testing Update")
+                        const dayndateobject = {
+                          day:specialday,
+                          date:specialdate
+                        }
+                        const finalarray = [...array]
+                        finalarray[selectedindex] = dayndateobject
+                        console.log(finalarray,"Testing Update")
+                        let obj = {}
+                        finalarray.map((item) =>{
+                          obj = {
+                            ...obj,
+                            [item?.day]: item?.date
+                          }
+                        })
+                        console.log(obj,"testying obj")
+                        setSpecialObj(obj);
+                        setArray(finalarray)
+
+                        // array.splice(selectedindex,0,dayndateobject)
+                      }}
+                    >
+                      Update SpecialDay
+                    </Button>
+                     
+
+                  
+                          </>
+
+                      :
+                     <>
+                     
+                      <Button
+                        style={{ backgroundColor: '#0066b3' }}
+                        className="mr-3"
                         size="sm"
                         onClick={() => {
                           handlespecialdaydate(specialday, specialdate);
@@ -1041,6 +1123,10 @@ export default function ViewCurrentDoctors(props) {
                       >
                         Add SpecialDay
                       </Button>
+                     
+                     </>
+                        }
+
                     </AvGroup>
                   </Col>
                 </>
@@ -1064,10 +1150,11 @@ export default function ViewCurrentDoctors(props) {
                             {array?.map((item, index) => {
                               return (
                                 <tr>
-                                  <td className="text-capitalize">{item?.day}</td>
+                                  <td className="text-capitalize">
+                                    {item?.day}
+                                  </td>
 
                                   <td>{item?.date}</td>
-                                 
                                 </tr>
                               );
                             })}
@@ -1079,46 +1166,67 @@ export default function ViewCurrentDoctors(props) {
                 </>
               ) : (
                 <>
-                 <Col xl={12}>
-                <AvGroup className="error-t-negative">
-                  <div className="table-form">
-                    <Table>
-                      <thead>
-                        <tr>
-                          <th>Special Day</th>
-                          <th>Special Date</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                       
-                        {array?.map((item, index) => {
-                          return (
+                  <Col xl={12}>
+                    <AvGroup className="error-t-negative">
+                      <div className="table-form">
+                        <Table>
+                          <thead>
                             <tr>
-                              <td>{item?.day}</td>
-
-                              <td>{item?.date}</td>
-                              <td>
-                                <i
-                                   onClick={() => {
-                                    const test = [...array];
-                                    test.splice(index, 1);
-                                    setArray(test);
-                                    let table_obj = { ...specialObj };
-                                    delete table_obj[item.day];
-                                    setSpecialObj(table_obj);
-                                  }}
-                                  style={{ fontSize: '20px', color: 'red' }}
-                                  className="simple-icon-close"
-                                />
-                              </td>
+                              <th>Special Day</th>
+                              <th>Special Date</th>
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </div>
-                </AvGroup>
-              </Col>
+                          </thead>
+                          <tbody>
+                            {array?.map((item, index) => {
+                              return (
+                                <tr>
+                                  <td>{item?.day}</td>
+
+                                  <td>{item?.date}</td>
+                                  <td>
+                                    <i
+                                      onClick={() => {
+                                        const test = [...array];
+                                        test.splice(index, 1);
+                                        setArray(test);
+                                        let table_obj = { ...specialObj };
+                                        delete table_obj[item.day];
+                                        setSpecialObj(table_obj);
+                                      }}
+                                      className="simple-icon-close"
+                                      style={{
+                                        fontSize: '20px',
+                                        color: 'red',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                    <i
+                                      onClick={() => {
+                                        // handlespecialdaydateupdate(
+                                        //   { date: item?.date, day: item?.day },
+                                        //   index
+                                        // );
+                                        setDatevaldefault(item?.date);
+                                        setDayvaldefault(item?.day);
+                                        setSelectedindex(index);
+                                        setUpdatabutshow(true)
+                                      }}
+                                      className="iconsminds-folder-edit ml-2"
+                                      style={{
+                                        fontSize: '20px',
+                                        color: 'blue',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </Table>
+                      </div>
+                    </AvGroup>
+                  </Col>
                 </>
               )}
             </Row>
@@ -1140,38 +1248,39 @@ export default function ViewCurrentDoctors(props) {
             </Button> */}
 
             {thisView ? (
-               <Button style={{backgroundColor:'#0066b3'}} className="mr-3" onClick={editProfile}>
+              <Button
+                style={{ backgroundColor: '#0066b3' }}
+                className="mr-3"
+                onClick={editProfile}
+              >
                 Edit Doctor
               </Button>
             ) : (
-               <Button style={{backgroundColor:'#0066b3'}} onClick={editData}>
-                
+              <Button style={{ backgroundColor: '#0066b3' }} onClick={editData}>
                 {loading ? (
-                <div className="d-flex justify-content-center">
-                  <Loader height={18} width={18} type="Oval" color="#fff" />
-                  &nbsp; Updating
-                </div> 
-              ) : (
-                'Save'
-              )}
+                  <div className="d-flex justify-content-center">
+                    <Loader height={18} width={18} type="Oval" color="#fff" />
+                    &nbsp; Updating
+                  </div>
+                ) : (
+                  'Save'
+                )}
               </Button>
             )}
 
             {thisView ? (
               <Button
-                style={{backgroundColor:'#0066b3'}}
-
+                style={{ backgroundColor: '#0066b3' }}
                 onClick={suspandDepartmenthead}
               >
-             {suspendloader ? (
-              <div className="d-flex justify-content-center">
-                <Loader height={18} width={18} type="Oval" color="#fff" />
-                &nbsp; Suspending
-              </div>
-            ) : (
-              buttonName
-              )}
-
+                {suspendloader ? (
+                  <div className="d-flex justify-content-center">
+                    <Loader height={18} width={18} type="Oval" color="#fff" />
+                    &nbsp; Suspending
+                  </div>
+                ) : (
+                  buttonName
+                )}
               </Button>
             ) : (
               ''

@@ -157,6 +157,7 @@ const Login = ({ history, error, loginUserAction }) => {
                     <Button
                       color="primary"
                       style={{backgroundColor:"#0066B3"}}
+                      disabled={loading ? true :false}
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''
                       }`}

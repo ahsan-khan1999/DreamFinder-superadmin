@@ -23,7 +23,7 @@ import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
-import { searchArray, testSearch } from 'Utils/auth.util';
+import { searchArray,testSearch } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
@@ -105,7 +105,7 @@ export default function Orders({ match, history }) {
                   placeholder="Search"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="By Customer Name Payment Type  Delivery Status Payment Status And Status"
+                  title="By Customer Name And Payment Status Delivery Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">
@@ -139,7 +139,7 @@ export default function Orders({ match, history }) {
               <OrderRequestTable
                 header={headers}
                 changeRoute={changeRoute}
-                data={search === '' ? orders : orderTable}
+                data={orderTable}
               />
             )}
           </Colxx>

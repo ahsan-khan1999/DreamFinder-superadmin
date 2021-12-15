@@ -32,6 +32,11 @@ export default function ViewCurrentCustomers(props) {
 
   const [thisView, setThisView] = useState(true);
 
+  let [datevaldefault, setDatevaldefault] = useState();
+  let [dayvaldefault, setDayvaldefault] = useState();
+  let [selectedindex, setSelectedindex] = useState();
+  let [updatabutshow, setUpdatabutshow] = useState(false);
+
   const currentCustomer = props?.location?.state;
 
   useEffect(() => {
@@ -113,7 +118,6 @@ export default function ViewCurrentCustomers(props) {
   const hierarchy_market_loader = useSelector(
     (state) => state?.doctorsReducer?.hierarchy_market_loader
   );
-
 
   let optionregion = [];
   hierarchy_region?.filter((item) =>
@@ -258,9 +262,7 @@ export default function ViewCurrentCustomers(props) {
       special_day: specialObj,
     };
 
-    
-
-    let res = await dispatch(UpdateCustomer({...apiData}));
+    let res = await dispatch(UpdateCustomer({ ...apiData }));
     if (res) {
       NotificationManager.success(
         'Successful response',
@@ -641,31 +643,37 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
-                      {hierarchy_region_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> :
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          required
-                          defaultValue={{
-                            label:
-                              currentCustomer?.market?.parent?.parent?.parent
-                                ?.parent?.name,
-                            value:
-                              currentCustomer?.market?.parent?.parent?.parent
-                                ?.parent?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'area'));
-                          }}
-                          options={optionregion}
-                        />
-                        }
+                        {hierarchy_region_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            required
+                            defaultValue={{
+                              label:
+                                currentCustomer?.market?.parent?.parent?.parent
+                                  ?.parent?.name,
+                              value:
+                                currentCustomer?.market?.parent?.parent?.parent
+                                  ?.parent?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'area'));
+                            }}
+                            options={optionregion}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -677,31 +685,37 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
-                      {hierarchy_area_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          required
-                          defaultValue={{
-                            label:
-                              currentCustomer?.market?.parent?.parent?.parent
-                                ?.name,
-                            value:
-                              currentCustomer?.market?.parent?.parent?.parent
-                                ?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'thana'));
-                          }}
-                          options={optionarea}
-                        />
-                    }
+                        {hierarchy_area_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            required
+                            defaultValue={{
+                              label:
+                                currentCustomer?.market?.parent?.parent?.parent
+                                  ?.name,
+                              value:
+                                currentCustomer?.market?.parent?.parent?.parent
+                                  ?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'thana'));
+                            }}
+                            options={optionarea}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -713,28 +727,35 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
-                      {hierarchy_thana_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> :
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          required
-                          defaultValue={{
-                            label:
-                              currentCustomer?.market?.parent?.parent?.name,
-                            value: currentCustomer?.market?.parent?.parent?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'territory'));
-                          }}
-                          options={optionthana}
-                        />
-                        }
+                        {hierarchy_thana_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            required
+                            defaultValue={{
+                              label:
+                                currentCustomer?.market?.parent?.parent?.name,
+                              value:
+                                currentCustomer?.market?.parent?.parent?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'territory'));
+                            }}
+                            options={optionthana}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -747,27 +768,33 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
-                      {hierarchy_territory_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> :
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentCustomer?.market?.parent?.name,
-                            value: currentCustomer?.market?.parent?.uid,
-                          }}
-                          required
-                          onChange={(e, index) => {
-                            dispatch(GetMarketsData(e.value, 'market'));
-                          }}
-                          options={optionterritory}
-                        />
-                      }
+                        {hierarchy_territory_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            defaultValue={{
+                              label: currentCustomer?.market?.parent?.name,
+                              value: currentCustomer?.market?.parent?.uid,
+                            }}
+                            required
+                            onChange={(e, index) => {
+                              dispatch(GetMarketsData(e.value, 'market'));
+                            }}
+                            options={optionterritory}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
@@ -780,35 +807,41 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <>
-                      {hierarchy_market_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> :
-                        <Select
-                          required
-                          components={{ Input: CustomSelectInput }}
-                          className="react-select"
-                          classNamePrefix="react-select"
-                          defaultValue={{
-                            label: currentCustomer?.market?.name,
-                            value: currentCustomer?.market?.uid,
-                          }}
-                          onChange={(e, index) => {
-                            setCustomerCreate({
-                              ...CustomerCreate,
-                              market_uid: e.value,
-                            });
-                          }}
-                          options={optionmarket}
-                        />   
-                    }
+                        {hierarchy_market_loader ? (
+                          <div className="">
+                            <Loader
+                              height={18}
+                              width={18}
+                              type="Oval"
+                              color="#0066b3"
+                            />
+                            &nbsp;
+                          </div>
+                        ) : (
+                          <Select
+                            required
+                            components={{ Input: CustomSelectInput }}
+                            className="react-select"
+                            classNamePrefix="react-select"
+                            defaultValue={{
+                              label: currentCustomer?.market?.name,
+                              value: currentCustomer?.market?.uid,
+                            }}
+                            onChange={(e, index) => {
+                              setCustomerCreate({
+                                ...CustomerCreate,
+                                market_uid: e.value,
+                              });
+                            }}
+                            options={optionmarket}
+                          />
+                        )}
                       </>
                     </AvGroup>
                   </Col>
 
                   {/* Select Special Day */}
-                  <Col lg={6}>
+                  <Col lg={4}>
                     <AvGroup className="error-t-negative">
                       <Label>
                         <IntlMessages id="Select Special Day" />
@@ -819,7 +852,7 @@ export default function ViewCurrentCustomers(props) {
                           className="form-control"
                           name="specialday"
                           type="text"
-                          // validate={validateEmail}
+                          value={dayvaldefault ? dayvaldefault : array[0].day}
                           onChange={(e) => {
                             setSpecialday(e.target.value);
                           }}
@@ -834,17 +867,71 @@ export default function ViewCurrentCustomers(props) {
                         <IntlMessages id="Select Special Day Date" />
                       </Label>
                       <AvField
+                        required
                         className="form-control"
                         name="date-dd"
+                        value={datevaldefault ? datevaldefault : array[0]?.date}
                         type="date"
                         onChange={(e) => setSpecialdate(e.target.value)}
                       />
                     </AvGroup>
                   </Col>
-                  <Col lg={2}>
-                    <AvGroup className="error-t-negative" className="my-4">
+                                   <Col lg={4}>
+                    <AvGroup className="error-t-negative" className="my-4 mx-0">
+
+                          {updatabutshow ?
+                          
+                          
+                          <>
+                     <Button
+                     style={{ backgroundColor: '#0066b3' }}
+                     className="mr-3"
+                     size="sm"
+                     onClick={() => {
+                       handlespecialdaydate(specialday, specialdate);
+                     }}
+                   >
+                     Add SpecialDay
+                   </Button>
+                      <Button
+                      style={{ backgroundColor: '#0066b3' }}
+                      size="sm"
+                      onClick={() => {
+                        console.log(specialdate,specialday,selectedindex,"Testing Update")
+                        const dayndateobject = {
+                          day:specialday,
+                          date:specialdate
+                        }
+                        const finalarray = [...array]
+                        finalarray[selectedindex] = dayndateobject
+                        console.log(finalarray,"Testing Update")
+                        let obj = {}
+                        finalarray.map((item) =>{
+                          obj = {
+                            ...obj,
+                            [item?.day]: item?.date
+                          }
+                        })
+                        console.log(obj,"testying obj")
+                        setSpecialObj(obj);
+                        setArray(finalarray)
+
+                        // array.splice(selectedindex,0,dayndateobject)
+                      }}
+                    >
+                      Update SpecialDay
+                    </Button>
+                     
+
+                  
+                          </>
+
+                      :
+                     <>
+                     
                       <Button
                         style={{ backgroundColor: '#0066b3' }}
+                        className="mr-3"
                         size="sm"
                         onClick={() => {
                           handlespecialdaydate(specialday, specialdate);
@@ -852,8 +939,13 @@ export default function ViewCurrentCustomers(props) {
                       >
                         Add SpecialDay
                       </Button>
+                     
+                     </>
+                        }
+
                     </AvGroup>
                   </Col>
+
                 </>
               )}
             </Row>
@@ -902,7 +994,7 @@ export default function ViewCurrentCustomers(props) {
                             </tr>
                           </thead>
                           <tbody>
-                            {array?.map((item, index) => {
+                          {array?.map((item, index) => {
                               return (
                                 <tr>
                                   <td>{item?.day}</td>
@@ -918,8 +1010,30 @@ export default function ViewCurrentCustomers(props) {
                                         delete table_obj[item.day];
                                         setSpecialObj(table_obj);
                                       }}
-                                      style={{ fontSize: '20px', color: 'red' }}
                                       className="simple-icon-close"
+                                      style={{
+                                        fontSize: '20px',
+                                        color: 'red',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                    <i
+                                      onClick={() => {
+                                        // handlespecialdaydateupdate(
+                                        //   { date: item?.date, day: item?.day },
+                                        //   index
+                                        // );
+                                        setDatevaldefault(item?.date);
+                                        setDayvaldefault(item?.day);
+                                        setSelectedindex(index);
+                                        setUpdatabutshow(true)
+                                      }}
+                                      className="iconsminds-folder-edit ml-2"
+                                      style={{
+                                        fontSize: '20px',
+                                        color: 'blue',
+                                        cursor: 'pointer',
+                                      }}
                                     />
                                   </td>
                                 </tr>

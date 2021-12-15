@@ -1424,7 +1424,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value ? props?.value?.toUpperCase() : 'N/A'}
+            {props?.value ? props?.value : 'N/A'}
           </span>
         ),
       },
@@ -1439,7 +1439,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value ? props?.value?.toUpperCase() :'N/A'}
+            {props?.value ? props?.value :'N/A'}
           </span>
         ),
       },
@@ -1455,7 +1455,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -1471,7 +1471,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -1491,7 +1491,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -1508,7 +1508,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -1525,7 +1525,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -1541,7 +1541,7 @@ export const DoctorTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -1613,7 +1613,7 @@ export const DoctorCategoryTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value ? props?.value?.toUpperCase() : 'N/A'}
+            {props?.value ? props?.value : 'N/A'}
           </span>
         ),
       },
@@ -1683,7 +1683,7 @@ export const CustomersTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value ? props?.value?.toUpperCase() : 'N/A'}
+            {props?.value ? props?.value : 'N/A'}
           </span>
         ),
       },
@@ -1698,7 +1698,7 @@ export const CustomersTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value ? props?.value?.toUpperCase() :'N/A'}
+            {props?.value ? props?.value :'N/A'}
           </span>
         ),
       },
@@ -1730,7 +1730,7 @@ export const CustomersTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },

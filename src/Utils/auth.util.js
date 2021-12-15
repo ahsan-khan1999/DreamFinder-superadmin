@@ -92,10 +92,7 @@ export const Check_Validation_Update = async (response) => {
 };
 export function testSearch(arrayOfAllObjects, searchText) {
   let arrayOfMatchedObjects = arrayOfAllObjects.filter((object) => {
-    return JSON.stringify(object)
-      .toString()
-      .toLowerCase()
-      .includes(searchText?.toLowerCase());
+    return JSON.stringify(object).toString().toLowerCase().includes(searchText.toLowerCase());
   });
   return arrayOfMatchedObjects;
 }
