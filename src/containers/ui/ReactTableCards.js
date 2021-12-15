@@ -885,7 +885,7 @@ export const ProductTable = (props) => {
       },
       {
         Header: props?.header[1],
-        accessor: 'category.category',
+        accessor: 'category.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -1257,7 +1257,7 @@ export const StockTransaction = (props) => {
       },
       {
         Header: props?.header[1],
-        accessor: 'stock.product.category.category',
+        accessor: 'stock.product.category.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span

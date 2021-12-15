@@ -335,7 +335,7 @@ export default function CreateProduct({ history }) {
                     <Input
                       required
                       value={product?.pack_size}
-                      type="number"
+                      type="text"
                       className="radio-in"
                       name="phone"
                       // validate={validateEmail}

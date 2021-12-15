@@ -459,6 +459,7 @@ export default function ViewCurrentProduct(props) {
                         </h6>
                       </Label>
                       <span>
+                        <p>
                         {CurrentProduct?.product_image ? (
                           <img
                             src={CurrentProduct?.product_image}
@@ -469,6 +470,7 @@ export default function ViewCurrentProduct(props) {
                         ) : (
                           <p>{'N/A'}</p>
                         )}
+                        </p>
                       </span>
                     </FormGroup>
                   </Col>
