@@ -1,37 +1,48 @@
 /* eslint-disable */
 
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
-import { TargetTable, ViewCustomerPeriorityTabel } from 'containers/ui/ReactTableCards';
+import {
+  TargetTable,
+  ViewCustomerPeriorityTabel,
+} from 'containers/ui/ReactTableCards';
 import React, { useEffect, useState } from 'react';
 import Loader from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { ViewPeriorityListAction } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
-import { searchArray, testSearch } from 'Utils/auth.util';
+import { mySearch, searchArray, testSearch } from 'Utils/auth.util';
 
 export default function ViewPeriorityList(props) {
-  const [search,setSearch] = useState('')
-  const [doc,setDoc] = useState()
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(ViewPeriorityListAction())    
-    }, [])
-    const customerList = useSelector(state => state?.ViewPeriorityRedcuer?.list)
-    const loading = useSelector(state => state?.ViewPeriorityRedcuer?.loading)
+  const [search, setSearch] = useState('');
+  const [doc, setDoc] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(ViewPeriorityListAction());
+  }, []);
+  const customerList = useSelector(
+    (state) => state?.ViewPeriorityRedcuer?.list
+  );
+  const loading = useSelector((state) => state?.ViewPeriorityRedcuer?.loading);
 
-    const handleSearch = (event) => {
-        setSearch(event.target.value);
-        setDoc(testSearch(customerList, search));
-      };
-      const handleAdd = () => {
-        props.history.push('/app/PeriorityList/CreatePeriorityList');
-
-      }
-      const header = ['Customer Name','Email Address','Phone Number','Street Address','Status','Action']
-    const changeRoute = (item) => {
-        props.history.push('/app/PeriorityList/EditPeriorityList', item);
-      };
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+    setDoc(testSearch(customerList, search));
+  };
+  const handleAdd = () => {
+    props.history.push('/app/PeriorityList/CreatePeriorityList');
+  };
+  const header = [
+    'Customer Name',
+    'Email Address',
+    'Phone Number',
+    'Street Address',
+    'Status',
+    'Action',
+  ];
+  const changeRoute = (item) => {
+    props.history.push('/app/PeriorityList/EditPeriorityList', item);
+  };
   return (
     <Card>
       <CardBody>
@@ -105,12 +116,11 @@ export default function ViewPeriorityList(props) {
                 />
               </div>
             ) : (
-                <ViewCustomerPeriorityTabel
-                  header={header}
-                  data={search === '' ? customerList : doc}
-                  changeRoute={changeRoute}
-                />
-              
+              <ViewCustomerPeriorityTabel
+                header={header}
+                data={search === '' ? customerList : doc}
+                changeRoute={changeRoute}
+              />
             )}
           </Colxx>
         </Row>

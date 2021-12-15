@@ -250,8 +250,8 @@ export default function CreateProduct({ history }) {
                 <Col lg={6}>
                   <FormGroup>
                     <label>
-                      <IntlMessages id="Select" />
-                      {selectedCategory}
+                      <IntlMessages id="Select " />
+                      {selectedCategory} Category
                     </label>
 
                     <>
