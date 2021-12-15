@@ -31,6 +31,17 @@ export const searchArray = (data, keyword) => {
   // console.log(result);
   return result;
 };
+
+export const mySearch = (data, keyword) => {
+  let finalResult = [];
+  data.forEach((item) => {
+    console.log(item?.name,"name");
+    if (item.name.toLowerCase().indexOf(keyword) !== -1) {
+      finalResult.push(item);
+    }
+  });
+  return finalResult;
+};
 /* eslint-disable */
 export const logout = async () => {
   await localStore.remove_data('token');
@@ -53,9 +64,14 @@ export const Check_Validation = async (response) => {
     response?.data?.response_data?.map((item) => {
       NotificationManager.error(Object.values(item), 'Error', 5000, null, '');
     });
-  }else{
-    NotificationManager.error(response?.data?.response_message, 'Error', 5000, null, '');
-
+  } else {
+    NotificationManager.error(
+      response?.data?.response_message,
+      'Error',
+      5000,
+      null,
+      ''
+    );
   }
 };
 
@@ -64,14 +80,22 @@ export const Check_Validation_Update = async (response) => {
     response?.response_data?.map((item) => {
       NotificationManager.error(Object.values(item), 'Error', 5000, null, '');
     });
-  }else{
-    NotificationManager.error(response?.response_message, 'Error', 5000, null, '');
-
+  } else {
+    NotificationManager.error(
+      response?.response_message,
+      'Error',
+      5000,
+      null,
+      ''
+    );
   }
 };
 export function testSearch(arrayOfAllObjects, searchText) {
   let arrayOfMatchedObjects = arrayOfAllObjects.filter((object) => {
-    return JSON.stringify(object).toString().toLowerCase().includes(searchText?.toLowerCase());
+    return JSON.stringify(object)
+      .toString()
+      .toLowerCase()
+      .includes(searchText?.toLowerCase());
   });
   return arrayOfMatchedObjects;
 }

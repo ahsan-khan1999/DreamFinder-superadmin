@@ -507,7 +507,7 @@ var data = [{
   to: "".concat(_defaultValues.adminRoot, "/doctor-management"),
   subs: [{
     icon: 'iconsminds-doctor',
-    label: 'Doctors Category',
+    label: 'Doctors Speciality',
     to: "".concat(_defaultValues.adminRoot, "/doctor-management/viewDoctorsCategory")
   }, {
     icon: 'iconsminds-doctor',

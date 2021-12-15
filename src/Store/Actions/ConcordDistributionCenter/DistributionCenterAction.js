@@ -7,6 +7,7 @@ import apiServices from 'services/requestHandler';
 import {
     DISTRIBUTION_CENTER_CONSTANT,
 } from 'Store/Constant/Constants';
+import { Check_Validation_Update } from 'Utils/auth.util';
 
 
 // Distribution Center
@@ -117,7 +118,8 @@ export const UpdateDistributionCenter = (data) => async (dispatch) => {
         type: DISTRIBUTION_CENTER_CONSTANT.UPDATE_DISTRIBUTION_CENTER_ERROR,
         payload: true,
       });
-      NotificationManager.error(res?.response_message, 'Error', 5000, '');
+      Check_Validation_Update(res)
+      // NotificationManager.error(res?.response_message, 'Error', 5000, '');
       return false;
     }
   } catch {}

@@ -40,7 +40,6 @@ export default function CreateStockTransaction({ history }) {
     transactiontype: '',
   });
 
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -165,9 +164,8 @@ export default function CreateStockTransaction({ history }) {
     <Card>
       <CardBody>
         <Button
-          
           onClick={handleChangeToView}
-          style={{ marginRight: '20px', backgroundColor:'#0066b3' }}
+          style={{ marginRight: '20px', backgroundColor: '#0066b3' }}
         >
           Back
         </Button>
@@ -208,23 +206,29 @@ export default function CreateStockTransaction({ history }) {
                   </label>
 
                   <>
-                  {distributioncenterloader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      onChange={(e) => {
-                        setDistributionuid(e.value);
-                      }}
-                      required
-                      options={distributioncenterData}
-                    />
-                    }
+                    {distributioncenterloader ? (
+                      <div className="">
+                        <Loader
+                          height={18}
+                          width={18}
+                          type="Oval"
+                          color="#0066b3"
+                        />
+                        &nbsp;
+                      </div>
+                    ) : (
+                      <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        onChange={(e) => {
+                          setDistributionuid(e.value);
+                        }}
+                        required
+                        options={distributioncenterData}
+                      />
+                    )}
                   </>
                 </FormGroup>
               </Col>
@@ -254,7 +258,6 @@ export default function CreateStockTransaction({ history }) {
                       required
                       options={option_static_Category}
                     />
-                    
                   </>
                 </FormGroup>
               </Col>
@@ -267,29 +270,35 @@ export default function CreateStockTransaction({ history }) {
                   </label>
 
                   <>
-                  {getstock_loader ? 
-                  <div className="">
-                  <Loader height={18} width={18} type="Oval" color="#0066b3" />
-                   &nbsp;
-                 </div> : 
-                    <Select
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      isClearable
-                      onChange={(e) => {
-                        setStocktransaction({
-                          ...stocktransaction,
-                          stock_uid: e?.value,
-                        });
-                        setSelectsinglecategory({
-                          quantity: e?.key,
-                        });
-                      }}
-                      required
-                      options={optioncategory}
-                    />
-                    }
+                    {getstock_loader ? (
+                      <div className="">
+                        <Loader
+                          height={18}
+                          width={18}
+                          type="Oval"
+                          color="#0066b3"
+                        />
+                        &nbsp;
+                      </div>
+                    ) : (
+                      <Select
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        isClearable
+                        onChange={(e) => {
+                          setStocktransaction({
+                            ...stocktransaction,
+                            stock_uid: e?.value,
+                          });
+                          setSelectsinglecategory({
+                            quantity: e?.key,
+                          });
+                        }}
+                        required
+                        options={optioncategory}
+                      />
+                    )}
                   </>
                 </FormGroup>
               </Col>
@@ -328,7 +337,7 @@ export default function CreateStockTransaction({ history }) {
                     className="radio-in"
                     // validate={validateEmail}
                     // onChange={(e) => setNumber()}
-                    
+
                     onChange={(e) =>
                       setStocktransaction({
                         ...stocktransaction,
@@ -378,6 +387,7 @@ export default function CreateStockTransaction({ history }) {
                   <Input
                     required
                     type="number"
+                    value={stocktransaction?.quantity}
                     min={0}
                     max={
                       selectsinglecategory.transactiontype === 'out'
@@ -389,14 +399,13 @@ export default function CreateStockTransaction({ history }) {
                     // onChange={(e) => setNumber()}
                     onChange={(e, index) => {
                       if (selectsinglecategory.transactiontype === 'out') {
-                        if (e.target.value <= Number(e.target.max)) {
+                        if (e.target.value <= Number(e.target.max) && e.target.value > 0) {
                           setStocktransaction({
                             ...stocktransaction,
                             quantity: Number(e.target.value),
                           });
                         }
-                      }
-                      else{
+                      } else {
                         setStocktransaction({
                           ...stocktransaction,
                           quantity: Number(e.target.value),
@@ -433,7 +442,7 @@ export default function CreateStockTransaction({ history }) {
             </Row>
 
             <Button
-                style={{backgroundColor:'#0066b3'}}
+              style={{ backgroundColor: '#0066b3' }}
               size="sm"
               onClick={onDepartHeadCreate}
             >

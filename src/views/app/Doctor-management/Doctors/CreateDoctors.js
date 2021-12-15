@@ -415,10 +415,10 @@ export default function CreateDoctors({ history }) {
                         value: true,
                         errorMessage: 'Please enter your Designation',
                       },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your designation must be composed only with letters',
-                      },
+                      // pattern: {
+                      //   value: '^[A-Za-z]+$',
+                      //   errorMessage: 'Your designation must be composed only with letters',
+                      // },
                       minLength: {
                         value: 2,
                         errorMessage: 'To Short',

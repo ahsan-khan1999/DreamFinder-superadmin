@@ -443,7 +443,7 @@ export default function CreateProduct({ history }) {
                 <Col lg={6}>
                   <div className="form-row">
                     <div className="form-group col-md-9">
-                      <label className="">Select File :</label>
+                      <label className="">Product Image :</label>
                       <input
                         type="file"
                         className="form-control"

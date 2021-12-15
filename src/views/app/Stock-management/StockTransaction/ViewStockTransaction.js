@@ -70,7 +70,7 @@ export default function ViewStockTransaction({ match, history }) {
     setStocktransactionTableTable(stocktransaction);
   }, [stocktransaction]);
   const headers = [
-    'Name',
+    'Stock Transaction',
     'Category',
     'Product Name',
     'Date',

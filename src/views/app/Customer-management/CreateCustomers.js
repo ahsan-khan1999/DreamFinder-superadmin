@@ -258,11 +258,11 @@ export default function CreateCustomers({ history }) {
                         value: true,
                         errorMessage: 'Please enter your name',
                       },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage:
-                          'Your name must be composed only with letters',
-                      },
+                      // pattern: {
+                      //   value: '^[A-Za-z]+$\s',
+                      //   errorMessage:
+                      //     'Your name must be composed only with letters',
+                      // },
                       minLength: {
                         value: 2,
                         errorMessage: 'To Short',

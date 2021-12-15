@@ -541,7 +541,7 @@ const data = [
     subs: [
       {
         icon: 'iconsminds-doctor',
-        label: 'Doctors Category',
+        label: 'Doctors Speciality',
         to: `${adminRoot}/doctor-management/viewDoctorsCategory`,
       },
       {

@@ -646,7 +646,7 @@ export const DepartmentHeadTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },
@@ -1273,7 +1273,7 @@ export const StockTransaction = (props) => {
   
       {
         Header: props?.header[2],
-        accessor: 'stock.product.category.name',
+        accessor: 'stock.product.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -1714,7 +1714,7 @@ export const CustomersTable = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+            {props?.value}
           </span>
         ),
       },

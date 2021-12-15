@@ -34,12 +34,12 @@ import {
 } from 'Store/Actions/ConcordDistributionCenter/DistributionCenterAction';
 
 export default function viewCurrentDistributioncenter(props) {
+  const currentDistribution = props?.location?.state;
   let [buttonName, setButtonName] = useState();
-  const [name, setName] = useState('');
+  const [name, setName] = useState(currentDistribution?.name);
 
   const [thisView, setThisView] = useState(true);
   const dispatch = useDispatch();
-  const currentDistribution = props?.location?.state;
   useEffect(() => {
     if (currentDistribution?.status === 'suspended') {
       setButtonName('Active');
@@ -71,6 +71,7 @@ export default function viewCurrentDistributioncenter(props) {
   }, []);
 
   const defauldata = () => {
+    setName(currentDistribution?.name)
     let optionsareas = [];
     currentDistribution?.areasSelect?.map((item, index) => {
       optionsareas.push(item?.uid);
@@ -133,7 +134,7 @@ export default function viewCurrentDistributioncenter(props) {
   let distributioncenter_obj = {
     depot_managers_uid: depoarray,
 
-    name: name,
+    name: currentDistribution?.name,
     uid: currentDistribution.uid,
   };
 
