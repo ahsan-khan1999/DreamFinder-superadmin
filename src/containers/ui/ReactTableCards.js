@@ -753,24 +753,27 @@ export const DistributionCenter = (props) => {
           </span>
         ),
       },
+    
+     
+    
       {
         Header: props?.header[1],
-        accessor: 'designation',
+        accessor: 'regions',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
             style={{
-             
+              
               fontSize: '0.9rem',
             }}
           >
-            {props?.value?.toUpperCase()}
+           {props?.value?.map((item,index) => `${item?.name}, `)}
           </span>
         ),
       },
       {
         Header: props?.header[2],
-        accessor: 'email',
+        accessor: 'depomanagersSelect',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <span
@@ -779,43 +782,13 @@ export const DistributionCenter = (props) => {
               fontSize: '0.9rem',
             }}
           >
-            {props?.value}
-          </span>
-        ),
-      },
-      {
-        Header: props?.header[3],
-        accessor: 'address',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => (
-          <span
-            style={{
-              
-              fontSize: '0.9rem',
-            }}
-          >
-            {props?.value === "N/A N/A N/A N/A" ? "N/A" :props?.value}
-          </span>
-        ),
-      },
-      {
-        Header: props?.header[4],
-        accessor: 'phone',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => (
-          <span
-            style={{
-              
-              fontSize: '0.9rem',
-            }}
-          >
-           {props?.value}
+           {props?.value?.map((item,index) => `${item?.name}, `)}
           </span>
         ),
       },
 
       {
-        Header: props?.header[5],
+        Header: props?.header[3],
         accessor: 'status',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
@@ -834,7 +807,7 @@ export const DistributionCenter = (props) => {
      
       {
         Header: (
-          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[6]}</span>
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[3]}</span>
         ),
         accessor: 'title6',
         cellClass: 'text-muted w-10',
@@ -1129,6 +1102,116 @@ export const StockTable = (props) => {
           </Button>
         ),
       },
+    ],
+    []
+  );
+
+  return <Table columns={cols} data={props?.data} />;
+};
+
+export const StockTableForDistributionCenter = (props) => {
+  const cols = React.useMemo(
+    () => [
+     
+      
+      {
+        Header: props?.header[0],
+        accessor: 'product.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[1],
+        accessor: 'product.category.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+             
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+  
+      {
+        Header: props?.header[2],
+        accessor: 'quantity',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+            {props?.value}
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[3],
+        accessor: 'product.formula',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value ? props?.value?.toUpperCase() : 'N/A' }  
+          </span>
+        ),
+      },
+      {
+        Header: props?.header[4],
+        accessor: 'product.price',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              
+              fontSize: '0.9rem',
+            }}
+          >
+           {props?.value}
+          </span>
+        ),
+      },
+     
+
+      {
+        Header: props?.header[5],
+        accessor: 'status.name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => (
+          <span
+            style={{
+              color: props?.value === 'active' 
+              ? 'green':'red',
+              fontSize: '0.9rem',
+              fontWeight:'600'
+            }}
+          >
+            {props?.value?.toUpperCase()}
+          </span>
+        ),
+      },
+
+
+   
     ],
     []
   );
@@ -1719,25 +1802,25 @@ export const CustomersTable = (props) => {
         ),
       },
 
-      {
-        Header: props?.header[3],
-        accessor: 'market__street_address',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => (
-          <span
-            style={{
+      // {
+      //   Header: props?.header[3],
+      //   accessor: 'market__street_address',
+      //   cellClass: 'list-item-heading w-10',
+      //   Cell: (props) => (
+      //     <span
+      //       style={{
              
-              fontSize: '0.9rem',
-            }}
-          >
-            {props?.value}
-          </span>
-        ),
-      },
+      //         fontSize: '0.9rem',
+      //       }}
+      //     >
+      //       {props?.value}
+      //     </span>
+      //   ),
+      // },
   
 
      {
-        Header: props?.header[4],
+        Header: props?.header[3],
         accessor: 'phone_number',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
@@ -1757,7 +1840,7 @@ export const CustomersTable = (props) => {
       
 
       {
-        Header: props?.header[6],
+        Header: props?.header[4],
         accessor: 'status.name',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
@@ -1777,7 +1860,7 @@ export const CustomersTable = (props) => {
 
       {
         Header: (
-          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[7]}</span>
+          <span style={{ 'fontSize': '1.0rem' }}>{props?.header[5]}</span>
         ),
         accessor: 'title6',
         cellClass: 'text-muted w-10',

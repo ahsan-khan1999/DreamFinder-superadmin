@@ -82,7 +82,7 @@ export const EditTargetAction = (data) => async (dispatch) => {
       payload:true
     })
     let res = await apiServices.updateTarget(data)
-    
+      console.log(res);
     if(res?.response_code === 200){
       dispatch({
         type:EDIT_TARGET_CONSTANT.EDIT_TARGET_LOADING,
@@ -98,10 +98,10 @@ export const EditTargetAction = (data) => async (dispatch) => {
         type:EDIT_TARGET_CONSTANT.EDIT_TARGET_ERROR,
         payload:false
       })
-      Check_Validation_Update(res)
+      // Check_Validation_Update(res)
 
 
-      // NotificationManager.error(res?.response_message,'Error',5000,null,'')
+      NotificationManager.error(res?.response_message,'Error',5000,null,'')
       return false
     }
   }catch{

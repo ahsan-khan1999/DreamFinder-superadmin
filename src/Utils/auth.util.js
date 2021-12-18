@@ -94,7 +94,18 @@ export function testSearch(arrayOfAllObjects, searchText) {
   let arrayOfMatchedObjects = arrayOfAllObjects.filter((object) => {
     return JSON.stringify(object).toString().toLowerCase().includes(searchText.toLowerCase());
   });
-  console.log(arrayOfMatchedObjects,"arrayOfMatchedObjects",searchText);
+  return arrayOfMatchedObjects;
+}
+export function testSearchCustomer(arrayOfAllObjects, searchText) {
+  let arrayOfMatchedObjects = arrayOfAllObjects.filter((object) => {
+    return JSON.stringify(object?.name).toString().toLowerCase().includes(searchText.toLowerCase());
+  });
+  return arrayOfMatchedObjects;
+}
+export function testSearchTarget(arrayOfAllObjects, searchText) {
+  let arrayOfMatchedObjects = arrayOfAllObjects.filter((object) => {
+    return JSON.stringify(object?.assigned_to?.name).toString().toLowerCase().includes(searchText.toLowerCase());
+  });
   return arrayOfMatchedObjects;
 }
 export function periorityListSearch(arrayOfAllObjects, searchText) {

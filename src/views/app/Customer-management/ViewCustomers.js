@@ -25,7 +25,7 @@ import {
   OrderRequestTable,
   RemovalRequestTable,
 } from 'containers/ui/ReactTableCards';
-import { mySearch, searchArray, testSearch } from 'Utils/auth.util';
+import { mySearch, searchArray, testSearch, testSearchCustomer } from 'Utils/auth.util';
 
 import { OrderAction } from 'Store/Actions/ConcordOrder/OrderAction';
 import { StaticDataGet } from 'Store/Actions/StaticData/StaticDataAction';
@@ -64,7 +64,6 @@ export default function ViewCustomers({ match, history }) {
     'Name',
     'Client Type',
     'Email',
-    'Market Address',
     'Phone',
     'Status',
     'Actions',
@@ -72,7 +71,7 @@ export default function ViewCustomers({ match, history }) {
   const handleSearch = (event) => {
     setSearch(event.target.value);
 
-    setCustomerTable(testSearch(customer, search));
+    setCustomerTable(testSearchCustomer(customer, search));
   };
 
   return (
@@ -106,6 +105,9 @@ export default function ViewCustomers({ match, history }) {
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

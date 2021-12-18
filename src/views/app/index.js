@@ -36,6 +36,9 @@ const Gift = React.lazy(() =>
 const ViewGift = React.lazy(() =>
   import(/* webpackChunkName: "dashboards" */ './Gift/ViewGift')
 );
+const ViewStocks = React.lazy(() =>
+  import(/* webpackChunkName: "dashboards" */ './distributioncenter-management/ViewStocks')
+);
 
 
 
@@ -353,6 +356,11 @@ const App = ({ match }) => {
               path={`${match.url}/Sample/ViewSample`}
               render={(props) => <ViewSample {...props} />}
             />
+            <Route
+              path={`${match.url}/distributioncenter-management/ViewStocks`}
+              render={(props) => <ViewStocks {...props} />}
+            />
+            
             <Route
               path={`${match.url}/Sample/ViewSample`}
               render={(props) => <ViewSample {...props} />}

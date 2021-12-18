@@ -35,6 +35,7 @@ import {
 
 export default function viewCurrentDistributioncenter(props) {
   const currentDistribution = props?.location?.state;
+  console.log(currentDistribution,"currentDistribution");
   let [buttonName, setButtonName] = useState();
   const [name, setName] = useState(currentDistribution?.name);
 
@@ -71,7 +72,7 @@ export default function viewCurrentDistributioncenter(props) {
   }, []);
 
   const defauldata = () => {
-    setName(currentDistribution?.name)
+    setName(currentDistribution?.name);
     let optionsareas = [];
     currentDistribution?.areasSelect?.map((item, index) => {
       optionsareas.push(item?.uid);
@@ -145,13 +146,16 @@ export default function viewCurrentDistributioncenter(props) {
     setThisView(!thisView);
   };
 
+  const viewStocks = () => {
+    props.history.push('/app/distributioncenter-management/ViewStocks',currentDistribution?.uid)
 
+  };
   const editData = async () => {
     distributioncenter_obj = {
       depot_managers_uid: depoarray,
       regions_uid: array,
       uid: currentDistribution.uid,
-      name:name
+      name: name,
     };
     let res = await dispatch(UpdateDistributionCenter(distributioncenter_obj));
     if (res) {
@@ -302,7 +306,6 @@ export default function viewCurrentDistributioncenter(props) {
             <Row className="h-100">
               {thisView ? (
                 <>
-                
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
@@ -368,12 +371,30 @@ export default function viewCurrentDistributioncenter(props) {
                             fontSize: '0.9rem',
                           }}
                         >
-                          Address
+                          Regions
                         </h6>
                       </Label>
 
                       <span>
-                        <p>{currentDistribution?.address.toUpperCase()}</p>
+                        <p>{currentDistribution?.regionSelect?.map((item) => `${item?.name}, `)}</p>
+                      </span>
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <h6
+                          style={{
+                            fontWeight: '700',
+                            fontSize: '0.9rem',
+                          }}
+                        >
+                          Depo Managers
+                        </h6>
+                      </Label>
+
+                      <span>
+                        <p>{currentDistribution?.depomanagersSelect?.map((item) => `${item?.name}, `)}</p>
                       </span>
                     </FormGroup>
                   </Col>
@@ -458,7 +479,8 @@ export default function viewCurrentDistributioncenter(props) {
                       </>
                     </FormGroup>
                   </Col>
-
+                  
+                  
                   <Col lg={6}>
                     <FormGroup>
                       <Label>
@@ -519,7 +541,7 @@ export default function viewCurrentDistributioncenter(props) {
             {thisView ? (
               <Button
                 style={{ backgroundColor: '#0066b3' }}
-                className="mr-3"
+                className="mr-2"
                 onClick={editProfile}
               >
                 Edit Profile
@@ -543,6 +565,17 @@ export default function viewCurrentDistributioncenter(props) {
                 ) : (
                   buttonName
                 )}
+              </Button>
+            ) : (
+              ''
+            )}
+            {thisView ? (
+              <Button
+              className='ml-2'
+                style={{ backgroundColor: '#0066b3' }}
+                onClick={viewStocks}
+              >
+                View Stocks
               </Button>
             ) : (
               ''

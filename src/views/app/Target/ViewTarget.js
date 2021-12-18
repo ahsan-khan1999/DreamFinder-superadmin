@@ -7,7 +7,7 @@ import Loader from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
-import { searchArray, testSearch } from 'Utils/auth.util';
+import { searchArray, testSearch, testSearchTarget } from 'Utils/auth.util';
 
 export default function ViewTarget(props) {
   const target = useSelector((state) => state?.TargetReducer?.target);
@@ -25,7 +25,7 @@ export default function ViewTarget(props) {
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(testSearch(target, search));
+    setDoc(testSearchTarget(target, search));
   };
 
   const handleAdd = () => {
@@ -55,7 +55,7 @@ export default function ViewTarget(props) {
                   placeholder="Search"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="By Name Role And Status"
+                  title="By Name And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">

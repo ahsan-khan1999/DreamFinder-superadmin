@@ -114,11 +114,11 @@ export default function viewDistributioncenter({ match, history }) {
 
       depomanagersSelect: item?.depot_managers,
       areasSelect: item?.areas,
+      regionSelect:item?.regions
     })
   );
 
 
-  console.log(distributioncenterData,"Testing Now")
   const loading = useSelector(
     (state) => state?.distributionCenterReducer?.loading
   );
@@ -142,10 +142,8 @@ export default function viewDistributioncenter({ match, history }) {
   }, [distributioncenter]);
   const headers = [
     'Name',
-    'Designation',
-    'Email',
-    'Address',
-    'Phone',
+    'Regions',
+    'Depo Manager',
     'Status',
     'Actions',
   ];

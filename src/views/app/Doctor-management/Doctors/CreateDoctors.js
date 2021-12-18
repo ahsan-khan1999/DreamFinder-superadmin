@@ -289,7 +289,7 @@ export default function CreateDoctors({ history }) {
           Back
         </Button>
         <CardTitle>
-          <IntlMessages id="Create Doctors" />
+          <IntlMessages id="Create Doctor" />
         </CardTitle>
 
         <div style={{ marginBottom: '30px' }}></div>
@@ -377,10 +377,7 @@ export default function CreateDoctors({ history }) {
                         value: true,
                         errorMessage: 'Please enter your Degree',
                       },
-                      pattern: {
-                        value: '^[A-Za-z]+$',
-                        errorMessage: 'Your degree must be composed only with letters',
-                      },
+                      
                       minLength: {
                         value: 2,
                         errorMessage: 'To Short',

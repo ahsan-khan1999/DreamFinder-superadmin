@@ -63,7 +63,7 @@ export default function CreateDoctorsCategory({ history }) {
 
       if (res) {
         NotificationManager.success(
-          'Doctor Category Added Sucessfully',
+          'Doctor Speciality Added Sucessfully',
           'Success',
           3000,
           null,
@@ -102,7 +102,7 @@ export default function CreateDoctorsCategory({ history }) {
           onSubmit={(event, errors, values) => onSubmit(event, errors, values)}
           >
             <Row className="h-100">
-              <Col lg={12}>
+              <Col lg={6}>
                 <AvGroup>
                   <Label>
                     <IntlMessages id="Name"/>
@@ -136,7 +136,7 @@ export default function CreateDoctorsCategory({ history }) {
               </Col>
 
             
-              <Col lg={12}>
+              <Col lg={6}>
                 <AvGroup>
                   <Label>
                     <IntlMessages id="Description" />

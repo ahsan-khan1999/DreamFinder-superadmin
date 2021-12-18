@@ -238,12 +238,18 @@ export default function CreateTarget(props) {
         },
       }
     );
-    // if(Object.keys(response?.data?.response_data)?.length < 1){
-    //   NotificationManager.error
-    // }
-    setReadTarget(response?.data?.response_data);
+    if(Object.keys(response?.data?.response_data)?.length < 1){
+      NotificationManager.error("Parent Target Does'nt Exists Create Parent Target First",'Error',5000,null,'')
+      setTimeout(() => {
+        props.history.push('/app/Target/ViewTarget')
+        
+      }, 3000);
+      return {}
+    }else{
+      setReadTarget(response?.data?.response_data);
+
+    }
   };
-  console.log(readTarget, 'parent Sm Target');
   const getDirectorTarget = async (uid) => {
     setLoadingMedicine(true);
     let token = await getToken();
@@ -684,6 +690,104 @@ export default function CreateTarget(props) {
                     </FormGroup>
                   </Col>
 
+                  
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter By Customer Visits</Label>
+
+                      <Input
+                        name="visit"
+                        type="number"
+                        value={target?.by_customer_visits}
+                        // value={targets[0]?.by_customer_visits?.by_customer_visits}
+                        // min=[0]
+                        max={readTarget?.by_customer_visits?.by_customer_visits}
+                        onChange={(e) => {
+                          if (
+                            e.target?.value > 0
+                            &&
+                            e.target?.value <=
+                              readTarget?.by_customer_visits?.by_customer_visits
+                          ) {
+                            setTarget({
+                              ...target,
+                              by_customer_visits: Number(e?.target?.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter By Doctor Visits</Label>
+
+                      <Input
+                        min={1}
+                        name="visitByDoctor"
+                        type="number"
+                        value={target?.by_doctor_visits}
+                        onChange={(e) => {
+                          if (
+                            e.target?.value > 0
+                            &&
+                            e.target?.value <=
+                              readTarget?.by_doctor_visits?.by_doctor_visits
+                          ) {
+                            setTarget({
+                              ...target,
+                              by_doctor_visits: Number(e?.target?.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Orders</Label>
+                      <Input
+                        type="number"
+                        value={target?.no_orders}
+                        min={1}
+                        onChange={(e) => {
+                          if (
+                            e.target?.value > 0
+                            &&
+                            e.target?.value <= readTarget?.no_orders?.no_orders
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_orders: Number(e?.target?.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Prescription</Label>
+                      <Input
+                        type="number"
+                        min={1}
+                        value={target?.no_prescriptions}
+                        onChange={(e) => {
+                          if (
+                            e.target?.value > 0
+                            &&
+                            e.target?.value <=
+                              readTarget?.no_prescriptions?.no_prescriptions
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_prescriptions: Number(e?.target?.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Medicine</Label>
@@ -709,9 +813,7 @@ export default function CreateTarget(props) {
 
                             setTarget({
                               ...target,
-                              // start_date: moment
-                              //   .unix(targets[0]?.start_date)
-                              //   .format('YYYY-MM-DD h:mm:ss'),
+                            
                             });
                           }}
                           options={medicineOption}
@@ -719,125 +821,10 @@ export default function CreateTarget(props) {
                       )}
                     </FormGroup>
                   </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter By Customer Visits</Label>
-
-                      <Input
-                        name="visit"
-                        type="number"
-                        value={target?.by_customer_visits}
-                        // value={targets[0]?.by_customer_visits?.by_customer_visits}
-                        // min=[0]
-                        max={readTarget?.by_customer_visits?.by_customer_visits}
-                        onChange={(e) => {
-                          if (
-                            e.target?.value > 0
-                            // &&
-                            // e.target?.value <
-                            //   readTarget?.by_customer_visits?.by_customer_visits
-                          ) {
-                            setTarget({
-                              ...target,
-                              by_customer_visits: Number(e?.target?.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter By Doctor Visits</Label>
-
-                      <Input
-                        min={1}
-                        name="visitByDoctor"
-                        type="number"
-                        value={target?.by_doctor_visits}
-                        onChange={(e) => {
-                          if (
-                            e.target?.value > 0
-                            // &&
-                            // e.target?.value <
-                            //   readTarget?.by_doctor_visits?.by_doctor_visits
-                          ) {
-                            setTarget({
-                              ...target,
-                              by_doctor_visits: Number(e?.target?.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Orders</Label>
-                      <Input
-                        type="number"
-                        value={target?.no_orders}
-                        min={1}
-                        onChange={(e) => {
-                          if (
-                            e.target?.value > 0
-                            // &&
-                            // e.target?.value < readTarget?.no_orders?.no_orders
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e?.target?.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Prescription</Label>
-                      <Input
-                        type="number"
-                        min={1}
-                        value={target?.no_prescriptions}
-                        onChange={(e) => {
-                          if (
-                            e.target?.value > 0
-                            // &&
-                            // e.target?.value <
-                            //   readTarget?.no_prescriptions?.no_prescriptions
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e?.target?.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
                 </>
               ) : selected?.value === 'Director' ? (
                 <>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter Amount</Label>
-
-                      <Input
-                        name="amount"
-                        type="number"
-                        value={target?.amount}
-                        onChange={(e) => {
-                          if (e.target?.value > 0) {
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
+                  
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Director</Label>
@@ -885,37 +872,26 @@ export default function CreateTarget(props) {
                       />
                     </FormGroup>
                   </Col>
-
                   <Col lg={6}>
                     <FormGroup>
-                      <Label>Select Medicine</Label>
-                      {loadingStocks ? (
+                      <Label>Enter Amount</Label>
 
-                        <div className="">
-                          <Loader
-                            height={18}
-                            width={18}
-                            type="Oval"
-                            color="#0066B3"
-                          />
-                          &nbsp;
-                        </div>
-                      ) : (
-                        <Select
-                          cacheOptions
-                          closeMenuOnSelect={false}
-                          components={animatedComponents}
-                          isMulti
-                          ref={selectInputRef}
-                          // value={admin?.service_location_uid}
-                          onChange={(val, index) => {
-                            handleChangeProduct(val, index);
-                          }}
-                          options={medicineOptionFromStock}
-                        />
-                      )}
+                      <Input
+                        name="amount"
+                        type="number"
+                        value={target?.amount}
+                        onChange={(e) => {
+                          if (e.target?.value > 0) {
+                            setTarget({
+                              ...target,
+                              amount: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
                     </FormGroup>
                   </Col>
+                  
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Start Date</Label>
@@ -1014,32 +990,40 @@ export default function CreateTarget(props) {
                       />
                     </FormGroup>
                   </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Select Medicine</Label>
+                      {loadingStocks ? (
+
+                        <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div>
+                      ) : (
+                        <Select
+                          cacheOptions
+                          closeMenuOnSelect={false}
+                          components={animatedComponents}
+                          isMulti
+                          ref={selectInputRef}
+                          // value={admin?.service_location_uid}
+                          onChange={(val, index) => {
+                            handleChangeProduct(val, index);
+                          }}
+                          options={medicineOptionFromStock}
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
                 </>
               ) : selected?.value === 'RSM' ? (
                 <>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter Amount</Label>
-
-                      <Input
-                        name="amount"
-                        value={target?.amount}
-                        type="number"
-                        onChange={(e) => {
-                          if (
-                            e.target?.value > 0
-                            // &&
-                            // e?.target?.value > readTarget?.amount?.amount
-                          ) {
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
+                  
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Director</Label>
@@ -1109,12 +1093,35 @@ export default function CreateTarget(props) {
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
                             await getDirectorTarget(val?.key);
+                            // await getDirectorTarget(val?.key);
                           }}
                           options={regionalSalesManagerOption}
                         />
                       )}
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter Amount</Label>
+
+                      <Input
+                        name="amount"
+                        value={target?.amount}
+                        type="number"
+                        onChange={(e) => {
+                          if (
+                            e.target?.value > 0
+                            &&
+                            e?.target?.value <= readTarget?.amount?.amount
+                          ) {
+                            setTarget({
+                              ...target,
+                              amount: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
                     </FormGroup>
                   </Col>
 
@@ -1129,9 +1136,9 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e?.target?.value > 0
-                            // &&
-                            // e?.target?.value >
-                            //   readTarget?.by_customer_visits?.by_customer_visits
+                            &&
+                            e?.target?.value <=
+                              readTarget?.by_customer_visits?.by_customer_visits
                           ) {
                             setTarget({
                               ...target,
@@ -1153,13 +1160,56 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e?.target?.value > 0
-                            // &&
-                            // e?.target?.value >
-                            //   readTarget?.by_doctor_visits?.by_doctor_visits
+                            &&
+                            e?.target?.value <=
+                              readTarget?.by_doctor_visits?.by_doctor_visits
                           ) {
                             setTarget({
                               ...target,
                               by_doctor_visits: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Orders</Label>
+                      <Input
+                        type="number"
+                        value={target?.no_orders}
+                        onChange={(e) => {
+                          if (
+                            e?.target?.value > 0
+                            &&
+                            e?.target?.value <= readTarget?.no_orders?.no_orders
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_orders: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Prescription</Label>
+                      <Input
+                        type="number"
+                        value={target?.no_prescriptions}
+                        onChange={(e) => {
+                          if (
+                            e?.target?.value > 0
+                            &&
+                            e?.target?.value <=
+                              readTarget?.no_prescriptions?.no_prescriptions
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_prescriptions: Number(e.target.value),
                             });
                           }
                         }}
@@ -1189,87 +1239,18 @@ export default function CreateTarget(props) {
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
 
-                            // setTarget({
-                            //   ...target,
-                            //   start_date: moment
-                            //     .unix(targets[0]?.start_date)
-                            //     .format('YYYY-MM-DD h:mm:ss'),
-                            // });
+                           
                           }}
                           options={medicineOption}
                         />
                       )}
                     </FormGroup>
                   </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Orders</Label>
-                      <Input
-                        type="number"
-                        value={target?.no_orders}
-                        onChange={(e) => {
-                          if (
-                            e?.target?.value > 0
-                            // &&
-                            // e?.target?.value > readTarget?.no_orders?.no_orders
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Prescription</Label>
-                      <Input
-                        type="number"
-                        value={target?.no_prescriptions}
-                        onChange={(e) => {
-                          if (
-                            e?.target?.value > 0
-                            // &&
-                            // e?.target?.value >
-                            //   readTarget?.no_prescriptions?.no_prescriptions
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
+                 
                 </>
               ) : selected?.value === 'AM' ? (
                 <>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter Amount</Label>
-
-                      <Input
-                        name="amount"
-                        type="number"
-                        value={target?.amount}
-                        onChange={(e) => {
-                          if (
-                            e?.target?.value > 0
-                            // &&
-                            // e?.target?.value > readTarget?.amount?.amount
-                          ) {
-                            setTarget({
-                              ...target,
-                              amount: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
+                  
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Select Director</Label>
@@ -1310,9 +1291,7 @@ export default function CreateTarget(props) {
                           onChange={async (val) => {
                             dispatch(getUsers(val.key, 'rsm'));
 
-                            //   setTimeout(async() => {
-                            //     await console.log(targets[0]?.start_date);
-                            //   }, 3000);
+                           
                           }}
                           options={salesManagerOption}
                         />
@@ -1372,15 +1351,38 @@ export default function CreateTarget(props) {
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
                             await getDirectorTarget(val?.key);
+
+                          
                           }}
                           options={areaManagerOption}
                         />
                       )}
                     </FormGroup>
                   </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter Amount</Label>
 
+                      <Input
+                        name="amount"
+                        type="number"
+                        value={target?.amount}
+                        onChange={(e) => {
+                          if (
+                            e?.target?.value > 0
+                            &&
+                            e?.target?.value <= readTarget?.amount?.amount
+                          ) {
+                            setTarget({
+                              ...target,
+                              amount: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
                   <Col lg={6}>
                     <FormGroup>
                       <Label>Enter By Customer Visits</Label>
@@ -1392,9 +1394,9 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e?.target?.value > 0
-                            // &&
-                            // e?.target?.value >
-                            //   readTarget?.by_customer_visits?.by_customer_visits
+                            &&
+                            e?.target?.value <=
+                              readTarget?.by_customer_visits?.by_customer_visits
                           ) {
                             setTarget({
                               ...target,
@@ -1416,13 +1418,54 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e?.target?.value > 0
-                            // &&
-                            // e?.target?.value >
-                            //   readTarget?.by_doctor_visits?.by_doctor_visits
+                            &&
+                            e?.target?.value <=
+                              readTarget?.by_doctor_visits?.by_doctor_visits
                           ) {
                             setTarget({
                               ...target,
                               by_doctor_visits: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Orders</Label>
+                      <Input
+                        value={target?.no_orders}
+                        onChange={(e) => {
+                          if (
+                            e?.target?.value > 0
+                            &&
+                            e?.target?.value <= readTarget?.no_orders?.no_orders
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_orders: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Prescription</Label>
+                      <Input
+                        value={target?.no_prescriptions}
+                        onChange={(e) => {
+                          if (
+                            e?.target?.value > 0
+                            &&
+                            e?.target?.value <=
+                              readTarget?.no_prescriptions?.no_prescriptions
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_prescriptions: Number(e.target.value),
                             });
                           }
                         }}
@@ -1452,59 +1495,14 @@ export default function CreateTarget(props) {
                           onChange={(val, index) => {
                             handleChangeProduct(val, index);
 
-                            // setTarget({
-                            //   ...target,
-                            //   start_date: moment
-                            //     .unix(targets[0]?.start_date)
-                            //     .format('YYYY-MM-DD h:mm:ss'),
-                            // });
+                           
                           }}
                           options={medicineOption}
                         />
                       )}
                     </FormGroup>
                   </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Orders</Label>
-                      <Input
-                        value={target?.no_orders}
-                        onChange={(e) => {
-                          if (
-                            e?.target?.value > 0
-                            // &&
-                            // e?.target?.value > readTarget?.no_orders?.no_orders
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Prescription</Label>
-                      <Input
-                        value={target?.no_prescriptions}
-                        onChange={(e) => {
-                          if (
-                            e?.target?.value > 0
-                            // &&
-                            // e?.target?.value >
-                            //   readTarget?.no_prescriptions?.no_prescriptions
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
+                 
                 </>
               ) : selected?.value === 'MPO' ? (
                 <>
@@ -1579,9 +1577,7 @@ export default function CreateTarget(props) {
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             dispatch(getUsers(val.key, 'am'));
-                            // await getDirectorTarget(val?.key);
-
-                            // await getDirectorTarget(val?.key);
+                            
                           }}
                           options={regionalSalesManagerOption}
                         />
@@ -1612,7 +1608,6 @@ export default function CreateTarget(props) {
                             dispatch(getUsers(val.key, 'mpo'));
                             getParentTarget(val?.key);
 
-                            // await getDirectorTarget(val?.key);
                           }}
                           options={areaManagerOption}
                         />
@@ -1641,8 +1636,9 @@ export default function CreateTarget(props) {
                           name="form-field-name-gender"
                           onChange={async (val) => {
                             setTarget({ ...target, assigned_to_uid: val?.key });
-                            // await getDirectorTarget(val?.key);
-                            // await getDirectorTarget(val?.key);
+                            await getDirectorTarget(val?.key);
+
+                            
                           }}
                           options={mpoOption}
                         />
@@ -1660,8 +1656,8 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e.target.value > 0
-                            // &&
-                            // e.target.value < readTarget?.amount?.amount
+                            &&
+                            e.target.value <= readTarget?.amount?.amount
                           ) {
                             setTarget({
                               ...target,
@@ -1685,9 +1681,9 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e.target.value > 0
-                            // &&
-                            // e.target.value <
-                            //   readTarget?.by_customer_visits?.by_customer_visits
+                            &&
+                            e.target.value <=
+                              readTarget?.by_customer_visits?.by_customer_visits
                           ) {
                             setTarget({
                               ...target,
@@ -1709,13 +1705,58 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e.target.value > 0
-                            // &&
-                            // e.target.value <
-                            //   readTarget?.by_doctor_visits?.by_doctor_visits
+                            &&
+                            e.target.value <=
+                              readTarget?.by_doctor_visits?.by_doctor_visits
                           ) {
                             setTarget({
                               ...target,
                               by_doctor_visits: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                 
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Orders</Label>
+                      <Input
+                        value={target?.no_orders}
+                        onChange={(e) => {
+                          if (
+                            e.target.value > 0
+                            &&
+                            e.target.value <= readTarget?.no_orders?.no_orders
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_orders: Number(e.target.value),
+                            });
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>Enter No Of Prescription</Label>
+                      <Input
+                        min={1}
+                        value={target?.no_prescriptions}
+                        type="number"
+                        min={1}
+                        onChange={(e) => {
+                          if (
+                            e.target.value > 0
+                            &&
+                            e.target.value <=
+                              readTarget?.no_prescriptions?.no_prescriptions
+                          ) {
+                            setTarget({
+                              ...target,
+                              no_prescriptions: Number(e.target.value),
                             });
                           }
                         }}
@@ -1748,50 +1789,6 @@ export default function CreateTarget(props) {
                           options={medicineOption}
                         />
                       )}
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Orders</Label>
-                      <Input
-                        value={target?.no_orders}
-                        onChange={(e) => {
-                          if (
-                            e.target.value > 0
-                            // &&
-                            // e.target.value < readTarget?.no_orders?.no_orders
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_orders: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
-                  <Col lg={6}>
-                    <FormGroup>
-                      <Label>Enter No Of Prescription</Label>
-                      <Input
-                        min={1}
-                        value={target?.no_prescriptions}
-                        type="number"
-                        min={1}
-                        onChange={(e) => {
-                          if (
-                            e.target.value > 0
-                            // &&
-                            // e.target.value <
-                            //   readTarget?.no_prescriptions?.no_prescriptions
-                          ) {
-                            setTarget({
-                              ...target,
-                              no_prescriptions: Number(e.target.value),
-                            });
-                          }
-                        }}
-                      />
                     </FormGroup>
                   </Col>
                 </>
