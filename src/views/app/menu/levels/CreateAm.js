@@ -42,6 +42,7 @@ import makeAnimated from 'react-select/animated';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 import { BASEURL } from 'services/HttpProvider';
+import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
 const animatedComponents = makeAnimated();
 
 const selectGender = [
@@ -52,11 +53,28 @@ const selectGender = [
 export default function CreateDirector({ history }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
+  const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
   const [confirmPassword, setConfirmPassword] = useState('');
   let [service_location, setService_location] = useState([]);
   let [loadingLocation, setLoadingLocation] = useState(false);
+  
+  
 
+  let regionalSalesManagerOption = [];
+  rsm?.map((item) =>
+    regionalSalesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+  
   const admin_obj = {
     email_address: '',
 
@@ -81,16 +99,17 @@ export default function CreateDirector({ history }) {
   };
 
   const readUser = () => {
-    dispatch(ViewRegionalSalesManagerManagerAction());
+    dispatch(ViewSalesManagerManagerAction());
     // dispatch(ViewSalesManagerManagerAction());
   };
   useEffect(() => {
     readRoles();
     readUser();
+
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  const rsm = useSelector(
-    (state) => state?.ViewUserReducer?.regionalSalesManager
+  const sm = useSelector(
+    (state) => state?.ViewUserReducer?.salesManager
   );
   // const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
 
@@ -100,11 +119,11 @@ export default function CreateDirector({ history }) {
       ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
       : null
   );
-  let rsmOptiopns = [];
+  let smOptiopns = [];
   // let smOptiopnsEdit = [];
 
-  rsm?.filter((item) =>
-    rsmOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
+  sm?.filter((item) =>
+    smOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
   // sm?.filter((item) =>
   //   smOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
@@ -372,7 +391,7 @@ export default function CreateDirector({ history }) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select RSM" />
+                    <IntlMessages id="Select SM" />
                   </Label>
 
                   <Select
@@ -384,14 +403,45 @@ export default function CreateDirector({ history }) {
                     // value={gender}
 
                     onChange={(val) => {
-                      setAdmin({
-                        ...admin,
-                        manager_uid: val.key,
-                      });
-                      getServiceLocationUid(val.key);
+                      dispatch(getUsers(val.key, 'rsm'));
+                      
                     }}
-                    options={rsmOptiopns}
+                    options={smOptiopns}
                   />
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select RSM" />
+                  </Label>
+                  {loadingRSM ? <div className="">
+                          <Loader
+                            height={18}
+                            width={18}
+                            type="Oval"
+                            color="#0066B3"
+                          />
+                          &nbsp;
+                        </div> :
+                        <Select
+                        required
+                        components={{ Input: CustomSelectInput }}
+                        className="react-select"
+                        classNamePrefix="react-select"
+                        name="form-field-name-gender"
+                        // value={gender}
+    
+                        onChange={(val) => {
+                          setAdmin({
+                            ...admin,
+                            manager_uid: val.key,
+                          });
+                          getServiceLocationUid(val.key);
+                        }}
+                        options={regionalSalesManagerOption}
+                      />}
+                  
                 </FormGroup>
               </Col>
               

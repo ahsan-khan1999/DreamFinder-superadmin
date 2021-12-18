@@ -78,7 +78,7 @@ export default function EditRole(props) {
     let res = await apiServices.suspandRoles({ uid: currentRole?.uid });
     if (res?.response_code === 200) {
       NotificationManager.success(
-        'Successfully Suspanded',
+        'Successfully Suspended',
         'Success',
         5000,
         null,
@@ -90,7 +90,7 @@ export default function EditRole(props) {
     } else {
     setLoading(true)
 
-      NotificationManager.success(
+      NotificationManager.error(
         res?.response_message,
         'Error',
         5000,

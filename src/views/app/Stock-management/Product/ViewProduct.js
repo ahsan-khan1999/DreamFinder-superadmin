@@ -215,12 +215,7 @@ export default function ViewProduct({ match, history }) {
                             : index === buttonnew_old.length - 1
                             ? '0px 10px 10px 0px'
                             : '',
-                        width:
-                          index === 0
-                            ? '80px'
-                            : index === buttonnew_old.length - 1
-                            ? '80px'
-                            : '',
+                      
                       }}
                       className={
                         selectedTab2 === item

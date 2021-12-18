@@ -35,6 +35,7 @@ export const searchArray = (data, keyword) => {
 export const mySearch = (data, keyword) => {
   let finalResult = [];
   data?.forEach((item) => {
+    
     if (item?.name?.toLowerCase()?.indexOf(keyword) !== -1) {
       finalResult.push(item);
     }
@@ -94,6 +95,12 @@ export function testSearch(arrayOfAllObjects, searchText) {
     return JSON.stringify(object).toString().toLowerCase().includes(searchText.toLowerCase());
   });
   console.log(arrayOfMatchedObjects,"arrayOfMatchedObjects",searchText);
+  return arrayOfMatchedObjects;
+}
+export function periorityListSearch(arrayOfAllObjects, searchText) {
+  let arrayOfMatchedObjects = arrayOfAllObjects.filter((object) => {
+    return JSON.stringify(object?.customer?.name).toString().toLowerCase().includes(searchText.toLowerCase());
+  });
   return arrayOfMatchedObjects;
 }
 

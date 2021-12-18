@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, CardBody, Col, Row } from 'reactstrap';
 import { ViewPeriorityListAction } from 'Store/Actions/PeriorityListAction/PeriorityListAction';
 import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
-import { mySearch, searchArray, testSearch } from 'Utils/auth.util';
+import { mySearch, periorityListSearch, searchArray, testSearch } from 'Utils/auth.util';
 
 export default function ViewPeriorityList(props) {
   const [search, setSearch] = useState('');
@@ -27,7 +27,7 @@ export default function ViewPeriorityList(props) {
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(testSearch(customerList, search));
+    setDoc(periorityListSearch(customerList, search));
   };
   const handleAdd = () => {
     props.history.push('/app/PeriorityList/CreatePeriorityList');
@@ -40,6 +40,20 @@ export default function ViewPeriorityList(props) {
     'Status',
     'Action',
   ];
+//   const globalSearch = () => {
+//     let { searchInput, data } = this.state;
+//     let filteredData = data.filter(value => {
+//     return (
+//         value.firstName.toLowerCase().includes(searchInput.toLowerCase()) ||
+//         value.status.toLowerCase().includes(searchInput.toLowerCase()) ||
+//         value.visits
+//           .toString()
+//           .toLowerCase()
+//           .includes(searchInput.toLowerCase())
+//       );
+//     });
+//     this.setState({ filteredData });
+// };
   const changeRoute = (item) => {
     props.history.push('/app/PeriorityList/EditPeriorityList', item);
   };

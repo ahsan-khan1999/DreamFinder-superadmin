@@ -164,7 +164,7 @@ export default function UpdateSample(props) {
     let res = await dispatch(SuspandSampleAction({ uid: currentSample?.uid }));
     if (res) {
       NotificationManager.success(
-        'Successfully Suspanded',
+        'Successfully Suspended',
         'Success',
         5000,
         null,

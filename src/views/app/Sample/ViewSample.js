@@ -16,7 +16,8 @@ export default function ViewSample(props) {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(ViewSampleAction());
+
+      dispatch(ViewSampleAction());
   }, []);
 
   const sample = useSelector((state) => state?.SampleReducer?.sample);

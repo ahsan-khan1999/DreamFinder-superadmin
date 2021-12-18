@@ -384,7 +384,7 @@ export default function ViewCurrentCustomers(props) {
                       </Label>
 
                       <span>
-                        <p>{currentCustomer?.name.toUpperCase()}</p>
+                        <p>{currentCustomer?.name?.toUpperCase()}</p>
                       </span>
                     </AvGroup>
                   </Col>
@@ -421,7 +421,7 @@ export default function ViewCurrentCustomers(props) {
                         </h6>
                       </Label>
                       <span>
-                        <p>{currentCustomer?.email_address.toUpperCase()}</p>
+                        <p>{currentCustomer?.email_address?.toUpperCase()}</p>
                       </span>
                     </AvGroup>
                   </Col>
@@ -441,7 +441,7 @@ export default function ViewCurrentCustomers(props) {
 
                       <span>
                         <p>
-                          {currentCustomer?.market__street_address.toUpperCase()}
+                          {currentCustomer?.market?.name?.toUpperCase()+" "+ currentCustomer?.street_address  }
                         </p>
                       </span>
                     </AvGroup>
@@ -460,7 +460,7 @@ export default function ViewCurrentCustomers(props) {
                         </h6>
                       </Label>
                       <span>
-                        <p>{currentCustomer?.client_type.toUpperCase()}</p>
+                        <p>{currentCustomer?.client_type?.toUpperCase()}</p>
                       </span>
                     </AvGroup>
                   </Col>

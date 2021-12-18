@@ -672,7 +672,7 @@ export default function CreateTarget(props) {
                         onChange={(e) => {
                           if (
                             e.target?.value > 0 &&
-                            e?.target?.value < readTarget?.amount?.amount
+                            e?.target?.value <= readTarget?.amount?.amount
                           ) {
                             setTarget({
                               ...target,
@@ -861,6 +861,17 @@ export default function CreateTarget(props) {
                       <Label>Select Distribtion Center</Label>
 
                       <Select
+                        // cacheOptions
+                        // closeMenuOnSelect={false}
+                        // components={animatedComponents}
+                        // isMulti
+                        // ref={selectInputRef}
+                        // onChange={(val, index) => {
+                        //   // handleChangeProduct(val, index);
+                        //   // getStocks(val?.key);
+                        //   console.log(val[0]);
+                        // }}
+                        // options={distributionCenterOption}
                         required
                         components={{ Input: CustomSelectInput }}
                         className="react-select"
@@ -879,6 +890,7 @@ export default function CreateTarget(props) {
                     <FormGroup>
                       <Label>Select Medicine</Label>
                       {loadingStocks ? (
+
                         <div className="">
                           <Loader
                             height={18}

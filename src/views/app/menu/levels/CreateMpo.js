@@ -42,6 +42,7 @@ import axios from 'axios';
 import makeAnimated from 'react-select/animated';
 import Loader from 'react-loader-spinner';
 import { BASEURL } from 'services/HttpProvider';
+import { getUsers } from 'Store/Actions/AttendanceActions/AttendanceAction';
 
 const animatedComponents = makeAnimated();
 
@@ -55,7 +56,17 @@ export default function CreateDirector({ history }) {
   let [service_location, setService_location] = useState([]);
 
   let [loadingLocation, setLoadingLocation] = useState(false);
-
+  const loadingSM = useSelector((state) => state?.AttendanceReducer?.loadingSm);
+  const loadingAM = useSelector((state) => state?.AttendanceReducer?.loadingAm);
+  const loadingRSM = useSelector(
+    (state) => state?.AttendanceReducer?.loadingRsm
+  );
+  const loadingMPO = useSelector(
+    (state) => state?.AttendanceReducer?.loadingMpo
+  );
+  const rsm = useSelector((state) => state?.AttendanceReducer?.rsm);
+  const am = useSelector((state) => state?.AttendanceReducer?.am);
+  const mpo = useSelector((state) => state?.AttendanceReducer?.mpo);
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
     email_address: '',
@@ -79,44 +90,64 @@ export default function CreateDirector({ history }) {
   const readRoles = () => {
     dispatch(ViewRoleAction());
   };
+  let areaManagerOption = [];
+  am?.map((item) =>
+    areaManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
+
+  let regionalSalesManagerOption = [];
+  rsm?.map((item) =>
+    regionalSalesManagerOption?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
   const readUser = () => {
     // dispatch(ViewRegionalSalesManagerManagerAction());
     // dispatch(ViewSalesManagerManagerAction());
-    dispatch(ViewAreaManagerAction());
+    dispatch(ViewSalesManagerManagerAction());
   };
   useEffect(() => {
     readRoles();
     readUser();
   }, []);
   const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  const rsm = useSelector(
-    (state) => state?.ViewUserReducer?.regionalSalesManager
-  );
   const sm = useSelector((state) => state?.ViewUserReducer?.salesManager);
-
-  const am = useSelector((state) => state?.ViewUserReducer?.areaManager);
+  let smOptions = [];
+  sm.map((item) =>
+    smOptions?.push({
+      label: item?.name,
+      value: item?.name,
+      key: item?.uid,
+    })
+  );
   const getServiceLocationUid = async (uid) => {
-    setLoadingLocation(true)
+    setLoadingLocation(true);
     let token = await getToken();
     const response = await axios.get(
-      BASEURL+`/region-classifications/read/territory?child_uid=${uid}`,
+      BASEURL + `/region-classifications/read/territory?child_uid=${uid}`,
       {
         headers: {
-          "x-session-key": token.token,
-          "x-session-type": token.type,
+          'x-session-key': token.token,
+          'x-session-type': token.type,
         },
       }
     );
-    setLoadingLocation(false)
+    setLoadingLocation(false);
 
     setService_location(response?.data?.response_data);
   };
   let options = [];
   roles?.filter((item) =>
-  item?.category?.user_role_id == 6
-    ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
-    : null
-);
+    item?.category?.user_role_id == 6
+      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
+      : null
+  );
 
   let amOptiopns = [];
   let value = [];
@@ -131,17 +162,15 @@ export default function CreateDirector({ history }) {
     });
     await setArray(value);
     let test = { ...admin, service_location_uid: value };
-    setAdmin(test)
+    setAdmin(test);
     // await setDeliveryStaff({ ...deliveryStaff, service_location_uid: value });
   };
 
   am?.filter((item) =>
     amOptiopns?.push({ label: item?.name, value: item?.name, key: item?.uid })
   );
-  
 
   const onAdminCreate = async () => {
-    setLoading(true);
     // let test = { ...admin, service_location_uid: array };
 
     if (
@@ -153,6 +182,8 @@ export default function CreateDirector({ history }) {
       admin?.designation === '' &&
       admin.role_uid === ''
     ) {
+    setLoading(true);
+
       NotificationManager.error(
         'Please Enter Required Field',
         'Error',
@@ -181,6 +212,8 @@ export default function CreateDirector({ history }) {
 
         history.push('/app/menu/levels/viewMpo');
       } else if (confirmPassword !== admin?.password) {
+    setLoading(true);
+
         NotificationManager.warning(
           'Password Doesnt match',
           'Error',
@@ -189,6 +222,9 @@ export default function CreateDirector({ history }) {
           ''
         );
         setLoading(false);
+      }else{
+        setLoading(false);
+
       }
     }
   };
@@ -366,11 +402,10 @@ export default function CreateDirector({ history }) {
                   />
                 </FormGroup>
               </Col>
-
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Am" />
+                    <IntlMessages id="Select SM" />
                   </Label>
 
                   <Select
@@ -382,22 +417,19 @@ export default function CreateDirector({ history }) {
                     // value={gender}
 
                     onChange={(val) => {
-                      setAdmin({
-                        ...admin,
-                        manager_uid: val.key,
-                      });
-                      getServiceLocationUid(val.key);
+                      dispatch(getUsers(val.key, 'rsm'));
                     }}
-                    options={amOptiopns}
+                    options={smOptions}
                   />
                 </FormGroup>
               </Col>
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Select Territory" />
+                    <IntlMessages id="Select RSM" />
                   </Label>
-                  {loadingLocation ? <div className="">
+                  {loadingRSM ? (
+                    <div className="">
                       <Loader
                         height={18}
                         width={18}
@@ -405,15 +437,85 @@ export default function CreateDirector({ history }) {
                         color="#0066B3"
                       />
                       &nbsp;
-                    </div> : <Select
-                    cacheOptions
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                    isMulti
-                    onChange={(e) => handleChange(e)}
-                    options={option}
-                  />}
-                  
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      // value={gender}
+
+                      onChange={(val) => {
+                        dispatch(getUsers(val.key, 'am'));
+                      }}
+                      options={regionalSalesManagerOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select AM" />
+                  </Label>
+                  {loadingAM ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      required
+                      components={{ Input: CustomSelectInput }}
+                      className="react-select"
+                      classNamePrefix="react-select"
+                      name="form-field-name-gender"
+                      // value={gender}
+
+                      onChange={(val) => {
+                        setAdmin({
+                          ...admin,
+                          manager_uid: val.key,
+                        });
+                        getServiceLocationUid(val.key);
+                      }}
+                      options={areaManagerOption}
+                    />
+                  )}
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Select Territory" />
+                  </Label>
+                  {loadingLocation ? (
+                    <div className="">
+                      <Loader
+                        height={18}
+                        width={18}
+                        type="Oval"
+                        color="#0066B3"
+                      />
+                      &nbsp;
+                    </div>
+                  ) : (
+                    <Select
+                      cacheOptions
+                      closeMenuOnSelect={false}
+                      components={animatedComponents}
+                      isMulti
+                      onChange={(e) => handleChange(e)}
+                      options={option}
+                    />
+                  )}
                 </FormGroup>
               </Col>
               {/* <Col lg={6}>
