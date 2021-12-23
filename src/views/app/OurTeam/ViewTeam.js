@@ -1,63 +1,78 @@
 /* eslint-disable */
 
+import { React, useState, useEffect } from 'react';
+import { Button, Card, Row } from 'reactstrap';
 import { Colxx, Separator } from 'components/common/CustomBootstrap';
-import { DCPTable, TargetTable } from 'containers/ui/ReactTableCards';
-import React, { useEffect, useState } from 'react';
-import Loader from 'react-loader-spinner';
+import axios from 'axios';
+import { getToken, searchArray, testSearch } from '../../../Utils/auth.util';
+import { CardBody, Col, Table, CardTitle } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, CardBody, Col, Row } from 'reactstrap';
-import { ViewDcpAction } from 'Store/Actions/FieldWorkManagmentAction/FieldWorkManagmentAction';
-import { ViewTargetAction } from 'Store/Actions/Target/TargetAction';
-import { searchArray } from 'Utils/auth.util';
 
-export default function ViewDcp(props) {
-  const [search, setSearch] = useState('');
-  const [doc, setDoc] = useState([]);
-  const dispatch = useDispatch();
+import Loader from 'react-loader-spinner';
+
+import { AdminTable } from 'containers/ui/ReactTableCards';
+
+export default function ViewTeam({history}) {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    dispatch(ViewDcpAction());
+    getAdmin();
   }, []);
+  const dispatch = useDispatch();
+  const getAdmin = async () => {
+    setLoading(true);
+    const res = await axios.get(
+      'https://dream-finder-backend.herokuapp.com/api/v1/our-teams',
+      {}
+    );
 
-  const dcps = useSelector((state) => state?.DcpReducer?.dcp);
-  const loading = useSelector((state) => state?.DcpReducer?.loading);
+    setData(res?.data?.response_data?.our_team);
+    setLoading(false)
+  };
+  const [doc, setDoc] = useState();
+
+  const [search, setSearch] = useState('');
+
   const changeRoute = (item) => {
-    props.history.push('/app/FieldWorkManagment/EditDcp', item);
+    history.push('/app/OurTeam/EditTeam', item);
   };
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    setDoc(searchArray(dcps, search));
+
+    setDoc(testSearch(data, search));
   };
 
-  let header = [
-    'Name',
-    'Doctor Name',
-    'Designation',
-    'Purpose',
-    'Status',
-    'Actions',
-  ];
+  const handleAdd = () => {
+    history.push('/app/OurTeam/CreateTeam');
+  };
+
+  let header = ['Name', 'Designation', 'Description', 'Actions'];
   return (
     <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
             {/* <Breadcrumb heading="Doctors" match={match} /> */}
-            <h4>DCP</h4>
+            <h4>Admin</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
         <Row>
           <Col lg={12}>
             {/* <label htmlFor="search">
-              <input id="search" type="text" onChange={handleSearch} />
-            </label> */}
+                <input id="search" type="text" onChange={handleSearch} />
+              </label> */}
             <div className="header-search">
               <form action="#" className="">
                 <i className="fas fa-search search-icon"></i>
                 <input
                   type="text"
                   placeholder="Search"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="By Name Designation Gender And Status"
                   onChange={handleSearch}
                 />
                 <button type="submit">
@@ -67,17 +82,26 @@ export default function ViewDcp(props) {
             </div>
           </Col>
         </Row>
-
-        {/* <Button
-          onClick={handleAddStaff}
+        <Button
+          onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#003766',
+            backgroundColor: '#0066B3',
             marginTop: '10px',
           }}
         >
-          Add Delivery Staff
-        </Button> */}
+          Add User
+        </Button>
+        {/* <Button
+            onClick={handleAddStaff}
+            style={{
+              marginBottom: '15px',
+              backgroundColor: '#003766',
+              marginTop: '10px',
+            }}
+          >
+            Add Delivery Staff
+          </Button> */}
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (
@@ -98,9 +122,9 @@ export default function ViewDcp(props) {
                 />
               </div>
             ) : (
-              <DCPTable
+              <AdminTable
                 header={header}
-                data={search === '' ? dcps : doc}
+                data={search === '' ? data : doc}
                 changeRoute={changeRoute}
               />
             )}

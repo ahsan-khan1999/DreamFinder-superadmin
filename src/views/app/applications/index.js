@@ -7,13 +7,8 @@ const Todo = React.lazy(() =>
 const Survey = React.lazy(() =>
   import(/* webpackChunkName: "application-survey" */ './survey')
 );
-const ViewRequests = React.lazy(() =>
-  import(/* webpackChunkName: "application-todo" */ './viewRequests')
-);
 
-const ViewCurrentRequests = React.lazy(() =>
-  import(/* webpackChunkName: "application-todo" */ './viewCurrentRequest')
-);
+
 const SurveyDetail = React.lazy(() =>
   import(/* webpackChunkName: "application-survey-detail" */ './survey-detail')
 );
@@ -29,14 +24,7 @@ const Applications = ({ match }) => (
         path={`${match.url}/todo`}
         render={(props) => <Todo {...props} />}
       />
-      <Route
-        path={`${match.url}/viewRequests`}
-        render={(props) => <ViewRequests {...props} />}
-      />
-      <Route
-        path={`${match.url}/viewCurrentRequest`}
-        render={(props) => <ViewCurrentRequests {...props} />}
-      />
+     
       <Route
         path={`${match.url}/survey/:surveyid`}
         render={(props) => <SurveyDetail {...props} />}

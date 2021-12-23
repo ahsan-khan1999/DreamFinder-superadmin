@@ -2,32 +2,9 @@ import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 // import PastAppoinment from './pastAppoinment';
 
-const ViewTodaysAppoinment = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './todaysAppoinment')
-);
 
-const RescheduleRequest = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './rescheduleRequest')
-);
-const CurrentRescheduleRequest = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './viewCurrentAppoitmentReq')
-);
 
-const ViewPastAppoinment = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './pastAppoinment')
-);
-const ViewCurrentPastAppoinment = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './viewCurrentPastAppointment')
-);
-const ViewCurrentTodayAppoinment = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './viewCurrentTodaysAppointment')
-);
-const ViewCurrentUpcomingAppoinment = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './viewCurrentUpcomingAppointment')
-);
-const UpcommingAppoinment = React.lazy(() =>
-  import(/* webpackChunkName: "components-badges" */ './upcomingAppoinments')
-);
+
 const Buttons = React.lazy(() =>
   import(/* webpackChunkName: "components-buttons" */ './buttons')
 );

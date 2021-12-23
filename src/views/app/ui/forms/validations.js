@@ -6,8 +6,6 @@ import Breadcrumb from 'containers/navs/Breadcrumb';
 
 import FormikBasicFieldLevel from 'containers/form-validations/FormikBasicFieldLevel';
 import FormikBasicFormLevel from 'containers/form-validations/FormikBasicFormLevel';
-import FormikCustomComponents from 'containers/form-validations/FormikCustomComponents';
-import FormikCustomWithTopLabels from 'containers/form-validations/FormikCustomWithTopLabels';
 import AvailityBasic from 'containers/form-validations/AvailityBasic';
 import AvailityCustom from 'containers/form-validations/AvailityCustom';
 import AvailityDefaultValues from 'containers/form-validations/AvailityDefaultValues';
@@ -31,8 +29,6 @@ const FormValidationsUi = ({ match }) => {
           <FormikBasicFieldLevel />
           <FormikBasicFormLevel />
           <FormikValidationSchema />
-          <FormikCustomComponents />
-          <FormikCustomWithTopLabels />
         </Colxx>
         <Colxx xs="12" md="6" className="mb-3">
           <h5 className="mb-4">

@@ -2446,54 +2446,30 @@ export const AdminTable = (props) => {
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
+      
       {
         Header: header[1],
-        accessor: 'date_of_birth',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => <>{props.value}</>,
-      },
-      {
-        Header: header[2],
         accessor: 'designation',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
       {
-        Header: header[3],
-        accessor: 'gender',
+        Header: header[2],
+        accessor: 'short_description',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => <>{props.value}</>,
       },
 
+      
+      
       {
-        Header: header[4],
-        accessor: 'phone_number',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => <>{props.value}</>,
-      },
-      {
-        Header: header[5],
-        accessor: 'status.name',
-        cellClass: 'list-item-heading w-10',
-        Cell: (props) => (
-          <span
-            style={{
-              color: props?.value === 'active' ? 'green' : 'red',
-              fontSize: '0.9rem',
-            }}
-          >
-            {props?.value?.toUpperCase()}
-          </span>
-        ),
-      },
-      {
-        Header: header[6],
+        Header: header[3],
         accessor: 'action',
         cellClass: 'list-item-heading w-10',
         Cell: (props) => (
           <Button
             style={{ backgroundColor: '#0066B3' }}
-            onClick={() => changeRoute(props?.cell?.row?.original)}
+            onClick={() => changeRoute(props?.cell?.row?.original?.id)}
           >
             View
           </Button>

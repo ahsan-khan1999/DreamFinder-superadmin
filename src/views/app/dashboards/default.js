@@ -51,7 +51,7 @@ const DefaultDashboard = ({ intl, match }) => {
   };
   useEffect(() => {
     if (from !== undefined && to !== undefined) {
-      getDashboardData();
+      // getDashboardData();
     }
   }, [convertFrom, convertTo]);
   return (
@@ -61,36 +61,15 @@ const DefaultDashboard = ({ intl, match }) => {
           <h4>Dashboard</h4>
           <Separator className="mb-5" />
         </Colxx>
-        <Colxx lg={6} md={12}>
-          <Card className="p-4 mb-3">
-            <Row className="">
-              <Colxx sm={6}>
-                <Input
-                  type="datetime-local"
-                  className="dashboard-date-filter"
-                  value={from}
-                  onChange={(e) => setFrom(e.target.value)}
-                ></Input>
-              </Colxx>
-              <Colxx sm={6}>
-                <Input
-                  type="datetime-local"
-                  className="dashboard-date-filter"
-                  value={to}
-                  onChange={(e) => setTo(e.target.value)}
-                ></Input>
-              </Colxx>
-            </Row>
-          </Card>
-        </Colxx>
+       
       </Row>
       <Row>
         <Colxx lg="12" xl="6" className="mb-4">
           {/* <WebsiteVisitsChartCard /> */}
           <Row>
             <Colxx>
-              <PrescriptionChartCard data={chart} />
-
+              {/* <PrescriptionChartCard data={chart} /> */}
+              <SalesChartCard />
               {/* <BestSellers /> */}
             </Colxx>
           </Row>
@@ -99,7 +78,7 @@ const DefaultDashboard = ({ intl, match }) => {
           {/* <WebsiteVisitsChartCard /> */}
           <Row>
             <Colxx>
-              <OrderChartCard data={chart} />
+            <BestSellers />
 
               {/* <BestSellers /> */}
             </Colxx>

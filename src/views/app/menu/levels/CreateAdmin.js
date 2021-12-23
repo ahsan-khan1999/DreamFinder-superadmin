@@ -22,18 +22,7 @@ import {
 } from '../../../../Store/Actions/User/Doctor/createDoctorAction';
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getToken } from '../../../../Utils/auth.util';
-import BestSellers from 'containers/dashboards/BestSellers';
-import AdvancedSearch from 'containers/dashboards/AdvancedSearch';
-import { Link, NavLink } from 'react-router-dom';
-import products from '../../../../data/products';
-import AddNewSurveyModal from 'containers/applications/AddNewSurveyModal';
-import AddNewModal from 'containers/pages/AddNewModal';
-import AddNewTodoModal from 'containers/applications/AddNewTodoModal';
-import ModalExample from './ModelTo';
-import data from 'data/notifications';
-import { object } from 'prop-types';
-import { objectOf } from 'prop-types';
+
 
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
@@ -68,7 +57,7 @@ export default function CreateAdmin({ history }) {
     // dispatch(ViewAdminAction());
   };
   useEffect(() => {
-    readRoles();
+    // readRoles();
     // readUser();
   }, []);
   
