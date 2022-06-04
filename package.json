@@ -73,6 +73,9 @@
     "web-vitals": "^2.0.1",
     "yup": "^0.32.9"
   },
+  "engines": {
+    "node": "v16.13.0"
+  },
   "scripts": {
     "start": "serve -s build",
     "dev": "react-scripts start",
