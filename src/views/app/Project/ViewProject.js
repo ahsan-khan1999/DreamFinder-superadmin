@@ -10,27 +10,25 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loader from 'react-loader-spinner';
 
-import { AdminTable, TeamTable } from 'containers/ui/ReactTableCards';
+import {ProjectTable } from 'containers/ui/ReactTableCards';
 
-export default function ViewTeam({history}) {
-  const [loading, setLoading] = useState(false);
+export default function ViewProject(props) {
+    const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if(data?.length < 1){
 
       getAdmin();
-    }
   }, []);
   const dispatch = useDispatch();
   const getAdmin = async () => {
     setLoading(true);
     const res = await axios.get(
-      'https://dream-finder-backend.herokuapp.com/api/v1/our-teams',
+      'https://dream-finder-backend.herokuapp.com/api/v1/projects',
       {}
     );
 
-    setData(res?.data?.response_data?.our_team);
+    setData(res?.data?.response_data?.project);
     setLoading(false)
   };
   const [doc, setDoc] = useState();
@@ -38,7 +36,7 @@ export default function ViewTeam({history}) {
   const [search, setSearch] = useState('');
 
   const changeRoute = (item) => {
-    history.push('/app/OurTeam/EditTeam', item);
+    props.history.push('/app/Project/EditProject', item);
   };
 
   const handleSearch = (event) => {
@@ -48,21 +46,23 @@ export default function ViewTeam({history}) {
   };
 
   const handleAdd = () => {
-    history.push('/app/OurTeam/CreateTeam');
+    props.history.push('/app/Project/CreateProject');
   };
 
-  let header = ['Name', 'Designation', 'Description', 'Actions'];
-  return (
-    <Card>
+  let header = ['Name',  'Description', 'Actions'];
+    return (
+        <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
             {/* <Breadcrumb heading="Doctors" match={match} /> */}
-            <h4>Team</h4>
+            <h4>Project</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
-       
+        
+        <Row>
+            <Col lg={12}>
         <Button
           onClick={handleAdd}
           style={{
@@ -71,8 +71,10 @@ export default function ViewTeam({history}) {
             marginTop: '10px',
           }}
         >
-          Add User
+          Add Project
         </Button>
+        </Col>
+        </Row>
         {/* <Button
             onClick={handleAddStaff}
             style={{
@@ -103,7 +105,7 @@ export default function ViewTeam({history}) {
                 />
               </div>
             ) : (
-              <TeamTable
+              <ProjectTable
                 header={header}
                 data={search === '' ? data : doc}
                 changeRoute={changeRoute}
@@ -113,5 +115,5 @@ export default function ViewTeam({history}) {
         </Row>
       </CardBody>
     </Card>
-  );
+    )
 }

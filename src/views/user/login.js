@@ -66,9 +66,8 @@ const Login = ({ history, error, loginUserAction }) => {
     }
     if (values.email !== '' && values.password !== '') {
       const apiData = {
-        email_address: values?.email,
+        email: values?.email,
         password: values?.password,
-        fcm_token: localStorage.getItem('fcm'),
       };
       // console.log(apiData);
 
@@ -156,7 +155,7 @@ const Login = ({ history, error, loginUserAction }) => {
                     </NavLink>
                     <Button
                       color="primary"
-                      style={{backgroundColor:"#0066B3"}}
+                      style={{backgroundColor:"#fed000"}}
                       disabled={loading ? true :false}
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''

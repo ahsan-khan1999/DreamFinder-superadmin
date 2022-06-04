@@ -144,7 +144,7 @@ const ChangePasswordModelSuperAdmin = (props) => {
                     <Button
                       style={{
                         marginTop: '5px',
-                        'background-color': '#0066B3',
+                        'background-color': '#fed000',
                       }}
                       onClick={onResetPassword}
                       color="primary"

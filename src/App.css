@@ -34,7 +34,7 @@
     position: absolute;
     right: 40;
     top: 1px;
-    border: 2px solid #0066B3;
+    border: 2px solid #fed000;
     /* width: 40px; */
     width: 220px;
     height: 38px;
@@ -52,7 +52,7 @@
   .header-search input[type="search"]:focus {
     width: 220px;
     padding: 0 45px 0 10px;
-    border-color: #0066B3
+    border-color: #fed000
   }
   .header-search input[type="submit"],
   .header-search button[type="submit"] {
@@ -168,7 +168,7 @@
   .headerBtn-red {
     margin-top: 10px;
     border-radius: 20px;
-    background-color: #0066B3;
+    background-color: #fed000;
     border: 1px solid transparent;
     color: #fff;
     min-width: 90px;
@@ -192,7 +192,7 @@
    
   }
   .dashboardBtnList-item-active {
-    background: #0066b3 !important;
+    background: #fed000 !important;
     text-decoration: none;
   
 }
@@ -210,7 +210,7 @@
 
 }
   .default-color-and-hover:hover {
-    background: #0066b3 !important;
+    background: #fed000 !important;
   }
   .default-color-and-hover:hover a {
     text-decoration: none;
@@ -222,3 +222,38 @@
     box-shadow: #565656;
 
   }
+
+
+  .container {
+    /* position: absolute; */
+    /* width: 20%; */
+  }
+  
+  /* Make the image responsive */
+  .container img {
+    width: 30%;
+    height: auto;
+  }
+  
+  /* Style the button and place it in the middle of the container/image */
+  .container .btn {
+    position: relative;
+    /* top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px; */
+  }
+  
+  .container .btn:hover {
+    background-color: black;
+  }
+  
+
+  

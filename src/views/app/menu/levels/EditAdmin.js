@@ -19,13 +19,15 @@ import {
 import {
   ViewRoleAction,
   UpdateUserAction,
+  ViewSpecificUserAction,
 } from 'Store/Actions/User/UserActions';
 import Select from 'react-select';
-
+import axios from 'axios';
 import CustomSelectInput from '../../../../components/common/CustomSelectInput';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import ChangePasswordModal from './ChangePasswordModal';
+import Loader from 'react-loader-spinner';
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
@@ -33,6 +35,8 @@ const selectGender = [
 ];
 export default function EditAdmin(props) {
   let [buttonName, setButtonName] = useState();
+  const authToken = JSON.parse(localStorage.getItem('token'));
+
   let [show, setShow] = useState(false);
   const showModal = () => setShow(true);
   const hideModal = () => setShow(false);
@@ -42,44 +46,31 @@ export default function EditAdmin(props) {
   const [loadingSuspand, setLoadingSuspand] = useState(false);
 
   const currentUser = props?.location?.state;
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { loading, loadingCreate } = useSelector(
+    (state) => state?.ViewUserReducer
+  );
   const admin_obj = {
-    email_address: currentUser?.email_address,
-    uid: currentUser?.uid,
-    name: currentUser?.name,
+    // email: userSpecific?.user?.email,
+    username: currentUser?.username,
     // password: "alpha",
 
-    gender: currentUser?.gender,
-    designation: currentUser?.designation,
-
-    phone_number: currentUser?.phone_number,
-
-    role_uid: currentUser?.role?.uid,
+    role: currentUser?.role,
   };
+  useEffect(() => {
+    // dispatch(ViewSpecificUserAction(currentUser?.id));
+    setAdmin(admin_obj);
+  }, []);
+  useEffect(() => {
+    setAdmin(admin_obj);
+  }, [currentUser]);
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   const dispatch = useDispatch();
 
   // const viewRole = () => {
   //   ViewRoleAction();
   // };
-  useEffect(() => {
-    dispatch(ViewRoleAction());
-  }, []);
-  useEffect(() => {
-    if (currentUser?.status?.name === 'suspended') {
-      setButtonName('Active');
-    } else if (currentUser?.status?.name === 'active') {
-      setButtonName('Suspend');
-    }
-  }, []);
-  const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
 
-  let options = [];
-  roles?.filter((item) =>
-    item?.category?.user_role_id == 1
-      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
-      : null
-  );
   const [admin, setAdmin] = useState(admin_obj);
   const editProfile = (e) => {
     e.preventDefault();
@@ -89,7 +80,7 @@ export default function EditAdmin(props) {
     props.history.push('/app/menu/levels/viewAdmin');
   };
   const editData = async () => {
-    let res = await dispatch(UpdateUserAction(admin));
+    let res = await dispatch(UpdateUserAction(admin, currentUser?.id));
     if (res) {
       NotificationManager.success(
         'Successful response',
@@ -103,60 +94,40 @@ export default function EditAdmin(props) {
   };
   const suspandAdmin = async () => {
     setLoadingSuspand(true);
-    if (currentUser?.status?.name === 'suspended') {
-      let apiData = {
-        uid: currentUser?.uid,
-      };
-      let res = await apiServices.suspandUser(apiData);
-      if (res?.data?.response_code === 200) {
-        NotificationManager.success(
-          'Sucessfully Activated',
-          'Sucess',
-          5000,
-          null,
-          ''
-        );
-        setLoadingSuspand(false);
 
-        props.history.push('/app/menu/levels/viewAdmin');
-      } else {
-        NotificationManager.error(
-          'Error active This Admin',
-          'Error',
-          5000,
-          null,
-          ''
-        );
-        setLoadingSuspand(false);
+    let apiData = {
+      uid: currentUser?.uid,
+    };
+    let res = await axios.delete(
+      `https://dream-finder-backend.herokuapp.com/api/v1/users/${currentUser?.id}`,
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          authorization: `Bearer ${authToken?.token}`,
+        },
       }
+    );
+    if (res?.data?.response_code === 200) {
+      NotificationManager.success(
+        'Successfully Deleted',
+        'Success',
+        5000,
+        null,
+        ''
+      );
+      setLoadingSuspand(false);
+
+      props.history.push('/app/menu/levels/viewAdmin');
     } else {
-      setLoadingSuspand(true);
-
-      let apiData = {
-        uid: currentUser?.uid,
-      };
-      let res = await apiServices.suspandUser(apiData);
-      if (res?.response_code === 200) {
-        NotificationManager.success(
-          'Sucessfully Suspaned',
-          'Sucess',
-          5000,
-          null,
-          ''
-        );
-        setLoadingSuspand(false);
-
-        props.history.push('/app/menu/levels/viewAdmin');
-      } else {
-        NotificationManager.error(
-          res?.response_message,
-          'Error',
-          5000,
-          null,
-          ''
-        );
-        setLoadingSuspand(false);
-      }
+      NotificationManager.error(
+        res?.data?.response_message,
+        'Error',
+        5000,
+        null,
+        ''
+      );
+      setLoadingSuspand(false);
     }
 
     //  setStatusUpdate()
@@ -165,313 +136,206 @@ export default function EditAdmin(props) {
   };
   return (
     <>
-      <Card>
-        <CardBody>
-          <CardTitle>
-            <Button
-              className="btn-btn-secondary"
-              onClick={handleChangeToView}
-              style={{ marginRight: '20px', 'background-color': '#0066B3' }}
+      {loading ? (
+        <Card>
+          <CardBody>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             >
-              Back
-            </Button>
-            <IntlMessages id="View User" />
-          </CardTitle>
+              <Loader
+                type="Puff"
+                color="#fed000"
+                height={100}
+                width={100}
+                // color="#003766"
+              />
+            </div>
+          </CardBody>
+        </Card>
+      ) : (
+        <Card>
+          <CardBody>
+            <CardTitle>
+              <Button
+                className="btn-btn-secondary"
+                onClick={handleChangeToView}
+                style={{ marginRight: '20px', 'background-color': '#fed000' }}
+              >
+                Back
+              </Button>
+              <IntlMessages id="View User" />
+            </CardTitle>
 
-          <Formik>
-            <Form>
-              <Row className="h-100">
-                <Col lg={6}>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="Name" />
-                    </Label>
+            <Formik>
+              <Form>
+                <Row className="h-100">
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Name" />
+                      </Label>
 
-                    {thisView ? (
-                      <span>
-                        <p>{admin.name}</p>
-                      </span>
-                    ) : (
-                      <Input
-                        required
-                        value={admin.name}
-                        className="form-control"
-                        name="name"
-                        // validate={validateEmail}
-                        onChange={(e) =>
-                          setAdmin({ ...admin, name: e.target.value })
-                        }
-                      />
-                    )}
-                  </FormGroup>
-                </Col>
-
-                <Col lg={6}>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="Email" />
-                    </Label>
-
-                    {thisView ? (
-                      <span>
-                        <p>{admin.email_address}</p>
-                      </span>
-                    ) : (
-                      <Input
-                        required
-                        disabled
-                        value={admin.email_address}
-                        className="form-control"
-                        name="email"
-                        type="email"
-                        onChange={(e) =>
-                          setAdmin({ ...admin, email_address: e.target.value })
-                        }
-                      />
-                    )}
-                  </FormGroup>
-                </Col>
-
-                {/* <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Password" />
-                  </Label>
-                  {thisView ? (
-                    <span>
-                      <p>{admin.password}</p>
-                    </span>
-                  ) : (
-                    <Input
-                      required
-                      value={admin.password}
-                      className="form-control"
-                      name="password"
-                      type="password"
-                      //   validate={validate}
-                      onChange={(e) =>
-                        setAdmin({ ...admin, password: e.target.value })
-                      }
-                    />
-                  )}
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Confirm Password" />
-                  </Label>
-                  <Input
-                    required
-                    value={confirmPassword}
-                    className="form-control"
-                    name="confirm password"
-                    type="password"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </FormGroup>
-              </Col> */}
-                <Col lg={6}>
-                  <FormGroup>
-                    <label>
-                      <IntlMessages id="Select Gender" />
-                    </label>
-
-                    <>
                       {thisView ? (
                         <span>
-                          <p>{admin?.gender}</p>
+                          <p>{currentUser?.username}</p>
+                        </span>
+                      ) : (
+                        <Input
+                          required
+                          defaultValue={currentUser?.username}
+                          className="form-control"
+                          name="name"
+                          // validate={validateEmail}
+                          onChange={(e) =>
+                            setAdmin({ ...admin, username: e.target.value })
+                          }
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Email" />
+                      </Label>
+
+                      {thisView ? (
+                        <span>
+                          <p>{currentUser?.email}</p>
+                        </span>
+                      ) : (
+                        <Input
+                          required
+                          disabled
+                          defaultValue={currentUser?.email}
+                          className="form-control"
+                          name="email"
+                          type="email"
+                          onChange={(e) =>
+                            setAdmin({ ...admin, email: e.target.value })
+                          }
+                        />
+                      )}
+                    </FormGroup>
+                  </Col>
+
+                  <Col lg={6}>
+                    <FormGroup>
+                      <Label>
+                        <IntlMessages id="Select Role" />
+                      </Label>
+
+                      {thisView ? (
+                        <span>
+                          <p>{currentUser?.role}</p>
                         </span>
                       ) : (
                         <Select
                           required
-                          disabled
                           components={{ Input: CustomSelectInput }}
                           className="react-select"
                           classNamePrefix="react-select"
                           name="form-field-name-gender"
                           // value={gender}
                           defaultValue={{
-                            label: admin?.gender,
-                            value: admin?.gender,
-                            key: admin?.gender,
+                            label: currentUser?.role,
+                            value: currentUser?.role,
+                            key: currentUser?.role,
                           }}
                           onChange={(val) =>
                             setAdmin({
                               ...admin,
-                              gender: val?.value,
+                              role: val?.value,
                             })
                           }
-                          options={selectGender}
+                          options={[
+                            {
+                              label: 'Admin',
+                              value: 'admin',
+                              key: '1',
+                            },
+                            {
+                              label: 'User',
+                              value: 'user',
+                              key: '2',
+                            },
+                          ]}
                         />
                       )}
-                    </>
-                  </FormGroup>
-                </Col>
+                    </FormGroup>
+                  </Col>
+                </Row>
 
-                <Col lg={6}>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="Phone Number" />
-                    </Label>
+                {thisView ? (
+                  <Button
+                    className="btn btn-primary"
+                    style={{ backgroundColor: '#fed000' }}
+                    // type="submit"
+                    // className={`btn-shadow btn-multiple-state ${
+                    //   loading ? 'show-spinner' : ''
+                    // }`}
+                    size="sm"
+                    onClick={editProfile}
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    Edit Profile
+                  </Button>
+                ) : (
+                  <Button
+                    // className="btn btn-primary"
+                    disabled={loadingCreate}
+                    style={{ backgroundColor: '#fed000' }}
+                    // type="submit"
+                    className={`btn-shadow btn-multiple-state ${
+                      loadingCreate ? 'show-spinner' : ''
+                    }`}
+                    size="sm"
+                    onClick={editData}
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className="label">Save</span>
+                  </Button>
+                )}
+                {thisView ? (
+                  <Button
+                    style={{ 'background-color': '#fed000', marginLeft: '3px' }}
+                    disabled={loadingSuspand}
+                    className={`btn-shadow btn-multiple-state ${
+                      loadingSuspand ? 'show-spinner' : ''
+                    }`}
+                    // className="btn btn-primary"
+                    onClick={suspandAdmin}
+                  >
+                    <span className="spinner d-inline-block">
+                      <span className="bounce1" />
+                      <span className="bounce2" />
+                      <span className="bounce3" />
+                    </span>
+                    <span className='label'>Delete User</span>
+                  </Button>
+                ) : (
+                  ''
+                )}
+              </Form>
+            </Formik>
+          </CardBody>
+        </Card>
+      )}
 
-                    {thisView ? (
-                      <span>
-                        <p>{admin?.phone_number}</p>
-                      </span>
-                    ) : (
-                      <Input
-                        required
-                        disabled
-                        value={admin?.phone_number}
-                        type="text"
-                        className="radio-in"
-                        name="phone_number"
-                        // validate={validateEmail}
-                        // onChange={(e) => setNumber()}
-                        onChange={(e) =>
-                          setAdmin({ ...admin, phone_number: e.target.value })
-                        }
-                      />
-                    )}
-                  </FormGroup>
-                </Col>
-
-                <Col lg={6}>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="Enter Designation" />
-                    </Label>
-
-                    {thisView ? (
-                      <span>
-                        <p>{admin?.designation}</p>
-                      </span>
-                    ) : (
-                      <Input
-                        required={true}
-                        value={admin.designation}
-                        className="form-control"
-                        name="designation"
-                        type="text"
-                        // validate={validateEmail}
-                        onChange={(e) =>
-                          setAdmin({ ...admin, designation: e.target.value })
-                        }
-                      />
-                    )}
-                  </FormGroup>
-                </Col>
-                <Col lg={6}>
-                  <FormGroup>
-                    <Label>
-                      <IntlMessages id="Select Role" />
-                    </Label>
-
-                    {thisView ? (
-                      <span>
-                        <p>{currentUser?.role?.name}</p>
-                      </span>
-                    ) : (
-                      <Select
-                        required
-                        // isDisabled={currentUser?.role?.name}
-                        components={{ Input: CustomSelectInput }}
-                        className="react-select"
-                        classNamePrefix="react-select"
-                        name="form-field-name-gender"
-                        defaultValue={{
-                          label: currentUser?.role?.name,
-                          value: currentUser?.role?.name,
-                          id: currentUser?.role?.uid,
-                        }}
-                        // value={gender}
-
-                        onChange={(val) =>
-                          setAdmin({ ...admin, role_uid: val?.key })
-                        }
-                        options={options}
-                      />
-                    )}
-                  </FormGroup>
-                </Col>
-              </Row>
-
-              {thisView ? (
-                <Button
-                  className="btn btn-primary"
-                  style={{ backgroundColor: '#0066B3' }}
-                  // type="submit"
-                  // className={`btn-shadow btn-multiple-state ${
-                  //   loading ? 'show-spinner' : ''
-                  // }`}
-                  size="sm"
-                  onClick={editProfile}
-                >
-                  <span className="spinner d-inline-block">
-                    <span className="bounce1" />
-                    <span className="bounce2" />
-                    <span className="bounce3" />
-                  </span>
-                  Edit Profile
-                </Button>
-              ) : (
-                <Button
-                  // className="btn btn-primary"
-                  disabled={loading ? true : false}
-                  style={{ backgroundColor: '#0066B3' }}
-                  // type="submit"
-                  className={`btn-shadow btn-multiple-state ${
-                    loading ? 'show-spinner' : ''
-                  }`}
-                  size="sm"
-                  onClick={editData}
-                >
-                  <span className="spinner d-inline-block">
-                    <span className="bounce1" />
-                    <span className="bounce2" />
-                    <span className="bounce3" />
-                  </span>
-                  <span>Save</span>
-                </Button>
-              )}
-              {thisView ? (
-                <Button
-                  style={{ 'background-color': '#0066B3', marginLeft: '3px' }}
-                  disabled={loading ? true : false}
-                  className={`btn-shadow btn-multiple-state ${
-                    loading ? 'show-spinner' : ''
-                  }`}
-                  // className="btn btn-primary"
-                  onClick={suspandAdmin}
-                >
-                  <span className="spinner d-inline-block">
-                    <span className="bounce1" />
-                    <span className="bounce2" />
-                    <span className="bounce3" />
-                  </span>
-                  <span>{buttonName}</span>
-                </Button>
-              ) : (
-                ''
-              )}
-
-              {thisView ? (
-                <Button
-                  className="btn btn-primary"
-                  onClick={showModal}
-                  style={{ marginLeft: '3px', 'background-color': '#0066B3' }}
-                >
-                  Change Password
-                </Button>
-              ) : (
-                ''
-              )}
-            </Form>
-          </Formik>
-        </CardBody>
-      </Card>
       <ChangePasswordModal
         show={show}
         handleClose={hideModal}

@@ -65,13 +65,14 @@ const DefaultDashboard = ({ intl, match }) => {
       </Row>
       <Row>
         <Colxx lg="12" xl="6" className="mb-4">
-          {/* <WebsiteVisitsChartCard /> */}
+          <WebsiteVisitsChartCard />
           <Row>
             <Colxx>
               {/* <PrescriptionChartCard data={chart} /> */}
-              <SalesChartCard />
+              {/* <SalesChartCard /> */}
               {/* <BestSellers /> */}
             </Colxx>
+            {/* #fed000 */}
           </Row>
         </Colxx>
         <Colxx lg="12" xl="6" className="mb-4">

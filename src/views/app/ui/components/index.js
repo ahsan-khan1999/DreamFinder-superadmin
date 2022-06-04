@@ -61,38 +61,7 @@ const Components = ({ match }) => (
     <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}`} />
 
-      <Route
-        path={`${match.url}/todaysAppoinment`}
-        render={(props) => <ViewTodaysAppoinment {...props} />}
-      />
-      <Route
-        path={`${match.url}/rescheduleRequest`}
-        render={(props) => <RescheduleRequest {...props} />}
-      />
-      <Route
-        path={`${match.url}/pastAppoinment`}
-        render={(props) => <ViewPastAppoinment {...props} />}
-      />
-      <Route
-        path={`${match.url}/viewCurrentPastAppointment`}
-        render={(props) => <ViewCurrentPastAppoinment {...props} />}
-      />
-      <Route
-        path={`${match.url}/viewCurrentTodaysAppointment`}
-        render={(props) => <ViewCurrentTodayAppoinment {...props} />}
-      />
-      <Route
-        path={`${match.url}/upcomingAppoinments`}
-        render={(props) => <UpcommingAppoinment {...props} />}
-      />
-      <Route
-        path={`${match.url}/viewCurrentAppoitmentReq`}
-        render={(props) => <CurrentRescheduleRequest {...props} />}
-      />
-      <Route
-        path={`${match.url}/viewCurrentUpcomingAppointment`}
-        render={(props) => <ViewCurrentUpcomingAppoinment {...props} />}
-      />
+     
 
       <Route
         path={`${match.url}/buttons`}

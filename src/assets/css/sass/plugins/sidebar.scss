@@ -63,7 +63,7 @@
 
         &:hover,
         &:focus {
-          color:#0066B3 !important ;
+          color:#fed000 !important ;
         }
       }
 
@@ -73,13 +73,13 @@
       }
 
       &.active a {
-        color: #0066B3 !important;
+        color: #fed000 !important;
 
       }
 
       &.active:after {
         content: ' ';
-        background: #0066B3;
+        background: #fed000;
         border-radius: 10px;
         position: absolute;
         width: 6px;
@@ -122,7 +122,7 @@
       ul li.active:after {
         width: 3px;
         height: 60px;
-        background: #0066B3 !important
+        background: #fed000 !important
       }
     }
   }
@@ -166,7 +166,7 @@
 
         a {
           font-size: 13px;
-          // color: #0066B3 !important;
+          // color: #fed000 !important;
           display: block;
           padding: 8px 0;
           margin-bottom: 10px;
@@ -175,19 +175,19 @@
         i {
           font-size: 1.3em;
           margin-right: 10px;
-          // color: #0066B3 !important;
+          // color: #fed000 !important;
           vertical-align: middle;
           display: inline-block;
         }
 
         &.active i,
         &.active a {
-          // color: #0066B3 !important;
+          // color: #fed000 !important;
         }
 
         &.active:after {
           content: ' ';
-          background: #0066B3;
+          background: #fed000;
           border-radius: 10px;
           position: absolute;
           width: 4px;

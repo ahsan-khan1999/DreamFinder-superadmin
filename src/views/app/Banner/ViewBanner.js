@@ -10,35 +10,32 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Loader from 'react-loader-spinner';
 
-import { AdminTable, TeamTable } from 'containers/ui/ReactTableCards';
+import { AdminTable, BannerTable, ProjectTable } from 'containers/ui/ReactTableCards';
 
-export default function ViewTeam({history}) {
+export default function ViewBanner(props) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if(data?.length < 1){
-
-      getAdmin();
-    }
+    getAdmin();
   }, []);
   const dispatch = useDispatch();
   const getAdmin = async () => {
     setLoading(true);
     const res = await axios.get(
-      'https://dream-finder-backend.herokuapp.com/api/v1/our-teams',
+      'https://dream-finder-backend.herokuapp.com/api/v1/banner',
       {}
     );
 
-    setData(res?.data?.response_data?.our_team);
-    setLoading(false)
+    setData(res?.data?.response_data?.banner);
+    setLoading(false);
   };
   const [doc, setDoc] = useState();
 
   const [search, setSearch] = useState('');
 
   const changeRoute = (item) => {
-    history.push('/app/OurTeam/EditTeam', item);
+    props.history.push('/app/Banner/EditBanner', item);
   };
 
   const handleSearch = (event) => {
@@ -48,41 +45,36 @@ export default function ViewTeam({history}) {
   };
 
   const handleAdd = () => {
-    history.push('/app/OurTeam/CreateTeam');
+    props.history.push('/app/Banner/CreateBanner');
   };
 
-  let header = ['Name', 'Designation', 'Description', 'Actions'];
+  let header = ['Heading', 'Description', 'Action'];
   return (
     <Card>
       <CardBody>
         <Row>
           <Colxx xxs="12">
             {/* <Breadcrumb heading="Doctors" match={match} /> */}
-            <h4>Team</h4>
+            <h4>Banner</h4>
             <Separator className="mb-5" />
           </Colxx>
         </Row>
+
+        <Row className="mb-5 mx-0">
+          <Col lg={12}>
+            <Button
+              onClick={handleAdd}
+              style={{
+                marginBottom: '15px',
+                backgroundColor: '#fed000',
+                marginTop: '10px',
+              }}
+            >
+              Add Banner
+            </Button>
+          </Col>
+        </Row>
        
-        <Button
-          onClick={handleAdd}
-          style={{
-            marginBottom: '15px',
-            backgroundColor: '#fed000',
-            marginTop: '10px',
-          }}
-        >
-          Add User
-        </Button>
-        {/* <Button
-            onClick={handleAddStaff}
-            style={{
-              marginBottom: '15px',
-              backgroundColor: '#003766',
-              marginTop: '10px',
-            }}
-          >
-            Add Delivery Staff
-          </Button> */}
         <Row>
           <Colxx xxs="12" className="mb-4">
             {loading ? (
@@ -103,9 +95,9 @@ export default function ViewTeam({history}) {
                 />
               </div>
             ) : (
-              <TeamTable
+                <BannerTable
                 header={header}
-                data={search === '' ? data : doc}
+                data={data}
                 changeRoute={changeRoute}
               />
             )}

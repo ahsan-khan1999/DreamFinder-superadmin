@@ -43,7 +43,19 @@ const data = [
     id:"project",
     icon: 'iconsminds-project',
     label: 'Project',
-    to: `${adminRoot}/menu/levels`,
+    to: `${adminRoot}/Project/ViewProject`,
+  },
+  {
+    id:"certificate",
+    icon: 'simple-icon-docs',
+    label: 'Certificate',
+    to: `${adminRoot}/Certificates/ViewCertificate`,
+  },
+  {
+    id:"banner",
+    icon: 'simple-icon-picture',
+    label: 'Banner',
+    to: `${adminRoot}/Banner/ViewBanner`,
   },
 ];
 export default data;

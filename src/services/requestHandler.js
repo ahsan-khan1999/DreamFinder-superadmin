@@ -5,7 +5,7 @@ import featureConstants from './features-constants';
 
 const SERVICE_URLS = {
   // service URL's (API End-Points)
-  login: 'users/login/web',
+  login: 'users/login',
   changePassword: 'users/change-password',
   staticData: 'static/all',
   registerPatient: 'patient/create',
@@ -20,7 +20,7 @@ const SERVICE_URLS = {
   resetPassword: 'users/reset-password ',
   getDepartment: 'department/read ',
   createUser: 'user/create',
-  getAdmin: 'users/read/admin',
+  getAdmin: 'users',
   getDirector: 'users/read/director',
   getDepoManagerAll: 'users/read/depot_manager',
   getDeliveryStaff: 'users/read/delivery_staff',
@@ -64,9 +64,13 @@ const SERVICE_URLS = {
   upadtePay: 'payment/update',
   region: 'region-classifications/read_hierarchy',
   area: 'region-classifications/read/area',
-  createUsers: 'users/create',
+  createUsers: 'users',
+  createTeam: 'our-teams',
+  createProj: 'projects',
+  createBanner: 'banner',
+
   readRoles: 'roles/read',
-  updateUsers: 'users/update',
+  updateUsers: 'users/',
   suspandUser: 'users/suspend',
   readTargets: 'targets/read',
   createTarget: 'targets/create',
@@ -180,13 +184,26 @@ const SERVICE_URLS = {
 
   giftAssignment: 'fieldstaffs/gift-assignment',
   readAssignedGift: 'fieldstaffs/read_all_gifts',
+  readSpecificuser: 'users',
+
+  // Dream Finder
+
+  uploadImage: 'firebase/image/upload',
+
+  // Dream Finder
 };
+// Dream Finder
+const UploadImages = (data) =>
+  post(SERVICE_URLS.uploadImage, data, { feature: featureConstants.static });
+
+// Dream Finder
+
 const AssignGift = (data) =>
   patch(SERVICE_URLS.giftAssignment, data, {
     feature: featureConstants.static,
   });
 const getDashboardChart = (convertFrom, convertTo) => {
-  let url = BASEURL+`/dashboard/${convertFrom}/${convertTo}`;
+  let url = BASEURL + `/dashboard/${convertFrom}/${convertTo}`;
   return get(url, {}, { feature: featureConstants.static });
 };
 
@@ -208,6 +225,18 @@ const CreateUsers = (data) =>
   post(SERVICE_URLS.createUsers, data, {
     feature: featureConstants.static,
   });
+const CreateTeam = (data) =>
+  post(SERVICE_URLS.createTeam, data, {
+    feature: featureConstants.static,
+  });
+const CreateProject = (data) =>
+  post(SERVICE_URLS.createProj, data, {
+    feature: featureConstants.static,
+  });
+  const CreateBanner = (data) =>
+  post(SERVICE_URLS.createBanner, data, {
+    feature: featureConstants.static,
+  });
 const ReadSampleTransaction = (data) =>
   get(SERVICE_URLS.readSampleTransaction, data, {
     feature: featureConstants.static,
@@ -216,8 +245,10 @@ const SuspandSampleTransaction = (data) =>
   patch(SERVICE_URLS.suspandSampleTransaction, data, {
     feature: featureConstants.static,
   });
-const updateUser = (data) =>
-  put(SERVICE_URLS.updateUsers, data, { feature: featureConstants.static });
+const updateUser = (data, id) =>
+  put(SERVICE_URLS.updateUsers + `${id}`, data, {
+    feature: featureConstants.static,
+  });
 const requestApproval = (data) =>
   put(SERVICE_URLS.reqApproval, data, { feature: featureConstants.static });
 const updateTest = (data) =>
@@ -878,6 +909,10 @@ const ReadAssignedGifts = (data) =>
   get(SERVICE_URLS.readAssignedGift, data, {
     feature: featureConstants.static,
   });
+const ReadSpecificUser = (data) =>
+  get(SERVICE_URLS.readSpecificuser + `/${data}`, {
+    feature: featureConstants.static,
+  });
 
 // post g
 
@@ -1058,5 +1093,13 @@ const apiServices = {
 
   AssignGift,
   getDashboardChart,
+
+  // Dream Finder
+
+  UploadImages,
+  ReadSpecificUser,
+  CreateTeam,
+  CreateProject,
+  CreateBanner
 };
 export default apiServices;

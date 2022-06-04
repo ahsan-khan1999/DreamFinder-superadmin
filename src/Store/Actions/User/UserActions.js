@@ -1,9 +1,9 @@
 /* eslint-disable */
 
+import axios from 'axios';
 import { NotificationManager } from 'components/common/react-notifications';
 import apiServices from 'services/requestHandler';
 import {
-  
   VIEW_ADMIN_CONSTANT,
   VIEW_DIRECTOR_CONSTANT,
   VIEW_DEPO_CONSTANT,
@@ -32,9 +32,15 @@ import {
   VIEW_CATEGORY_CONSTANT,
   CREATE_CATEGORY__CONSTANT,
   UPDATE_CATEGORY__CONSTANT,
-  VIEW_STATIC_CONSTANT
+  VIEW_STATIC_CONSTANT,
+  GET_USER_CONSTANT,
 } from 'Store/Constant/Constants';
-import { Check_Authentication, Check_Validation, Check_Validation_Update, logout } from 'Utils/auth.util';
+import {
+  Check_Authentication,
+  Check_Validation,
+  Check_Validation_Update,
+  logout,
+} from 'Utils/auth.util';
 import { logOutUser } from '../Auth/Actions';
 
 export const ViewAdminAction = (history) => async (dispatch) => {
@@ -45,7 +51,7 @@ export const ViewAdminAction = (history) => async (dispatch) => {
     });
 
     let response = await apiServices.getAdmin();
-    Check_Authentication(response,history);
+    Check_Authentication(response, history);
 
     if (response?.data?.response_code === 200) {
       dispatch({
@@ -54,7 +60,7 @@ export const ViewAdminAction = (history) => async (dispatch) => {
       });
       dispatch({
         type: VIEW_ADMIN_CONSTANT.VIEW_ADMIN_SUCCESS,
-        payload: response?.data?.response_data,
+        payload: response?.data?.response_data?.users,
       });
     } else {
       dispatch({
@@ -99,7 +105,7 @@ export const ViewDepoAction = () => async (dispatch) => {
     });
 
     let response = await apiServices.getDepo();
-    
+
     if (response?.data?.response_code === 200) {
       dispatch({
         type: VIEW_DEPO_CONSTANT.VIEW_DEPO_LOADING,
@@ -271,6 +277,32 @@ export const ViewRoleAction = () => async (dispatch) => {
   } catch {}
 };
 
+export const ViewSpecificUserAction = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_USER_CONSTANT.GET_USER_LOADING,
+      payload: true,
+    });
+
+    let response = await apiServices.ReadSpecificUser(id);
+    if (response?.data?.response_code === 200) {
+      dispatch({
+        type: GET_USER_CONSTANT.GET_USER_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: GET_USER_CONSTANT.GET_USER_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+    } else {
+      dispatch({
+        type: GET_USER_CONSTANT.GET_USER_ERROR,
+        payload: true,
+      });
+    }
+  } catch {}
+};
+
 export const ViewStaticDataAction = () => async (dispatch) => {
   try {
     dispatch({
@@ -298,14 +330,20 @@ export const ViewStaticDataAction = () => async (dispatch) => {
 };
 
 export const CreateAdminAction = (data) => async (dispatch) => {
+  let response = {};
   try {
     dispatch({
       type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
       payload: true,
     });
-
-    let response = await apiServices.CreateUsers(data);
-    if (response?.data?.response_code === 200) {
+    let data1 = {
+      username: data?.username,
+      email: data?.email,
+      password: data?.password,
+      role: data?.role,
+    };
+    response = await apiServices.CreateUsers(data1);
+    if (response?.data?.response_code === 201) {
       dispatch({
         type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
         payload: false,
@@ -316,17 +354,34 @@ export const CreateAdminAction = (data) => async (dispatch) => {
       });
       return true;
     } else {
+      console.log(response, 'res');
       dispatch({
         type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
         payload: false,
       });
-
-     
-
-      Check_Validation(response)
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
       return false;
     }
-  } catch {}
+  } catch (e) {
+    console.log(response, 'res', e);
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
 };
 
 export const CreateSmAction = (data) => async (dispatch) => {
@@ -353,7 +408,7 @@ export const CreateSmAction = (data) => async (dispatch) => {
         payload: true,
       });
 
-      Check_Validation(response)
+      Check_Validation(response);
       return false;
     }
   } catch {}
@@ -381,10 +436,8 @@ export const CreateRsmAction = (data) => async (dispatch) => {
         type: CREATE_RSM_CONSTANT.CREATE_RSM_ERROR,
         payload: true,
       });
-      Check_Validation(response)
+      Check_Validation(response);
 
-
-      
       return false;
     }
   } catch {}
@@ -413,7 +466,7 @@ export const CreateAmAction = (data) => async (dispatch) => {
         payload: true,
       });
 
-      Check_Validation(response)
+      Check_Validation(response);
       return false;
     }
   } catch {}
@@ -442,20 +495,20 @@ export const CreateMpoAction = (data) => async (dispatch) => {
         payload: true,
       });
 
-      Check_Validation(response)
+      Check_Validation(response);
 
       return false;
     }
   } catch {}
 };
 
-export const UpdateUserAction = (data) => async (dispatch) => {
+export const UpdateUserAction = (data, id) => async (dispatch) => {
   try {
     dispatch({
       type: UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_LOADING,
       payload: true,
     });
-    let res = await apiServices.updateUser(data);
+    let res = await apiServices.updateUser(data, id);
     if (res?.response_code === 200) {
       // dispatch(ViewAdminAction())
       dispatch({
@@ -472,10 +525,28 @@ export const UpdateUserAction = (data) => async (dispatch) => {
         type: UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_ERROR,
         payload: false,
       });
-      Check_Validation_Update(res)
+      NotificationManager.error(
+        res?.response_message,
+        'Error',
+        5000,
+        null,
+        null
+      );
       return false;
     }
-  } catch {}
+  } catch (e) {
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      5000,
+      null,
+      null
+    );
+    dispatch({
+      type: UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
 };
 
 export const ViewUserRoleAction = () => async (dispatch) => {
@@ -510,7 +581,7 @@ export const CreateRoleAction = (data) => async (dispatch) => {
       type: CREATE_CATEGORY__CONSTANT.CREATE_CATEGORY_LOADING,
       payload: true,
     });
-    
+
     let response = await apiServices.createRoles(data);
     if (response?.data?.response_code === 200) {
       dispatch({
@@ -575,4 +646,170 @@ export const UpdateRoleAction = (data) => async (dispatch) => {
       return false;
     }
   } catch {}
+};
+
+export const CreateTeamAction = (data) => async (dispatch) => {
+  let response = {};
+  try {
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: true,
+    });
+
+    response = await apiServices.CreateTeam(data);
+    if (response?.data?.response_code === 201) {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Success',
+        3000,
+        null,
+        null
+      );
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
+      return false;
+    }
+  } catch (e) {
+    console.log(response, 'res', e);
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const CreateProjectAction = (data) => async (dispatch) => {
+  let response = {};
+  try {
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: true,
+    });
+
+    response = await apiServices.CreateProject(data);
+    if (response?.data?.response_code === 201) {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Success',
+        3000,
+        null,
+        null
+      );
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
+      return false;
+    }
+  } catch (e) {
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const CreateBannerAction = (data) => async (dispatch) => {
+  let response = {};
+  try {
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: true,
+    });
+
+    response = await apiServices.CreateBanner(data);
+    if (response?.data?.response_code === 201) {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Success',
+        3000,
+        null,
+        null
+      );
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
+      return false;
+    }
+  } catch (e) {
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
 };

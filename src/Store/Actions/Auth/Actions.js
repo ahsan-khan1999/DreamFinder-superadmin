@@ -32,10 +32,10 @@ export const Login_action = (data) => async (dispatch) => {
         token: response?.data?.response_data?.token?.access_token,
       };
       setToken({
-        token: response?.data?.response_data?.token?.access_token,
-        type: response?.data?.response_data?.token?.user?.role?.category?.name,
+        token: response?.data?.response_data?.token,
+        type: response?.data?.response_data?.user,
       });
-      saveUser(response?.data?.response_data?.token?.user);
+      saveUser(response?.data?.response_data?.user);
       dispatch({
         type: LOGIN_CONSTANTS.LOGIN_LOADING,
         payload: false,

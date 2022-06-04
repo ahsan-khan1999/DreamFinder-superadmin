@@ -209,7 +209,7 @@ const ResetPassword = ({
                   onClick={onResetPassword}
                   color="primary"
                   style={{
-                    'background-color': '#0066B3',
+                    'background-color': '#fed000',
                   }}
                   className={`btn-shadow btn-multiple-state ${
                     loading ? 'show-spinner' : ''

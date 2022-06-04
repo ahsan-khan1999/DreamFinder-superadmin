@@ -153,7 +153,7 @@ const ForgotPassword = ({
                       <IntlMessages id="Login" />
                     </NavLink>
                     <Button
-                      style={{ backgroundColor: '#0066B3' }}
+                      style={{ backgroundColor: '#fed000' }}
                       onClick={onForgotPassword}
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''

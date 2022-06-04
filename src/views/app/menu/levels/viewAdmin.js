@@ -11,7 +11,6 @@ import { CardBody, Col, Table, CardTitle } from 'reactstrap';
 import { doc } from 'prettier';
 import { items } from 'data/carouselItems';
 import { useDispatch, useSelector } from 'react-redux';
-import dot from '../../../../assets/img/dot.png';
 // import { DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap';
 
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
@@ -66,11 +65,8 @@ const ViewAdmin = ({ match, history }) => {
 
   let header = [
     'Name',
-    'DOB',
-    'Designation',
-    'Gender',
-    'Phone Number',
-    'Status',
+    'Email',
+    'Role',
     'Actions',
   ];
   // const filterAdmin = user?.filter((item) =>
@@ -113,7 +109,7 @@ const ViewAdmin = ({ match, history }) => {
           onClick={handleAdd}
           style={{
             marginBottom: '15px',
-            backgroundColor: '#0066B3',
+            backgroundColor: '#fed000',
             marginTop: '10px',
           }}
         >
@@ -143,7 +139,7 @@ const ViewAdmin = ({ match, history }) => {
 
                 <Loader
                   type="Puff"
-                  color="#0066B3"
+                  color="#fed000"
                   height={100}
                   width={100}
                   // color="#003766"

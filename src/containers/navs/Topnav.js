@@ -17,7 +17,6 @@ import {
 
 import { NavLink } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
-import test from '../../assets/img/image.png';
 import IntlMessages from 'helpers/IntlMessages';
 import {
   menuHiddenBreakpoint,
@@ -29,7 +28,8 @@ import {
 } from 'constants/defaultValues';
 import { MobileMenuIcon, MenuIcon } from 'components/svg';
 import { getDirection, setDirection } from 'helpers/Utils';
-import logo from '../../assets/logos/logo.png';
+import logo from '../../assets/logos/logo.7c0497cb.png';
+import test from '../../assets/img/image.png';
 
 import {
   setContainerClassnames,
@@ -77,15 +77,10 @@ const TopNav = ({
     }
   };
   const dispatch = useDispatch();
-
+  const user = JSON.parse(localStorage.getItem('user'));
   const logoutUser = () => {
-    let res = dispatch(logOutUser());
-    if (res) {
-      logout();
-      // console.log(res);
-      history.push('/user/login');
-    }else{
-    }
+    logout();
+    history.push('/');
   };
   let [show, setShow] = useState(false);
   let [hide, setHide] = useState(false);
@@ -248,24 +243,24 @@ const TopNav = ({
             <MobileMenuIcon />
           </NavLink>
           <span className="d-block d-xs-none">
-            <img
+            {/* <img
               className="logo_dmfr"
               src={logo}
               alt=""
               height="55px"
               width="200px"
               // style={{ 'margin-left': '10px' }}
-            />
+            /> */}
           </span>
           <span className="d-none d-xs-block">
-            <img
+            {/* <img
               className="logo_dmfr"
               src={logo}
               alt=""
               height="55px"
               width="220px"
               // style={{ margin: '0px 40px' }}
-            />
+            /> */}
           </span>
           {/* <NavLink className="navbar-logo" to={adminRoot}>
             <span className="d-none d-xs-block">
@@ -352,8 +347,12 @@ const TopNav = ({
               <DropdownMenu className="mt-3">
                 {/* <DropdownItem onClick={showModal}>Change Password</DropdownItem> */}
 
-                <DropdownItem color="" onClick={showModal}>
-                  Change Password
+                <DropdownItem
+                  color="#000"
+                  className="text-center"
+                  style={{ fontWeight: 'bold' }}
+                >
+                  {user?.username ? user?.username : 'None'}
                 </DropdownItem>
 
                 <DropdownItem onClick={logoutUser}>Log Out</DropdownItem>
@@ -362,7 +361,11 @@ const TopNav = ({
           </div>
         </div>
       </nav>
-      <ModalChangePassword show={show} handleClose={hideModal} history={history}/>
+      <ModalChangePassword
+        show={show}
+        handleClose={hideModal}
+        history={history}
+      />
     </>
   );
 };

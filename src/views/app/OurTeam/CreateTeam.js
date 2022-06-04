@@ -5,6 +5,7 @@ import { NotificationManager } from 'components/common/react-notifications';
 import { Formik } from 'formik';
 import IntlMessages from 'helpers/IntlMessages';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Card,
@@ -17,8 +18,11 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import { CreateTeamAction } from 'Store/Actions/User/UserActions';
 
 export default function CreateTeam(props) {
+  const authToken = JSON.parse(localStorage.getItem('token'));
+  const dispatch =useDispatch()
   const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState('');
@@ -31,10 +35,10 @@ export default function CreateTeam(props) {
     facebook: '',
     instagram: '',
     twitter: '',
-    linkedIn: '',
   });
 
   const onTeamCreate = async () => {
+    let res = {};
     if (name === '' || desc === '' || designation === '') {
       NotificationManager.warning(
         'Please Enter All Field',
@@ -52,33 +56,11 @@ export default function CreateTeam(props) {
         short_description: desc,
         designation: designation,
         full_description: fullDescription,
-        social_media_links: {},
+        social_media_links: social_media_links,
       };
-      let response = await axios.post(
-        'https://dream-finder-backend.herokuapp.com/api/v1/our-teams',
-        apiData,
-        {}
-      );
-      if (response?.data?.response_code === 201) {
-        setLoading(false);
-        NotificationManager.success(
-          'Successfully Created',
-          'Success',
-          5000,
-          null,
-          ''
-        );
-        props.history.push('/app/OurTeam/ViewTeam');
-      } else {
-        NotificationManager.success(
-          response?.data?.response_message,
-          'Error',
-          5000,
-          null,
-          ''
-        );
-
-      }
+      let res = await dispatch(CreateTeamAction(apiData));
+      setLoading(false)
+      if(res) props.history.push('/app/OurTeam/ViewTeam')
     }
   };
   return (
@@ -189,7 +171,10 @@ export default function CreateTeam(props) {
                     name="name"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setSocial_media_links({ facebook: e.target.value })
+                      setSocial_media_links({
+                        ...social_media_links,
+                        facebook: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -208,7 +193,10 @@ export default function CreateTeam(props) {
                     name="name"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setSocial_media_links({ instagram: e.target.value })
+                      setSocial_media_links({
+                        ...social_media_links,
+                        instagram: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
@@ -227,12 +215,15 @@ export default function CreateTeam(props) {
                     name="name"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setSocial_media_links({ twitter: e.target.value })
+                      setSocial_media_links({
+                        ...social_media_links,
+                        twitter: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
               </Col>
-              <Col lg={6}>
+              {/* <Col lg={6}>
                 <FormGroup>
                   <Label>
                     <IntlMessages id="Enter LinkedIn Link" />
@@ -246,20 +237,24 @@ export default function CreateTeam(props) {
                     name="name"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setSocial_media_links({ linkedIn: e.target.value })
+                      setSocial_media_links({
+                        ...social_media_links,
+                        linkedIn: e.target.value,
+                      })
                     }
                   />
                 </FormGroup>
-              </Col>
+              </Col> */}
             </Row>
             <Button
               disabled={loading ? true : false}
-              style={{ backgroundColor: '#0066B3' }}
+              style={{ backgroundColor: '#fed000' }}
               className={`btn-shadow btn-multiple-state ${
                 loading ? 'show-spinner' : ''
               }`}
               size="sm"
               onClick={onTeamCreate}
+              // #fed000
             >
               <span className="spinner d-inline-block">
                 <span className="bounce1" />

@@ -23,7 +23,6 @@ import {
 import { Card, CardTitle, Label, FormGroup, Button, Input } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
-
 const selectGender = [
   { label: 'Male', value: 'male', key: 1 },
   { label: 'Female', value: 'female', key: 2 },
@@ -31,22 +30,18 @@ const selectGender = [
 ];
 export default function CreateAdmin({ history }) {
   const dispatch = useDispatch();
-    
+  const [loadingCreate, setLoadingCreate] = useState(false);
 
   const [confirmPassword, setConfirmPassword] = useState('');
   const admin_obj = {
-    email_address: '',
+    email: '',
 
-    name: '',
-    // password: "alpha",
+    username: '',
     password: '',
 
-    gender: '',
-    designation: '',
 
-    phone_number: '',
 
-    role_uid: '',
+    role: '',
   };
   const [admin, setAdmin] = useState(admin_obj);
 
@@ -60,35 +55,13 @@ export default function CreateAdmin({ history }) {
     // readRoles();
     // readUser();
   }, []);
-  
-  const roles = useSelector((state) => state?.ViewUserReducer?.roles);
-  const user = useSelector((state) => state?.ViewUserReducer?.admin);
-  const loading = useSelector((state) => state?.ViewUserReducer?.loadingCreate);
-  
-  let options = [];
-  roles?.filter((item) =>
-    item?.category?.user_role_id == 1
-      ? options.push({ label: item?.name, value: item?.name, key: item?.uid })
-      : null
-  );
-
-  // let user_id =options?.filter((item) => (
-  //   item?.value === 'admin' ? item?.key : ''
-  // ))
-  // const [loading, setLoading] = useState(false);
 
 
-  useEffect(() => {
-    // setAdmin({...admin,role_uid:user_id[0]?.key})
-  }, [])
   const onAdminCreate = async () => {
     if (
-      admin?.email_address === '' &&
-      admin?.name === '' &&
-      admin?.password === '' &&
-      admin?.gender === '' &&
-      admin?.phone_number === '' &&
-      admin?.designation === '' &&
+      admin?.email === '' ||
+      admin?.username === '' ||
+      admin?.password === '' ||
       admin.role_uid === ''
     ) {
       NotificationManager.error(
@@ -100,10 +73,19 @@ export default function CreateAdmin({ history }) {
       );
 
       return;
+    } else if (confirmPassword !== admin?.password) {
+      NotificationManager.warning(
+        'Password Doesnt match',
+        'Error',
+        3000,
+        null,
+        ''
+      );
     } else {
       // console.log(id, 'user uid');
       // setAdmin({ ...admin, role_uid: id });
       // console.log(admin, 'admin');
+      setLoadingCreate(true);
       let res = await dispatch(CreateAdminAction({ ...admin }));
       // console.log(res, 'admin create res');
 
@@ -115,16 +97,11 @@ export default function CreateAdmin({ history }) {
           null,
           ''
         );
+        setLoadingCreate(false);
 
         history.push('/app/menu/levels/viewAdmin');
-      } else if (confirmPassword !== admin?.password) {
-        NotificationManager.warning(
-          'Password Doesnt match',
-          'Error',
-          3000,
-          null,
-          ''
-        );
+      } else {
+        setLoadingCreate(false);
       }
     }
   };
@@ -151,7 +128,7 @@ export default function CreateAdmin({ history }) {
                     name="name"
                     // validate={validateEmail}
                     onChange={(e) =>
-                      setAdmin({ ...admin, name: e.target.value })
+                      setAdmin({ ...admin, username: e.target.value })
                     }
                   />
                 </FormGroup>
@@ -170,7 +147,7 @@ export default function CreateAdmin({ history }) {
                     name="email"
                     type="email"
                     onChange={(e) =>
-                      setAdmin({ ...admin, email_address: e.target.value })
+                      setAdmin({ ...admin, email: e.target.value })
                     }
                   />
                 </FormGroup>
@@ -210,115 +187,51 @@ export default function CreateAdmin({ history }) {
                   />
                 </FormGroup>
               </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <label>
-                    <IntlMessages id="Select Gender" />
-                  </label>
+              
 
-                  <>
-                    <Select
-                      required
-                      components={{ Input: CustomSelectInput }}
-                      className="react-select"
-                      classNamePrefix="react-select"
-                      name="form-field-name-gender"
-                      // value={gender}
-                      defaultValue={{
-                        label: admin?.gender,
-                        value: admin?.gender,
-                        key: admin?.gender,
-                      }}
-                      onChange={(val) =>
-                        setAdmin({
-                          ...admin,
-                          gender: val?.value,
-                        })
-                      }
-                      options={selectGender}
-                    />
-                  </>
-                </FormGroup>
-              </Col>
+            
 
+             
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Phone Number" />
+                    <IntlMessages id="Enter Role" />
                   </Label>
-
-                  <Input
-                    required
-                    value={admin?.phone_number}
-                    type="text"
-                    className="radio-in"
-                    name="phone_number"
-                    // validate={validateEmail}
-                    // onChange={(e) => setNumber()}
-                    onChange={(e) =>
-                      setAdmin({ ...admin, phone_number: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Enter Designation" />
-                  </Label>
-
-                  <Input
-                    required={true}
-                    value={admin.designation}
-                    className="form-control"
-                    name="designation"
-                    type="text"
-                    // validate={validateEmail}
-                    onChange={(e) =>
-                      setAdmin({ ...admin, designation: e.target.value })
-                    }
-                  />
-                </FormGroup>
-              </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Select Role" />
-                  </Label>
-
                   <Select
                     required
                     components={{ Input: CustomSelectInput }}
                     className="react-select"
-                    // defaultValue={options?.map((item) => {
-                    //   if (item?.value === 'admin') {
-                    //     console.log(item?.key);
-                    //     return {
-                    //       label: item?.value,
-                    //       value: item?.value,
-                    //       key: item?.key,
-                    //     };
-                    //   }
-                    // })}
                     classNamePrefix="react-select"
                     name="form-field-name-gender"
                     // value={gender}
-                    
+
                     onChange={(val) =>
-                      setAdmin({ ...admin, role_uid: val?.key })
+                      setAdmin({
+                        ...admin,
+                        role: val?.value,
+                      })
                     }
-                   
-                    options={options}
+                    options={[
+                      {
+                        label: 'Admin',
+                        value: 'admin',
+                        key: '1',
+                      },
+                      {
+                        label: 'User',
+                        value: 'user',
+                        key: '2',
+                      },
+                    ]}
                   />
                 </FormGroup>
               </Col>
             </Row>
             <Button
-              disabled={loading ? true : false}
-              style={{ backgroundColor: '#0066B3' }}
+              // disabled={loadingCreate ? true : false}
+              style={{ backgroundColor: '#fed000' }}
               className={`btn-shadow btn-multiple-state ${
-                loading ? 'show-spinner' : ''
+                loadingCreate ? 'show-spinner' : ''
               }`}
               size="sm"
               onClick={onAdminCreate}
@@ -328,10 +241,7 @@ export default function CreateAdmin({ history }) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">
-                Create Admin
-              </span>
-              
+              <span className="label">Create Admin</span>
             </Button>
           </Form>
         </Formik>

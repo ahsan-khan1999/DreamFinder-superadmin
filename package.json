@@ -1,5 +1,5 @@
 {
-  "name": "dmfr-admin",
+  "name": "Dream Finder",
   "version": "5.3.1",
   "description": "DMFR - Super Admin",
   "private": true,
@@ -38,6 +38,7 @@
     "react-contextmenu": "^2.14.0",
     "react-datepicker": "^4.1.1",
     "react-dom": "^17.0.2",
+    "react-drag-drop-files": "^2.3.7",
     "react-dropzone-component": "^3.2.0",
     "react-dynamic-animated-tree": "^1.1.0",
     "react-google-maps": "^9.4.5",

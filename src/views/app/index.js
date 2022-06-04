@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import AppLayout from 'layout/AppLayout';
 import ViewTeam from './OurTeam/ViewTeam';
 
+
 // import { ProtectedRoute, UserRole } from 'helpers/authHelper';
 
 const Dashboards = React.lazy(() =>
@@ -22,11 +23,32 @@ const Menu = React.lazy(() => import(/* webpackChunkName: "menu" */ './menu'));
 const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "blank-page" */ './blank-page')
 );
+const Certificates = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './Certificates/ViewCertificate')
+);
 const CreateTeam = React.lazy(() =>
   import(/* webpackChunkName: "blank-page" */ './OurTeam/CreateTeam')
 );
 const EditTeam = React.lazy(() =>
   import(/* webpackChunkName: "blank-page" */ './OurTeam/EditTeam')
+);
+const ViewProject = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './Project/ViewProject')
+);
+const CreateProject = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './Project/CreateProject')
+);
+const EditProject = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './Project/EditProject')
+);
+const ViewBanner = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './Banner/ViewBanner')
+);
+const CreateBanner = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './Banner/CreateBanner')
+);
+const EditBanner = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './Banner/EditBanner')
 );
 const App = ({ match }) => {
   return (
@@ -63,6 +85,22 @@ const App = ({ match }) => {
               path={`${match.url}/blank-page`}
               render={(props) => <BlankPage {...props} />}
             />
+            <Route
+              path={`${match.url}/Certificates/ViewCertificate`}
+              render={(props) => <Certificates {...props} />}
+            />
+            <Route
+              path={`${match.url}/Project/ViewProject`}
+              render={(props) => <ViewProject {...props} />}
+            />
+            <Route
+              path={`${match.url}/Project/EditProject`}
+              render={(props) => <EditProject {...props} />}
+            />
+            <Route
+              path={`${match.url}/Project/CreateProject`}
+              render={(props) => <CreateProject {...props} />}
+            />
              <Route
               path={`${match.url}/OurTeam/ViewTeam`}
               render={(props) => <ViewTeam {...props} />}
@@ -74,6 +112,18 @@ const App = ({ match }) => {
             <Route
               path={`${match.url}/OurTeam/EditTeam`}
               render={(props) => <EditTeam {...props} />}
+            />
+             <Route
+              path={`${match.url}/Banner/ViewBanner`}
+              render={(props) => <ViewBanner {...props} />}
+            />
+            <Route
+              path={`${match.url}/Banner/CreateBanner`}
+              render={(props) => <CreateBanner {...props} />}
+            />
+            <Route
+              path={`${match.url}/Banner/EditBanner`}
+              render={(props) => <EditBanner {...props} />}
             />
             
             <Redirect to="/error" />

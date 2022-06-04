@@ -18,8 +18,9 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import apiServices from 'services/requestHandler';
 
-export default function EditTeam(props) {
+export default function EditProject(props) {
   const authToken = JSON.parse(localStorage.getItem('token'));
 
   const currentTeamId = props?.location?.state;
@@ -28,10 +29,10 @@ export default function EditTeam(props) {
   const getCurrentTeam = async (uid) => {
     setLoading(true);
     let res = await axios.get(
-      `https://dream-finder-backend.herokuapp.com/api/v1/our-teams/${uid}`,
+      `https://dream-finder-backend.herokuapp.com/api/v1/projects/${uid}`,
       {}
     );
-    setCurrentTeam(res?.data?.response_data?.our_team);
+    setCurrentTeam(res?.data?.response_data?.project);
     setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -39,10 +40,15 @@ export default function EditTeam(props) {
   useEffect(() => {
     getCurrentTeam(currentTeamId?.id);
   }, []);
+  const [titledImage, setTitledImage] = useState(currentTeam?.titled_image);
+  const [file,setFile] = useState(null)
+  const [galleryImages, setGalleryImages] = useState(currentTeam?.gallery);
   const [loading, setLoading] = useState(false);
+  const [loadingSingle, setLoadingSingle] = useState(false);
+
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
-
+  const [loadingMulti, setLoadingMulti] = useState(false);
   const [name, setName] = useState(currentTeam?.name);
   const [desc, setDesc] = useState(currentTeam?.short_description);
   const [email, setEmail] = useState(currentTeam?.email_address);
@@ -62,22 +68,21 @@ export default function EditTeam(props) {
     setName(currentTeam?.name);
     setDesc(currentTeam?.short_description);
     setFullDescription(currentTeam?.full_description);
-    setEmail(currentTeam?.email_address);
-    setDesignation(currentTeam?.designation);
-    setSocial_media_links(currentTeam?.social_media_links);
-  }, []);
+    setTitledImage(currentTeam?.titled_image)
+    setGalleryImages(currentTeam?.gallery)
+  }, [currentTeam]);
 
   const editTeamData = async () => {
     setLoadingEdit(true);
     let apiData = {
       name: name,
-      email_address: email,
       short_description: desc,
-      designation: designation,
       full_description: fullDescription,
+      titled_image: titledImage,
+      gallery: galleryImages,
     };
     const res = await axios.put(
-      `https://dream-finder-backend.herokuapp.com/api/v1/our-teams/${currentTeam?.id}`,
+      `https://dream-finder-backend.herokuapp.com/api/v1/projects/${currentTeam?.id}`,
       apiData,
       {
         headers: {
@@ -96,7 +101,7 @@ export default function EditTeam(props) {
         null,
         ''
       );
-      props.history.push('/app/OurTeam/ViewTeam');
+      props.history.push('/app/Project/ViewProject');
     } else {
       setLoadingEdit(false);
       NotificationManager.success(
@@ -112,7 +117,7 @@ export default function EditTeam(props) {
   const deleteMember = async () => {
     setLoadingDelete(true);
     let res = await axios.delete(
-      `https://dream-finder-backend.herokuapp.com/api/v1/our-teams/${currentTeam?.id}`,
+      `https://dream-finder-backend.herokuapp.com/api/v1/projects/${currentTeam?.id}`,
       {
         headers: {
           Accept: 'application/json',
@@ -131,7 +136,7 @@ export default function EditTeam(props) {
         null,
         null
       );
-      props.history.push('/app/OurTeam/ViewTeam');
+      props.history.push('/app/Project/ViewProject');
     } else {
       setLoadingDelete(false);
 
@@ -144,6 +149,82 @@ export default function EditTeam(props) {
       );
     }
     setLoadingDelete(false);
+  };
+  const uploadImage = async (event) => {
+    event.preventDefault();
+
+    let formdata = new FormData();
+
+    if (file === undefined || file === null) {
+      NotificationManager.error('Enter Details', 'Error', 5000, '');
+      return;
+    } else {
+      formdata.append('images', file[0]);
+      setLoadingSingle(true);
+
+      let res = await apiServices.UploadImages(formdata);
+
+      setLoadingSingle(false);
+      if (res?.data?.response_code === 201) {
+        NotificationManager.success(
+          'Successfully Uploaded Image',
+          'Success',
+          5000,
+          ''
+        );
+        setTitledImage(res?.data?.response_data?.image_urls[0]);
+      } else {
+        NotificationManager.error(
+          res?.data?.response_message,
+          'Error',
+          5000,
+          ''
+        );
+      }
+    }
+  };
+  const uploadImageGallery = async (event) => {
+    event.preventDefault();
+
+    let formdata = new FormData();
+
+    if (file === undefined || file === null) {
+      NotificationManager.error('Enter Details', 'Error', 5000, '');
+      return;
+    } else {
+      // file?.map((item) => formdata?.append('images', item));
+      const test = Object.values(file);
+      test?.map((item, index) => {
+        formdata.append('images', file[index]);
+      });
+      // formdata?.append("images",file[0])
+      // formdata?.append("images",file[1])
+
+      console.log(formdata, 'formdata');
+      // formdata.append('images', file);
+      setLoadingMulti(true);
+
+      let res = await apiServices.UploadImages(formdata);
+
+      setLoadingMulti(false);
+      if (res?.data?.response_code === 201) {
+        NotificationManager.success(
+          'Successfully Uploaded Image',
+          'Success',
+          5000,
+          ''
+        );
+        setGalleryImages(res?.data?.response_data?.image_urls);
+      } else {
+        NotificationManager.error(
+          res?.data?.response_message,
+          'Error',
+          5000,
+          ''
+        );
+        setLoadingMulti(false);
+      }
+    }
   };
 
   return loading ? (
@@ -171,7 +252,7 @@ export default function EditTeam(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="View Team" />
+          <IntlMessages id="View Project" />
         </CardTitle>
         <Formik>
           <Form>
@@ -209,25 +290,32 @@ export default function EditTeam(props) {
               <Col lg={6}>
                 <FormGroup>
                   <Label>
-                    <IntlMessages id="Enter Designation" />
+                    <IntlMessages id="Titled Image" />
                   </Label>
-                  <span>
-                    <p>{currentTeam?.designation}</p>
-                  </span>
-                </FormGroup>
-              </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Enter Email Address" />
-                  </Label>
-                  <span>
-                    <p>{currentTeam?.email_address}</p>
-                  </span>
+                  <div>
+                    <img
+                      src={currentTeam?.titled_image}
+                      style={{ maxHeight: '400px' }}
+                    />
+                  </div>
                 </FormGroup>
               </Col>
             </Row>
-            <Button onClick={changeTeeam}>Edit Team</Button>
+            <Row className="mb-3">
+              <Col lg={12}>
+                {currentTeam?.gallery?.map((it) => (
+                  <Col lg={3}>
+                    <a href={it} target="_blank">
+                      <img
+                        src={it}
+                        style={{ maxHeight: '300px', maxWidth: '200px' }}
+                      />
+                    </a>
+                  </Col>
+                ))}
+              </Col>
+            </Row>
+            <Button onClick={changeTeeam}>Edit Project</Button>
             <Button
               disabled={loadingDelete ? true : false}
               style={{ backgroundColor: '#fed000' }}
@@ -242,7 +330,7 @@ export default function EditTeam(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">Delete Member</span>
+              <span className="label">Delete Project</span>
             </Button>
           </Form>
         </Formik>
@@ -252,7 +340,7 @@ export default function EditTeam(props) {
     <Card>
       <CardBody>
         <CardTitle>
-          <IntlMessages id="Edit Team" />
+          <IntlMessages id="Edit Project" />
         </CardTitle>
         <Formik>
           <Form>
@@ -309,38 +397,86 @@ export default function EditTeam(props) {
                 </FormGroup>
               </Col>
               <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Enter Designation" />
-                  </Label>
+                <div className="form-row">
+                  <div className="form-group col-md-6">
+                    <label
+                      className=""
+                      style={{ fontSize: '1rem', fontWeight: 'bold' }}
+                    >
+                      Select Title Image :
+                    </label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      name="upload_file"
+                      onChange={(e) => {
+                        setFile(e.target.files);
+                      }}
+                    />
+                  </div>
+                </div>
 
-                  <Input
-                    required
-                    defaultValue={currentTeam?.designation}
-                    className="form-control"
-                    name="name"
-                    type="text"
-                    // validate={validateEmail}
-                    onChange={(e) => setDesignation(e.target.value)}
-                  />
-                </FormGroup>
+                <div className="form-row">
+                  <div className="col-md-6">
+                    <Button
+                      type="submit"
+                      style={{ 'background-color': '#003766' }}
+                      className={`btn-shadow btn-multiple-state ${
+                        loadingSingle ? 'show-spinner' : ''
+                      }`}
+                      onClick={uploadImage}
+                    >
+                      <span className="spinner d-inline-block">
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">Save</span>
+                    </Button>
+                  </div>
+                </div>
               </Col>
-              <Col lg={6}>
-                <FormGroup>
-                  <Label>
-                    <IntlMessages id="Enter Email Address" />
-                  </Label>
 
-                  <Input
-                    required
-                    defaultValue={currentTeam?.email_address}
-                    type="email"
-                    className="form-control"
-                    name="name"
-                    // validate={validateEmail}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </FormGroup>
+              <Col lg={6}>
+                <div className="form-row">
+                  <div className="form-group col-md-6">
+                    <label
+                      className=""
+                      style={{ fontSize: '1rem', fontWeight: 'bold' }}
+                    >
+                      Select Gallery Image :
+                    </label>
+                    <input
+                      type="file"
+                      multiple
+                      className="form-control"
+                      name="upload_file"
+                      onChange={(e) => {
+                        setFile(e.target.files);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="col-md-6 mb-3">
+                    <Button
+                      type="submit"
+                      style={{ 'background-color': '#003766' }}
+                      className={`btn-shadow btn-multiple-state ${
+                        loadingMulti ? 'show-spinner' : ''
+                      }`}
+                      onClick={uploadImageGallery}
+                    >
+                      <span className="spinner d-inline-block">
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">Save</span>
+                    </Button>
+                  </div>
+                </div>
               </Col>
             </Row>
             <Button
@@ -357,7 +493,7 @@ export default function EditTeam(props) {
                 <span className="bounce2" />
                 <span className="bounce3" />
               </span>
-              <span className="label">Edit Team</span>
+              <span className="label">Edit Project</span>
             </Button>
           </Form>
         </Formik>
