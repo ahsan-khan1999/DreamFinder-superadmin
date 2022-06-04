@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardBody, CardTitle, Button, Col } from 'reactstrap';
 import { NotificationManager } from 'components/common/react-notifications';
 
-import './viewcertificate.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { FileUploader } from 'react-drag-drop-files';
 export default function ViewCertificate(props) {
@@ -168,7 +167,6 @@ export default function ViewCertificate(props) {
     }
   };
   const handleView = (item) => {
-    console.log(item, 'item');
     window.open(item?.certificate_image, '_blank');
   };
   return (
@@ -231,12 +229,12 @@ export default function ViewCertificate(props) {
               />
               <div className="row">
                 <div className="col-2">
-                  <Button style={{backgroundColor:"#fed000"}} className="" onClick={() => handleView(item)}>
+                  <Button style={{backgroundColor:"#fed000"}} className="test" onClick={() => handleView(item)}>
                     View
                   </Button>
                 </div>
                 <div className="col-2">
-                  <Button style={{backgroundColor:"#fed000"}} className="" onClick={() => deleteCertificate(item)}>
+                  <Button style={{backgroundColor:"#fed000"}} className="test" onClick={() => deleteCertificate(item)}>
                     Delete
                   </Button>
                 </div>

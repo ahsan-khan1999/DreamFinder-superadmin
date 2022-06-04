@@ -33,7 +33,6 @@ import {
   ViewRoleAction,
 } from 'Store/Actions/User/UserActions';
 const ViewAdmin = ({ match, history }) => {
-
   useEffect(() => {
     getAdmin();
   }, []);
@@ -55,7 +54,7 @@ const ViewAdmin = ({ match, history }) => {
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
-    
+
     setDoc(testSearch(user, search));
   };
 
@@ -63,15 +62,8 @@ const ViewAdmin = ({ match, history }) => {
     history.push('/app/menu/levels/CreateAdmin');
   };
 
-  let header = [
-    'Name',
-    'Email',
-    'Role',
-    'Actions',
-  ];
-  // const filterAdmin = user?.filter((item) =>
-  //   item?.role?.category?.user_role_id === 1 ? item : null
-  // );
+  let header = ['Name', 'Email', 'Role', 'Actions'];
+
   return (
     <Card>
       <CardBody>
@@ -84,37 +76,20 @@ const ViewAdmin = ({ match, history }) => {
         </Row>
         <Row>
           <Col lg={12}>
-            {/* <label htmlFor="search">
-              <input id="search" type="text" onChange={handleSearch} />
-            </label> */}
-            <div className="header-search">
-              <form action="#" className="">
-                <i className="fas fa-search search-icon"></i>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="By Name Designation Gender And Status"
-                  onChange={handleSearch}
-                />
-                <button type="submit">
-                  <i className="fas fa-search search-icon"></i>
-                </button>
-              </form>
-            </div>
+            <Button
+              onClick={handleAdd}
+              className="mb-3"
+              style={{
+                marginBottom: '15px',
+                backgroundColor: '#fed000',
+                marginTop: '10px',
+              }}
+            >
+              Add User
+            </Button>
           </Col>
         </Row>
-        <Button
-          onClick={handleAdd}
-          style={{
-            marginBottom: '15px',
-            backgroundColor: '#fed000',
-            marginTop: '10px',
-          }}
-        >
-          Add User
-        </Button>
+
         {/* <Button
           onClick={handleAddStaff}
           style={{
@@ -136,7 +111,6 @@ const ViewAdmin = ({ match, history }) => {
                   alignItems: 'center',
                 }}
               >
-
                 <Loader
                   type="Puff"
                   color="#fed000"
@@ -148,7 +122,7 @@ const ViewAdmin = ({ match, history }) => {
             ) : (
               <AdminTable
                 header={header}
-                data={search === '' ? user : doc}
+                data={user}
                 changeRoute={changeRoute}
               />
             )}
