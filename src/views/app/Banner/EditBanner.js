@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import IntlMessages from 'helpers/IntlMessages';
 import React, { useEffect, useState } from 'react';
 import Loader from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Card,
@@ -19,6 +20,7 @@ import {
   Row,
 } from 'reactstrap';
 import apiServices from 'services/requestHandler';
+import { EditBannerAction } from 'Store/Actions/User/UserActions';
 
 export default function EditTeam(props) {
   const authToken = JSON.parse(localStorage.getItem('token'));
@@ -26,7 +28,7 @@ export default function EditTeam(props) {
   const currentTeam = props?.location?.state;
   const [editTeam, setEditTeam] = useState(false);
   const [titledImage, setTitledImage] = useState(currentTeam?.image);
-
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [loadingUpload, setLoadingUpload] = useState(false);
@@ -53,38 +55,12 @@ export default function EditTeam(props) {
     let apiData = {
       heading: name,
       paragraph: desc,
-      image:titledImage
+      image: titledImage,
     };
-    const res = await axios.put(
-      `https://dream-finder-backend.herokuapp.com/api/v1/banner/${currentTeam?.id}`,
-      apiData,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${authToken?.token}`,
-        },
-      }
-    );
-    if (res?.data?.response_code === 200) {
+    const res = await dispatch(EditBannerAction(apiData, currentTeam?.id));
+    if (res) {
       setLoadingEdit(false);
-      NotificationManager.success(
-        'Successfully Updated',
-        'Success',
-        5000,
-        null,
-        ''
-      );
       props.history.push('/app/Banner/ViewBanner');
-    } else {
-      setLoadingEdit(false);
-      NotificationManager.success(
-        res?.data?.response_message,
-        'Error',
-        5000,
-        null,
-        ''
-      );
     }
     setLoadingEdit(false);
   };

@@ -69,7 +69,8 @@ const SERVICE_URLS = {
   createProj: 'projects',
   createBanner: 'banner',
   editProject: 'projects',
-
+  editTeam:'our-teams',
+  editBanner:'banner',
   readRoles: 'roles/read',
   updateUsers: 'users/',
   suspandUser: 'users/suspend',
@@ -240,6 +241,14 @@ const CreateBanner = (data) =>
   });
 const EditProject = (data, id) =>
   put(SERVICE_URLS.editProject + `/${id}`, data, {
+    feature: featureConstants.static,
+  });
+const EditTeam = (data, id) =>
+  put(SERVICE_URLS.editTeam + `/${id}`, data, {
+    feature: featureConstants.static,
+  });
+  const EditBanner = (data, id) =>
+  put(SERVICE_URLS.editBanner + `/${id}`, data, {
     feature: featureConstants.static,
   });
 const ReadSampleTransaction = (data) =>
@@ -1107,5 +1116,7 @@ const apiServices = {
   CreateProject,
   CreateBanner,
   EditProject,
+  EditTeam,
+  EditBanner
 };
 export default apiServices;

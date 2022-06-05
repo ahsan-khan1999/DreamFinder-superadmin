@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import IntlMessages from 'helpers/IntlMessages';
 import React, { useEffect, useState } from 'react';
 import Loader from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Card,
@@ -18,11 +19,13 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import { EditTeamAction } from 'Store/Actions/User/UserActions';
 
 export default function EditTeam(props) {
   const authToken = JSON.parse(localStorage.getItem('token'));
 
   const currentTeamId = props?.location?.state;
+  const dispatch = useDispatch();
   const [currentTeam, setCurrentTeam] = useState({});
   const [editTeam, setEditTeam] = useState(false);
   const getCurrentTeam = async (uid) => {
@@ -76,36 +79,10 @@ export default function EditTeam(props) {
       designation: designation,
       full_description: fullDescription,
     };
-    const res = await axios.put(
-      `https://dream-finder-backend.herokuapp.com/api/v1/our-teams/${currentTeam?.id}`,
-      apiData,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${authToken?.token}`,
-        },
-      }
-    );
-    if (res?.data?.response_code === 200) {
+    const res = await dispatch(EditTeamAction(apiData, currentTeam?.id));
+    if (res) {
       setLoadingEdit(false);
-      NotificationManager.success(
-        'Successfully Updated',
-        'Success',
-        5000,
-        null,
-        ''
-      );
       props.history.push('/app/OurTeam/ViewTeam');
-    } else {
-      setLoadingEdit(false);
-      NotificationManager.success(
-        res?.data?.response_message,
-        'Error',
-        5000,
-        null,
-        ''
-      );
     }
     setLoadingEdit(false);
   };

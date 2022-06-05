@@ -868,3 +868,112 @@ export const EditProjectAction = (data,id) => async (dispatch) => {
     });
   }
 };
+
+export const EditTeamAction = (data,id) => async (dispatch) => {
+  let response = {};
+  try {
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: true,
+    });
+
+    response = await apiServices.EditTeam(data,id)
+    if (response?.response_code === 200) {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
+        payload: response?.response_data,
+      });
+      NotificationManager.success(
+        response?.response_message,
+        'Success',
+        3000,
+        null,
+        null
+      );
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
+      return false;
+    }
+  } catch (e) {
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
+};
+export const EditBannerAction = (data,id) => async (dispatch) => {
+  let response = {};
+  try {
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: true,
+    });
+
+    response = await apiServices.EditBanner(data,id)
+    if (response?.response_code === 200) {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
+        payload: response?.response_data,
+      });
+      NotificationManager.success(
+        response?.response_message,
+        'Success',
+        3000,
+        null,
+        null
+      );
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
+      return false;
+    }
+  } catch (e) {
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
+};
