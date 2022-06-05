@@ -167,7 +167,7 @@ export default function CreateBanner(props) {
                   <div className="col-md-6">
                     <Button
                       type="submit"
-                      style={{ 'background-color': '#003766' }}
+                      style={{ 'background-color': '#fed000' }}
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''
                       }`}

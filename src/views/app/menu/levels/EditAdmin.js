@@ -152,7 +152,7 @@ export default function EditAdmin(props) {
                 color="#fed000"
                 height={100}
                 width={100}
-                // color="#003766"
+                // color="#fed000"
               />
             </div>
           </CardBody>

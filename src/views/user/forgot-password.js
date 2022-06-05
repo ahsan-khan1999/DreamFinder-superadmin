@@ -10,7 +10,7 @@ import IntlMessages from 'helpers/IntlMessages';
 import { forgotPassword } from 'redux/actions';
 import { ForgotAction } from '../../Store/Actions/Auth/Actions';
 import { NotificationManager } from 'components/common/react-notifications';
-import logo from '../../assets/logos/logo.png';
+import logo from '../../assets/logos/logo.7c0497cb.png';
 
 const validateEmail = (value) => {
   let error;

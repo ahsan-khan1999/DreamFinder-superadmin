@@ -384,7 +384,7 @@ const AdvancedSearch = (props) => {
         </FormGroup>
         <FormGroup className="text-center">
           <Button
-            style={{ 'background-color': '#003766' }}
+            style={{ 'background-color': '#fed000' }}
             color="primary"
             className="btn-lg mt-3"
             onClick={totalNumberOfSlots}

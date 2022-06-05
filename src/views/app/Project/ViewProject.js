@@ -79,7 +79,7 @@ export default function ViewProject(props) {
             onClick={handleAddStaff}
             style={{
               marginBottom: '15px',
-              backgroundColor: '#003766',
+              backgroundColor: '#fed000',
               marginTop: '10px',
             }}
           >
@@ -101,7 +101,7 @@ export default function ViewProject(props) {
                   color="#fed000"
                   height={100}
                   width={100}
-                  // color="#003766"
+                  // color="#fed000"
                 />
               </div>
             ) : (

@@ -198,7 +198,7 @@ export default function ViewCertificate(props) {
               <div className="col-md-6 mb-5 ml-0 p-0">
                 <Button
                   type="submit"
-                  style={{ 'background-color': '#003766' }}
+                  style={{ 'background-color': '#fed000' }}
                   className={`btn-shadow btn-multiple-state ${
                     loading ? 'show-spinner' : ''
                   }`}

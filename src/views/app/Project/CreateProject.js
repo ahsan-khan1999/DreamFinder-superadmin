@@ -235,7 +235,7 @@ export default function CreateProject(props) {
                   <div className="col-md-6">
                     <Button
                       type="submit"
-                      style={{ 'background-color': '#003766' }}
+                      style={{ 'background-color': '#fed000' }}
                       className={`btn-shadow btn-multiple-state ${
                         loading ? 'show-spinner' : ''
                       }`}
@@ -277,7 +277,7 @@ export default function CreateProject(props) {
                   <div className="col-md-6 mb-3">
                     <Button
                       type="submit"
-                      style={{ 'background-color': '#003766' }}
+                      style={{ 'background-color': '#fed000' }}
                       className={`btn-shadow btn-multiple-state ${
                         loadingMulti ? 'show-spinner' : ''
                       }`}

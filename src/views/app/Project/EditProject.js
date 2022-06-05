@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import IntlMessages from 'helpers/IntlMessages';
 import React, { useEffect, useState } from 'react';
 import Loader from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
 import {
   Button,
   Card,
@@ -19,6 +20,7 @@ import {
   Row,
 } from 'reactstrap';
 import apiServices from 'services/requestHandler';
+import { EditProjectAction } from 'Store/Actions/User/UserActions';
 
 export default function EditProject(props) {
   const authToken = JSON.parse(localStorage.getItem('token'));
@@ -41,11 +43,11 @@ export default function EditProject(props) {
     getCurrentTeam(currentTeamId?.id);
   }, []);
   const [titledImage, setTitledImage] = useState(currentTeam?.titled_image);
-  const [file,setFile] = useState(null)
+  const [file, setFile] = useState(null);
   const [galleryImages, setGalleryImages] = useState(currentTeam?.gallery);
   const [loading, setLoading] = useState(false);
   const [loadingSingle, setLoadingSingle] = useState(false);
-
+  const dispatch = useDispatch()
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [loadingMulti, setLoadingMulti] = useState(false);
@@ -68,8 +70,8 @@ export default function EditProject(props) {
     setName(currentTeam?.name);
     setDesc(currentTeam?.short_description);
     setFullDescription(currentTeam?.full_description);
-    setTitledImage(currentTeam?.titled_image)
-    setGalleryImages(currentTeam?.gallery)
+    setTitledImage(currentTeam?.titled_image);
+    setGalleryImages(currentTeam?.gallery);
   }, [currentTeam]);
 
   const editTeamData = async () => {
@@ -81,38 +83,18 @@ export default function EditProject(props) {
       titled_image: titledImage,
       gallery: galleryImages,
     };
-    const res = await axios.put(
-      `https://dream-finder-backend.herokuapp.com/api/v1/projects/${currentTeam?.id}`,
-      apiData,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${authToken?.token}`,
-        },
+    try {
+      const res = await dispatch(EditProjectAction(apiData, currentTeam?.id));
+      if(res){
+
+        setLoadingEdit(false);
+        props.history.push('/app/Project/ViewProject')
       }
-    );
-    if (res?.data?.response_code === 200) {
       setLoadingEdit(false);
-      NotificationManager.success(
-        'Successfully Updated',
-        'Success',
-        5000,
-        null,
-        ''
-      );
-      props.history.push('/app/Project/ViewProject');
-    } else {
-      setLoadingEdit(false);
-      NotificationManager.success(
-        res?.data?.response_message,
-        'Error',
-        5000,
-        null,
-        ''
-      );
+
+    } catch (e) {
+      console.log(e, 'error');
     }
-    setLoadingEdit(false);
   };
   const deleteMember = async () => {
     setLoadingDelete(true);
@@ -243,7 +225,7 @@ export default function EditProject(props) {
             color="#fed000"
             height={100}
             width={100}
-            // color="#003766"
+            // color="#fed000"
           />
         </div>
       </CardBody>
@@ -420,7 +402,7 @@ export default function EditProject(props) {
                   <div className="col-md-6">
                     <Button
                       type="submit"
-                      style={{ 'background-color': '#003766' }}
+                      style={{ 'background-color': '#fed000' }}
                       className={`btn-shadow btn-multiple-state ${
                         loadingSingle ? 'show-spinner' : ''
                       }`}
@@ -462,7 +444,7 @@ export default function EditProject(props) {
                   <div className="col-md-6 mb-3">
                     <Button
                       type="submit"
-                      style={{ 'background-color': '#003766' }}
+                      style={{ 'background-color': '#fed000' }}
                       className={`btn-shadow btn-multiple-state ${
                         loadingMulti ? 'show-spinner' : ''
                       }`}
@@ -501,3 +483,54 @@ export default function EditProject(props) {
     </Card>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// if (res?.data?.response_code === 200) {
+//         setLoadingEdit(false);
+//         NotificationManager.success(
+//           'Successfully Updated',
+//           'Success',
+//           5000,
+//           null,
+//           ''
+//         );
+//         props.history.push('/app/Project/ViewProject');
+//       } else {
+//         setLoadingEdit(false);
+//         NotificationManager.success(
+//           res?.data?.response_message,
+//           'Error',
+//           5000,
+//           null,
+//           ''
+//         );
+//       }

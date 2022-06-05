@@ -174,7 +174,7 @@ export default function EditTeam(props) {
             color="#fed000"
             height={100}
             width={100}
-            // color="#003766"
+            // color="#fed000"
           />
         </div>
       </CardBody>
@@ -312,7 +312,7 @@ export default function EditTeam(props) {
                   <div className="col-md-6">
                     <Button
                       type="submit"
-                      style={{ 'background-color': '#003766' }}
+                      style={{ 'background-color': '#fed000' }}
                       className={`btn-shadow btn-multiple-state ${
                         loadingUpload ? 'show-spinner' : ''
                       }`}

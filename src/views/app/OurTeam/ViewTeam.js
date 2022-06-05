@@ -77,7 +77,7 @@ export default function ViewTeam({history}) {
             onClick={handleAddStaff}
             style={{
               marginBottom: '15px',
-              backgroundColor: '#003766',
+              backgroundColor: '#fed000',
               marginTop: '10px',
             }}
           >
@@ -99,7 +99,7 @@ export default function ViewTeam({history}) {
                   color="#fed000"
                   height={100}
                   width={100}
-                  // color="#003766"
+                  // color="#fed000"
                 />
               </div>
             ) : (

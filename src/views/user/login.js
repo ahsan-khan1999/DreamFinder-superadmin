@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Card, CardTitle, Label, FormGroup, Button } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import logo from '../../../src/assets/logos/logo.png';
+import logo from '../../../src/assets/logos/logo.7c0497cb.png';
 
 import { Formik, Form, Field } from 'formik';
 import { NotificationManager } from 'components/common/react-notifications';
