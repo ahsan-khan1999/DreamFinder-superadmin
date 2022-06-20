@@ -177,11 +177,12 @@ export default function ViewCertificate(props) {
         </CardTitle>
         <div
           className="row"
-          style={{ display: certificate?.length < 1 ? 'block' : 'none' }}
+          // style={{ display: certificate?.length < 1 ? 'block' : 'none' }}
         >
           <Col lg={6}>
             <div className="form-row">
               <div className="form-group col-md-6">
+                <span>Add Certificate</span>
                 <FileUploader
                   multiple={false}
                   handleChange={(e) => {
@@ -215,34 +216,55 @@ export default function ViewCertificate(props) {
             </div> */}
           </Col>
         </div>
-        <div className="row ">
+        <table>
+          {/* <tr>
+            <th>Edit Image</th>
+            <th>Image </th>
+            <th>Delete</th>
+          </tr> */}
           {certificate?.map((item) => (
-            <div className="col-lg-6 my-5">
-              <FileUploader
-                multiple={false}
-                handleChange={(e) => {
-                  uploadImage(e, item);
-                }}
-                name="file"
+            <tr>
+              <div className="col-lg-6 my-5">
+                <td>
+                  <FileUploader
+                    multiple={false}
+                    handleChange={(e) => {
+                      uploadImage(e, item);
+                    }}
+                    name="file"
 
-                // types={fileTypes}
-              />
-              <div className="row">
-                <div className="col-2">
-                  <Button style={{backgroundColor:"#fed000"}} className="test" onClick={() => handleView(item)}>
-                    View
-                  </Button>
-                </div>
-                <div className="col-2">
-                  <Button style={{backgroundColor:"#fed000"}} className="test" onClick={() => deleteCertificate(item)}>
-                    Delete
-                  </Button>
-                </div>
+                    // types={fileTypes}
+                  />
+                </td>
+                {/* <div className="row"> */}
+                <td>
+                  <div className="col-2">
+                    {/* <Button style={{backgroundColor:"#fed000"}} className="test" onClick={() => handleView(item)}> */}
+                    <img
+                      src={item?.certificate_image}
+                      height="100px"
+                      width="100px"
+                    />
+                    {/* </Button> */}
+                  </div>
+                </td>
+                <td>
+                  <div className="col-2">
+                    <Button
+                      style={{ backgroundColor: '#fed000' }}
+                      className="test"
+                      onClick={() => deleteCertificate(item)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </td>
+                {/* </div> */}
               </div>
-            </div>
-            // <img src={item?.certificate_image} />
+            </tr>
           ))}
-        </div>
+        </table>
+        <div className="row "></div>
       </CardBody>
     </Card>
   );
