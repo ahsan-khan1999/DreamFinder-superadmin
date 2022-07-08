@@ -34,6 +34,7 @@ import {
   UPDATE_CATEGORY__CONSTANT,
   VIEW_STATIC_CONSTANT,
   GET_USER_CONSTANT,
+  GET_TESTANOMIAL_CONSTANT,
 } from 'Store/Constant/Constants';
 import {
   Check_Authentication,
@@ -964,6 +965,143 @@ export const EditBannerAction = (data,id) => async (dispatch) => {
       return false;
     }
   } catch (e) {
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const ViewTestanomialAction = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: GET_TESTANOMIAL_CONSTANT.GET_TESTANOMIAL_LOADING,
+      payload: true,
+    });
+
+    let response = await apiServices.ReadTestanomial();
+    if (response?.data?.response_code === 200) {
+      dispatch({
+        type: GET_TESTANOMIAL_CONSTANT.GET_TESTANOMIAL_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: GET_TESTANOMIAL_CONSTANT.GET_TESTANOMIAL_SUCCESS,
+        payload: response?.data?.response_data?.testimonials,
+      });
+    } else {
+      dispatch({
+        type: GET_TESTANOMIAL_CONSTANT.GET_TESTANOMIAL_ERROR,
+        payload: false,
+      });
+    }
+  } catch {}
+};
+
+export const EditTestanomialAction = (data,id) => async (dispatch) => {
+  let response = {};
+  try {
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: true,
+    });
+
+    response = await apiServices.EditTestanomial(data,id)
+    if (response?.response_code === 200) {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
+        payload: response?.response_data,
+      });
+      NotificationManager.success(
+        response?.response_message,
+        'Success',
+        3000,
+        null,
+        null
+      );
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
+      return false;
+    }
+  } catch (e) {
+    NotificationManager.error(
+      e?.data?.response_message,
+      'Error',
+      3000,
+      null,
+      null
+    );
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: false,
+    });
+  }
+};
+
+export const CreateTestanomialAction = (data) => async (dispatch) => {
+  let response = {};
+  try {
+    dispatch({
+      type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+      payload: true,
+    });
+
+    response = await apiServices.CreateTestanomial(data);
+    if (response?.data?.response_code === 201) {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_LOADING,
+        payload: false,
+      });
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_SUCCESS,
+        payload: response?.data?.response_data,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Success',
+        3000,
+        null,
+        null
+      );
+      return true;
+    } else {
+      dispatch({
+        type: CREATE_ADMIN_CONSTANT.CREATE_ADMIN_ERROR,
+        payload: false,
+      });
+      NotificationManager.error(
+        response?.data?.response_message,
+        'Error',
+        3000,
+        null,
+        null
+      );
+      return false;
+    }
+  } catch (e) {
+    console.log(response, 'res', e);
     NotificationManager.error(
       e?.data?.response_message,
       'Error',

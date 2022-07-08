@@ -57,5 +57,11 @@ const data = [
     label: 'Banner',
     to: `${adminRoot}/Banner/ViewBanner`,
   },
+  {
+    id:"testanomial",
+    icon: 'iconsminds-students',
+    label: 'Testanomial',
+    to: `${adminRoot}/testanomial/ViewTestanomial`,
+  },
 ];
 export default data;

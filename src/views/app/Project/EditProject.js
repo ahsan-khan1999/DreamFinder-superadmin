@@ -21,6 +21,7 @@ import {
 } from 'reactstrap';
 import apiServices from 'services/requestHandler';
 import { EditProjectAction } from 'Store/Actions/User/UserActions';
+import DetailTable from './DetailTable';
 
 export default function EditProject(props) {
   const authToken = JSON.parse(localStorage.getItem('token'));
@@ -42,12 +43,15 @@ export default function EditProject(props) {
   useEffect(() => {
     getCurrentTeam(currentTeamId?.id);
   }, []);
+  const [projectVideo, setProjectVideo] = useState(currentTeam?.banner_video);
+  const [link, setLink] = useState();
+
   const [titledImage, setTitledImage] = useState(currentTeam?.titled_image);
   const [file, setFile] = useState(null);
   const [galleryImages, setGalleryImages] = useState(currentTeam?.gallery);
   const [loading, setLoading] = useState(false);
   const [loadingSingle, setLoadingSingle] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [loadingMulti, setLoadingMulti] = useState(false);
@@ -72,6 +76,7 @@ export default function EditProject(props) {
     setFullDescription(currentTeam?.full_description);
     setTitledImage(currentTeam?.titled_image);
     setGalleryImages(currentTeam?.gallery);
+    setProjectVideo(currentTeam?.banner_video);
   }, [currentTeam]);
 
   const editTeamData = async () => {
@@ -82,16 +87,15 @@ export default function EditProject(props) {
       full_description: fullDescription,
       titled_image: titledImage,
       gallery: galleryImages,
+      banner_video: projectVideo,
     };
     try {
       const res = await dispatch(EditProjectAction(apiData, currentTeam?.id));
-      if(res){
-
+      if (res) {
         setLoadingEdit(false);
-        props.history.push('/app/Project/ViewProject')
+        props.history.push('/app/Project/ViewProject');
       }
       setLoadingEdit(false);
-
     } catch (e) {
       console.log(e, 'error');
     }
@@ -206,6 +210,14 @@ export default function EditProject(props) {
         );
         setLoadingMulti(false);
       }
+    }
+  };
+  const addLink = () => {
+    if (link) {
+      const list = [...projectVideo, link];
+      setProjectVideo(list);
+      setLink(null);
+      NotificationManager.success('Video Added', 'Success', 3000, null, null);
     }
   };
 
@@ -385,6 +397,42 @@ export default function EditProject(props) {
                       className=""
                       style={{ fontSize: '1rem', fontWeight: 'bold' }}
                     >
+                      Enter Link
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="link"
+                      onChange={(e) => {
+                        setLink(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="col-md-6">
+                    <Button
+                      style={{ 'background-color': '#fed000' }}
+                      onClick={addLink}
+                    >
+                      <span className="spinner d-inline-block">
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">Add Video</span>
+                    </Button>
+                  </div>
+                </div>
+              </Col>
+              <Col lg={6}>
+                <div className="form-row">
+                  <div className="form-group col-md-6">
+                    <label
+                      className=""
+                      style={{ fontSize: '1rem', fontWeight: 'bold' }}
+                    >
                       Select Title Image :
                     </label>
                     <input
@@ -469,7 +517,7 @@ export default function EditProject(props) {
               }`}
               size="sm"
               onClick={editTeamData}
-            >
+              >
               <span className="spinner d-inline-block">
                 <span className="bounce1" />
                 <span className="bounce2" />
@@ -477,42 +525,45 @@ export default function EditProject(props) {
               </span>
               <span className="label">Edit Project</span>
             </Button>
+              <Row>
+              <DetailTable
+                    tableHead={[
+                      "SNO"
+                      ,
+                      "Video",
+                      "Remove",
+                    ]}
+                    data={projectVideo?.map((item,idx) => {
+                      return [
+                        idx,
+                        item,
+                        <>
+                        {" "}
+                        <div className="row">
+                          <div className="col">
+                            <Button
+                              className="btn btn-danger"
+                              onClick={() => {
+                                const test = [...projectVideo];
+                                test.splice(idx, 1);
+                                setProjectVideo(test);
+                              }}
+                            >
+                              {"Remove"}
+                            </Button>
+                          </div>
+                        </div>
+                      </>,
+                      ]
+                    })}
+                  />
+              </Row>
           </Form>
         </Formik>
       </CardBody>
     </Card>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // if (res?.data?.response_code === 200) {
 //         setLoadingEdit(false);

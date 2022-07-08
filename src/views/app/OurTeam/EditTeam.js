@@ -19,14 +19,19 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import apiServices from 'services/requestHandler';
 import { EditTeamAction } from 'Store/Actions/User/UserActions';
 
 export default function EditTeam(props) {
   const authToken = JSON.parse(localStorage.getItem('token'));
-
+  const [loadingSingle, setLoadingSingle] = useState(false);
+  
   const currentTeamId = props?.location?.state;
   const dispatch = useDispatch();
+  const [file, setFile] = useState(null);
+
   const [currentTeam, setCurrentTeam] = useState({});
+  const [titledImage, setTitledImage] = useState(currentTeam?.image);
   const [editTeam, setEditTeam] = useState(false);
   const getCurrentTeam = async (uid) => {
     setLoading(true);
@@ -78,6 +83,7 @@ export default function EditTeam(props) {
       short_description: desc,
       designation: designation,
       full_description: fullDescription,
+      image:titledImage
     };
     const res = await dispatch(EditTeamAction(apiData, currentTeam?.id));
     if (res) {
@@ -122,7 +128,39 @@ export default function EditTeam(props) {
     }
     setLoadingDelete(false);
   };
+  const uploadImage = async (event) => {
+    event.preventDefault();
 
+    let formdata = new FormData();
+
+    if (file === undefined || file === null) {
+      NotificationManager.error('Enter Details', 'Error', 5000, '');
+      return;
+    } else {
+      formdata.append('images', file[0]);
+      setLoadingSingle(true);
+
+      let res = await apiServices.UploadImages(formdata);
+
+      setLoadingSingle(false);
+      if (res?.data?.response_code === 201) {
+        NotificationManager.success(
+          'Successfully Uploaded Image',
+          'Success',
+          5000,
+          ''
+        );
+        setTitledImage(res?.data?.response_data?.image_urls[0]);
+      } else {
+        NotificationManager.error(
+          res?.data?.response_message,
+          'Error',
+          5000,
+          ''
+        );
+      }
+    }
+  };
   return loading ? (
     <Card>
       <CardBody>
@@ -201,6 +239,19 @@ export default function EditTeam(props) {
                   <span>
                     <p>{currentTeam?.email_address}</p>
                   </span>
+                </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <FormGroup>
+                  <Label>
+                    <IntlMessages id="Titled Image" />
+                  </Label>
+                  <div>
+                    <img
+                      src={currentTeam?.image}
+                      style={{ maxHeight: '200px' }}
+                    />
+                  </div>
                 </FormGroup>
               </Col>
             </Row>
@@ -318,6 +369,46 @@ export default function EditTeam(props) {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <div className="form-row">
+                  <div className="form-group col-md-6">
+                    <label
+                      className=""
+                      style={{ fontSize: '1rem', fontWeight: 'bold' }}
+                    >
+                      Select Title Image :
+                    </label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      name="upload_file"
+                      onChange={(e) => {
+                        setFile(e.target.files);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="col-md-6">
+                    <Button
+                      type="submit"
+                      style={{ 'background-color': '#fed000' }}
+                      className={`btn-shadow btn-multiple-state ${
+                        loadingSingle ? 'show-spinner' : ''
+                      }`}
+                      onClick={uploadImage}
+                    >
+                      <span className="spinner d-inline-block">
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">Save</span>
+                    </Button>
+                  </div>
+                </div>
               </Col>
             </Row>
             <Button

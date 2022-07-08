@@ -50,6 +50,15 @@ const CreateBanner = React.lazy(() =>
 const EditBanner = React.lazy(() =>
   import(/* webpackChunkName: "blank-page" */ './Banner/EditBanner')
 );
+const ViewTestanomial = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './testanomial/ViewTestenomial')
+);
+const CreateTestanomial = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './testanomial/CreateTestanomial')
+);
+const EditTestanomial = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './testanomial/EditTestanomial')
+);
 const App = ({ match }) => {
   return (
     <AppLayout>
@@ -121,10 +130,23 @@ const App = ({ match }) => {
               path={`${match.url}/Banner/CreateBanner`}
               render={(props) => <CreateBanner {...props} />}
             />
-            <Route
+             <Route
               path={`${match.url}/Banner/EditBanner`}
               render={(props) => <EditBanner {...props} />}
             />
+            <Route
+              path={`${match.url}/testanomial/EditTestanomial`}
+              render={(props) => <EditTestanomial {...props} />}
+            />
+             <Route
+              path={`${match.url}/testanomial/ViewTestanomial`}
+              render={(props) => <ViewTestanomial {...props} />}
+            />
+            <Route
+              path={`${match.url}/testanomial/Createtestanomial`}
+              render={(props) => <CreateTestanomial {...props} />}
+            />
+            
             
             <Redirect to="/error" />
           </Switch>

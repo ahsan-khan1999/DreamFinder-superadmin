@@ -404,3 +404,46 @@ export const BannerTable = (props) => {
     </div>
   );
 };
+
+export const TestanomialTable = (props) => {
+  const { changeRoute, header } = props;
+  const cols = React.useMemo(
+    () => [
+      {
+        Header: header[0],
+        accessor: 'name',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+
+      {
+        Header: header[1],
+        accessor: 'testimonial',
+        cellClass: 'list-item-heading w-10',
+        Cell: (props) => <>{props.value}</>,
+      },
+     
+
+      {
+        Header: <span style={{ fontSize: '1.0rem' }}>{header[2]}</span>,
+        accessor: 'title3',
+        cellClass: 'text-muted w-10',
+        // Cell: (props) => {console.log(props?.cell?.row?.original)}
+        Cell: (props) => (
+          <Button
+            style={{ backgroundColor: '#fed000' }}
+            onClick={() => changeRoute(props?.cell?.row?.original)}
+          >
+            View
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div className="mb-4">
+      <Table columns={cols} data={props?.data} />
+    </div>
+  );
+};

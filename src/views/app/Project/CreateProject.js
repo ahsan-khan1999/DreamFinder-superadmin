@@ -25,13 +25,16 @@ export default function CreateProject(props) {
   const [loading, setLoading] = useState(false);
   const [loadingMulti, setLoadingMulti] = useState(false);
   const authToken = JSON.parse(localStorage.getItem('token'));
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [loadingCreate, setLoadingCreate] = useState(false);
+  const [projectVideo, setProjectVideo] = useState([]);
 
   const [titledImage, setTitledImage] = useState('');
   const [galleryImages, setGalleryImages] = useState([]);
 
   const [file, setFile] = useState();
+  const [link, setLink] = useState();
+
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [fullDescription, setFullDescription] = useState('');
@@ -47,6 +50,7 @@ export default function CreateProject(props) {
         full_description: fullDescription,
         titled_image: titledImage,
         gallery: galleryImages,
+        banner_video: projectVideo,
       };
 
       NotificationManager.warning(
@@ -65,12 +69,12 @@ export default function CreateProject(props) {
         full_description: fullDescription,
         titled_image: titledImage,
         gallery: galleryImages,
+        banner_video: projectVideo,
 
       };
-      let res  = await dispatch(CreateProjectAction(apiData))
-      if(res) props.history.push('/app/Project/ViewProject') 
+      let res = await dispatch(CreateProjectAction(apiData));
+      if (res) props.history.push('/app/Project/ViewProject');
       setLoadingCreate(false);
-
     }
   };
   const uploadImage = async (event) => {
@@ -145,10 +149,15 @@ export default function CreateProject(props) {
           5000,
           ''
         );
-      setLoadingMulti(false);
-
+        setLoadingMulti(false);
       }
     }
+  };
+  const addLink = () => {
+    const list = [...projectVideo, link];
+    setProjectVideo(list);
+    setLink(null);
+    NotificationManager.success('Video Added', 'Success', 3000, null, null);
   };
   return (
     <Card>
@@ -209,6 +218,42 @@ export default function CreateProject(props) {
                     onChange={(e) => setFullDescription(e.target.value)}
                   />
                 </FormGroup>
+              </Col>
+              <Col lg={6}>
+                <div className="form-row">
+                  <div className="form-group col-md-6">
+                    <label
+                      className=""
+                      style={{ fontSize: '1rem', fontWeight: 'bold' }}
+                    >
+                      Enter Link
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="link"
+                      onChange={(e) => {
+                        setLink(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="col-md-6">
+                    <Button
+                      style={{ 'background-color': '#fed000' }}
+                      onClick={addLink}
+                    >
+                      <span className="spinner d-inline-block">
+                        <span className="bounce1" />
+                        <span className="bounce2" />
+                        <span className="bounce3" />
+                      </span>
+                      <span className="label">Add Video</span>
+                    </Button>
+                  </div>
+                </div>
               </Col>
 
               <Col lg={6}>

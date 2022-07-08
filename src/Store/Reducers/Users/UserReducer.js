@@ -31,6 +31,7 @@ import {
   UPDATE_CATEGORY__CONSTANT,
   VIEW_STATIC_CONSTANT,
   GET_USER_CONSTANT,
+  GET_TESTANOMIAL_CONSTANT,
 } from 'Store/Constant/Constants';
 
 const initial_state = {
@@ -49,6 +50,7 @@ const initial_state = {
   updateUser: {},
   staticData: {},
   userSpecific: {},
+  testanomial: [],
   // loadingUpdate:false
 };
 
@@ -60,14 +62,14 @@ export const ViewUserReducer = (state = initial_state, action) => {
       return { ...state, admin: action.payload };
     case VIEW_ADMIN_CONSTANT.VIEW_ADMIN_ERROR:
       return { ...state, loading: action.payload };
-    
+
     case UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_LOADING:
       return { ...state, loadingCreate: action.payload };
     case UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_SUCCESS:
       return { ...state, updateUser: action.payload };
     case UPDATE_ADMIN_CONSTANT.UPDATE_ADMIN_ERROR:
       return { ...state, loadingCreate: action.payload };
-   
+
     case VIEW_STATIC_CONSTANT.VIEW_STATIC_LOADING:
       return { ...state, loading: action.payload };
     case VIEW_STATIC_CONSTANT.VIEW_STATIC_SUCCESS:
@@ -79,6 +81,12 @@ export const ViewUserReducer = (state = initial_state, action) => {
     case GET_USER_CONSTANT.GET_USER_SUCCESS:
       return { ...state, userSpecific: action.payload };
     case GET_USER_CONSTANT.GET_USER_ERROR:
+      return { ...state, loading: action.payload };
+    case GET_TESTANOMIAL_CONSTANT.GET_TESTANOMIAL_LOADING:
+      return { ...state, loading: action.payload };
+    case GET_TESTANOMIAL_CONSTANT.GET_TESTANOMIAL_SUCCESS:
+      return { ...state, testanomial: action.payload };
+    case GET_TESTANOMIAL_CONSTANT.GET_TESTANOMIAL_ERROR:
       return { ...state, loading: action.payload };
     default:
       return { ...state };

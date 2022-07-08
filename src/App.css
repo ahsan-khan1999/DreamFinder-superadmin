@@ -266,4 +266,20 @@
     border-collapse: collapse;
     width: 100%;
   }
-  
+  .containerWithShadow {
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 5%);
+    -webkit-box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 5%);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+  }
+
+  .table-responsive::-webkit-scrollbar{
+    background-color: #e0e0e0!important;
+       height: 10px!important;
+       width:10px!important;
+   }
+   .table-responsive {
+    max-height: 500px!important;
+    scrollbar-width:10px!important;
+   }   

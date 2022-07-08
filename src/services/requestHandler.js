@@ -188,6 +188,11 @@ const SERVICE_URLS = {
   readAssignedGift: 'fieldstaffs/read_all_gifts',
   readSpecificuser: 'users',
 
+  readTestanomial:'testimonials',
+  createTestanomial:'testimonials',
+  editTestanomial:'testimonials',
+
+
   // Dream Finder
 
   uploadImage: 'firebase/image/upload',
@@ -249,6 +254,19 @@ const EditTeam = (data, id) =>
   });
   const EditBanner = (data, id) =>
   put(SERVICE_URLS.editBanner + `/${id}`, data, {
+    feature: featureConstants.static,
+  });
+  const CreateTestanomial = (data) =>
+  post(SERVICE_URLS.createTestanomial, data, {
+    feature: featureConstants.static,
+  });
+
+const EditTestanomial = (data, id) =>
+  put(SERVICE_URLS.editTestanomial + `/${id}`, data, {
+    feature: featureConstants.static,
+  });
+  const ReadTestanomial = () =>
+  get(SERVICE_URLS.readTestanomial,{
     feature: featureConstants.static,
   });
 const ReadSampleTransaction = (data) =>
@@ -1117,6 +1135,9 @@ const apiServices = {
   CreateBanner,
   EditProject,
   EditTeam,
-  EditBanner
+  EditBanner,
+  CreateTestanomial,
+  EditTestanomial,
+  ReadTestanomial,
 };
 export default apiServices;
